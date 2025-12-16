@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import GeneratorPage from './pages/GeneratorPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 import { PAGE_CONFIGS } from './constants';
 
 function App() {
@@ -19,6 +23,7 @@ function App() {
         <Navbar />
         <main className="flex-grow z-10">
           <Routes>
+            {/* Generator Pages */}
             <Route path="/" element={<GeneratorPage config={PAGE_CONFIGS.home} />} />
             <Route path="/letras-cursivas" element={<GeneratorPage config={PAGE_CONFIGS.cursivas} />} />
             <Route path="/letras-tatuajes" element={<GeneratorPage config={PAGE_CONFIGS.tatuajes} />} />
@@ -27,6 +32,13 @@ function App() {
             <Route path="/letras-amino" element={<GeneratorPage config={PAGE_CONFIGS.amino} />} />
             <Route path="/letras-facebook" element={<GeneratorPage config={PAGE_CONFIGS.facebook} />} />
             <Route path="/letras-tattoo" element={<GeneratorPage config={PAGE_CONFIGS.tattoo} />} />
+            
+            {/* Static Content Pages */}
+            <Route path="/sobre-nosotros" element={<AboutPage />} />
+            <Route path="/contacto" element={<ContactPage />} />
+            <Route path="/politica-de-privacidad" element={<PrivacyPage />} />
+            <Route path="/terminos-y-condiciones" element={<TermsPage />} />
+            
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

@@ -37,14 +37,14 @@ const Navbar: React.FC = () => {
             </NavLink>
           </div>
           
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-1">
-            {NAVIGATION_LINKS.slice(0, 6).map((link) => (
+          {/* Desktop Menu - Showing all links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {NAVIGATION_LINKS.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  `px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? 'bg-primary-50 text-primary-700 shadow-sm ring-1 ring-primary-100'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition-colors"
@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-100 absolute w-full left-0 shadow-2xl animate-fade-in">
+        <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-slate-100 absolute w-full left-0 shadow-2xl animate-fade-in max-h-[80vh] overflow-y-auto">
           <div className="px-4 pt-4 pb-6 space-y-2">
             {NAVIGATION_LINKS.map((link) => (
               <NavLink

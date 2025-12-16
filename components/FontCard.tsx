@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
-import { Copy, Check, ExternalLink } from 'lucide-react';
-import { FontStyle } from '../types';
+import { Copy, Check } from 'lucide-react';
+import { FontStyle, TextSegment } from '../types';
 
 interface FontCardProps {
   font: FontStyle;
-  text: string;
+  rawText: string;
+  displaySegments: TextSegment[];
 }
 
-const FontCard: React.FC<FontCardProps> = ({ font, text }) => {
+const FontCard: React.FC<FontCardProps> = ({ font, rawText, displaySegments }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(rawText).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
   };
 
+  // Determine context class for CSS fallback logic
+  const contextClass = `font-ctx-${font.category}`;
+
   return (
     <div 
-      className="group relative bg-white rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+      className={`group relative bg-white rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden ${contextClass}`}
       onClick={handleCopy}
     >
       {/* Background decoration on hover */}
@@ -41,12 +45,20 @@ const FontCard: React.FC<FontCardProps> = ({ font, text }) => {
 
         <div className="relative min-h-[3rem] flex items-center">
            <p className="text-xl sm:text-2xl text-slate-800 break-all font-medium leading-relaxed group-hover:text-primary-900 transition-colors">
-             {text || <span className="text-slate-300 italic font-light">Vista Previa...</span>}
+             {displaySegments.length > 0 ? (
+               displaySegments.map((seg, i) => (
+                 seg.isFallback ? 
+                   <span key={i} className="fallback-char">{seg.content}</span> : 
+                   <span key={i}>{seg.content}</span>
+               ))
+             ) : (
+               <span className="text-slate-300 italic font-light">Vista Previa...</span>
+             )}
            </p>
         </div>
       </div>
       
-      {/* Copied overlay feedback (Optional visual cue) */}
+      {/* Copied overlay feedback */}
       <div className={`absolute inset-0 bg-primary-600/90 flex items-center justify-center backdrop-blur-sm transition-opacity duration-200 ${copied ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
          <div className="text-white font-bold text-lg flex flex-col items-center gap-2">
             <div className="bg-white text-primary-600 p-2 rounded-full">

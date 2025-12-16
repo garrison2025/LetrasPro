@@ -31,10 +31,17 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="md:col-span-4">
-             <h4 className="font-bold text-slate-900 mb-6">Compatible Con</h4>
+             <h4 className="font-bold text-slate-900 mb-6">Información Legal</h4>
+             <ul className="space-y-3 text-sm font-medium text-slate-500 mb-6">
+                <li><Link to="/sobre-nosotros" className="hover:text-primary-600 transition-colors">Sobre Nosotros</Link></li>
+                <li><Link to="/contacto" className="hover:text-primary-600 transition-colors">Contacto</Link></li>
+                <li><Link to="/politica-de-privacidad" className="hover:text-primary-600 transition-colors">Política de Privacidad</Link></li>
+                <li><Link to="/terminos-y-condiciones" className="hover:text-primary-600 transition-colors">Términos y Condiciones</Link></li>
+             </ul>
+             
              <div className="flex flex-wrap gap-2">
-                {['Instagram', 'TikTok', 'Facebook', 'Twitter', 'WhatsApp', 'Discord', 'Free Fire'].map(tag => (
-                  <span key={tag} className="px-3 py-1 rounded-full bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                {['Instagram', 'TikTok', 'Facebook', 'Twitter', 'WhatsApp'].map(tag => (
+                  <span key={tag} className="px-3 py-1 rounded-full bg-slate-50 text-slate-400 text-xs font-semibold border border-slate-100">
                     {tag}
                   </span>
                 ))}
@@ -43,7 +50,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-slate-100 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-           <p className="text-xs text-slate-400">© {new Date().getFullYear()} LetrasPro. Todos los derechos reservados.</p>
+           <p className="text-xs text-slate-400">© {new Date().getFullYear()} ConversorDeLetrasBonitas.org. Todos los derechos reservados.</p>
            <p className="text-xs text-slate-400 flex items-center gap-1">
               Diseñado con <Heart size={12} className="fill-red-400 text-red-400" /> para creadores
            </p>

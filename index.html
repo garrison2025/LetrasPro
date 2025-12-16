@@ -58,6 +58,49 @@
         }
       }
     </script>
+    <style>
+      /* Strategy B: CSS Fallback System for Spanish Characters */
+      
+      .fallback-char {
+        display: inline-block;
+      }
+
+      /* 1. Context: Script/Cursive */
+      /* Use a serif italic or system cursive to blend with mathematical script */
+      .font-ctx-script .fallback-char {
+        font-family: 'Brush Script MT', 'Segoe Script', 'Apple Chancery', 'Lucida Calligraphy', 'Times New Roman', serif;
+        font-style: italic;
+        font-weight: 400;
+        transform: scale(1.1); /* Often scripts are larger */
+      }
+
+      /* 2. Context: Gothic/Blackletter */
+      /* Use a heavy serif to match the density of blackletter */
+      .font-ctx-gothic .fallback-char {
+        font-family: 'Times New Roman', 'Georgia', serif;
+        font-weight: bold;
+        letter-spacing: -0.5px;
+      }
+
+      /* 3. Context: Double Struck / Graffiti */
+      /* Use a monospaced or bold serif */
+      .font-ctx-decorative .fallback-char {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+      }
+      
+      /* 4. Context: Serif */
+      .font-ctx-serif .fallback-char {
+        font-family: 'Times New Roman', serif;
+        font-weight: bold;
+      }
+
+      /* Animation for copying */
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+    </style>
 <script type="importmap">
 {
   "imports": {
