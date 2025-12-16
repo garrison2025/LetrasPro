@@ -5,192 +5,192 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     path: '/',
     title: 'Conversor de Letras Bonitas (Copiar y Pegar)',
     heading: 'Conversor de Letras Bonitas',
-    description: 'Transforma tu texto en fuentes únicas para Instagram, Twitter, Facebook y más. Escribe, copia y pega.',
-    content: 'Bienvenido al mejor conversor de letras bonitas. Aquí encontrarás todas las variedades de estilos, desde cursivas elegantes hasta letras góticas impactantes. Utiliza nuestra herramienta para destacar en tus biografías y posts.',
+    description: 'El mejor conversor de letras bonitas para Instagram y redes sociales. Transforma textos con este conversor de letras bonitas gratuito.',
+    content: 'Bienvenido al **conversor de letras bonitas** más completo de internet. Si buscas destacar en redes sociales, nuestro **conversor de letras bonitas** es la herramienta definitiva que transforma tu texto plano en tipografías estéticas y llamativas. A diferencia de otros sitios, este **conversor de letras bonitas** está optimizado para garantizar la compatibilidad en Instagram, TikTok, WhatsApp y más. Usar un **conversor de letras bonitas** te ayuda a captar la atención de tus seguidores inmediatamente. Simplemente escribe, y deja que nuestro **conversor de letras bonitas** haga la magia por ti.',
     filter: (f) => f.pages.includes('home'),
     whyFeatures: [
-      { title: '100% Gratis y Rápido', description: 'Nuestro conversor de letras bonitas es gratuito y genera resultados al instante.', icon: 'zap' },
-      { title: 'Compatible Universal', description: 'Funciona en Instagram, TikTok, Facebook, Twitter y WhatsApp sin errores.', icon: 'smartphone' },
-      { title: 'Variedad de Estilos', description: 'Más de 70 fuentes diferentes: cursivas, góticas, emojis y símbolos.', icon: 'palette' }
+      { title: 'Conversor Gratuito', description: 'Este conversor de letras bonitas es 100% gratuito, ilimitado y no requiere registro para generar fuentes estilizadas.', icon: 'zap' },
+      { title: 'Compatibilidad Total', description: 'Nuestro conversor de letras bonitas genera caracteres Unicode probados para funcionar en todas las apps sociales.', icon: 'smartphone' },
+      { title: 'Estilos Variados', description: 'El conversor de letras bonitas ofrece más de 70 estilos, desde cursivas hasta góticas, en un solo lugar.', icon: 'palette' }
     ],
     howToSteps: [
-      'Escribe tu frase o nombre en el cuadro de texto superior.',
-      'Desplázate hacia abajo para ver todas las variedades de letras bonitas generadas.',
-      'Haz clic en el estilo que más te guste para copiarlo automáticamente.',
-      'Pégalo en tu biografía de Instagram, estado de WhatsApp o tweet.'
+      'Escribe tu frase en el panel superior del conversor de letras bonitas.',
+      'Explora la lista de resultados que genera el conversor de letras bonitas automáticamente.',
+      'Haz clic en tu estilo favorito para copiarlo desde el conversor.',
+      'Pega el texto transformado por el conversor de letras bonitas en tus redes.'
     ],
     faqs: [
-      { question: '¿Qué es un conversor de letras bonitas?', answer: 'Es una herramienta que transforma texto normal en símbolos Unicode que parecen fuentes estilizadas. No cambia la fuente real, sino los caracteres, permitiendo usarlos en redes sociales.' },
-      { question: '¿Funcionan estas letras en Instagram?', answer: 'Sí, absolutamente. Puedes usarlas en tu biografía (bio), comentarios, pies de foto e historias.' },
-      { question: '¿Por qué veo cuadrados en lugar de letras?', answer: 'Si tu dispositivo es muy antiguo, es posible que no soporte algunos caracteres Unicode modernos. Sin embargo, la mayoría de nuestros estilos son compatibles con iOS y Android actuales.' }
+      { question: '¿Qué es un conversor de letras bonitas?', answer: 'Un **conversor de letras bonitas** es una herramienta digital que traduce caracteres ASCII normales a símbolos Unicode estéticos. Nuestro **conversor de letras bonitas** facilita este proceso técnico para que puedas personalizar tus perfiles sin conocimientos de código.' },
+      { question: '¿Es seguro usar este conversor de letras bonitas?', answer: 'Sí, absolutamente. Este **conversor de letras bonitas** funciona localmente en tu navegador, protegiendo tu privacidad. Además, los estilos del **conversor de letras bonitas** son seguros para evitar baneos en plataformas como Instagram.' },
+      { question: '¿Por qué usar un conversor de letras bonitas en 2024?', answer: 'La competencia en redes es alta. Un **conversor de letras bonitas** te permite diferenciarte visualmente. Los influencers utilizan nuestro **conversor de letras bonitas** para resaltar palabras clave en sus biografías y pies de foto.' }
     ]
   },
   cursivas: {
     path: '/letras-cursivas',
     title: 'Conversor de Letras Cursivas y Manuscritas',
-    heading: 'Letras Cursivas',
-    description: 'Generador de letras cursivas y caligrafía para tatuajes y redes sociales.',
-    content: 'Las letras cursivas evocan elegancia y estilo personal. Son perfectas para mensajes románticos, invitaciones digitales o para diseñar tatuajes con nombres. Nuestra herramienta convierte tu texto normal en bellos caracteres de script.',
+    heading: 'Conversor de Letras Cursivas',
+    description: 'Utiliza nuestro conversor de letras cursivas para generar textos elegantes. El mejor conversor de letras cursivas para Instagram y tatuajes.',
+    content: '¿Buscas elegancia? Nuestro **conversor de letras cursivas** transforma instantáneamente tus frases en hermosa caligrafía manuscrita. Las fuentes script son ideales para transmitir sofisticación, y con este **conversor de letras cursivas**, puedes obtener estilos negrita, delicados o clásicos en segundos. Muchos diseñadores usan nuestro **conversor de letras cursivas** para maquetar invitaciones o nombres. Si necesitas destacar un nombre en tu biografía, el **conversor de letras cursivas** es tu mejor aliado. Prueba ahora la versatilidad de este **conversor de letras cursivas**.',
     filter: (f) => f.pages.includes('cursivas'),
     whyFeatures: [
-      { title: 'Elegancia Instantánea', description: 'Transforma textos aburridos en caligrafía sofisticada en segundos.', icon: 'star' },
-      { title: 'Ideal para Nombres', description: 'El estilo perfecto para destacar nombres propios en perfiles sociales.', icon: 'heart' },
-      { title: 'Legibilidad Alta', description: 'Seleccionamos estilos cursivos que se ven bien incluso en pantallas pequeñas.', icon: 'check' }
+      { title: 'Elegancia Instantánea', description: 'El conversor de letras cursivas convierte textos aburridos en arte caligráfico sofisticado al instante.', icon: 'star' },
+      { title: 'Ideal para Nombres', description: 'Usa el conversor de letras cursivas para embellecer nombres propios en perfiles sociales.', icon: 'heart' },
+      { title: 'Alta Legibilidad', description: 'Este conversor de letras cursivas selecciona estilos script que se leen bien en móviles.', icon: 'check' }
     ],
     howToSteps: [
-      'Introduce el texto que deseas convertir a cursiva.',
-      'Observa las variantes: desde cursiva negrita hasta manuscrita delicada.',
-      'Copia el resultado haciendo clic sobre la tarjeta.',
-      'Úsalo en tus invitaciones, emails o biografía.'
+      'Introduce el texto en el conversor de letras cursivas.',
+      'Visualiza las opciones script y handwriting del conversor de letras cursivas.',
+      'Copia tu estilo preferido generado por el conversor de letras cursivas.',
+      'Úsalo donde quieras; el conversor de letras cursivas es compatible universalmente.'
     ],
     faqs: [
-      { question: '¿Cuál es la diferencia entre cursiva normal y negrita?', answer: 'La cursiva negrita (Bold Script) tiene trazos más gruesos y destaca más en títulos, mientras que la cursiva normal es más sutil y elegante.' },
-      { question: '¿Puedo usar letras cursivas en mi Nick de Free Fire?', answer: 'Sí, muchos jugadores usan nuestro conversor de letras cursivas para darle un toque exclusivo a sus nicks de juego.' },
-      { question: '¿Sirve para tatuajes?', answer: '¡Por supuesto! Es una excelente manera de previsualizar cómo se vería un nombre o frase en estilo manuscrito antes de tatuarte.' }
+      { question: '¿Cómo funciona el conversor de letras cursivas?', answer: 'El **conversor de letras cursivas** mapea cada letra de tu teclado a su equivalente matemático en formato script Unicode. Esto hace que el texto del **conversor de letras cursivas** se pueda pegar en sitios que normalmente no permiten cambiar fuentes.' },
+      { question: '¿Puedo usar el conversor de letras cursivas para Nicks?', answer: 'Sí, muchos jugadores usan el **conversor de letras cursivas** para crear nicks únicos en Free Fire o PUBG. La estética fluida del **conversor de letras cursivas** destaca en las listas de jugadores.' },
+      { question: '¿Sirve este conversor de letras cursivas para tatuajes?', answer: '¡Por supuesto! El **conversor de letras cursivas** es excelente para previsualizar nombres antes de tatuarlos. Simplemente escribe en el **conversor de letras cursivas** y muestra el diseño a tu artista.' }
     ]
   },
   tatuajes: {
     path: '/letras-tatuajes',
-    title: 'Conversor de Letras para Tatuajes',
-    heading: 'Letras para Tatuajes',
-    description: 'Fuentes ideales para tatuajes: góticas, cursivas y estilos artísticos.',
-    content: '¿Buscas inspiración para tu próximo tatuaje? Prueba nuestros estilos góticos y cursivos. Estos caracteres Unicode son visualmente impactantes y funcionan perfectamente para maquetas de diseño de texto en piel.',
+    title: 'Conversor de Letras para Tatuajes Online',
+    heading: 'Conversor de Letras para Tatuajes',
+    description: 'Prueba diseños con el conversor de letras para tatuajes. Encuentra fuentes góticas y cursivas en este conversor de letras para tatuajes.',
+    content: 'Diseñar arte corporal requiere precisión, y nuestro **conversor de letras para tatuajes** es la herramienta perfecta para visualizar tus ideas. Ya sea que busques un estilo chicano, gótico o minimalista, este **conversor de letras para tatuajes** te ofrece una vista previa instantánea. Ahorra tiempo explicándole a tu artista lo que quieres; usa el **conversor de letras para tatuajes** para generar la referencia exacta. Miles de usuarios confían en nuestro **conversor de letras para tatuajes** para decidir la tipografía de fechas importantes, nombres y frases célebres. El **conversor de letras para tatuajes** es tu primer paso hacia la tinta.',
     filter: (f) => f.pages.includes('tatuajes'),
     whyFeatures: [
-      { title: 'Previsualización Real', description: 'Escribe tu idea y mira cómo queda en diferentes estilos tipográficos.', icon: 'palette' },
-      { title: 'Estilos Clásicos', description: 'Incluye Chicano, Gótico y Script, los más populares en el mundo del tattoo.', icon: 'star' },
-      { title: 'Sin Instalación', description: 'No necesitas descargar fuentes .ttf, solo copia y envía el diseño a tu tatuador.', icon: 'zap' }
+      { title: 'Previsualización Real', description: 'El conversor de letras para tatuajes te permite ver cómo queda tu frase en diferentes estilos antes de la tinta.', icon: 'palette' },
+      { title: 'Estilos Clásicos', description: 'Nuestro conversor de letras para tatuajes incluye fuentes Chicano, Old English y Script.', icon: 'star' },
+      { title: 'Sin Instalación', description: 'No necesitas instalar fuentes; el conversor de letras para tatuajes funciona en tu navegador.', icon: 'zap' }
     ],
     howToSteps: [
-      'Escribe la frase, nombre o fecha que planeas tatuarte.',
-      'Explora las categorías Góticas y Cursivas que ofrece la herramienta.',
-      'Prueba añadir símbolos como ★ o ✝ usando nuestra barra de herramientas.',
-      'Copia el diseño final y muéstraselo a tu artista del tatuaje.'
+      'Escribe tu idea en el conversor de letras para tatuajes.',
+      'Filtra entre estilos góticos y cursivos en el conversor de letras para tatuajes.',
+      'Añade símbolos especiales disponibles en el conversor de letras para tatuajes.',
+      'Lleva el diseño del conversor de letras para tatuajes a tu estudio de confianza.'
     ],
     faqs: [
-      { question: '¿Cómo elegir la mejor letra para un tatuaje?', answer: 'Depende de la zona del cuerpo y el mensaje. Las cursivas son ideales para nombres, mientras que las góticas funcionan bien en espalda o pecho para frases con fuerza.' },
-      { question: '¿Estas fuentes son gratis para tatuar?', answer: 'Sí, los estilos generados son de uso libre ya que son caracteres Unicode universales.' },
-      { question: '¿Puedo combinar estilos?', answer: 'Sí, puedes generar una palabra en gótico y otra en cursiva, copiarlas por separado y unirlas.' }
+      { question: '¿Cómo elegir en el conversor de letras para tatuajes?', answer: 'El **conversor de letras para tatuajes** ofrece variedad. Para zonas grandes, usa estilos góticos del **conversor de letras para tatuajes**. Para muñecas o dedos, busca las opciones cursivas finas en el **conversor de letras para tatuajes**.' },
+      { question: '¿Son gratis las fuentes del conversor de letras para tatuajes?', answer: 'Sí, el **conversor de letras para tatuajes** genera caracteres Unicode de dominio público, por lo que puedes tatuarte cualquier diseño salido de este **conversor de letras para tatuajes** sin problemas de licencia.' },
+      { question: '¿Puedo combinar estilos en el conversor de letras para tatuajes?', answer: 'Sí, puedes generar una palabra en un estilo y otra en otro usando el **conversor de letras para tatuajes**, y luego unirlas para crear una composición única.' }
     ]
   },
   goticas: {
     path: '/letras-goticas',
-    title: 'Conversor de Letras Góticas (Blackletter)',
-    heading: 'Letras Góticas',
-    description: 'Genera texto gótico oscuro y antiguo. Perfecto para nicks de juegos y estética dark.',
-    content: 'El estilo gótico (o Blackletter) es denso, oscuro y dramático. Muy utilizado en la cultura del rock, metal y en juegos MMORPG para nicks de clanes. Convierte tu nombre en algo legendario.',
+    title: 'Conversor de Letras Góticas (Dark & Blackletter)',
+    heading: 'Conversor de Letras Góticas',
+    description: 'Genera textos oscuros con el conversor de letras goticas. Ideal para nicks y bios darks, usa nuestro conversor de letras goticas gratis.',
+    content: 'El estilo Blackletter nunca pasa de moda, y nuestro **conversor de letras goticas** lo trae a la era digital. Este **conversor de letras goticas** es esencial para crear una estética "dark", misteriosa o antigua en tus perfiles. Muy popular entre la comunidad gamer y metalera, el **conversor de letras goticas** transforma caracteres simples en símbolos Fraktur complejos. Si quieres imponer respeto en tu clan o biografía, utiliza el **conversor de letras goticas**. La legibilidad y el impacto visual son las prioridades de nuestro **conversor de letras goticas** especializado.',
     filter: (f) => f.pages.includes('goticas'),
     whyFeatures: [
-      { title: 'Impacto Visual', description: 'Las letras góticas (Fraktur) captan la atención inmediatamente.', icon: 'shield' },
-      { title: 'Perfecto para Gamers', description: 'El estilo favorito para clanes y nicks en juegos competitivos.', icon: 'smartphone' },
-      { title: 'Estética Dark', description: 'Ideal para perfiles con temática oscura, emo o metalera.', icon: 'star' }
+      { title: 'Impacto Visual', description: 'El conversor de letras goticas genera textos Fraktur que captan la atención inmediatamente.', icon: 'shield' },
+      { title: 'Perfecto para Gamers', description: 'Usa el conversor de letras goticas para crear nicks intimidantes en juegos competitivos.', icon: 'smartphone' },
+      { title: 'Estética Dark', description: 'El conversor de letras goticas es ideal para perfiles con temática oscura, emo o alternativa.', icon: 'star' }
     ],
     howToSteps: [
-      'Escribe tu apodo o frase en el campo de texto.',
-      'Busca los estilos "Fraktur" o "Gótica" en la lista de resultados.',
-      'Elige entre la versión normal o la versión negrita (Bold) para más intensidad.',
-      'Copia y pega en tu perfil de juego o red social.'
+      'Escribe tu nick en el conversor de letras goticas.',
+      'Selecciona entre Fraktur normal o negrita en el conversor de letras goticas.',
+      'Copia el resultado directamente del conversor de letras goticas.',
+      'Pégalo en tu juego o red social favorita compatible con el conversor de letras goticas.'
     ],
     faqs: [
-      { question: '¿Qué es la letra Fraktur?', answer: 'Es un tipo de letra gótica alemana. Nuestro conversor utiliza los caracteres Unicode matemáticos que imitan este estilo histórico.' },
-      { question: '¿Se aceptan letras góticas en Instagram?', answer: 'Sí, Instagram permite caracteres Unicode góticos tanto en la biografía como en los nombres de perfil.' },
-      { question: '¿Son difíciles de leer?', answer: 'Tienen trazos complejos, pero la mayoría de nuestros estilos góticos están optimizados para ser legibles en pantallas móviles.' }
+      { question: '¿Qué es el estilo Fraktur del conversor de letras goticas?', answer: 'Es un tipo de caligrafía alemana antigua. Nuestro **conversor de letras goticas** utiliza símbolos matemáticos Unicode que imitan este estilo. El **conversor de letras goticas** hace accesible esta tipografía histórica para la web.' },
+      { question: '¿El conversor de letras goticas funciona en Instagram?', answer: 'Sí, Instagram soporta perfectamente los caracteres generados por el **conversor de letras goticas**. Puedes usar el **conversor de letras goticas** para tu nombre de perfil o descripción.' },
+      { question: '¿Son difíciles de leer los textos del conversor de letras goticas?', answer: 'Tienen trazos complejos, pero el **conversor de letras goticas** prioriza versiones legibles. Aun así, recomendamos usar el **conversor de letras goticas** para palabras clave cortas.' }
     ]
   },
   graffiti: {
     path: '/letras-graffiti',
-    title: 'Conversor de Letras Graffiti y Burbujas',
-    heading: 'Letras Graffiti',
-    description: 'Estilos urbanos, letras en burbujas y doble trazo.',
-    content: 'Dale un toque urbano a tus comentarios. Las letras de doble trazo (Double Struck) y las burbujas circulares destacan inmediatamente en el feed de cualquier red social.',
+    title: 'Conversor de Letras Graffiti y Urbano',
+    heading: 'Conversor de Letras Graffiti',
+    description: 'Crea textos urbanos con el conversor de letras graffiti. Estilos burbuja y callejeros en este conversor de letras graffiti online.',
+    content: 'Dale un toque callejero a tu presencia digital con el **conversor de letras graffiti**. Este estilo vibrante y rebelde es posible gracias a los caracteres de doble trazo y burbujas que ofrece nuestro **conversor de letras graffiti**. Ya sea para comentarios divertidos o títulos de videos, el **conversor de letras graffiti** asegura que tu mensaje destaque visualmente. La cultura urbana se encuentra con la tecnología en este **conversor de letras graffiti**. No te conformes con texto plano, usa el **conversor de letras graffiti** para expresar tu lado más creativo y moderno.',
     filter: (f) => f.pages.includes('graffiti'),
     whyFeatures: [
-      { title: 'Estilo Urbano', description: 'Lleva el arte callejero a tus textos digitales.', icon: 'palette' },
-      { title: 'Destaca en Comentarios', description: 'Las letras de burbuja ocupan más espacio visual y llaman la atención.', icon: 'star' },
-      { title: 'Diversión Pura', description: 'Perfecto para mensajes informales y divertidos entre amigos.', icon: 'heart' }
+      { title: 'Estilo Urbano', description: 'El conversor de letras graffiti lleva el arte callejero directamente a tus textos digitales.', icon: 'palette' },
+      { title: 'Destaca en Comentarios', description: 'Las fuentes del conversor de letras graffiti ocupan más espacio visual y llaman la atención.', icon: 'star' },
+      { title: 'Diversión Pura', description: 'El conversor de letras graffiti es perfecto para mensajes informales y divertidos.', icon: 'heart' }
     ],
     howToSteps: [
-      'Introduce tu texto para "graffitear".',
-      'Selecciona el estilo de burbujas (Circled) o doble trazo (Double Struck).',
-      'Copia el resultado.',
-      'Pégalo en comentarios de YouTube, TikTok o foros.'
+      'Introduce tu texto para "graffitear" en el conversor de letras graffiti.',
+      'Elige estilos de burbujas o doble trazo en el conversor de letras graffiti.',
+      'Copia el arte generado por el conversor de letras graffiti.',
+      'Pégalo en comentarios o foros compatibles con el conversor de letras graffiti.'
     ],
     faqs: [
-      { question: '¿Qué son las letras Double Struck?', answer: 'Son caracteres que simulan tener un contorno o estar escritos en negrita de pizarra, muy similares al estilo de letra de las universidades americanas o el graffiti básico.' },
-      { question: '¿Funcionan las letras burbuja en WhatsApp?', answer: 'Sí, WhatsApp soporta perfectamente los caracteres encerrados en círculos o paréntesis.' },
-      { question: '¿Puedo usar números graffiti?', answer: 'Sí, nuestro conversor también transforma los números al estilo de doble trazo o burbuja.' }
+      { question: '¿Qué son las letras Double Struck del conversor de letras graffiti?', answer: 'Son caracteres con contorno doble que simulan el estilo urbano. El **conversor de letras graffiti** los utiliza para imitar el arte callejero o universitario.' },
+      { question: '¿El conversor de letras graffiti funciona en WhatsApp?', answer: 'Sí, los estilos de burbujas del **conversor de letras graffiti** se ven perfectos en chats. Sorprende a tus amigos usando el **conversor de letras graffiti** en tus mensajes.' },
+      { question: '¿Puedo usar números en el conversor de letras graffiti?', answer: 'Sí, nuestro **conversor de letras graffiti** también transforma los números al estilo de doble trazo o burbuja, ideal para fechas.' }
     ]
   },
   amino: {
     path: '/letras-amino',
-    title: 'Conversor de Letras Amino',
-    heading: 'Letras para Amino',
-    description: 'Fuentes compatibles con la app Amino. Destaca en tus blogs y chats.',
-    content: 'Amino tiene una comunidad vibrante. Usa estos estilos probados para decorar tus blogs, wikis y perfiles sin miedo a que aparezcan cuadros vacíos.',
+    title: 'Conversor de Letras Amino (Compatibles)',
+    heading: 'Conversor de Letras Amino',
+    description: 'El único conversor de letras amino optimizado. Crea blogs estéticos con fuentes seguras usando el conversor de letras amino.',
+    content: 'La comunidad Amino valora la estética, y nuestro **conversor de letras amino** está diseñado específicamente para ello. A diferencia de generadores genéricos, este **conversor de letras amino** filtra los caracteres que suelen dar error en la app. Si quieres que tus wikis, blogs y perfiles luzcan profesionales, necesitas el **conversor de letras amino**. Evita los molestos cuadros vacíos y asegura la legibilidad con nuestra herramienta. El **conversor de letras amino** es el secreto de los usuarios más populares para decorar sus publicaciones y títulos.',
     filter: (f) => f.pages.includes('amino'),
     whyFeatures: [
-      { title: '100% Compatible', description: 'Filtramos solo las fuentes que se visualizan correctamente en la App Amino.', icon: 'check' },
-      { title: 'Blogs Estéticos', description: 'Ideal para crear títulos llamativos y separar secciones en tus wikis.', icon: 'palette' },
-      { title: 'Nombres de Perfil', description: 'Haz que tu perfil destaque en la lista de miembros de tu comunidad.', icon: 'star' }
+      { title: '100% Compatible', description: 'El conversor de letras amino filtra solo las fuentes que se visualizan correctamente en la App.', icon: 'check' },
+      { title: 'Blogs Estéticos', description: 'Usa el conversor de letras amino para crear títulos llamativos y separar secciones.', icon: 'palette' },
+      { title: 'Nombres de Perfil', description: 'Haz que tu perfil destaque en la lista de miembros con el conversor de letras amino.', icon: 'star' }
     ],
     howToSteps: [
-      'Escribe el título de tu blog o tu nuevo nombre de usuario.',
-      'Elige un estilo decorativo (como Small Caps o Espaciado).',
-      'Copia el texto estilizado.',
-      'Abre la app Amino y edita tu blog o perfil para pegar el nuevo diseño.'
+      'Escribe el título de tu blog en el conversor de letras amino.',
+      'Elige un estilo decorativo seguro del conversor de letras amino.',
+      'Copia el texto estilizado desde el conversor de letras amino.',
+      'Abre la app y pega el diseño creado con el conversor de letras amino.'
     ],
     faqs: [
-      { question: '¿Por qué algunas letras no se ven en Amino?', answer: 'Amino a veces tiene problemas con ciertos rangos de Unicode en dispositivos Android antiguos. Esta página selecciona los más seguros.' },
-      { question: '¿Cómo centrar texto en Amino?', answer: 'Para centrar, debes usar el código [C] al inicio de la línea en el editor de Amino. Nuestras letras estilizadas funcionan dentro de ese código.' },
-      { question: '¿Sirve para títulos de blogs?', answer: 'Sí, las letras "Small Caps" (mayúsculas pequeñas) son las favoritas para títulos elegantes en Amino.' }
+      { question: '¿Por qué usar este conversor de letras amino específico?', answer: 'Porque Amino en Android antiguos tiene problemas con ciertos Unicode. Este **conversor de letras amino** selecciona los rangos más seguros para garantizar que todos vean tu decoración.' },
+      { question: '¿Cómo centrar texto del conversor de letras amino?', answer: 'Para centrar, usa el código [C] en la app. El texto generado por el **conversor de letras amino** funciona perfectamente dentro de esos códigos de formato.' },
+      { question: '¿El conversor de letras amino sirve para títulos?', answer: 'Sí, las letras "Small Caps" del **conversor de letras amino** son las favoritas para títulos elegantes y limpios en la comunidad.' }
     ]
   },
   facebook: {
     path: '/letras-facebook',
-    title: 'Conversor de Letras para Facebook',
+    title: 'Conversor de Letras para Facebook (Anti-Ban)',
     heading: 'Conversor de Letras para Facebook',
-    description: 'Conversor de letras para Facebook. Texto estilizado que funciona en posts y comentarios.',
-    content: 'Facebook a veces restringe ciertos caracteres Unicode. Este conversor de letras para Facebook selecciona automáticamente los estilos que garantizan la legibilidad y compatibilidad en el feed de noticias, grupos y comentarios.',
+    description: 'Mejora tus posts con el conversor de letras para facebook. Fuentes legibles y seguras en este conversor de letras para facebook.',
+    content: 'Facebook es estricto con los formatos, pero nuestro **conversor de letras para facebook** te permite personalizar tus posts sin perder visibilidad. Este **conversor de letras para facebook** selecciona tipografías claras como Serif y Sans-Serif negrita que no confunden al algoritmo. Ya sea para anuncios, grupos o estados personales, el **conversor de letras para facebook** te ayuda a resaltar lo importante. No arriesgues el alcance de tu publicación con caracteres extraños; usa el **conversor de letras para facebook** para garantizar compatibilidad y estilo profesional.',
     filter: (f) => f.pages.includes('facebook'),
     whyFeatures: [
-      { title: 'Anti-Ban', description: 'Evita caracteres extraños que Facebook podría marcar como spam.', icon: 'shield' },
-      { title: 'Visibilidad Feed', description: 'Asegura que tus amigos vean el texto tal como lo diseñaste.', icon: 'check' },
-      { title: 'Grupos y Páginas', description: 'Destaca tus anuncios o reglas de grupo con tipografías únicas.', icon: 'star' }
+      { title: 'Anti-Spam', description: 'El conversor de letras para facebook evita caracteres que la plataforma marca como ilegibles.', icon: 'shield' },
+      { title: 'Visibilidad Feed', description: 'El conversor de letras para facebook asegura que tus amigos vean el texto tal como lo diseñaste.', icon: 'check' },
+      { title: 'Grupos y Páginas', description: 'Destaca tus anuncios con tipografías únicas del conversor de letras para facebook.', icon: 'star' }
     ],
     howToSteps: [
-      'Escribe tu estado o comentario en el conversor.',
-      'Selecciona estilos legibles como Serif Negrita o Sans Itálica.',
-      'Copia el texto generado.',
-      'Ve a Facebook y pégalo en tu muro. ¡Verás que se mantiene el formato!'
+      'Escribe tu estado en el conversor de letras para facebook.',
+      'Selecciona estilos legibles recomendados por el conversor de letras para facebook.',
+      'Copia el texto generado por el conversor de letras para facebook.',
+      'Publica en tu muro sin miedo a errores gracias al conversor de letras para facebook.'
     ],
     faqs: [
-      { question: '¿Puedo cambiar la letra de mi nombre en Facebook?', answer: 'Facebook es estricto con los nombres reales. Recomendamos usar estas letras para "Apodos" (en la sección "Otros nombres") o en biografías y posts, no en el nombre principal.' },
-      { question: '¿Funciona en Facebook Messenger?', answer: 'Sí, puedes enviar mensajes con letras bonitas a través de Messenger sin problemas.' },
-      { question: '¿Es seguro usar este conversor para Facebook Ads?', answer: 'Se recomienda usarlo con moderación en publicidad para no afectar la legibilidad y el rendimiento del anuncio.' }
+      { question: '¿Puedo cambiar mi nombre con el conversor de letras para facebook?', answer: 'Facebook exige nombres reales. Recomendamos usar el **conversor de letras para facebook** para "Apodos" o en la descripción, pero no en el nombre legal principal.' },
+      { question: '¿El conversor de letras para facebook funciona en Messenger?', answer: 'Sí, puedes enviar mensajes estilizados con el **conversor de letras para facebook** a través de Messenger y se verán correctamente.' },
+      { question: '¿Es seguro el conversor de letras para facebook para Ads?', answer: 'Sí, pero úsalo con moderación. El **conversor de letras para facebook** es genial para resaltar una palabra clave en tu anuncio (CTA).' }
     ]
   },
   tattoo: {
     path: '/letras-tattoo',
-    title: 'Conversor de Letras Tattoo',
+    title: 'Conversor de Letras Tattoo (Diseños Gratis)',
     heading: 'Conversor de Letras Tattoo',
-    description: 'Conversor de letras tattoo con variedad de fuentes para diseño de tatuajes y arte corporal.',
-    content: 'Utiliza nuestro conversor de letras tattoo para explorar una mezcla de estilos agresivos, góticos y artísticos. Es la herramienta perfecta para visualizar frases y nombres antes de plasmarlos en tu piel.',
+    description: 'El mejor conversor de letras tattoo para inspirarte. Crea diseños únicos de piel con el conversor de letras tattoo.',
+    content: 'Encontrar la fuente perfecta para tu piel es fácil con el **conversor de letras tattoo**. Esta herramienta especializada combina lo mejor de la tipografía clásica y moderna. Si buscas un **conversor de letras tattoo** que te ofrezca variedad y rapidez, has llegado al lugar correcto. Desde nombres minimalistas hasta frases complejas, el **conversor de letras tattoo** te permite experimentar sin coste alguno. Es la referencia visual ideal para llevar a tu estudio; el **conversor de letras tattoo** puentea la brecha entre tu idea y la aguja del artista.',
     filter: (f) => f.pages.includes('tattoo'),
     whyFeatures: [
-      { title: 'Inspiración Artística', description: 'Combina estilos para crear diseños de tatuajes únicos.', icon: 'palette' },
-      { title: 'Prueba Rápida', description: 'Ahorra tiempo probando docenas de fuentes en segundos.', icon: 'zap' },
-      { title: 'Gratis', description: 'Diseña tu próximo tattoo sin gastar en software de diseño.', icon: 'heart' }
+      { title: 'Inspiración Artística', description: 'El conversor de letras tattoo combina estilos para crear diseños de tatuajes únicos.', icon: 'palette' },
+      { title: 'Prueba Rápida', description: 'Ahorra tiempo probando docenas de fuentes en segundos con el conversor de letras tattoo.', icon: 'zap' },
+      { title: 'Gratis', description: 'Diseña tu próximo tattoo usando el conversor de letras tattoo sin gastar en software.', icon: 'heart' }
     ],
     howToSteps: [
-      'Piensa en la palabra clave de tu tatuaje.',
-      'Introdúcela en el generador.',
-      'Busca estilos "Old English" o "Manuscritos".',
-      'Haz una captura de pantalla o copia el texto para mostrárselo a tu tatuador.'
+      'Piensa en la palabra clave y escríbela en el conversor de letras tattoo.',
+      'Busca estilos "Old English" en el conversor de letras tattoo.',
+      'Haz una captura del resultado del conversor de letras tattoo.',
+      'Muestra el diseño del conversor de letras tattoo a tu tatuador.'
     ],
     faqs: [
-      { question: '¿Qué estilo es mejor para tatuajes pequeños?', answer: 'Para tatuajes pequeños (fine line), recomendamos fuentes Sans-Serif o Manuscritas simples para asegurar que la tinta no se expanda con el tiempo y lo haga ilegible.' },
-      { question: '¿Puedo usar esto para tatuajes de fechas?', answer: 'Sí, el conversor incluye estilos numéricos romanos y góticos perfectos para fechas importantes.' },
-      { question: '¿Es compatible con máquinas de stencil?', answer: 'Los tatuadores suelen redibujar el diseño para el stencil, pero este conversor sirve como la referencia visual perfecta.' }
+      { question: '¿Qué estilo es mejor en el conversor de letras tattoo para zonas pequeñas?', answer: 'Para tatuajes pequeños, el **conversor de letras tattoo** recomienda fuentes Sans-Serif o Manuscritas simples para asegurar que la tinta no se expanda y lo haga ilegible.' },
+      { question: '¿El conversor de letras tattoo sirve para fechas?', answer: 'Sí, el **conversor de letras tattoo** incluye estilos numéricos romanos y góticos perfectos para inmortalizar fechas importantes en tu piel.' },
+      { question: '¿Es compatible el conversor de letras tattoo con stencils?', answer: 'Los tatuadores usan el resultado del **conversor de letras tattoo** como referencia visual perfecta para crear el stencil final.' }
     ]
   }
 };
