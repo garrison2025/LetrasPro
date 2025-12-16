@@ -41,3 +41,15 @@ export interface TextSegment {
   content: string;
   isFallback: boolean;
 }
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string; // HTML string for rich text content
+  date: string;
+  author: string;
+  tags: string[];
+  imageUrl?: string; // Optional cover image URL
+}

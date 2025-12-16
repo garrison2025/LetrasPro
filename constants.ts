@@ -204,4 +204,5 @@ export const NAVIGATION_LINKS: NavLink[] = [
   { label: 'Amino', path: '/letras-amino' },
   { label: 'Facebook', path: '/letras-facebook' },
   { label: 'Tattoo', path: '/letras-tattoo' },
+  { label: 'Blog', path: '/blog' },
 ];

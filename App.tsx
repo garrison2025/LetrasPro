@@ -8,6 +8,8 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
+import BlogIndexPage from './pages/BlogIndexPage';
+import BlogPostPage from './pages/BlogPostPage';
 import { PAGE_CONFIGS } from './constants';
 
 function App() {
@@ -35,6 +37,10 @@ function App() {
               <Route path="/letras-facebook" element={<GeneratorPage config={PAGE_CONFIGS.facebook} />} />
               <Route path="/letras-tattoo" element={<GeneratorPage config={PAGE_CONFIGS.tattoo} />} />
               
+              {/* Blog Pages */}
+              <Route path="/blog" element={<BlogIndexPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
+
               {/* Static Content Pages */}
               <Route path="/sobre-nosotros" element={<AboutPage />} />
               <Route path="/contacto" element={<ContactPage />} />

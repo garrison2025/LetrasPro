@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PageConfig } from '../types';
+import { PAGE_CONFIGS } from '../constants';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import FontCard from '../components/FontCard';
 import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, HelpCircle, ChevronRight, Home } from 'lucide-react';
@@ -22,7 +23,15 @@ const SYMBOLS = [
 ];
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
-  const [inputText, setInputText] = useState('');
+  // Initialize state from localStorage if available (Input Persistence)
+  const [inputText, setInputText] = useState(() => {
+    try {
+      return localStorage.getItem('let_pro_input') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isTyping, setIsTyping] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -39,6 +48,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     window.scrollTo(0, 0);
   }, [config.path]);
 
+  // Persist input to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('let_pro_input', inputText);
+    } catch (e) {
+      // Ignore storage errors
+    }
+  }, [inputText]);
+
   // Effect to track instant typing state for UI feedback
   useEffect(() => {
     if (inputText !== debouncedText) {
@@ -52,6 +70,16 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const filteredFonts = useMemo(() => {
     return FONTS.filter(config.filter);
   }, [config.filter]);
+
+  // Calculate related pages for Internal Linking Strategy
+  const relatedPages = useMemo(() => {
+    const allPages = Object.values(PAGE_CONFIGS);
+    // Filter out current page
+    const others = allPages.filter(p => p.path !== config.path);
+    // Shuffle array simply and take top 3
+    const shuffled = [...others].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
+  }, [config.path]);
 
   // Performance: Slice the array to only render visible items
   const visibleFonts = filteredFonts.slice(0, visibleCount);
@@ -418,6 +446,32 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                </div>
              ))}
            </div>
+        </div>
+        
+        {/* 4. También te puede interesar (Internal Linking) */}
+        <div className="mb-20 border-t border-slate-100 pt-16">
+          <div className="text-center mb-10">
+            <h2 className="font-display font-bold text-3xl text-slate-900 mb-3">También te puede interesar</h2>
+            <div className="w-16 h-1 bg-primary-500 mx-auto rounded-full"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+             {relatedPages.map((page) => (
+               <Link 
+                 key={page.path} 
+                 to={page.path}
+                 className="group block bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-primary-200 transition-all duration-300"
+               >
+                 <div className="flex items-center justify-between mb-4">
+                    <div className="p-2 bg-primary-50 text-primary-600 rounded-lg group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                       <Sparkles size={20} />
+                    </div>
+                    <ChevronRight size={20} className="text-slate-300 group-hover:text-primary-500 group-hover:translate-x-1 transition-transform" />
+                 </div>
+                 <h3 className="font-bold text-lg text-slate-800 mb-2 group-hover:text-primary-700 transition-colors">{page.heading}</h3>
+                 <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">{page.description}</p>
+               </Link>
+             ))}
+          </div>
         </div>
 
         {/* Existing SEO Content Block (Retained as requested) */}

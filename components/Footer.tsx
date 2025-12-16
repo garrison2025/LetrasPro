@@ -27,6 +27,7 @@ const Footer: React.FC = () => {
               <li><Link to="/letras-goticas" className="hover:text-primary-600 transition-colors">Letras Góticas</Link></li>
               <li><Link to="/letras-tatuajes" className="hover:text-primary-600 transition-colors">Fuentes Tattoo</Link></li>
               <li><Link to="/letras-graffiti" className="hover:text-primary-600 transition-colors">Graffiti & Burbujas</Link></li>
+              <li><Link to="/blog" className="hover:text-primary-600 transition-colors flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-primary-500"></span>Blog & Artículos</Link></li>
             </ul>
           </div>
 
