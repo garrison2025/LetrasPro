@@ -12,134 +12,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    
-    <!-- FIX: Added typography plugin -->
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              display: ['Outfit', 'sans-serif'],
-            },
-            colors: {
-              primary: {
-                50: '#f5f3ff',
-                100: '#ede9fe',
-                200: '#ddd6fe',
-                300: '#c4b5fd',
-                400: '#a78bfa',
-                500: '#8b5cf6',
-                600: '#7c3aed',
-                700: '#6d28d9',
-                800: '#5b21b6',
-                900: '#4c1d95',
-              },
-              secondary: {
-                500: '#ec4899', // Pink
-                600: '#db2777',
-              }
-            },
-            animation: {
-              'blob': 'blob 7s infinite',
-              'fade-in': 'fadeIn 0.5s ease-out forwards',
-            },
-            keyframes: {
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
-              fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              }
-            },
-            typography: (theme) => ({
-              DEFAULT: {
-                css: {
-                  color: theme('colors.slate.600'),
-                  a: {
-                    color: theme('colors.primary.600'),
-                    '&:hover': {
-                      color: theme('colors.primary.700'),
-                    },
-                  },
-                  h1: { color: theme('colors.slate.900') },
-                  h2: { color: theme('colors.slate.900') },
-                  h3: { color: theme('colors.slate.900') },
-                  h4: { color: theme('colors.slate.900') },
-                  strong: { color: theme('colors.slate.900') },
-                  blockquote: {
-                    borderLeftColor: theme('colors.primary.500'),
-                    backgroundColor: theme('colors.slate.50'),
-                    color: theme('colors.slate.700'),
-                    fontStyle: 'normal',
-                    fontWeight: '500',
-                  },
-                },
-              },
-            }),
-          }
-        }
-      }
-    </script>
-    <style>
-      /* Strategy B: CSS Fallback System for Spanish Characters */
-      
-      .fallback-char {
-        display: inline-block;
-      }
-
-      /* 1. Context: Script/Cursive */
-      /* Use a serif italic or system cursive to blend with mathematical script */
-      .font-ctx-script .fallback-char {
-        font-family: 'Brush Script MT', 'Segoe Script', 'Apple Chancery', 'Lucida Calligraphy', 'Times New Roman', serif;
-        font-style: italic;
-        font-weight: 400;
-        transform: scale(1.1); /* Often scripts are larger */
-      }
-
-      /* 2. Context: Gothic/Blackletter */
-      /* Use a heavy serif to match the density of blackletter */
-      .font-ctx-gothic .fallback-char {
-        font-family: 'Times New Roman', 'Georgia', serif;
-        font-weight: bold;
-        letter-spacing: -0.5px;
-      }
-
-      /* 3. Context: Double Struck / Graffiti */
-      /* Use a monospaced or bold serif */
-      .font-ctx-decorative .fallback-char {
-        font-family: 'Courier New', monospace;
-        font-weight: bold;
-      }
-      
-      /* 4. Context: Serif */
-      .font-ctx-serif .fallback-char {
-        font-family: 'Times New Roman', serif;
-        font-weight: bold;
-      }
-
-      /* Animation for copying */
-      @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-      }
-    </style>
-<script type="importmap">
+  <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
+    "react-helmet-async": "https://esm.sh/react-helmet-async@^2.0.5",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
-    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
-    "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-    "react-helmet-async": "https://esm.sh/react-helmet-async@^2.0.5"
+    "react": "https://esm.sh/react@^19.2.3"
   }
 }
 </script>
