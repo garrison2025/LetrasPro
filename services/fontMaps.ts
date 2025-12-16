@@ -7,8 +7,12 @@ const nums = '0123456789';
 
 const createMap = (source: string, target: string): Record<string, string> => {
   const map: Record<string, string> = {};
+  // FIX: Use spread syntax [...target] to split by Unicode Code Point instead of UTF-16 Code Unit.
+  // This correctly handles characters that require 2 units (Surrogate Pairs), like 𝓪, 𝕭, etc.
+  const targetChars = [...target];
+
   for (let i = 0; i < source.length; i++) {
-    if (target[i]) map[source[i]] = target[i];
+    if (targetChars[i]) map[source[i]] = targetChars[i];
   }
   return map;
 };
