@@ -175,14 +175,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:title" content={config.title} />
         <meta property="og:description" content={config.description} />
         <meta property="og:site_name" content={siteName} />
-        {/* Placeholder for OG Image - if we had one */}
-        {/* <meta property="og:image" content="https://conversordeletrasbonitas.org/og-image.jpg" /> */}
+        <meta property="og:image" content="https://conversordeletrasbonitas.org/og-image.svg" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={canonicalUrl} />
         <meta property="twitter:title" content={config.title} />
         <meta property="twitter:description" content={config.description} />
+        <meta property="twitter:image" content="https://conversordeletrasbonitas.org/og-image.svg" />
 
         {/* Structured Data JSON-LD */}
         <script type="application/ld+json">
