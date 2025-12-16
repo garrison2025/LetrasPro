@@ -1,22 +1,30 @@
 import { BlogPost } from '../types';
 
+// Updated Date for all posts
+const CURRENT_DATE = '2025-12-17';
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: '1',
     slug: 'guia-definitiva-conversor-letras-bonitas-instagram-facebook',
     title: 'Guía Definitiva 2025: Cómo usar un Conversor de Letras Bonitas para Instagram y Facebook',
     excerpt: 'Domina el arte de la tipografía digital. Aprende a cambiar la fuente de tu biografía, posts y comentarios utilizando un conversor de letras bonitas. Trucos, consejos de diseño y estrategias para ganar seguidores.',
-    date: '2024-03-15',
+    date: CURRENT_DATE,
     author: 'Equipo LetrasPro',
     tags: ['Instagram', 'Facebook', 'Marketing', 'Tipografía'],
     imageUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop',
     content: `
-      <p>En el saturado mundo de las redes sociales, destacar es cada vez más difícil. Ya no basta con tener buenas fotos; la estética de tu texto juega un papel fundamental. Aquí es donde entra en juego una herramienta poderosa y a menudo subestimada: el <strong>conversor de letras bonitas</strong>.</p>
+      <p class="lead">En el saturado mundo de las redes sociales, destacar es cada vez más difícil. Ya no basta con tener buenas fotos; la estética de tu texto juega un papel fundamental. Aquí es donde entra en juego una herramienta poderosa y a menudo subestimada: el <strong>conversor de letras bonitas</strong>.</p>
 
       <p>Si alguna vez te has preguntado cómo hacen los influencers para tener esas biografías con letras cursivas, negritas o con símbolos extraños, has llegado al lugar correcto. En esta guía extensa, desglosaremos todo lo que necesitas saber sobre las <a href="https://conversordeletrasbonitas.org/letras-facebook">letras para Facebook</a>, Instagram y otras plataformas.</p>
 
       <h2>¿Por qué la tipografía importa en Redes Sociales?</h2>
       <p>La tipografía es el tono de voz de tu texto. Escribir en una fuente estándar es como hablar en un tono monótono. Al utilizar un <strong>conversor de letras bonitas</strong>, le das entonación, carácter y personalidad a tus palabras.</p>
+      
+      <blockquote>
+        <p><strong>Dato curioso:</strong> Según estudios de marketing, las publicaciones con elementos visuales destacados (incluida la tipografía) tienen un <strong>40% más de probabilidades</strong> de ser compartidas.</p>
+      </blockquote>
+
       <ul>
         <li><strong>Retención de la atención:</strong> El ojo humano se siente atraído por lo diferente. Un texto en negrita o gótico detiene el "scroll" infinito.</li>
         <li><strong>Identidad de Marca:</strong> Si tu marca es elegante, las <a href="https://conversordeletrasbonitas.org/letras-cursivas">letras cursivas</a> refuerzan ese mensaje. Si eres una marca urbana, el graffiti es tu aliado.</li>
@@ -46,9 +54,13 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h2>Letras para Facebook: Evitando el Spam</h2>
       <p>Al buscar <strong>letras para Facebook</strong>, debes tener cuidado. El algoritmo de Facebook es sensible a caracteres que parezcan spam. Para asegurarte de que tus publicaciones tengan alcance:</p>
+      
+      <blockquote>
+        <p>⚠️ <strong>Advertencia:</strong> Evita el estilo "Zalgo" (letras con mucho ruido visual encima y debajo) en anuncios pagados (Facebook Ads), ya que la plataforma suele rechazarlos por "baja calidad".</p>
+      </blockquote>
+
       <ul>
         <li>Utiliza principalmente fuentes <strong>Sans-Serif Negrita</strong> o <strong>Serif Negrita</strong>. Son las más legibles y aceptadas.</li>
-        <li>Evita el estilo "Zalgo" (letras con mucho ruido visual encima y debajo) en publicaciones patrocinadas, ya que Facebook podría rechazarlas.</li>
         <li>Úsalo para destacar la primera frase de tu post (el "gancho") y hacer que los usuarios hagan clic en "Ver más".</li>
       </ul>
 
@@ -69,7 +81,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'letras-para-tatuajes-guia-estilos-goticos-cursivos',
     title: 'Letras para Tatuajes: Guía de Estilos Góticos, Cursivos y Chicanos',
     excerpt: '¿Pensando en tu próximo tatuaje? Descubre cómo elegir la tipografía perfecta. Análisis de estilos góticos, chicanos y cursivos para marcar tu piel.',
-    date: '2024-03-10',
+    date: CURRENT_DATE,
     author: 'Equipo LetrasPro',
     tags: ['Tatuajes', 'Diseño', 'Arte Corporal', 'Estilo de Vida'],
     imageUrl: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1000&auto=format&fit=crop',
@@ -89,7 +101,10 @@ export const BLOG_POSTS: BlogPost[] = [
       <h2>Conversor de Letras Góticas para Tatuajes</h2>
       <p>El estilo "Blackletter" o Gótico es, sin duda, el rey de los tatuajes de letras grandes, especialmente en la espalda, el pecho o el estómago (el famoso "belly rocker").</p>
       <p>Cuando usas nuestro <a href="https://conversordeletrasbonitas.org/letras-goticas">conversor de letras goticas</a>, obtienes acceso a estilos Fraktur que imitan la caligrafía medieval alemana. Este estilo es ideal para palabras con mucha fuerza semántica como "Lealtad", "Familia", "Respeto" o apellidos.</p>
-      <p><em>Consejo pro:</em> Las <strong>letras para tatoo</strong> góticas necesitan espacio. No intentes tatuarte una frase larga en gótico en una zona pequeña como la muñeca, ya que con los años la tinta se expandirá (blowout) y las letras se volverán una mancha negra ilegible.</p>
+      
+      <blockquote>
+        <p>⚠️ <strong>Consejo Pro:</strong> Las <strong>letras para tatoo</strong> góticas necesitan espacio. No intentes tatuarte una frase larga en gótico en una zona pequeña como la muñeca, ya que con los años la tinta se expandirá (blowout) y las letras se volverán una mancha negra ilegible.</p>
+      </blockquote>
 
       <h2>La elegancia del Conversor de Letras para Tatuajes Cursiva</h2>
       <p>Para zonas más delicadas como las costillas, la clavícula, el interior del brazo o detrás de la oreja, el estilo Script es el ganador. Un <strong>conversor de letras para tatuajes cursiva</strong> te permite previsualizar cómo se conectan las letras entre sí.</p>
@@ -127,7 +142,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'mejores-nicks-free-fire-pubg-graffiti',
     title: 'Domina el Juego: Conversor de Letras Graffiti y Nicks para Free Fire',
     excerpt: '¿Quieres un Nick que imponga respeto? Aprende a crear nombres épicos para Free Fire, PUBG y COD Mobile usando letras graffiti, símbolos y estilos únicos.',
-    date: '2024-03-05',
+    date: CURRENT_DATE,
     author: 'Equipo LetrasPro',
     tags: ['Gaming', 'Free Fire', 'Nicks', 'Graffiti'],
     imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000&auto=format&fit=crop',
@@ -155,12 +170,16 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h2>Símbolos Especiales para Acompañar tu Nick</h2>
       <p>Un buen nombre no es solo letras; los símbolos son el marco del cuadro. Aquí tienes una lista de los más populares y compatibles con Free Fire y <a href="https://conversordeletrasbonitas.org/letras-amino">Amino</a>:</p>
+      
+      <blockquote>
+        <p><strong>Truco Secreto:</strong> Coloca las "alas" ꧁ Nombre ꧂ alrededor de tu nick para centrar la atención en el texto medio. Es el formato más usado por los Pro Players.</p>
+      </blockquote>
+
       <ul>
         <li><strong>Armas:</strong> ︻╦o╤— (Francotirador), ⚔ (Espadas), 🗡 (Daga).</li>
         <li><strong>Caras:</strong> ( ͡° ͜ʖ ͡°), ¯\\_(ツ)_/¯, (¬_¬).</li>
         <li><strong>Decoración:</strong> ꧁ ꧂ (Alas), ⚡ (Rayo), ☠ (Calavera).</li>
       </ul>
-      <p><em>Truco:</em> Coloca las "alas" ꧁ Nombre ꧂ alrededor de tu nick para centrar la atención en el texto medio.</p>
 
       <h2>Cómo evitar el temido "Nombre Inválido" o Baneos</h2>
       <p>Muchos juegos tienen filtros estrictos. A veces, un <strong>conversor de letras bonitas</strong> genera caracteres que el juego no reconoce, mostrándolos como cuadros vacíos (□□□) o signos de interrogación.</p>
