@@ -24,6 +24,7 @@ const BlogPostPage: React.FC = () => {
     "@type": "BlogPosting",
     "headline": post.title,
     "description": post.excerpt,
+    "image": post.imageUrl ? [post.imageUrl] : [],
     "author": {
       "@type": "Person",
       "name": post.author
@@ -47,6 +48,7 @@ const BlogPostPage: React.FC = () => {
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:url" content={canonicalUrl} />
+        {post.imageUrl && <meta property="og:image" content={post.imageUrl} />}
         
         {/* Schema */}
         <script type="application/ld+json">
@@ -65,7 +67,7 @@ const BlogPostPage: React.FC = () => {
         </Link>
 
         {/* Header */}
-        <header className="mb-12">
+        <header className="mb-10">
           <div className="flex flex-wrap gap-2 mb-6">
             {post.tags.map(tag => (
               <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-bold uppercase tracking-wide">
@@ -75,11 +77,11 @@ const BlogPostPage: React.FC = () => {
             ))}
           </div>
           
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
             {post.title}
           </h1>
 
-          <div className="flex items-center gap-6 text-sm text-slate-500 border-b border-slate-100 pb-8">
+          <div className="flex items-center gap-6 text-sm text-slate-500 pb-8">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
                 <User size={16} />
@@ -95,9 +97,24 @@ const BlogPostPage: React.FC = () => {
           </div>
         </header>
 
+        {/* Cover Image */}
+        {post.imageUrl && (
+          <div className="mb-12 rounded-3xl overflow-hidden shadow-lg border border-slate-100 aspect-video">
+            <img 
+              src={post.imageUrl} 
+              alt={post.title}
+              className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+              loading="eager"
+            />
+          </div>
+        )}
+
         {/* Content */}
         <div 
-          className="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl"
+          className="prose prose-slate prose-lg max-w-none 
+            prose-headings:font-display prose-headings:font-bold prose-headings:text-slate-900 
+            prose-a:text-primary-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline 
+            prose-img:rounded-2xl prose-strong:text-slate-900 prose-li:marker:text-primary-500"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
         
