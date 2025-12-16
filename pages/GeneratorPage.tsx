@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { PageConfig } from '../types';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import FontCard from '../components/FontCard';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, HelpCircle, ChevronRight } from 'lucide-react';
+import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, HelpCircle, ChevronRight, Home } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -36,15 +38,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     setVisibleCount(ITEMS_PER_PAGE);
     window.scrollTo(0, 0);
   }, [config.path]);
-
-  // Handle SEO
-  useEffect(() => {
-    document.title = config.title;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', config.description);
-    }
-  }, [config]);
 
   // Effect to track instant typing state for UI feedback
   useEffect(() => {
@@ -113,13 +106,115 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const placeholder = "Escribe tu texto aquí..."; // 西班牙语占位符
   const textToProcess = debouncedText || 'Vista Previa';
 
+  // --- SEO & Schema Data ---
+  const canonicalUrl = `https://conversordeletrasbonitas.org${config.path === '/' ? '' : config.path}`;
+  const siteName = "Conversor de Letras Bonitas";
+  
+  // JSON-LD: WebApplication + FAQPage + BreadcrumbList
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": config.title,
+      "url": canonicalUrl,
+      "description": config.description,
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://conversordeletrasbonitas.org/"
+        },
+        ...(config.path !== '/' ? [{
+          "@type": "ListItem",
+          "position": 2,
+          "name": config.heading,
+          "item": canonicalUrl
+        }] : [])
+      ]
+    }
+  ];
+
+  if (config.faqs.length > 0) {
+    structuredData.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": config.faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    } as any);
+  }
+
   return (
     <div className="flex flex-col pb-20">
+      <Helmet>
+        {/* Basic Metadata */}
+        <title>{config.title}</title>
+        <meta name="description" content={config.description} />
+        <link rel="canonical" href={canonicalUrl} />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={config.title} />
+        <meta property="og:description" content={config.description} />
+        <meta property="og:site_name" content={siteName} />
+        {/* Placeholder for OG Image - if we had one */}
+        {/* <meta property="og:image" content="https://conversordeletrasbonitas.org/og-image.jpg" /> */}
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalUrl} />
+        <meta property="twitter:title" content={config.title} />
+        <meta property="twitter:description" content={config.description} />
+
+        {/* Structured Data JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Helmet>
+
       {/* Hero Section */}
-      <div className="relative pt-12 pb-24 lg:pt-20 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+      <div className="relative pt-8 pb-24 lg:pt-16 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
         
         {/* Decorative background for hero */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-gradient-to-r from-primary-200/30 to-secondary-200/30 blur-3xl rounded-full -z-10" />
+
+        {/* Breadcrumbs (Visual) */}
+        <nav className="flex justify-center mb-6" aria-label="Breadcrumb">
+          <ol className="inline-flex items-center space-x-1 md:space-x-2 p-2 bg-white/50 backdrop-blur-sm rounded-full border border-slate-100 shadow-sm">
+            <li className="inline-flex items-center">
+              <Link to="/" className="inline-flex items-center text-xs font-medium text-slate-500 hover:text-primary-600">
+                <Home size={14} className="mr-1" />
+                Inicio
+              </Link>
+            </li>
+            {config.path !== '/' && (
+              <li>
+                <div className="flex items-center">
+                  <ChevronRight size={14} className="text-slate-400" />
+                  <span className="ml-1 text-xs font-medium text-slate-700 md:ml-2">{config.heading}</span>
+                </div>
+              </li>
+            )}
+          </ol>
+        </nav>
 
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 border border-primary-100 text-primary-700 text-xs font-bold uppercase tracking-wide mb-6 shadow-sm">
           <Star size={12} className="fill-primary-700" />

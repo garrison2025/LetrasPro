@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Lock } from 'lucide-react';
 
 const PrivacyPage: React.FC = () => {
   useEffect(() => {
-    document.title = "Política de Privacidad - Conversor de Letras Bonitas";
     window.scrollTo(0, 0);
   }, []);
 
+  const canonicalUrl = "https://conversordeletrasbonitas.org/politica-de-privacidad";
+
   return (
     <div className="pt-16 pb-20 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Política de Privacidad - Conversor de Letras Bonitas</title>
+        <meta name="description" content="Política de privacidad de ConversorDeLetrasBonitas.org. Descubre cómo protegemos tus datos y respetamos tu privacidad al usar nuestra herramienta." />
+        <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
+
       <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm">
         <div className="border-b border-slate-100 pb-8 mb-8">
           <div className="flex items-center gap-3 mb-4 text-primary-600">

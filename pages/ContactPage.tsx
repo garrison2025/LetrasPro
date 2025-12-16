@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Mail, MessageSquare, MapPin, Send } from 'lucide-react';
 
 const ContactPage: React.FC = () => {
   useEffect(() => {
-    document.title = "Contacto - Conversor de Letras Bonitas";
     window.scrollTo(0, 0);
   }, []);
 
+  const canonicalUrl = "https://conversordeletrasbonitas.org/contacto";
+
   return (
     <div className="pt-20 pb-20 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Contacto - Conversor de Letras Bonitas</title>
+        <meta name="description" content="Ponte en contacto con el equipo de ConversorDeLetrasBonitas.org. Envíanos tus dudas, sugerencias o reportes de errores." />
+        <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
+
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6">Contáctanos</h1>

@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Users, Target, Shield, Zap } from 'lucide-react';
 
 const AboutPage: React.FC = () => {
   useEffect(() => {
-    document.title = "Sobre Nosotros - Conversor de Letras Bonitas";
     window.scrollTo(0, 0);
   }, []);
 
+  const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
+
   return (
     <div className="pt-20 pb-20 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Sobre Nosotros - Conversor de Letras Bonitas</title>
+        <meta name="description" content="Conoce al equipo detrás de ConversorDeLetrasBonitas.org, nuestra misión y compromiso con las herramientas de texto gratuitas." />
+        <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
+
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

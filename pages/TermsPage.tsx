@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { FileText } from 'lucide-react';
 
 const TermsPage: React.FC = () => {
   useEffect(() => {
-    document.title = "Términos y Condiciones - Conversor de Letras Bonitas";
     window.scrollTo(0, 0);
   }, []);
 
+  const canonicalUrl = "https://conversordeletrasbonitas.org/terminos-y-condiciones";
+
   return (
     <div className="pt-16 pb-20 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Términos y Condiciones - Conversor de Letras Bonitas</title>
+        <meta name="description" content="Lea los términos y condiciones de uso de ConversorDeLetrasBonitas.org. Reglas sobre el uso de nuestra herramienta y propiedad intelectual." />
+        <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
+
       <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm">
         <div className="border-b border-slate-100 pb-8 mb-8">
            <div className="flex items-center gap-3 mb-4 text-primary-600">
