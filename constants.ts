@@ -3,25 +3,25 @@ import { PageConfig, NavLink } from './types';
 export const PAGE_CONFIGS: Record<string, PageConfig> = {
   home: {
     path: '/',
-    title: 'Conversor de Letras Bonitas (Copiar y Pegar)',
+    title: 'Conversor de Letras Bonitas (90+ Estilos para Copiar y Pegar)',
     heading: 'Conversor de Letras Bonitas',
-    description: 'El mejor conversor de letras bonitas para Instagram y redes sociales. Transforma textos con este conversor de letras bonitas gratuito.',
-    content: 'Bienvenido al conversor de letras bonitas más completo de internet. Si buscas destacar en redes sociales, nuestro conversor de letras bonitas es la herramienta definitiva que transforma tu texto plano en tipografías estéticas y llamativas. A diferencia de otros sitios, este conversor de letras bonitas está optimizado para garantizar la compatibilidad en Instagram, TikTok, WhatsApp y más.',
+    description: 'El mejor conversor de letras bonitas con más de 90 estilos únicos para Instagram, TikTok y redes sociales. Transforma tus textos gratis.',
+    content: 'Bienvenido al conversor de letras bonitas más profesional de internet. Hemos actualizado nuestra herramienta para ofrecerte más de 90 tipografías únicas diseñadas específicamente para destacar en el ecosistema digital hispanohablante. Con nuestro conversor de letras bonitas, puedes transformar texto plano en estilos cursivos, góticos, negritas y artísticos en un solo clic, garantizando que tu biografía de Instagram o tus posts de Facebook se vean increíbles.',
     filter: (f) => f.pages.includes('home'),
     whyFeatures: [
-      { title: 'Conversor Gratuito', description: 'Este conversor de letras bonitas es 100% gratuito, ilimitado y no requiere registro.', icon: 'zap' },
-      { title: 'Compatibilidad Total', description: 'Nuestro conversor genera caracteres Unicode probados para funcionar en todas las apps sociales.', icon: 'smartphone' },
-      { title: '150+ Estilos Pro', description: 'Ofrecemos la mayor variedad de fuentes: desde cursivas y góticas hasta estilos aesthetic.', icon: 'palette' }
+      { title: '90+ Estilos Únicos', description: 'La mayor variedad de fuentes premium gratuitas: desde cursivas elegantes hasta góticas potentes.', icon: 'palette' },
+      { title: 'Compatibilidad Total', description: 'Nuestro conversor utiliza caracteres Unicode optimizados para Instagram, WhatsApp y TikTok.', icon: 'smartphone' },
+      { title: 'Optimizado para Español', description: 'Soporte completo para tildes y nuestra letra "ñ" mediante un sistema inteligente de fallback.', icon: 'check' }
     ],
     howToSteps: [
-      'Escribe tu frase en el panel superior del conversor de letras bonitas.',
-      'Explora la lista de resultados que genera el conversor automáticamente.',
-      'Haz clic en tu estilo favorito para copiarlo desde el conversor.',
-      'Pega el texto transformado en tus redes sociales.'
+      'Introduce tu texto en el panel superior de este conversor de letras bonitas.',
+      'Explora la lista con más de 90 variantes visuales que aparecen al instante.',
+      'Copia el estilo que más te guste haciendo clic en la tarjeta de la fuente.',
+      'Pega el resultado en tu perfil favorito y disfruta del impacto visual.'
     ],
     faqs: [
-      { question: '¿Qué es un conversor de letras bonitas?', answer: 'Es una herramienta que traduce caracteres ASCII a símbolos Unicode estéticos. Nuestro conversor facilita este proceso para que puedas personalizar tus perfiles sin conocimientos técnicos.' },
-      { question: '¿Es seguro usar este conversor?', answer: 'Sí, absolutamente. Funciona localmente en tu navegador y los estilos son seguros para evitar problemas en plataformas como Instagram.' }
+      { question: '¿Por qué este es el mejor conversor de letras bonitas?', answer: 'A diferencia de otros, nuestro sitio ofrece más de 90 fuentes verificadas, modo oscuro nativo, histórico de copiado y una compatibilidad superior con dispositivos móviles.' },
+      { question: '¿Es compatible con la letra Ñ y tildes?', answer: 'Sí, nuestro conversor está diseñado para el mercado español. Si un carácter no existe en el mapa Unicode, nuestra tecnología lo muestra de forma legible sin perder la estética.' }
     ]
   },
   cursivas: {
