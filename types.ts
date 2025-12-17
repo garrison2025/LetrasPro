@@ -35,6 +35,7 @@ export interface PageConfig {
 export interface NavLink {
   label: string;
   path: string;
+  group?: 'generators' | 'tools';
 }
 
 export interface TextSegment {

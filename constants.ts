@@ -196,14 +196,25 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
 };
 
 export const NAVIGATION_LINKS: NavLink[] = [
+  // Primary (Visible on desktop usually)
   { label: 'Inicio', path: '/' },
-  { label: 'Cursivas', path: '/letras-cursivas' },
-  { label: 'Góticas', path: '/letras-goticas' },
-  { label: 'Graffiti', path: '/letras-graffiti' },
-  { label: 'Repetidor', path: '/repetidor-de-texto' },
-  { label: 'Invisible', path: '/texto-invisible' }, // New
-  { label: 'Al Revés', path: '/texto-al-reves' }, // New
-  { label: 'Grandes', path: '/letras-grandes' }, // New
-  { label: 'Glitch', path: '/texto-glitch' },
+  
+  // Generators Group
+  { label: 'Cursivas', path: '/letras-cursivas', group: 'generators' },
+  { label: 'Góticas', path: '/letras-goticas', group: 'generators' },
+  { label: 'Graffiti', path: '/letras-graffiti', group: 'generators' },
+  { label: 'Tatuajes', path: '/letras-tatuajes', group: 'generators' },
+  { label: 'Tattoo', path: '/letras-tattoo', group: 'generators' },
+  { label: 'Facebook', path: '/letras-facebook', group: 'generators' },
+  { label: 'Amino', path: '/letras-amino', group: 'generators' },
+  
+  // Tools Group
+  { label: 'Repetidor', path: '/repetidor-de-texto', group: 'tools' },
+  { label: 'Invisible', path: '/texto-invisible', group: 'tools' },
+  { label: 'Glitch', path: '/texto-glitch', group: 'tools' },
+  { label: 'Al Revés', path: '/texto-al-reves', group: 'tools' },
+  { label: 'Grandes', path: '/letras-grandes', group: 'tools' },
+  
+  // Other
   { label: 'Blog', path: '/blog' },
 ];
