@@ -309,8 +309,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           </div>
         )}
 
-        {/* SEO CONTENT SECTIONS */}
-        <div className="mt-32 space-y-24">
+        {/* SEO CONTENT SECTIONS - RESTORED */}
+        <div className="mt-32 space-y-24 animate-fade-in">
           
           {/* Features Section */}
           <section>
