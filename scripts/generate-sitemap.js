@@ -70,7 +70,16 @@ const generateSitemap = () => {
   xml += `
 </urlset>`;
 
-  const outputPath = path.resolve(__dirname, '../public/sitemap.xml');
+  // Determine output directory from arguments, default to 'public'
+  const targetDirName = process.argv[2] || 'public';
+  const targetPath = path.resolve(__dirname, '..', targetDirName);
+
+  // Ensure directory exists (Critical fix for CI/CD environments)
+  if (!fs.existsSync(targetPath)) {
+    fs.mkdirSync(targetPath, { recursive: true });
+  }
+
+  const outputPath = path.join(targetPath, 'sitemap.xml');
   
   fs.writeFileSync(outputPath, xml);
   console.log(`✅ Sitemap generated at ${outputPath}`);
