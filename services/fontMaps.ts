@@ -10,6 +10,8 @@ const MAPS = {
   serifItalic: '𝑎𝑏𝑐ｄ𝑒ｆｇｈ𝑖𝑗𝑘ｌｍｎｏｐ𝑞ｒｓｔ𝑢𝑣ｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
+  chicano: '𝓐𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
+  heavySans: '𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝗫𝘆𝘇',
   fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
   frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
   monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
@@ -18,9 +20,9 @@ const MAPS = {
   tiny: 'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻ',
   bubble: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ',
   fullWidth: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  specialSoft: 'αɓ૮∂εƒɠɦเʝҡℓɱɳσρҩ૨รƭµѵωϰყƶ',
-  specialUrban: 'ąҍçժҽƒցհìʝҟӀʍղօքզɾʂէմѵա×վՀ',
-  greek: 'αвсδεfghιjκlмηορqrsτυvωxyzΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'
+  lookalike: 'αвc∂єfɢнιjкℓмиσρqяѕтυνωχуz',
+  block: '[̲̅a][̲̅b][̲̅c][̲̅d][̲̅e][̲̅f][̲̅g][̲̅h][̲̅i][̲̅j][̲̅k][̲̅l][̲̅m][̲̅n][̲̅o][̲̅p][̲̅q][̲̅r][̲̅s][̲̅t][̲̅u][̲̅v][̲̅w][̲̅x][̲̅y][̲̅z]',
+  mirror: 'ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz∀ᗺƆᗡƎℲ⅁HIᗿK˥WNOԀΌᴚS⊥∩ΛMX⅄Z'
 };
 
 const ACCENT_MAP: Record<string, string> = {
@@ -42,34 +44,51 @@ const createMap = (source: string, target: string): Record<string, string> => {
   return map;
 };
 
+const createBlockMap = (pattern: string): Record<string, string> => {
+  const map: Record<string, string> = {};
+  const chars = lower + upper;
+  [...chars].forEach(c => {
+    map[c] = pattern.replace('a', c.toLowerCase());
+  });
+  return map;
+};
+
 const getCompForBase = (key: string): FontStyle['compatibility'] => {
-  if (['sansBold', 'serifBold', 'sansItalic', 'serifItalic', 'monospace', 'fullWidth'].includes(key)) return 'high';
-  if (['bubble', 'tiny'].includes(key)) return 'low';
+  if (['sansBold', 'serifBold', 'sansItalic', 'serifItalic', 'monospace', 'fullWidth', 'doubleStruck', 'heavySans'].includes(key)) return 'high';
+  if (['bubble', 'tiny', 'mirror', 'chicano'].includes(key)) return 'low';
   return 'medium';
 };
 
-const homeBases = Object.entries(MAPS).map(([key, val]) => ({
+const baseFontsData = Object.entries(MAPS).map(([key, val]) => ({
   id: key,
   name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-  cat: key.includes('script') || key.includes('special') ? 'script' : (key.includes('fraktur') ? 'gothic' : 'serif'),
+  cat: key.includes('chicano') ? 'chicano' :
+       (key.includes('heavy') ? 'heavy' :
+       (key.includes('script') || key.includes('look') ? 'script' : 
+       (key.includes('fraktur') ? 'gothic' : 
+       (key.includes('block') ? 'block' : 
+       (key.includes('mirror') ? 'mirror' : 'serif'))))),
   chars: val,
   comp: getCompForBase(key)
 }));
 
-export const FONTS: FontStyle[] = homeBases.map(b => ({
-  id: `hm-${b.id}`,
+export const FONTS: FontStyle[] = baseFontsData.map(b => ({
+  id: `pro-${b.id}`,
   name: b.name,
   category: b.cat as any,
-  map: createMap(lower + upper, b.chars),
+  map: b.id === 'block' ? createBlockMap('[̲̅a]') : createMap(lower + upper, b.chars),
   pages: ['home'],
   compatibility: b.comp,
-  tags: b.cat === 'script' ? ['Elegante', 'Cute'] : (b.cat === 'gothic' ? ['Gaming', 'Dark'] : ['Classic'])
+  tags: b.cat === 'script' ? ['Elegante', 'Cute'] : 
+        (b.cat === 'chicano' ? ['Elegante', 'Tatuajes'] : 
+        (b.cat === 'gothic' ? ['Gaming', 'Tatuajes'] : 
+        (b.cat === 'heavy' ? ['Profesional', 'Urbano'] : ['Classic'])))
 }));
 
-// Nuevas fuentes específicas
+// Nuevas variantes
 FONTS.push({
-  id: 'vaporwave-pro',
-  name: 'Vaporwave Wide',
+  id: 'pro-vaporwave-spaced',
+  name: 'Vaporwave ✨',
   category: 'vaporwave',
   map: createMap(lower + upper, MAPS.fullWidth),
   pages: ['home'],
@@ -78,30 +97,19 @@ FONTS.push({
 });
 
 FONTS.push({
-  id: 'aesthetic-stars',
-  name: 'Aesthetic Soft ✧',
-  category: 'aesthetic',
-  map: createMap(lower + upper, MAPS.specialSoft),
-  pages: ['home', 'amino'],
+  id: 'pro-invisible-stacked',
+  name: 'Stacked Symbols ░',
+  category: 'decorative',
+  map: createMap(lower + upper, MAPS.sansBold),
+  pages: ['home'],
   compatibility: 'medium',
-  tags: ['Aesthetic', 'Cute']
+  tags: ['Gaming', 'Urbano']
 });
 
-FONTS.push({
-  id: 'gaming-skull',
-  name: 'Nick Gaming ☠',
-  category: 'gaming',
-  map: createMap(lower + upper, MAPS.frakturBold),
-  pages: ['home', 'goticas'],
-  compatibility: 'medium',
-  tags: ['Gaming', 'Agresivo']
-});
-
-export const convertText = (text: string, map: Record<string, string>): string => {
+export const convertText = (text: string, map: Record<string, string>, isVaporwave: boolean = false): string => {
   const normalized = text.normalize('NFC');
-  return [...normalized].map(char => {
+  const result = [...normalized].map(char => {
     if (map[char]) return map[char];
-    // Intento de mapeo inteligente para español
     const baseChar = ACCENT_MAP[char];
     if (baseChar && map[baseChar]) {
       const combiner = char === 'ñ' || char === 'Ñ' ? COMBINERS.tilde : COMBINERS.acute;
@@ -109,6 +117,8 @@ export const convertText = (text: string, map: Record<string, string>): string =
     }
     return char;
   }).join('');
+
+  return isVaporwave ? result.split('').join(' ') : result;
 };
 
 export const getDisplaySegments = (text: string, map: Record<string, string>): TextSegment[] => {

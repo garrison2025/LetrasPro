@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { PageConfig } from '../types';
-import { PAGE_CONFIGS } from '../constants';
+import { PageConfig, TextCase } from '../types';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import { DECORATORS, applyDecoration } from '../services/decorators';
-import { KAOMOJIS } from '../data/kaomojis';
+import { BIO_TEMPLATES } from '../data/bioTemplates';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle, AlertCircle, Wand2, Smile, X, Info, Search, Filter } from 'lucide-react';
+import { Trash2, Search, LayoutList, Instagram, Copy, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -19,17 +18,18 @@ interface GeneratorPageProps {
 const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
 
-const SYMBOLS = ['★', '⚡', '꧂', '❤', '✈', '☠', '✔', '⚔', '✿', '✨', '❣', 'ღ', '♕', '©'];
-
-const TONES = ['Todos', 'Elegante', 'Gaming', 'Cute', 'Urbano', 'Aesthetic'];
+const QUICK_SYMBOLS = ['★', '✨', '⚡', '꧁', '꧂', '❤', '☠', '⚔', '✿', '❣', 'ღ', '♕', '➳', '➤', '•', '░', '【', '】'];
+const TONES = ['Todos', 'Elegante', 'Gaming', 'Cute', 'Urbano', 'Aesthetic', 'Profesional', 'Tatuajes'];
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const location = useLocation();
   const [inputText, setInputText] = useState(() => {
     try { return localStorage.getItem('let_pro_input') || ''; } catch (e) { return ''; }
   });
+  const [textCase, setTextCase] = useState<TextCase>('original');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTone, setActiveTone] = useState('Todos');
+  const [showBioTemplates, setShowBioTemplates] = useState(false);
 
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
@@ -48,11 +48,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [activeDecorator, setActiveDecorator] = useState<string>('none');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-  const [isTyping, setIsTyping] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  const [isKaomojiOpen, setIsKaomojiOpen] = useState(false);
-  const [activeKaomojiTab, setActiveKaomojiTab] = useState(KAOMOJIS[0].id);
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debouncedText = useDebounce(inputText, 300);
@@ -67,16 +63,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     localStorage.setItem('let_pro_favs', JSON.stringify(favorites));
     localStorage.setItem('let_pro_history', JSON.stringify(history));
   }, [inputText, favorites, history]);
-
-  useEffect(() => {
-    setIsTyping(inputText !== debouncedText);
-  }, [inputText, debouncedText]);
-
-  useEffect(() => {
-    const handleScroll = () => setShowScrollTop(window.scrollY > 400);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const toggleFavorite = (fontId: string) => {
     setFavorites(prev => prev.includes(fontId) ? prev.filter(id => id !== fontId) : [...prev, fontId]);
@@ -96,6 +82,23 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       textareaRef.current?.focus();
       textareaRef.current?.setSelectionRange(start + symbol.length, start + symbol.length);
     }, 0);
+  };
+
+  const applyBioTemplate = (layout: string) => {
+    const text = inputText || 'Tu Nombre';
+    const filled = layout.replace('{text}', text);
+    setInputText(filled);
+    setShowBioTemplates(false);
+  };
+
+  const transformText = (text: string, mode: TextCase): string => {
+    if (!text) return '';
+    switch (mode) {
+      case 'upper': return text.toUpperCase();
+      case 'lower': return text.toLowerCase();
+      case 'title': return text.replace(/\b\w/g, c => c.toUpperCase());
+      default: return text;
+    }
   };
 
   const filteredFonts = useMemo(() => {
@@ -129,77 +132,129 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta name="description" content={config.description} />
       </Helmet>
 
-      {/* Hero Section */}
       <div className="pt-12 pb-20 px-4 text-center">
-        <h1 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
+        <h1 className="text-4xl sm:text-7xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
           {config.heading}
         </h1>
-        <p className="max-w-2xl mx-auto text-lg text-slate-500 dark:text-slate-400">{config.description}</p>
+        <p className="max-w-2xl mx-auto text-lg text-slate-500 dark:text-slate-400 font-medium">
+          {config.description}
+        </p>
       </div>
 
       <div className="max-w-6xl mx-auto w-full px-4 -mt-10 relative z-20">
         
-        {/* Main Input Area */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-8">
-          <div className="p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-8">
+          <div className="p-8">
+            <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+              <div className="flex gap-2 items-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
+                <Type size={14} /> Panel de Control
+              </div>
+              <div className="flex gap-2">
+                {(['upper', 'lower', 'title'] as TextCase[]).map(mode => (
+                  <button
+                    key={mode}
+                    onClick={() => setTextCase(textCase === mode ? 'original' : mode)}
+                    className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500'}`}
+                  >
+                    {mode === 'upper' ? 'AB' : mode === 'lower' ? 'ab' : 'Ab'}
+                  </button>
+                ))}
+                <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                <button 
+                  onClick={() => setShowBioTemplates(!showBioTemplates)}
+                  className="flex items-center gap-2 px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl text-[10px] font-black uppercase tracking-tighter hover:bg-primary-100 transition-colors"
+                >
+                  <Wand2 size={14} /> Plantillas
+                </button>
+              </div>
+            </div>
+
+            {showBioTemplates && (
+              <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in">
+                {BIO_TEMPLATES.map(bt => (
+                  <button
+                    key={bt.id}
+                    onClick={() => applyBioTemplate(bt.layout)}
+                    className="p-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-3xl text-left hover:border-primary-400 hover:shadow-lg transition-all group"
+                  >
+                    <div className="text-[10px] font-black text-primary-500 uppercase mb-1">{bt.category}</div>
+                    <div className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">{bt.name}</div>
+                    <div className="text-[10px] text-slate-400 line-clamp-1 italic">{bt.layout.substring(0, 30)}...</div>
+                  </button>
+                ))}
+              </div>
+            )}
+
             <textarea
               ref={textareaRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Escribe tu frase aquí..."
-              className="w-full text-2xl sm:text-3xl font-bold bg-transparent border-none focus:ring-0 placeholder:opacity-30 dark:text-white min-h-[120px] resize-none"
+              placeholder="Escribe tu mensaje o nombre aquí..."
+              className="w-full text-2xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:opacity-10 dark:text-white min-h-[140px] resize-none leading-tight"
             />
-            <div className="flex items-center justify-between mt-4">
-               <div className="flex gap-2">
-                 {SYMBOLS.map(s => (
-                   <button key={s} onClick={() => insertSymbol(s)} className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl hover:bg-primary-50 transition-colors text-lg">{s}</button>
+            
+            <div className="flex flex-wrap items-center justify-between gap-6 mt-8 pt-8 border-t border-slate-50 dark:border-slate-700/50">
+               <div className="flex flex-wrap gap-2">
+                 {QUICK_SYMBOLS.map(s => (
+                   <button 
+                    key={s} 
+                    onClick={() => insertSymbol(s)} 
+                    className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 transition-all text-base font-bold border border-transparent hover:border-primary-100"
+                   >
+                     {s}
+                   </button>
                  ))}
                </div>
-               <div className="flex items-center gap-4">
-                 <span className={`text-xs font-black ${inputText.length > INSTAGRAM_BIO_LIMIT ? 'text-red-500' : 'text-slate-400'}`}>
-                   {inputText.length} / {INSTAGRAM_BIO_LIMIT}
-                 </span>
-                 {inputText && <button onClick={() => setInputText('')} className="text-slate-400 hover:text-red-500"><Trash2 size={20} /></button>}
+               <div className="flex items-center gap-6">
+                 <div className="flex flex-col items-end">
+                   <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+                     <Instagram size={12} /> Instagram Bio
+                   </div>
+                   <div className="flex items-baseline gap-1">
+                     <span className={`text-2xl font-black ${inputText.length > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
+                       {inputText.length}
+                     </span>
+                     <span className="text-slate-300 dark:text-slate-600 font-bold">/ {INSTAGRAM_BIO_LIMIT}</span>
+                   </div>
+                 </div>
+                 {inputText && (
+                   <button onClick={() => setInputText('')} className="p-4 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-3xl hover:bg-red-100 transition-all active:scale-90">
+                     <Trash2 size={24} />
+                   </button>
+                 )}
                </div>
             </div>
           </div>
           
-          {/* Quick Filters / Search */}
-          <div className="bg-slate-50 dark:bg-slate-900/50 p-4 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-4 items-center">
-             <div className="relative flex-grow max-w-xs">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+          <div className="bg-slate-50/50 dark:bg-slate-900/30 p-5 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-4 items-center">
+             <div className="relative flex-grow max-w-sm">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                 <input 
                   type="text" 
-                  placeholder="Buscar estilo..." 
+                  placeholder="Filtrar por nombre o estilo..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:ring-2 focus:ring-primary-500 transition-all"
+                  className="w-full pl-12 pr-6 py-3 bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm"
                 />
              </div>
              
-             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 px-1">
                 {TONES.map(t => (
                   <button
                     key={t}
                     onClick={() => setActiveTone(t)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${activeTone === t ? 'bg-primary-600 text-white' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'}`}
+                    className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
                   >
                     {t}
                   </button>
                 ))}
              </div>
 
-             <div className="flex items-center gap-2 ml-auto">
-                <select 
-                  value={activeDecorator}
-                  onChange={(e) => setActiveDecorator(e.target.value)}
-                  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold p-2 focus:ring-0"
-                >
-                  {DECORATORS.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                </select>
-                <div className="flex bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
-                   <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-lg ${viewMode === 'list' ? 'bg-slate-200 dark:bg-slate-700' : ''}`}><LayoutList size={14}/></button>
-                   <button onClick={() => setViewMode('instagram')} className={`p-1.5 rounded-lg ${viewMode === 'instagram' ? 'bg-slate-200 dark:bg-slate-700' : ''}`}><Instagram size={14}/></button>
+             <div className="flex items-center gap-3 ml-auto">
+                <div className="flex bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                   <button onClick={() => setViewMode('list')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista de lista"><LayoutList size={20}/></button>
+                   <button onClick={() => setViewMode('instagram')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup Instagram"><Instagram size={20}/></button>
+                   <button onClick={() => setViewMode('whatsapp')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup WhatsApp"><MessageCircle size={20}/></button>
                 </div>
              </div>
           </div>
@@ -207,10 +262,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
         <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
 
-        {/* Results Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {visibleFonts.map((font) => {
-            const mappedText = convertText(debouncedText || 'Vista Previa', font.map);
+            const baseText = debouncedText || 'Vista Previa';
+            const transformed = transformText(baseText, textCase);
+            const mappedText = convertText(transformed, font.map, font.category === 'vaporwave');
             const finalRawText = applyDecoration(mappedText, activeDecorator);
             const segments = getDisplaySegments(finalRawText, {});
             
@@ -230,18 +286,18 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         </div>
 
         {hasMore && (
-          <div className="mt-12 text-center">
+          <div className="mt-16 text-center">
             <button 
               onClick={() => setVisibleCount(v => v + ITEMS_PER_PAGE)}
-              className="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-2xl hover:scale-105 transition-transform"
+              className="px-16 py-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-[2rem] hover:scale-105 transition-all shadow-2xl shadow-slate-900/10 active:scale-95 text-lg uppercase tracking-widest"
             >
-              Cargar más estilos
+              Explorar más estilos
             </button>
           </div>
         )}
       </div>
 
-      <Toast message="¡Texto copiado!" isVisible={showToast} onClose={() => setShowToast(false)} />
+      <Toast message="¡Texto copiado al portapapeles!" isVisible={showToast} onClose={() => setShowToast(false)} />
     </div>
   );
 };

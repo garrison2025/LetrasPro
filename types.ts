@@ -1,12 +1,19 @@
 export interface FontStyle {
   id: string;
   name: string;
-  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave';
+  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy';
   map: Record<string, string>;
   isPremium?: boolean; 
   pages: string[]; 
   compatibility: 'high' | 'medium' | 'low';
-  tags?: string[]; // Para filtros de "tono"
+  tags?: string[]; 
+}
+
+export interface BioTemplate {
+  id: string;
+  name: string;
+  layout: string; // El layout usa placeholders como {text}
+  category: 'instagram' | 'tiktok' | 'gaming';
 }
 
 export interface FeatureItem {
@@ -42,8 +49,10 @@ export interface NavLink {
 export interface TextSegment {
   content: string;
   isFallback: boolean;
-  isCombined?: boolean; // Indica si se usó un combinador para tildes/ñ
+  isCombined?: boolean; 
 }
+
+export type TextCase = 'original' | 'upper' | 'lower' | 'title';
 
 export interface BlogPost {
   id: string;
