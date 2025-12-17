@@ -1,11 +1,12 @@
 export interface FontStyle {
   id: string;
   name: string;
-  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative';
+  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave';
   map: Record<string, string>;
   isPremium?: boolean; 
   pages: string[]; 
-  compatibility: 'high' | 'medium' | 'low'; // Nueva métrica de fiabilidad
+  compatibility: 'high' | 'medium' | 'low';
+  tags?: string[]; // Para filtros de "tono"
 }
 
 export interface FeatureItem {
@@ -41,6 +42,7 @@ export interface NavLink {
 export interface TextSegment {
   content: string;
   isFallback: boolean;
+  isCombined?: boolean; // Indica si se usó un combinador para tildes/ñ
 }
 
 export interface BlogPost {
