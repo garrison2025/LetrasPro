@@ -155,7 +155,16 @@ const FontCard: React.FC<FontCardProps> = ({
   // LIST VIEW (Default)
   const renderListView = () => (
     <div className="relative min-h-[3rem] flex items-center pr-2">
-      <p className="text-xl sm:text-2xl text-slate-800 dark:text-slate-100 break-all font-medium leading-relaxed group-hover:text-primary-900 dark:group-hover:text-white transition-colors">
+      {/* 
+         SEO/Accessibility Improvement: 
+         role="img" + aria-label tells screen readers/Google: "This block represents the text [rawText]".
+         This prevents them from trying to read "Mathematical Script Capital H..." 
+      */}
+      <p 
+        className="text-xl sm:text-2xl text-slate-800 dark:text-slate-100 break-all font-medium leading-relaxed group-hover:text-primary-900 dark:group-hover:text-white transition-colors"
+        role="img" 
+        aria-label={rawText}
+      >
         {renderTextContent()}
       </p>
     </div>
@@ -178,7 +187,11 @@ const FontCard: React.FC<FontCardProps> = ({
       </div>
       <div className="text-sm">
         <div className="font-bold mb-1 text-slate-900 dark:text-white">Tu Nombre</div>
-        <div className="text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-tight">
+        <div 
+          className="text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-tight"
+          role="img" 
+          aria-label={rawText}
+        >
           {renderTextContent()}
         </div>
         <div className="mt-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md text-center text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
@@ -196,7 +209,11 @@ const FontCard: React.FC<FontCardProps> = ({
       
       <div className="relative flex justify-end">
         <div className="bg-[#dcf8c6] dark:bg-[#005c4b] rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-[90%]">
-          <p className="text-sm text-slate-800 dark:text-slate-100 break-all leading-relaxed">
+          <p 
+            className="text-sm text-slate-800 dark:text-slate-100 break-all leading-relaxed"
+            role="img" 
+            aria-label={rawText}
+          >
             {renderTextContent()}
           </p>
           <div className="flex justify-end items-center gap-1 mt-1">

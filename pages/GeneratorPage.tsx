@@ -20,7 +20,7 @@ const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
 
 const SYMBOLS = [
-  '★', '⚡', '꧁', '꧂', '❤', '✈', '☠', '✔', '✘', 
+  '★', '⚡', '꧂', '꧂', '❤', '✈', '☠', '✔', '✘', 
   '⚔', '☂', '✿', '❄', '✪', '✯', 
   '✦', '✨', '❥', '❣', 'ღ', 
   '♪', '♫', '♕', '♔', '®', '©' 
@@ -225,6 +225,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       ]
     }
   ];
+
+  // Add HowTo Schema
+  if (config.howToSteps.length > 0) {
+    structuredData.push({
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": `Cómo usar el ${config.heading}`,
+      "step": config.howToSteps.map((step, index) => ({
+        "@type": "HowToStep",
+        "position": index + 1,
+        "text": step
+      }))
+    } as any);
+  }
 
   if (config.faqs.length > 0) {
     structuredData.push({

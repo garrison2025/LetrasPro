@@ -15,6 +15,7 @@ import GlitchPage from './pages/GlitchPage';
 import InvisibleTextPage from './pages/InvisibleTextPage'; // New
 import FlipTextPage from './pages/FlipTextPage'; // New
 import BigTextPage from './pages/BigTextPage'; // New
+import NotFoundPage from './pages/NotFoundPage'; // New 404 Page
 import { PAGE_CONFIGS } from './constants';
 import { ThemeProvider } from './context/ThemeContext'; // New
 
@@ -61,8 +62,8 @@ function App() {
                 <Route path="/politica-de-privacidad" element={<PrivacyPage />} />
                 <Route path="/terminos-y-condiciones" element={<TermsPage />} />
                 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/" replace />} />
+                {/* 404 Route */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
             <Footer />
