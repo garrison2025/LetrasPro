@@ -9,18 +9,18 @@ const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const nums = '0123456789';
 
 const MAPS = {
-  serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂ＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+  serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifItalic: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮ＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚ𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
-  sansItalic: '𝘢𝘣𝘤𝘥𝑒𝘧𝘨𝘩𝘪𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷ｗｘy𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕ＯＰＱＲＳＴＵＶＷＸＹＺ',
+  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
+  sansItalic: '𝘢𝘣𝘤𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝘲ｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
   fraktur: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
   frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
-  monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷ𝚇Ｙ𝚉',
+  monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙＱＲＳＴ𝕌𝕍𝕎𝕏𝕐ℤ',
-  smallCaps: 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ',
+  smallCaps: 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠｗｘｙｚ',
   bubble: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ',
   bubbleBlack: '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩',
   fullWidth: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
@@ -93,18 +93,14 @@ const DECOS_ELEGANT = [
   { id: 'none', name: '', char: '' },
   { id: 'h', name: 'con Corazón', char: ' \u2665' },
   { id: 's', name: 'con Estrella', char: ' \u2727' },
-  { id: 'sp', name: 'Sparkle', char: '\u0324' },
   { id: 'dt', name: 'Punteada', char: '\u0323' },
-  { id: 'un', name: 'Subrayada', char: '\u0332' },
-  { id: 'br', name: 'Brillante', char: '\u035b' },
-  { id: 'fl', name: 'Floral', char: ' \u2740' }
+  { id: 'un', name: 'Subrayada', char: '\u0332' }
 ];
 
 const DECOS_URBAN = [
   { id: 'none', name: '', char: '' },
   { id: 'dr', name: 'Goteo', char: '\u0323' },
   { id: 'cr', name: 'Corona', char: '\u030a' },
-  { id: 'wal', name: 'Muro', char: '\u0333' },
   { id: 'fire', name: 'Fuego', char: ' \u{1F525}' }
 ];
 
@@ -112,19 +108,15 @@ const DECOS_DARK = [
   { id: 'none', name: '', char: '' },
   { id: 'cr', name: '† Cross', char: ' \u2020' },
   { id: 'sk', name: '☠ Skull', char: ' \u2620' },
-  { id: 'sw', name: '⚔ Swords', char: ' \u2694' },
-  { id: 'rit', name: '⛧ Ritual', char: ' \u26E7' },
-  { id: 'ch', name: '⛓ Chain', char: '\u0333' },
-  { id: 'bat', name: '🦇 Bat', char: ' \u1F987' },
   { id: 'dg', name: '𓆩 Dagger', char: '\u0338' }
 ];
 
 const DECOS_TATTOO = [
-  { id: 'none', name: '', char: '' },
+  { id: 'none', name: 'Limpio', char: '' },
   { id: 'dg', name: 'Daga', char: ' 𓆩' },
   { id: 'cr', name: 'Cruz', char: ' †' },
-  { id: 'dot', name: 'Dotwork', char: ' ⁝' },
-  { id: 'hr', name: 'Love', char: ' ♡' },
+  { id: 'dw', name: 'Dotwork', char: ' ⁝' },
+  { id: 'sk', name: 'Skull', char: ' ☠' },
   { id: 'st', name: 'Star', char: ' ✧' }
 ];
 
@@ -132,7 +124,6 @@ const DECOS_TATTOO = [
 const homeBases: BaseStyle[] = [
   { id: 'b', name: 'Negrita Pro', cat: 'serif', chars: MAPS.serifBold },
   { id: 'i', name: 'Itálica Soft', cat: 'serif', chars: MAPS.serifItalic },
-  { id: 'sb', name: 'Sans Bold', cat: 'sans', chars: MAPS.sansBold },
   { id: 'scr', name: 'Cursiva Real', cat: 'script', chars: MAPS.scriptFine },
   { id: 'got', name: 'Gótica Medieval', cat: 'gothic', chars: MAPS.fraktur },
   { id: 'sc', name: 'Versalitas Pro', cat: 'other', chars: MAPS.smallCaps }
@@ -144,17 +135,14 @@ const cursiveBases: BaseStyle[] = [
   { id: 'c1', name: 'Caligrafía Fina', cat: 'script', chars: MAPS.scriptFine },
   { id: 'c2', name: 'Caligrafía Bold', cat: 'script', chars: MAPS.scriptBold },
   { id: 'c3', name: 'Firma Chic', cat: 'script', chars: MAPS.specialChic },
-  { id: 'c4', name: 'Manuscrita Real', cat: 'script', chars: MAPS.specialSoft },
-  { id: 'c5', name: 'Itálica Premium', cat: 'script', chars: MAPS.serifItalic }
+  { id: 'c4', name: 'Manuscrita Real', cat: 'script', chars: MAPS.specialSoft }
 ];
 const cursiveFonts = generateCollection('cur', cursiveBases, DECOS_ELEGANT, ['cursivas']);
 
 // --- 3.3 GÓTICAS ---
 const gothicBases: BaseStyle[] = [
   { id: 'g1', name: 'Gótica Fraktur', cat: 'gothic', chars: MAPS.fraktur },
-  { id: 'g2', name: 'Gótica Blackletter', cat: 'gothic', chars: MAPS.frakturBold },
-  { id: 'g3', name: 'Metal Extremo', cat: 'gothic', chars: MAPS.frakturBold },
-  { id: 'g4', name: 'Vampírica Pro', cat: 'gothic', chars: MAPS.fraktur }
+  { id: 'g2', name: 'Gótica Blackletter', cat: 'gothic', chars: MAPS.frakturBold }
 ];
 const gothicFonts = generateCollection('got', gothicBases, DECOS_DARK, ['goticas']);
 
@@ -162,19 +150,22 @@ const gothicFonts = generateCollection('got', gothicBases, DECOS_DARK, ['goticas
 const urbanBases: BaseStyle[] = [
   { id: 'tag', name: 'Firma Tag', cat: 'decorative', chars: MAPS.specialUrban },
   { id: 'urb', name: 'Urbano Pro', cat: 'decorative', chars: MAPS.specialTag },
-  { id: 'bub', name: 'Burbuja Blanca', cat: 'decorative', chars: MAPS.bubble },
-  { id: 'wild', name: 'Wild Style', cat: 'decorative', chars: MAPS.doubleStruck }
+  { id: 'bub', name: 'Burbuja Blanca', cat: 'decorative', chars: MAPS.bubble }
 ];
 const urbanFonts = generateCollection('grf', urbanBases, DECOS_URBAN, ['graffiti']);
 
-// --- 3.5 TATTOO (NUEVA COLECCIÓN - 36 ESTILOS) ---
+// --- 3.5 TATTOO (MATRIZ 10x6 = 60 ESTILOS) ---
 const tattooBases: BaseStyle[] = [
-  { id: 'chic', name: 'Estilo Chicano', cat: 'script', chars: MAPS.specialChic },
-  { id: 'old', name: 'Old English Tattoo', cat: 'gothic', chars: MAPS.frakturBold },
-  { id: 'fine', name: 'Fine Line Inked', cat: 'script', chars: MAPS.scriptFine },
-  { id: 'calli', name: 'Calligraphy Skin', cat: 'script', chars: MAPS.specialSoft },
-  { id: 'block', name: 'Traditional Block', cat: 'serif', chars: MAPS.serifBold },
-  { id: 'min', name: 'Minimalist Dot', cat: 'other', chars: MAPS.monospace }
+  { id: 'chic', name: 'Chicano Pro', cat: 'script', chars: MAPS.specialChic },
+  { id: 'old', name: 'Old English Real', cat: 'gothic', chars: MAPS.frakturBold },
+  { id: 'fine', name: 'Fine Line Tattoo', cat: 'script', chars: MAPS.scriptFine },
+  { id: 'tribal', name: 'Tribal Ink Style', cat: 'decorative', chars: MAPS.specialUrban },
+  { id: 'black', name: 'Blackletter Med', cat: 'gothic', chars: MAPS.fraktur },
+  { id: 'trad', name: 'Traditional Block', cat: 'serif', chars: MAPS.serifBold },
+  { id: 'mini', name: 'Minimalist Skin', cat: 'other', chars: MAPS.monospace },
+  { id: 'inked', name: 'Cursive Inked', cat: 'script', chars: MAPS.scriptBold },
+  { id: 'strong', name: 'Sans Strong Tattoo', cat: 'sans', chars: MAPS.sansBold },
+  { id: 'soft', name: 'Soft Lettering', cat: 'script', chars: MAPS.specialSoft }
 ];
 const tattooFonts = generateCollection('tat', tattooBases, DECOS_TATTOO, ['tattoo', 'tatuajes']);
 

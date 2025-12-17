@@ -87,46 +87,46 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   tatuajes: {
     path: '/letras-tatuajes',
-    title: 'Conversor de Letras para Tatuajes Online (36+ Estilos)',
+    title: 'Conversor de Letras para Tatuajes Online (60+ Estilos Lettering)',
     heading: 'Conversor de Letras para Tatuajes',
-    description: 'Diseña tu próximo tattoo con el conversor de letras para tatuajes. Más de 36 estilos góticos, chicanos y cursivos para visualizar en tu piel.',
-    content: 'Visualiza tu diseño con el conversor de letras para tatuajes más completo. Ofrecemos 36 estilos especializados: desde el elegante "Fine Line" hasta el potente "Old English" y el auténtico estilo "Chicano". Ideal para probar nombres, fechas y frases antes de acudir a tu tatuador de confianza.',
+    description: 'Diseña tu próximo tattoo con el conversor de letras para tatuajes. Más de 60 estilos góticos, chicanos, fine line y tribales para visualizar en tu piel.',
+    content: 'Visualiza tu próximo diseño con el conversor de letras para tatuajes más profesional. Nuestra biblioteca incluye 60 variaciones artísticas: desde el icónico estilo Chicano y el Old English hasta el minimalista Fine Line y el Tribal Ink. Ideal para probar frases y nombres con la estética real de un estudio de tatuajes.',
     filter: (f) => f.pages.includes('tatuajes'),
     whyFeatures: [
-      { title: '36+ Estilos Tattoo', description: 'Chicano, Fine Line, Blackletter y Caligrafía diseñados para la piel.', icon: 'palette' },
-      { title: 'Previsualización Real', description: 'Añade decoradores de dagas, cruces y dotwork a tus frases.', icon: 'star' },
-      { title: 'Optimizado para Piel', description: 'Fuentes seleccionadas por su legibilidad y estética artística atemporal.', icon: 'check' }
+      { title: '60+ Estilos Tattoo', description: 'Chicano, Fine Line, Blackletter y Tribal diseñados específicamente para lettering corporal.', icon: 'palette' },
+      { title: 'Decoradores Inked', description: 'Personaliza tus frases con símbolos de dagas, cruces, calaveras y dotwork.', icon: 'star' },
+      { title: 'Legibilidad Artística', description: 'Fuentes seleccionadas por artistas profesionales por su estética atemporal en la piel.', icon: 'check' }
     ],
     howToSteps: [
-      'Introduce la palabra o frase en el conversor de letras para tatuajes.',
-      'Elige entre los estilos Chicano, Fine Line o Gótico.',
-      'Personaliza con un decorador de daga o cruz si lo deseas.',
-      'Haz una captura o copia el resultado para mostrarlo a tu tatuador.'
+      'Introduce la frase o nombre en el conversor de letras para tatuajes.',
+      'Navega por los 60 estilos disponibles (Chicano, Gótico, Fine Line).',
+      'Añade un decorador de daga o dotwork para completar el diseño.',
+      'Copia o captura el resultado para mostrárselo a tu tatuador.'
     ],
     faqs: [
-      { question: '¿Cuál es el mejor estilo para un tatuaje de nombre?', answer: 'Recomendamos el estilo "Chicano" o "Fine Line" por su elegancia y fluidez natural.' }
+      { question: '¿Qué es el estilo Chicano en tatuajes?', answer: 'Es un estilo de lettering fluido y ornamentado nacido en la cultura urbana, ideal para nombres y frases largas.' }
     ]
   },
   tattoo: {
     path: '/letras-tattoo',
-    title: 'Conversor de Letras Tattoo (36+ Estilos de Lettering)',
+    title: 'Conversor de Letras Tattoo (60+ Estilos de Lettering Profesional)',
     heading: 'Conversor de Letras Tattoo',
-    description: 'Encuentra la fuente perfecta en el conversor de letras tattoo. 36 diseños de lettering para tatuajes góticos, urbanos y cursivos.',
-    content: 'El conversor de letras tattoo definitivo. Explora 36 variaciones de lettering que incluyen caligrafía tradicional, bloques marineros y script moderno. Nuestra herramienta utiliza caracteres Unicode artísticos que te permiten llevar tu idea a cualquier parte.',
+    description: 'Encuentra la fuente perfecta en el conversor de letras tattoo. 60 diseños de lettering para tatuajes góticos, urbanos, tribales y cursivos.',
+    content: 'El conversor de letras tattoo definitivo para entusiastas del arte corporal. Explora 60 estilos que cubren todas las ramas del lettering: caligrafía tradicional, bloques marineros, script moderno y gótico agresivo. Transforma tus ideas en caracteres Unicode artísticos listos para compartir.',
     filter: (f) => f.pages.includes('tattoo'),
     whyFeatures: [
-      { title: 'Lettering Profesional', description: 'Inspirado en los mejores artistas de tatuaje internacionales.', icon: 'palette' },
-      { title: 'Diseños Únicos', description: 'Combina bases de texto con símbolos de dotwork y dagas.', icon: 'zap' },
-      { title: 'Sin Instalación', description: 'Gratis y 100% online desde tu navegador móvil.', icon: 'smartphone' }
+      { title: 'Catálogo de 60 Fuentes', description: 'Inspiradas en los mejores estudios de tatuaje internacionales.', icon: 'palette' },
+      { title: 'Símbolos Decorativos', description: 'Combina tu texto con dotwork, dagas y elementos clásicos del tatuaje.', icon: 'zap' },
+      { title: 'Diseño Sin Límites', description: 'Herramienta 100% gratuita y optimizada para previsualizar diseños en el móvil.', icon: 'smartphone' }
     ],
     howToSteps: [
       'Escribe tu texto en el conversor de letras tattoo.',
-      'Busca el estilo "Old English" o "Inked Script".',
-      'Copia el diseño estilizado.',
-      'Úsalo como referencia para tu arte corporal.'
+      'Selecciona una base (Old English, Fine Line o Chicano).',
+      'Aplica un decorador temático de nuestra biblioteca.',
+      'Usa el diseño como referencia visual para tu próxima sesión.'
     ],
     faqs: [
-      { question: '¿Qué es el estilo Fine Line en tatuajes?', answer: 'Es una técnica de tatuado con agujas muy finas que crea diseños delicados y minimalistas.' }
+      { question: '¿Cuál es el mejor estilo para un tatuaje pequeño?', answer: 'El estilo "Fine Line" es el más recomendado para zonas pequeñas por su trazo fino y elegante.' }
     ]
   },
   amino: {
