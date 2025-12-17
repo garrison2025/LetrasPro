@@ -177,7 +177,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   onClick={() => setShowBioTemplates(!showBioTemplates)}
                   className="flex items-center gap-2 px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl text-[10px] font-black uppercase tracking-tighter hover:bg-primary-100 transition-colors"
                 >
-                  < Wand2 size={14} /> Plantillas
+                  <Wand2 size={14} /> Plantillas
                 </button>
               </div>
             </div>

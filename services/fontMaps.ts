@@ -36,14 +36,58 @@ const COMBINERS = {
   acute: '\u0301'
 };
 
+const getCategoryFromId = (id: string): FontStyle['category'] => {
+  if (id.includes('sans')) return 'sans';
+  if (id.includes('serif')) return 'serif';
+  if (id.includes('script') || id.includes('look')) return 'script';
+  if (id.includes('fraktur')) return 'gothic';
+  if (id.includes('chicano')) return 'chicano';
+  if (id.includes('heavy')) return 'heavy';
+  if (id.includes('block')) return 'block';
+  if (id.includes('mirror')) return 'mirror';
+  if (id.includes('bubble')) return 'graffiti';
+  if (id.includes('vaporwave')) return 'vaporwave';
+  if (id.includes('tiny') || id.includes('smallCaps') || id.includes('monospace')) return 'aesthetic';
+  if (id.includes('fullWidth')) return 'aesthetic';
+  return 'decorative';
+};
+
 const getPagesForFont = (cat: string): string[] => {
   const p = ['home'];
-  if (cat === 'script') p.push('cursivas', 'tatuajes', 'tattoo', 'amino');
-  if (cat === 'gothic') p.push('goticas', 'tatuajes', 'tattoo');
-  if (cat === 'chicano') p.push('tatuajes', 'tattoo');
-  if (cat === 'block' || cat === 'heavy') p.push('graffiti', 'facebook');
-  if (cat === 'heavy' || cat === 'sans' || cat === 'serif') p.push('facebook');
-  if (cat === 'aesthetic' || cat === 'vaporwave') p.push('amino');
+  switch (cat) {
+    case 'script':
+      p.push('cursivas', 'tatuajes', 'tattoo', 'amino');
+      break;
+    case 'gothic':
+      p.push('goticas', 'tatuajes', 'tattoo');
+      break;
+    case 'chicano':
+      p.push('tatuajes', 'tattoo');
+      break;
+    case 'graffiti':
+    case 'decorative':
+      p.push('graffiti', 'amino');
+      break;
+    case 'block':
+      p.push('graffiti', 'facebook');
+      break;
+    case 'heavy':
+      p.push('facebook', 'graffiti');
+      break;
+    case 'sans':
+    case 'serif':
+      p.push('facebook');
+      break;
+    case 'aesthetic':
+    case 'vaporwave':
+      p.push('amino', 'facebook');
+      break;
+    case 'mirror':
+      p.push('tools');
+      break;
+    default:
+      break;
+  }
   return p;
 };
 
@@ -70,33 +114,32 @@ const getCompForBase = (key: string): FontStyle['compatibility'] => {
   return 'medium';
 };
 
-const baseFontsData = Object.entries(MAPS).map(([key, val]) => ({
-  id: key,
-  name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-  cat: key.includes('chicano') ? 'chicano' :
-       (key.includes('heavy') ? 'heavy' :
-       (key.includes('script') || key.includes('look') ? 'script' : 
-       (key.includes('fraktur') ? 'gothic' : 
-       (key.includes('block') ? 'block' : 
-       (key.includes('mirror') ? 'mirror' : 'serif'))))),
-  chars: val,
-  comp: getCompForBase(key)
-}));
+const baseFontsData = Object.entries(MAPS).map(([key, val]) => {
+  const cat = getCategoryFromId(key);
+  return {
+    id: key,
+    name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+    cat: cat,
+    chars: val,
+    comp: getCompForBase(key)
+  };
+});
 
 export const FONTS: FontStyle[] = baseFontsData.map(b => ({
   id: `pro-${b.id}`,
   name: b.name,
-  category: b.cat as any,
+  category: b.cat,
   map: b.id === 'block' ? createBlockMap('[̲̅a]') : createMap(lower + upper, b.chars),
   pages: getPagesForFont(b.cat),
   compatibility: b.comp,
   tags: b.cat === 'script' ? ['Elegante', 'Cute'] : 
         (b.cat === 'chicano' ? ['Elegante', 'Tatuajes'] : 
         (b.cat === 'gothic' ? ['Gaming', 'Tatuajes'] : 
-        (b.cat === 'heavy' ? ['Profesional', 'Urbano'] : ['Classic'])))
+        (b.cat === 'heavy' ? ['Profesional', 'Urbano'] : 
+        (b.cat === 'graffiti' ? ['Urbano', 'HipHop'] : ['Classic']))))
 }));
 
-// Nuevas variantes
+// Nuevas variantes manuales
 FONTS.push({
   id: 'pro-vaporwave-spaced',
   name: 'Vaporwave ✨',
