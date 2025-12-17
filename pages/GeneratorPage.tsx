@@ -4,10 +4,11 @@ import { Helmet } from 'react-helmet-async';
 import { PageConfig } from '../types';
 import { PAGE_CONFIGS } from '../constants';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
+import { DECORATORS, applyDecoration } from '../services/decorators';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle } from 'lucide-react';
+import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle, AlertCircle, Wand2 } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -15,6 +16,7 @@ interface GeneratorPageProps {
 }
 
 const ITEMS_PER_PAGE = 24;
+const INSTAGRAM_BIO_LIMIT = 150;
 
 const SYMBOLS = [
   '★', '⚡', '꧁', '꧂', '❤', '✈', '☠', '✔', '✘', 
@@ -55,6 +57,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   // UI State
   const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const [activeDecorator, setActiveDecorator] = useState<string>('none');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isTyping, setIsTyping] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -181,7 +184,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   }, [config.path]);
 
   // SEO: Internal Link Insertion Helper
-  // Every 12 fonts, insert a "Call to Action" card to another page
   const getInternalLinkCard = (index: number) => {
     if (index === 11) { // After 12th item
         const targetPage = relatedPages[0];
@@ -192,6 +194,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   const placeholder = "Escribe tu texto aquí...";
   const textToProcess = debouncedText || 'Vista Previa';
+  const charCount = inputText.length;
+  const isOverLimit = charCount > INSTAGRAM_BIO_LIMIT;
+  const isNearLimit = charCount > INSTAGRAM_BIO_LIMIT - 20;
+
   const canonicalUrl = `https://conversordeletrasbonitas.org${config.path === '/' ? '' : config.path}`;
 
   const structuredData = [
@@ -303,15 +309,30 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     className="block w-full border-0 bg-transparent py-6 px-4 sm:pl-2 sm:pr-20 text-slate-900 placeholder:text-slate-400 focus:ring-0 text-xl sm:text-2xl font-medium min-h-[100px] resize-none leading-relaxed"
                     rows={2}
                   />
-                  {inputText.length > 0 && (
-                     <button 
-                       onClick={clearInput}
-                       className="absolute bottom-4 right-4 sm:bottom-auto sm:top-[4.5rem] sm:right-6 p-2 text-slate-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
-                       title="Borrar texto"
-                     >
-                       <Trash2 size={20} />
-                     </button>
-                  )}
+                  
+                  {/* Character Counter & Clear Button */}
+                  <div className="absolute bottom-4 right-4 flex items-center gap-3">
+                     <span className={`text-xs font-bold px-2 py-1 rounded-md transition-colors ${
+                       isOverLimit 
+                         ? 'bg-red-100 text-red-600' 
+                         : isNearLimit 
+                           ? 'bg-yellow-100 text-yellow-700' 
+                           : 'bg-slate-100 text-slate-400'
+                     }`}>
+                       {charCount} / {INSTAGRAM_BIO_LIMIT}
+                       {isOverLimit && <AlertCircle size={12} className="inline ml-1 -mt-0.5" />}
+                     </span>
+
+                     {inputText.length > 0 && (
+                       <button 
+                         onClick={clearInput}
+                         className="p-1.5 text-slate-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
+                         title="Borrar texto"
+                       >
+                         <Trash2 size={18} />
+                       </button>
+                    )}
+                  </div>
                  </div>
                  
                  <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
@@ -338,31 +359,49 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4 px-2">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col xl:flex-row justify-between items-center mt-4 gap-4 px-2">
+            <div className="w-full xl:w-auto overflow-hidden">
                <HistoryBar history={history} onClear={clearHistory} onSelect={(t) => { setInputText(t); textareaRef.current?.focus(); }} />
             </div>
 
-            {/* View Mode Toggle */}
-            <div className="flex bg-white p-1 rounded-xl shadow-sm border border-slate-200">
-                <button 
-                  onClick={() => setViewMode('list')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'list' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
-                >
-                  <LayoutList size={16} /> <span className="hidden sm:inline">Lista</span>
-                </button>
-                <button 
-                  onClick={() => setViewMode('instagram')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'instagram' ? 'bg-gradient-to-tr from-yellow-500 to-purple-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
-                >
-                  <Instagram size={16} /> <span className="hidden sm:inline">Bio</span>
-                </button>
-                <button 
-                  onClick={() => setViewMode('whatsapp')}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'whatsapp' ? 'bg-green-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
-                >
-                  <MessageCircle size={16} /> <span className="hidden sm:inline">Chat</span>
-                </button>
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full xl:w-auto justify-end">
+              {/* Decorator Toggle */}
+              <div className="relative group z-20 flex-grow sm:flex-grow-0">
+                 <div className="flex items-center bg-white border border-slate-200 rounded-xl px-3 py-1.5 shadow-sm">
+                    <Wand2 size={16} className="text-primary-500 mr-2" />
+                    <select 
+                      value={activeDecorator}
+                      onChange={(e) => setActiveDecorator(e.target.value)}
+                      className="bg-transparent border-none text-sm font-medium text-slate-700 focus:ring-0 cursor-pointer py-1 pr-8"
+                    >
+                      {DECORATORS.map(d => (
+                        <option key={d.id} value={d.id}>{d.name} {d.prefix}A{d.suffix}</option>
+                      ))}
+                    </select>
+                 </div>
+              </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex bg-white p-1 rounded-xl shadow-sm border border-slate-200 flex-grow sm:flex-grow-0">
+                  <button 
+                    onClick={() => setViewMode('list')}
+                    className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'list' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                  >
+                    <LayoutList size={16} /> <span className="hidden sm:inline">Lista</span>
+                  </button>
+                  <button 
+                    onClick={() => setViewMode('instagram')}
+                    className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'instagram' ? 'bg-gradient-to-tr from-yellow-500 to-purple-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                  >
+                    <Instagram size={16} /> <span className="hidden sm:inline">Bio</span>
+                  </button>
+                  <button 
+                    onClick={() => setViewMode('whatsapp')}
+                    className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'whatsapp' ? 'bg-green-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                  >
+                    <MessageCircle size={16} /> <span className="hidden sm:inline">Chat</span>
+                  </button>
+              </div>
             </div>
           </div>
         </div>
@@ -371,16 +410,31 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {visibleFonts.map((font, index) => {
              const internalLink = getInternalLinkCard(index);
+             // Apply font mapping first
+             const mappedText = convertText(textToProcess, font.map);
+             // Apply decoration second
+             const finalRawText = applyDecoration(mappedText, activeDecorator);
+             // For display segments, we need to handle decoration manually if we want correct segments
+             // For simplicity in display, we can wrap the segments or just rely on raw text for display if simpler
+             // But to keep fallback logic, let's just decorate the raw output for the segments.
+             // Note: getDisplaySegments handles fallback logic on the character level. 
+             // Applying decoration adds simple chars.
+             
+             // Strategy: To preserve fallback logic, we apply decoration to the *source* text if it's simple, 
+             // OR we just use the rawText for display in the card if we don't care about coloring fallback chars in the decoration itself.
+             // Let's keep it simple: Pass the fully processed string to displaySegments.
+             const displaySegments = debouncedText || !isTyping ? getDisplaySegments(finalRawText, {}) : [];
+
              const card = (
                <FontCard
                  key={font.id}
                  font={font}
-                 rawText={convertText(textToProcess, font.map)}
-                 displaySegments={debouncedText || !isTyping ? getDisplaySegments(textToProcess, font.map) : []}
+                 rawText={finalRawText}
+                 displaySegments={displaySegments}
                  isFavorite={favorites.includes(font.id)}
                  viewMode={viewMode}
                  onToggleFavorite={() => toggleFavorite(font.id)}
-                 onCopy={() => addToHistory(font.name, convertText(textToProcess, font.map))}
+                 onCopy={() => addToHistory(font.name, finalRawText)}
                />
              );
 

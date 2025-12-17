@@ -1,11 +1,6 @@
-/* 
-  @tailwind directives are temporarily disabled for the Preview Environment.
-  The styling is currently handled by the CDN script in index.html to ensure stability.
-  
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* 
   Standard CSS Fallback System
