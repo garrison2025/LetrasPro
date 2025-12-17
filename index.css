@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 
   Standard CSS Fallback System
 */
@@ -33,7 +37,7 @@
   font-weight: bold;
 }
 
-/* Helper for shimmer animation in Tailwind CDN mode */
+/* Animation utilities */
 .animate-shimmer {
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
@@ -42,4 +46,13 @@
 @keyframes shimmer {
   0% { background-position: 100% 0; }
   100% { background-position: -100% 0; }
+}
+
+/* Hide scrollbar for history bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

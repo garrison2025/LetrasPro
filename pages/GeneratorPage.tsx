@@ -4,9 +4,10 @@ import { Helmet } from 'react-helmet-async';
 import { PageConfig } from '../types';
 import { PAGE_CONFIGS } from '../constants';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
-import FontCard from '../components/FontCard';
+import FontCard, { ViewMode } from '../components/FontCard';
+import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp } from 'lucide-react';
+import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -42,7 +43,18 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   });
 
+  // History State
+  const [history, setHistory] = useState<{fontName: string, text: string, timestamp: number}[]>(() => {
+    try {
+      const saved = localStorage.getItem('let_pro_history');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   // UI State
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isTyping, setIsTyping] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -68,6 +80,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   }, [favorites]);
 
   useEffect(() => {
+    localStorage.setItem('let_pro_history', JSON.stringify(history));
+  }, [history]);
+
+  useEffect(() => {
     if (inputText !== debouncedText) {
       setIsTyping(true);
     } else {
@@ -75,10 +91,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   }, [inputText, debouncedText]);
 
-  // Scroll listener for Back-to-Top button
   useEffect(() => {
     const handleScroll = () => {
-      // Show button if scrolled more than 400px
       setShowScrollTop(window.scrollY > 400);
     };
     window.addEventListener('scroll', handleScroll);
@@ -94,15 +108,25 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     );
   };
 
+  const addToHistory = (fontName: string, text: string) => {
+    setHistory(prev => {
+      const newItem = { fontName, text, timestamp: Date.now() };
+      // Remove duplicate texts if exist, keep last 10
+      const filtered = prev.filter(item => item.text !== text);
+      return [newItem, ...filtered].slice(0, 10);
+    });
+    setShowToast(true);
+  };
+
+  const clearHistory = () => setHistory([]);
+
   const clearInput = () => {
     setInputText('');
     textareaRef.current?.focus();
   };
 
   const scrollToTop = () => {
-    // Scroll smoothly to the input container
     if (inputContainerRef.current) {
-        // Adjust for sticky header offset
         const yOffset = -100; 
         const y = inputContainerRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({top: y, behavior: 'smooth'});
@@ -152,14 +176,24 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const relatedPages = useMemo(() => {
     return Object.values(PAGE_CONFIGS)
       .filter((page) => page.path !== config.path)
+      .sort(() => 0.5 - Math.random()) // Shuffle for randomness (SEO Internal Linking Strategy)
       .slice(0, 3);
   }, [config.path]);
+
+  // SEO: Internal Link Insertion Helper
+  // Every 12 fonts, insert a "Call to Action" card to another page
+  const getInternalLinkCard = (index: number) => {
+    if (index === 11) { // After 12th item
+        const targetPage = relatedPages[0];
+        if (targetPage) return targetPage;
+    }
+    return null;
+  };
 
   const placeholder = "Escribe tu texto aquí...";
   const textToProcess = debouncedText || 'Vista Previa';
   const canonicalUrl = `https://conversordeletrasbonitas.org${config.path === '/' ? '' : config.path}`;
 
-  // JSON-LD Construction
   const structuredData = [
     {
       "@context": "https://schema.org",
@@ -178,17 +212,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://conversordeletrasbonitas.org/" },
         ...(config.path !== '/' ? [{ "@type": "ListItem", "position": 2, "name": config.heading, "item": canonicalUrl }] : [])
       ]
-    },
-    // New: ItemList Schema for SEO to indicate this is a list of fonts
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "itemListElement": visibleFonts.slice(0, 10).map((font, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": font.name,
-        "description": `Estilo de fuente ${font.category}`
-      }))
     }
   ];
 
@@ -226,7 +249,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={config.title} />
         <meta property="og:description" content={config.description} />
-        <meta property="og:image" content="https://conversordeletrasbonitas.org/og-image.svg" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Helmet>
 
@@ -266,7 +288,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 -mt-12 relative z-20" ref={inputContainerRef}>
         
         {/* Sticky Input */}
-        <div className="sticky top-20 z-30 mb-12">
+        <div className="sticky top-20 z-30 mb-8">
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
             <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden flex flex-col">
@@ -281,7 +303,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     className="block w-full border-0 bg-transparent py-6 px-4 sm:pl-2 sm:pr-20 text-slate-900 placeholder:text-slate-400 focus:ring-0 text-xl sm:text-2xl font-medium min-h-[100px] resize-none leading-relaxed"
                     rows={2}
                   />
-                  {/* Clear Button (Only shows if text exists) */}
                   {inputText.length > 0 && (
                      <button 
                        onClick={clearInput}
@@ -316,29 +337,74 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               <div className="h-1 w-full bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-500 bg-[length:200%_100%] animate-shimmer"></div>
             </div>
           </div>
-          <div className="flex justify-between items-center mt-3 px-2">
-            <p className="text-sm font-medium text-slate-500">Mostrando <span className="text-primary-600 font-bold">{visibleFonts.length}</span> estilos</p>
-            {favorites.length > 0 && (
-               <p className="text-xs font-semibold text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full flex items-center gap-1">
-                 <Star size={10} fill="currentColor" /> {favorites.length} Favoritos
-               </p>
-            )}
+          
+          <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-4 px-2">
+            <div className="flex items-center gap-2">
+               <HistoryBar history={history} onClear={clearHistory} onSelect={(t) => { setInputText(t); textareaRef.current?.focus(); }} />
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex bg-white p-1 rounded-xl shadow-sm border border-slate-200">
+                <button 
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'list' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                >
+                  <LayoutList size={16} /> <span className="hidden sm:inline">Lista</span>
+                </button>
+                <button 
+                  onClick={() => setViewMode('instagram')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'instagram' ? 'bg-gradient-to-tr from-yellow-500 to-purple-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                >
+                  <Instagram size={16} /> <span className="hidden sm:inline">Bio</span>
+                </button>
+                <button 
+                  onClick={() => setViewMode('whatsapp')}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'whatsapp' ? 'bg-green-500 text-white shadow-md' : 'text-slate-500 hover:text-slate-900'}`}
+                >
+                  <MessageCircle size={16} /> <span className="hidden sm:inline">Chat</span>
+                </button>
+            </div>
           </div>
         </div>
 
         {/* Results */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-          {visibleFonts.map((font) => (
-            <FontCard
-              key={font.id}
-              font={font}
-              rawText={convertText(textToProcess, font.map)}
-              displaySegments={debouncedText || !isTyping ? getDisplaySegments(textToProcess, font.map) : []}
-              isFavorite={favorites.includes(font.id)}
-              onToggleFavorite={() => toggleFavorite(font.id)}
-              onCopy={() => setShowToast(true)}
-            />
-          ))}
+          {visibleFonts.map((font, index) => {
+             const internalLink = getInternalLinkCard(index);
+             const card = (
+               <FontCard
+                 key={font.id}
+                 font={font}
+                 rawText={convertText(textToProcess, font.map)}
+                 displaySegments={debouncedText || !isTyping ? getDisplaySegments(textToProcess, font.map) : []}
+                 isFavorite={favorites.includes(font.id)}
+                 viewMode={viewMode}
+                 onToggleFavorite={() => toggleFavorite(font.id)}
+                 onCopy={() => addToHistory(font.name, convertText(textToProcess, font.map))}
+               />
+             );
+
+             // Inject Internal Link Card for SEO
+             if (internalLink) {
+                return (
+                  <React.Fragment key={font.id}>
+                    {card}
+                    <Link to={internalLink.path} className="col-span-1 md:col-span-2 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-2xl p-6 flex items-center justify-between text-white shadow-lg hover:shadow-xl hover:scale-[1.01] transition-all">
+                       <div>
+                         <span className="text-primary-100 text-xs font-bold uppercase tracking-wider mb-1 block">Explora más estilos</span>
+                         <h3 className="font-display font-bold text-2xl">{internalLink.heading}</h3>
+                         <p className="text-primary-100 text-sm mt-1">Descubre nuevas fuentes para tu perfil</p>
+                       </div>
+                       <div className="bg-white/20 p-3 rounded-full backdrop-blur-sm">
+                         <ArrowRightCircle size={32} />
+                       </div>
+                    </Link>
+                  </React.Fragment>
+                );
+             }
+             return card;
+          })}
+          
           {visibleFonts.length === 0 && (
              <div className="col-span-full py-20 text-center">
                <div className="inline-block p-4 rounded-full bg-slate-100 mb-4"><Sparkles className="text-slate-400" size={32} /></div>

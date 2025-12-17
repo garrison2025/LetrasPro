@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Copy, Check, Star } from 'lucide-react';
+import { Copy, Check, Star, Instagram, MessageCircle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
+
+export type ViewMode = 'list' | 'instagram' | 'whatsapp';
 
 interface FontCardProps {
   font: FontStyle;
   rawText: string;
   displaySegments: TextSegment[];
   isFavorite: boolean;
+  viewMode: ViewMode;
   onToggleFavorite: () => void;
   onCopy: () => void;
 }
@@ -16,6 +19,7 @@ const FontCard: React.FC<FontCardProps> = ({
   rawText, 
   displaySegments, 
   isFavorite, 
+  viewMode,
   onToggleFavorite, 
   onCopy 
 }) => {
@@ -27,26 +31,94 @@ const FontCard: React.FC<FontCardProps> = ({
 
     navigator.clipboard.writeText(rawText).then(() => {
       setJustCopied(true);
-      onCopy(); // Trigger parent toast
-      setTimeout(() => setJustCopied(false), 500); // Shorter duration for the border flash
+      onCopy(); 
+      setTimeout(() => setJustCopied(false), 500); 
     });
   };
 
-  // Determine context class for CSS fallback logic
   const contextClass = `font-ctx-${font.category}`;
+
+  // Helper to render the text content
+  const renderTextContent = () => (
+    displaySegments.length > 0 ? (
+      displaySegments.map((seg, i) => (
+        seg.isFallback ? 
+          <span key={i} className="fallback-char">{seg.content}</span> : 
+          <span key={i}>{seg.content}</span>
+      ))
+    ) : (
+      <span className="opacity-50 italic">Vista Previa...</span>
+    )
+  );
+
+  // LIST VIEW (Default)
+  const renderListView = () => (
+    <div className="relative min-h-[3rem] flex items-center pr-2">
+      <p className="text-xl sm:text-2xl text-slate-800 break-all font-medium leading-relaxed group-hover:text-primary-900 transition-colors">
+        {renderTextContent()}
+      </p>
+    </div>
+  );
+
+  // INSTAGRAM VIEW
+  const renderInstagramView = () => (
+    <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 mt-2 w-full">
+      <div className="flex items-center gap-4 mb-4">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
+          <div className="w-full h-full rounded-full bg-white p-[2px]">
+            <div className="w-full h-full rounded-full bg-slate-200"></div>
+          </div>
+        </div>
+        <div className="flex-1 flex justify-around text-center">
+          <div><div className="font-bold text-sm">124</div><div className="text-[10px] text-slate-500">Posts</div></div>
+          <div><div className="font-bold text-sm">2.5k</div><div className="text-[10px] text-slate-500">Followers</div></div>
+          <div><div className="font-bold text-sm">340</div><div className="text-[10px] text-slate-500">Following</div></div>
+        </div>
+      </div>
+      <div className="text-sm">
+        <div className="font-bold mb-1">Tu Nombre</div>
+        <div className="text-slate-800 whitespace-pre-wrap leading-tight">
+          {renderTextContent()}
+        </div>
+        <div className="mt-3 py-1.5 bg-white border border-slate-200 rounded-md text-center text-xs font-semibold text-slate-700 shadow-sm">
+          Edit Profile
+        </div>
+      </div>
+    </div>
+  );
+
+  // WHATSAPP VIEW
+  const renderWhatsappView = () => (
+    <div className="bg-[#e5ddd5] rounded-xl p-4 border border-slate-200 mt-2 relative overflow-hidden">
+      {/* Pattern Overlay simulation */}
+      <div className="absolute inset-0 opacity-[0.05] bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png')] bg-repeat bg-[length:50px_50px]"></div>
+      
+      <div className="relative flex justify-end">
+        <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-[90%]">
+          <p className="text-sm text-slate-800 break-all leading-relaxed">
+            {renderTextContent()}
+          </p>
+          <div className="flex justify-end items-center gap-1 mt-1">
+            <span className="text-[10px] text-slate-500">12:45 PM</span>
+            <Check size={12} className="text-blue-500" />
+            <Check size={12} className="text-blue-500 -ml-1.5" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div 
       className={`group relative bg-white rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden ${
         justCopied
-          ? 'border-green-500 ring-2 ring-green-100 shadow-md scale-[1.02]' // Success state
+          ? 'border-green-500 ring-2 ring-green-100 shadow-md scale-[1.02]' 
           : isFavorite 
             ? 'border-primary-200 shadow-md ring-1 ring-primary-100 order-first' 
             : 'border-slate-100 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1'
       } ${contextClass}`}
       onClick={handleCopy}
     >
-      {/* Background decoration on hover */}
       <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-bl-full -mr-10 -mt-10 transition-opacity pointer-events-none ${isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
 
       <div className="p-6">
@@ -63,7 +135,6 @@ const FontCard: React.FC<FontCardProps> = ({
            </div>
            
            <div className="flex items-center gap-2 z-10">
-             {/* Favorite Button */}
              <button
                 className={`favorite-btn p-2 rounded-full transition-colors ${
                   isFavorite 
@@ -79,7 +150,6 @@ const FontCard: React.FC<FontCardProps> = ({
                 <Star size={18} fill={isFavorite ? "currentColor" : "none"} strokeWidth={isFavorite ? 0 : 2} />
              </button>
 
-             {/* Copy Indicator */}
              <div className={`
                flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
                ${justCopied ? 'bg-green-500 text-white scale-110 shadow-lg shadow-green-500/30' : 'bg-slate-100 text-slate-400 group-hover:bg-primary-500 group-hover:text-white'}
@@ -89,19 +159,10 @@ const FontCard: React.FC<FontCardProps> = ({
            </div>
         </div>
 
-        <div className="relative min-h-[3rem] flex items-center pr-2">
-           <p className="text-xl sm:text-2xl text-slate-800 break-all font-medium leading-relaxed group-hover:text-primary-900 transition-colors">
-             {displaySegments.length > 0 ? (
-               displaySegments.map((seg, i) => (
-                 seg.isFallback ? 
-                   <span key={i} className="fallback-char">{seg.content}</span> : 
-                   <span key={i}>{seg.content}</span>
-               ))
-             ) : (
-               <span className="text-slate-300 italic font-light">Vista Previa...</span>
-             )}
-           </p>
-        </div>
+        {viewMode === 'list' && renderListView()}
+        {viewMode === 'instagram' && renderInstagramView()}
+        {viewMode === 'whatsapp' && renderWhatsappView()}
+
       </div>
     </div>
   );
