@@ -11,7 +11,7 @@ const MAPS = {
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
   chicano: '𝓐𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
-  heavySans: '𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝗫𝘆𝘇',
+  heavySans: '𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗ𝗫𝘆𝘇',
   fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
   frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
   monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
@@ -34,6 +34,17 @@ const ACCENT_MAP: Record<string, string> = {
 const COMBINERS = {
   tilde: '\u0303',
   acute: '\u0301'
+};
+
+const getPagesForFont = (cat: string): string[] => {
+  const p = ['home'];
+  if (cat === 'script') p.push('cursivas', 'tatuajes', 'tattoo', 'amino');
+  if (cat === 'gothic') p.push('goticas', 'tatuajes', 'tattoo');
+  if (cat === 'chicano') p.push('tatuajes', 'tattoo');
+  if (cat === 'block' || cat === 'heavy') p.push('graffiti', 'facebook');
+  if (cat === 'heavy' || cat === 'sans' || cat === 'serif') p.push('facebook');
+  if (cat === 'aesthetic' || cat === 'vaporwave') p.push('amino');
+  return p;
 };
 
 const createMap = (source: string, target: string): Record<string, string> => {
@@ -77,7 +88,7 @@ export const FONTS: FontStyle[] = baseFontsData.map(b => ({
   name: b.name,
   category: b.cat as any,
   map: b.id === 'block' ? createBlockMap('[̲̅a]') : createMap(lower + upper, b.chars),
-  pages: ['home'],
+  pages: getPagesForFont(b.cat),
   compatibility: b.comp,
   tags: b.cat === 'script' ? ['Elegante', 'Cute'] : 
         (b.cat === 'chicano' ? ['Elegante', 'Tatuajes'] : 
@@ -91,7 +102,7 @@ FONTS.push({
   name: 'Vaporwave ✨',
   category: 'vaporwave',
   map: createMap(lower + upper, MAPS.fullWidth),
-  pages: ['home'],
+  pages: getPagesForFont('vaporwave'),
   compatibility: 'high',
   tags: ['Aesthetic', 'Urbano']
 });
@@ -101,7 +112,7 @@ FONTS.push({
   name: 'Stacked Symbols ░',
   category: 'decorative',
   map: createMap(lower + upper, MAPS.sansBold),
-  pages: ['home'],
+  pages: ['home', 'facebook', 'graffiti'],
   compatibility: 'medium',
   tags: ['Gaming', 'Urbano']
 });
