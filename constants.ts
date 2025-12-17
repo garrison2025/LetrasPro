@@ -69,22 +69,24 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   graffiti: {
     path: '/letras-graffiti',
-    title: 'Conversor de Letras Graffiti y Urbano (40+ Estilos)',
+    title: 'Conversor de Letras Graffiti y Urbano (40+ Estilos Murales)',
     heading: 'Conversor de Letras Graffiti',
-    description: 'Crea textos urbanos con nuestro conversor de letras graffiti. Estilos burbuja, goteos y tags callejeros online.',
-    content: 'Dale un toque rebelde a tu perfil con el conversor de letras graffiti. Incluye estilos de burbuja, firmas tipo tag y efectos de goteo.',
+    description: 'Crea textos urbanos con nuestro conversor de letras graffiti. Más de 40 estilos burbuja, goteos y tags callejeros en este generador online.',
+    content: 'Dale un toque rebelde y callejero a tu perfil con el conversor de letras graffiti. Hemos diseñado una colección exclusiva de 40 estilos que simulan el arte urbano real: desde letras "Burbuja" hasta firmas rápidas tipo "Tag" y efectos de goteo de pintura.',
     filter: (f) => f.pages.includes('graffiti'),
     whyFeatures: [
-      { title: 'Estilo Urbano Real', description: 'Efectos de goteo y firmas tipo tag de rotulador.', icon: 'palette' },
-      { title: '40+ Variantes Mural', description: 'Combina alfabetos de bloque y burbuja con decoradores.', icon: 'zap' }
+      { title: '40+ Estilos Graffiti', description: 'Burbuja, Tag, Wildstyle y Chicano en una sola herramienta urbana.', icon: 'palette' },
+      { title: 'Efectos Murales', description: 'Decoradores únicos de goteo, coronas de king y llamas de fuego.', icon: 'zap' },
+      { title: 'Ideal para Gaming', description: 'Crea nicks de clanes impactantes para Free Fire, COD y Discord.', icon: 'star' }
     ],
     howToSteps: [
       'Introduce tu texto en el conversor de letras graffiti.',
-      'Elige entre burbuja, bloque o tag.',
-      'Copia y pega el arte urbano.'
+      'Elige entre burbuja, bloque, wildstyle o tag caligráfico.',
+      'Añade efectos de goteo o coronas automáticamente.',
+      'Copia y pega tu arte urbano en cualquier red social.'
     ],
     faqs: [
-      { question: '¿Sirve para nombres de clanes?', answer: 'Sí, es el estilo más popular para crear nicks impactantes en juegos competitivos.' }
+      { question: '¿Son compatibles con nicks de juegos?', answer: 'Sí, la mayoría de nuestros estilos graffiti usan caracteres Unicode estándar aceptados en Free Fire, PUBG y nicks de clanes.' }
     ]
   },
   tatuajes: {

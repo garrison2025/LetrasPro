@@ -9,16 +9,16 @@ const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const nums = '0123456789';
 
 const MAPS = {
-  serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇ＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+  serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆ＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifItalic: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰ＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊｋ𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚ𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛ＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶ𝗪𝗫𝗬𝗭',
-  sansItalic: '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡',
+  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚ𝗔𝗕𝗖𝗗ＥＦ𝗚ＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
+  sansItalic: '𝘢𝘣𝘤𝘥𝑒𝘧𝘨𝘩𝘪𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷ｗｘ𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡',
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻ＩＪＫＬＭＮＯＰＱ𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
   fraktur: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
   frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
-  monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂ＴＵＶＷ𝚇Ｙ𝚉',
+  monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝚀𝚁𝚂ＴＵＶＷ𝚇Ｙ𝚉',
   doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ',
   smallCaps: 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ',
   bubble: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ',
@@ -105,7 +105,8 @@ const DECOS_URBAN = [
   { id: 'none', name: '', char: '' },
   { id: 'dr', name: 'Goteo', char: '\u0323' },
   { id: 'cr', name: 'Corona', char: '\u030a' },
-  { id: 'wal', name: 'Muro', char: '\u0333' }
+  { id: 'wal', name: 'Muro', char: '\u0333' },
+  { id: 'fire', name: 'Fuego', char: ' \u{1F525}' }
 ];
 
 const DECOS_DARK = [
@@ -166,18 +167,21 @@ const gothicBases: BaseStyle[] = [
 ];
 const gothicFonts = generateCollection('got', gothicBases, DECOS_DARK, ['goticas']);
 
-// --- 3.4 GRAFFITI (40) ---
+// --- 3.4 GRAFFITI (40+) ---
 const urbanBases: BaseStyle[] = [
   { id: 'tag', name: 'Firma Tag', cat: 'decorative', chars: MAPS.specialUrban },
   { id: 'urb', name: 'Urbano Pro', cat: 'decorative', chars: MAPS.specialTag },
   { id: 'bub', name: 'Burbuja Blanca', cat: 'decorative', chars: MAPS.bubble },
   { id: 'spr', name: 'Burbuja Spray', cat: 'decorative', chars: MAPS.bubbleBlack },
-  { id: 'block', name: 'Bloque Calle', cat: 'decorative', chars: MAPS.fullWidth }
+  { id: 'block', name: 'Bloque Calle', cat: 'decorative', chars: MAPS.fullWidth },
+  { id: 'wild', name: 'Wild Style', cat: 'decorative', chars: MAPS.doubleStruck },
+  { id: 'old', name: 'Old School Graffiti', cat: 'decorative', chars: MAPS.fraktur },
+  { id: 'chic', name: 'Chicano Street', cat: 'decorative', chars: MAPS.frakturBold }
 ];
 const urbanFonts = generateCollection('grf', urbanBases, DECOS_URBAN, ['graffiti']);
 
 // ==========================================
-// 4. EXPORTACIÓN UNIFICADA (TOTAL: 296+)
+// 4. EXPORTACIÓN UNIFICADA (TOTAL: 336+)
 // ==========================================
 
 export const FONTS: FontStyle[] = [
