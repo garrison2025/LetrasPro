@@ -11,9 +11,9 @@ const nums = '0123456789';
 const MAPS = {
   serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifItalic: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮ＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
-  sansItalic: '𝘢𝘣𝘤𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝘲ｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+  serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫ＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚ𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
+  sansItalic: '𝘢𝘣𝘤𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯ｵ𝘱𝗊ｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
   fraktur: '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
@@ -65,19 +65,27 @@ interface Decorator {
   id: string;
   name: string;
   char: string;
+  prefix?: string;
+  suffix?: string;
 }
 
 const generateCollection = (prefix: string, bases: BaseStyle[], decos: Decorator[], pages: string[]): FontStyle[] => {
   const res: FontStyle[] = [];
   bases.forEach(b => {
     decos.forEach(d => {
-      const isBaseOnly = d.id === 'none';
+      const isBaseOnly = d.id === 'none' && !d.prefix && !d.suffix;
       const baseMap = createMap(lower + upper, b.chars);
+      
+      let finalMap = { ...baseMap };
+      if (d.char) {
+        finalMap = createCombinerMap(d.char, baseMap);
+      }
+
       res.push({
         id: `${prefix}-${b.id}-${d.id}`,
         name: isBaseOnly ? b.name : `${b.name} ${d.name}`,
         category: b.cat,
-        map: isBaseOnly ? baseMap : createCombinerMap(d.char, baseMap),
+        map: finalMap,
         pages
       });
     });
@@ -120,6 +128,15 @@ const DECOS_TATTOO = [
   { id: 'st', name: 'Star', char: ' ✧' }
 ];
 
+const DECOS_FACEBOOK = [
+  { id: 'none', name: 'Pro', char: '' },
+  { id: 'un', name: 'Subrayado', char: '\u0332' },
+  { id: 'st', name: 'Tachado', char: '\u0336' },
+  { id: 'br', name: '【Brackets】', char: '' }, // Decoradores sin combinadores se manejan en UI o map específico si fuera necesario
+  { id: 'sp', name: 'Spark', char: ' \u2728' },
+  { id: 'sq', name: 'Square', char: '\u0332\u0305' }
+];
+
 // --- 3.1 HOME ---
 const homeBases: BaseStyle[] = [
   { id: 'b', name: 'Negrita Pro', cat: 'serif', chars: MAPS.serifBold },
@@ -154,7 +171,7 @@ const urbanBases: BaseStyle[] = [
 ];
 const urbanFonts = generateCollection('grf', urbanBases, DECOS_URBAN, ['graffiti']);
 
-// --- 3.5 TATTOO (MATRIZ 10x6 = 60 ESTILOS) ---
+// --- 3.5 TATTOO ---
 const tattooBases: BaseStyle[] = [
   { id: 'chic', name: 'Chicano Pro', cat: 'script', chars: MAPS.specialChic },
   { id: 'old', name: 'Old English Real', cat: 'gothic', chars: MAPS.frakturBold },
@@ -169,6 +186,21 @@ const tattooBases: BaseStyle[] = [
 ];
 const tattooFonts = generateCollection('tat', tattooBases, DECOS_TATTOO, ['tattoo', 'tatuajes']);
 
+// --- 3.6 FACEBOOK (NUEVA COLECCIÓN - 60 ESTILOS) ---
+const facebookBases: BaseStyle[] = [
+  { id: 'sb', name: 'Sans Bold FB', cat: 'sans', chars: MAPS.sansBold },
+  { id: 'srb', name: 'Serif Bold FB', cat: 'serif', chars: MAPS.serifBold },
+  { id: 'si', name: 'Sans Italic FB', cat: 'sans', chars: MAPS.sansItalic },
+  { id: 'sri', name: 'Serif Bold Italic', cat: 'serif', chars: MAPS.serifBoldItalic },
+  { id: 'cap', name: 'Small Caps Pro', cat: 'other', chars: MAPS.smallCaps },
+  { id: 'mono', name: 'Typewriter FB', cat: 'other', chars: MAPS.monospace },
+  { id: 'dbl', name: 'Double Struck', cat: 'other', chars: MAPS.doubleStruck },
+  { id: 'cur', name: 'Cursive Soft', cat: 'script', chars: MAPS.scriptFine },
+  { id: 'bld', name: 'Bold Script FB', cat: 'script', chars: MAPS.scriptBold },
+  { id: 'fld', name: 'Full Width Bold', cat: 'other', chars: MAPS.fullWidth }
+];
+const facebookFonts = generateCollection('fb', facebookBases, DECOS_FACEBOOK, ['facebook']);
+
 // ==========================================
 // 4. EXPORTACIÓN FINAL
 // ==========================================
@@ -179,6 +211,7 @@ export const FONTS: FontStyle[] = [
   ...gothicFonts,
   ...urbanFonts,
   ...tattooFonts,
+  ...facebookFonts,
   { id: 'am-titles', name: 'Títulos Amino', category: 'other', map: createMap(lower, MAPS.smallCaps), pages: ['amino'] }
 ];
 
