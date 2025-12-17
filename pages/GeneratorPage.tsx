@@ -6,7 +6,7 @@ import { PAGE_CONFIGS } from '../constants';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import FontCard from '../components/FontCard';
 import Toast from '../components/Toast';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home } from 'lucide-react';
+import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -47,8 +47,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const inputContainerRef = useRef<HTMLDivElement>(null);
   const debouncedText = useDebounce(inputText, 300);
   
   // Effects
@@ -73,6 +75,16 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   }, [inputText, debouncedText]);
 
+  // Scroll listener for Back-to-Top button
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button if scrolled more than 400px
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Handlers
   const toggleFavorite = (fontId: string) => {
     setFavorites(prev => 
@@ -80,6 +92,24 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         ? prev.filter(id => id !== fontId) 
         : [...prev, fontId]
     );
+  };
+
+  const clearInput = () => {
+    setInputText('');
+    textareaRef.current?.focus();
+  };
+
+  const scrollToTop = () => {
+    // Scroll smoothly to the input container
+    if (inputContainerRef.current) {
+        // Adjust for sticky header offset
+        const yOffset = -100; 
+        const y = inputContainerRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'smooth'});
+        textareaRef.current?.focus();
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const insertSymbol = (symbol: string) => {
@@ -120,10 +150,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const hasMore = visibleCount < sortedFonts.length;
 
   const relatedPages = useMemo(() => {
-    const allPages = Object.values(PAGE_CONFIGS);
-    const others = allPages.filter(p => p.path !== config.path);
-    const shuffled = [...others].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 3);
+    return Object.values(PAGE_CONFIGS)
+      .filter((page) => page.path !== config.path)
+      .slice(0, 3);
   }, [config.path]);
 
   const placeholder = "Escribe tu texto aquí...";
@@ -234,7 +263,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <p className="max-w-2xl mx-auto text-lg sm:text-xl text-slate-600 leading-relaxed font-light">{config.description}</p>
       </div>
 
-      <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
+      <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 -mt-12 relative z-20" ref={inputContainerRef}>
         
         {/* Sticky Input */}
         <div className="sticky top-20 z-30 mb-12">
@@ -243,15 +272,28 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl ring-1 ring-black/5 overflow-hidden flex flex-col">
               <div className="flex items-start">
                  <div className="hidden sm:flex items-center justify-center w-16 pt-6 pl-2 text-slate-400"><Type size={28} /></div>
-                 <textarea
-                  ref={textareaRef}
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder={placeholder}
-                  className="block w-full border-0 bg-transparent py-6 px-4 sm:pl-2 sm:pr-20 text-slate-900 placeholder:text-slate-400 focus:ring-0 text-xl sm:text-2xl font-medium min-h-[100px] resize-none leading-relaxed"
-                  rows={2}
-                />
-                <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                 <div className="relative flex-grow">
+                   <textarea
+                    ref={textareaRef}
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    placeholder={placeholder}
+                    className="block w-full border-0 bg-transparent py-6 px-4 sm:pl-2 sm:pr-20 text-slate-900 placeholder:text-slate-400 focus:ring-0 text-xl sm:text-2xl font-medium min-h-[100px] resize-none leading-relaxed"
+                    rows={2}
+                  />
+                  {/* Clear Button (Only shows if text exists) */}
+                  {inputText.length > 0 && (
+                     <button 
+                       onClick={clearInput}
+                       className="absolute bottom-4 right-4 sm:bottom-auto sm:top-[4.5rem] sm:right-6 p-2 text-slate-300 hover:text-red-400 hover:bg-red-50 rounded-lg transition-colors"
+                       title="Borrar texto"
+                     >
+                       <Trash2 size={20} />
+                     </button>
+                  )}
+                 </div>
+                 
+                 <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
                    <div className={`w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-300 ${isTyping ? 'bg-primary-100 text-primary-600' : 'bg-primary-50 text-primary-400'}`}>
                       {isTyping ? <Loader2 size={20} className="animate-spin" /> : <Sparkles size={20} />}
                    </div>
@@ -405,6 +447,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       </div>
 
       <Toast message="¡Texto copiado al portapapeles!" isVisible={showToast} onClose={() => setShowToast(false)} />
+
+      {/* Back to Top FAB */}
+      <button 
+        onClick={scrollToTop}
+        className={`fixed bottom-6 right-6 p-4 rounded-full bg-slate-900 text-white shadow-xl shadow-slate-900/20 z-40 transition-all duration-300 hover:scale-110 hover:bg-primary-600 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
+        aria-label="Volver arriba"
+      >
+        <ArrowUp size={24} />
+      </button>
     </div>
   );
 };

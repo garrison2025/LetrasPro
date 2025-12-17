@@ -28,7 +28,7 @@ const FontCard: React.FC<FontCardProps> = ({
     navigator.clipboard.writeText(rawText).then(() => {
       setJustCopied(true);
       onCopy(); // Trigger parent toast
-      setTimeout(() => setJustCopied(false), 2000);
+      setTimeout(() => setJustCopied(false), 500); // Shorter duration for the border flash
     });
   };
 
@@ -37,11 +37,13 @@ const FontCard: React.FC<FontCardProps> = ({
 
   return (
     <div 
-      className={`group relative bg-white rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden ${
-        isFavorite 
-          ? 'border-primary-200 shadow-md ring-1 ring-primary-100 order-first' 
-          : 'border-slate-100 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)]'
-      } hover:-translate-y-1 ${contextClass}`}
+      className={`group relative bg-white rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden ${
+        justCopied
+          ? 'border-green-500 ring-2 ring-green-100 shadow-md scale-[1.02]' // Success state
+          : isFavorite 
+            ? 'border-primary-200 shadow-md ring-1 ring-primary-100 order-first' 
+            : 'border-slate-100 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1'
+      } ${contextClass}`}
       onClick={handleCopy}
     >
       {/* Background decoration on hover */}

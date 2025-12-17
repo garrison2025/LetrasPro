@@ -1,6 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 
   Standard CSS Fallback System
-  Note: Tailwind styles are now handled by the script in index.html for immediate preview stability.
 */
 
 .fallback-char {
@@ -32,15 +35,4 @@
 .font-ctx-serif .fallback-char {
   font-family: 'Times New Roman', serif;
   font-weight: bold;
-}
-
-/* Helper for shimmer if CDN config misses it (though it is included in HTML now) */
-.animate-shimmer {
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
 }
