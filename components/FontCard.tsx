@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, Star, Instagram, MessageCircle } from 'lucide-react';
+import { Copy, Check, Star, Download, Image as ImageIcon } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
 
 export type ViewMode = 'list' | 'instagram' | 'whatsapp';
@@ -24,16 +24,117 @@ const FontCard: React.FC<FontCardProps> = ({
   onCopy 
 }) => {
   const [justCopied, setJustCopied] = useState(false);
+  const [isGeneratingImg, setIsGeneratingImg] = useState(false);
 
   const handleCopy = (e: React.MouseEvent) => {
-    // Prevent triggering if clicking the favorite button
-    if ((e.target as HTMLElement).closest('.favorite-btn')) return;
+    // Prevent triggering if clicking buttons
+    if ((e.target as HTMLElement).closest('button')) return;
 
     navigator.clipboard.writeText(rawText).then(() => {
       setJustCopied(true);
       onCopy(); 
       setTimeout(() => setJustCopied(false), 500); 
     });
+  };
+
+  const handleDownloadImage = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsGeneratingImg(true);
+
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Canvas Config
+      const width = 1080;
+      const padding = 80;
+      // Estimate height based on text length (rough approximation)
+      const estimatedLines = Math.ceil(rawText.length / 25); 
+      const height = Math.max(1080, 600 + (estimatedLines * 100)); // Square or portrait
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // 1. Draw Background (Gradient)
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, '#7c3aed'); // Primary 600
+      gradient.addColorStop(1, '#db2777'); // Secondary 600
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // 2. Draw Glassmorphism Card
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.roundRect(padding, padding, width - (padding * 2), height - (padding * 2), 40);
+      ctx.fill();
+      
+      // 3. Draw Header (Font Name)
+      ctx.fillStyle = '#64748b'; // Slate 500
+      ctx.font = 'bold 40px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(font.name.toUpperCase(), width / 2, padding + 100);
+
+      // 4. Draw Main Text
+      ctx.fillStyle = '#1e293b'; // Slate 900
+      ctx.font = '500 70px Inter, sans-serif'; // Use standard font to ensure emojis render if possible, system will fallback
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      
+      // Simple word wrap logic for canvas
+      const maxWidth = width - (padding * 4);
+      const lineHeight = 90;
+      const x = width / 2;
+      let y = (height / 2); // Start center
+
+      // Very basic wrapping
+      const words = rawText.split(''); // Split by char for fancy fonts often works better or standard wrap
+      // For fancy fonts, we often treat the whole string. 
+      // Let's just draw it. If it's too long, we might need better logic, but for now:
+      
+      const wrapText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
+          const chars = Array.from(text);
+          let line = '';
+          const lines = [];
+
+          for(let n = 0; n < chars.length; n++) {
+            const testLine = line + chars[n];
+            const metrics = ctx.measureText(testLine);
+            const testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+              lines.push(line);
+              line = chars[n];
+            } else {
+              line = testLine;
+            }
+          }
+          lines.push(line);
+
+          // Adjust Y start based on number of lines to center vertically
+          let startY = y - ((lines.length - 1) * lineHeight) / 2;
+
+          for(let k = 0; k < lines.length; k++) {
+             ctx.fillText(lines[k], x, startY + (k * lineHeight));
+          }
+      }
+
+      wrapText(rawText, x, y, maxWidth, lineHeight);
+
+      // 5. Draw Watermark
+      ctx.fillStyle = '#94a3b8'; // Slate 400
+      ctx.font = 'bold 30px sans-serif';
+      ctx.fillText('ConversorDeLetrasBonitas.org', width / 2, height - padding - 40);
+
+      // 6. Download
+      const link = document.createElement('a');
+      link.download = `letras-pro-${font.id}-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+    } catch (err) {
+      console.error("Error generating image", err);
+    } finally {
+      setIsGeneratingImg(false);
+    }
   };
 
   const contextClass = `font-ctx-${font.category}`;
@@ -135,6 +236,19 @@ const FontCard: React.FC<FontCardProps> = ({
            </div>
            
            <div className="flex items-center gap-2 z-10">
+              {/* Image Download Button */}
+              <button
+                className="p-2 rounded-full text-slate-300 dark:text-slate-600 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors hidden sm:block opacity-0 group-hover:opacity-100"
+                onClick={handleDownloadImage}
+                title="Descargar como Imagen"
+              >
+                {isGeneratingImg ? (
+                  <div className="animate-spin w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full" />
+                ) : (
+                  <ImageIcon size={18} strokeWidth={2} />
+                )}
+              </button>
+
              <button
                 className={`favorite-btn p-2 rounded-full transition-colors ${
                   isFavorite 
@@ -168,4 +282,15 @@ const FontCard: React.FC<FontCardProps> = ({
   );
 };
 
-export default FontCard;
+// React.memo optimization: Only re-render if essential props change
+export default React.memo(FontCard, (prev, next) => {
+  return (
+    prev.font.id === next.font.id &&
+    prev.rawText === next.rawText &&
+    prev.isFavorite === next.isFavorite &&
+    prev.viewMode === next.viewMode &&
+    // Segments usually change with rawText, but deep compare if needed. 
+    // Usually rawText equality implies segment equality unless utility changes.
+    prev.displaySegments === next.displaySegments
+  );
+});
