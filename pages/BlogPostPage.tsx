@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getPostBySlug } from '../data/blogPosts';
-import { Calendar, User, ChevronLeft, Tag, Share2 } from 'lucide-react';
+import { Calendar, User, ChevronLeft, Tag, Share2, Home } from 'lucide-react';
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -18,26 +18,52 @@ const BlogPostPage: React.FC = () => {
 
   const canonicalUrl = `https://conversordeletrasbonitas.org/blog/${post.slug}`;
 
-  // Structured Data for SEO (Article Schema)
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": post.imageUrl ? [post.imageUrl] : [],
-    "author": {
-      "@type": "Person",
-      "name": post.author
+  // Structured Data Array: Article Schema + Breadcrumb Schema
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "description": post.excerpt,
+      "image": post.imageUrl ? [post.imageUrl] : [],
+      "author": {
+        "@type": "Person",
+        "name": post.author
+      },
+      "datePublished": post.date,
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": canonicalUrl
+      }
     },
-    "datePublished": post.date,
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": canonicalUrl
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://conversordeletrasbonitas.org/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://conversordeletrasbonitas.org/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": post.title,
+          "item": canonicalUrl
+        }
+      ]
     }
-  };
+  ];
 
   return (
-    <article className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 bg-white min-h-screen font-sans">
+    <article className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900 min-h-screen font-sans transition-colors duration-300">
       <Helmet>
         <title>{post.title} - Blog LetrasPro</title>
         <meta name="description" content={post.excerpt} />
@@ -57,44 +83,44 @@ const BlogPostPage: React.FC = () => {
       </Helmet>
 
       <div className="max-w-3xl mx-auto">
-        {/* Breadcrumb / Back */}
-        <Link 
-          to="/blog" 
-          className="inline-flex items-center text-sm font-bold text-slate-400 hover:text-primary-600 mb-8 transition-colors group tracking-wide uppercase"
-        >
-          <ChevronLeft size={16} className="mr-1 group-hover:-translate-x-1 transition-transform" />
-          Volver al Blog
-        </Link>
+        {/* Breadcrumb / Back Navigation */}
+        <nav className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-8" aria-label="Breadcrumb">
+           <Link to="/" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"><Home size={16} /></Link>
+           <span className="text-slate-300 dark:text-slate-600">/</span>
+           <Link to="/blog" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">Blog</Link>
+           <span className="text-slate-300 dark:text-slate-600">/</span>
+           <span className="text-slate-800 dark:text-slate-200 truncate max-w-[200px] sm:max-w-xs">{post.title}</span>
+        </nav>
 
         {/* Header */}
         <header className="mb-12 text-center sm:text-left">
           <div className="flex flex-wrap gap-2 mb-6 justify-center sm:justify-start">
             {post.tags.map(tag => (
-              <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-bold uppercase tracking-wide border border-primary-100">
+              <span key={tag} className="inline-flex items-center px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold uppercase tracking-wide border border-primary-100 dark:border-primary-800">
                 <Tag size={12} className="mr-1.5" />
                 {tag}
               </span>
             ))}
           </div>
           
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 leading-tight tracking-tight">
             {post.title}
           </h1>
 
-          <div className="flex flex-col sm:flex-row items-center gap-6 text-sm text-slate-500 pb-8 border-b border-slate-100 justify-center sm:justify-start">
+          <div className="flex flex-col sm:flex-row items-center gap-6 text-sm text-slate-500 dark:text-slate-400 pb-8 border-b border-slate-100 dark:border-slate-800 justify-center sm:justify-start">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center text-primary-700 border border-white shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900 dark:to-secondary-900 flex items-center justify-center text-primary-700 dark:text-primary-300 border border-white dark:border-slate-800 shadow-sm">
                 <User size={20} />
               </div>
               <div className="text-left">
-                <span className="block font-bold text-slate-900 text-base">{post.author}</span>
-                <span className="text-xs text-slate-500 uppercase tracking-wider">Equipo Editorial</span>
+                <span className="block font-bold text-slate-900 dark:text-white text-base">{post.author}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-500 uppercase tracking-wider">Equipo Editorial</span>
               </div>
             </div>
-            <div className="hidden sm:block w-px h-10 bg-slate-200"></div>
-            <div className="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl">
+            <div className="hidden sm:block w-px h-10 bg-slate-200 dark:bg-slate-700"></div>
+            <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-xl">
               <Calendar size={18} className="text-primary-500" />
-              <time dateTime={post.date} className="font-semibold text-slate-700">
+              <time dateTime={post.date} className="font-semibold text-slate-700 dark:text-slate-300">
                 {new Date(post.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
               </time>
             </div>
@@ -103,7 +129,7 @@ const BlogPostPage: React.FC = () => {
 
         {/* Cover Image */}
         {post.imageUrl && (
-          <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 border border-slate-100 aspect-video relative group">
+          <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 aspect-video relative group">
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <img 
               src={post.imageUrl} 
@@ -116,37 +142,37 @@ const BlogPostPage: React.FC = () => {
 
         {/* Content */}
         <div 
-          className="prose prose-slate prose-lg max-w-none 
+          className="prose prose-slate dark:prose-invert prose-lg max-w-none 
             /* Spacing adjustments for Paragraphs */
-            prose-p:text-slate-600 prose-p:leading-8 prose-p:mb-8 prose-p:mt-0
+            prose-p:text-slate-600 dark:prose-p:text-slate-400 prose-p:leading-8 prose-p:mb-8 prose-p:mt-0
             
             /* Custom Lead Paragraph Style (needs 'lead' class in HTML) */
-            [&_.lead]:text-xl [&_.lead]:leading-relaxed [&_.lead]:text-slate-800 [&_.lead]:font-medium [&_.lead]:mb-12
+            [&_.lead]:text-xl [&_.lead]:leading-relaxed [&_.lead]:text-slate-800 dark:[&_.lead]:text-slate-200 [&_.lead]:font-medium [&_.lead]:mb-12
             
             /* Headings Spacing */
-            prose-headings:font-display prose-headings:font-bold prose-headings:text-slate-900 prose-headings:leading-tight
+            prose-headings:font-display prose-headings:font-bold prose-headings:text-slate-900 dark:prose-headings:text-white prose-headings:leading-tight
             prose-h2:mt-16 prose-h2:mb-6 prose-h2:text-3xl
             prose-h3:mt-12 prose-h3:mb-4 prose-h3:text-2xl
             
             /* Links */
-            prose-a:text-primary-600 prose-a:font-bold prose-a:no-underline hover:prose-a:text-primary-700 hover:prose-a:underline hover:prose-a:decoration-2 hover:prose-a:decoration-primary-300
+            prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:font-bold prose-a:no-underline hover:prose-a:text-primary-700 dark:hover:prose-a:text-primary-300 hover:prose-a:underline hover:prose-a:decoration-2 hover:prose-a:decoration-primary-300
             
             /* Images within content */
             prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-12
             
             /* Lists */
-            prose-li:text-slate-600 prose-li:mb-3 prose-ul:my-8 prose-ol:my-8 prose-ul:list-disc prose-ol:list-decimal
+            prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-li:mb-3 prose-ul:my-8 prose-ol:my-8 prose-ul:list-disc prose-ol:list-decimal
             
             /* Blockquotes */
-            prose-blockquote:border-l-4 prose-blockquote:border-primary-500 prose-blockquote:bg-slate-50 prose-blockquote:py-8 prose-blockquote:px-8 prose-blockquote:rounded-r-2xl prose-blockquote:my-12 prose-blockquote:not-italic prose-blockquote:shadow-sm
+            prose-blockquote:border-l-4 prose-blockquote:border-primary-500 prose-blockquote:bg-slate-50 dark:prose-blockquote:bg-slate-800/50 prose-blockquote:py-8 prose-blockquote:px-8 prose-blockquote:rounded-r-2xl prose-blockquote:my-12 prose-blockquote:not-italic prose-blockquote:shadow-sm prose-blockquote:text-slate-700 dark:prose-blockquote:text-slate-300
             
             /* Strong/Bold */
-            prose-strong:text-slate-900 prose-strong:font-bold"
+            prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-bold"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
         
         {/* Share / CTA Footer */}
-        <div className="mt-20 pt-12 border-t border-slate-100">
+        <div className="mt-20 pt-12 border-t border-slate-100 dark:border-slate-800">
            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden shadow-2xl">
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
