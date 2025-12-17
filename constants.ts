@@ -11,7 +11,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     whyFeatures: [
       { title: 'Conversor Gratuito', description: 'Este conversor de letras bonitas es 100% gratuito, ilimitado y no requiere registro.', icon: 'zap' },
       { title: 'Compatibilidad Total', description: 'Nuestro conversor genera caracteres Unicode probados para funcionar en todas las apps sociales.', icon: 'smartphone' },
-      { title: '90+ Estilos Pro', description: 'Ofrecemos la mayor variedad de fuentes: desde cursivas y góticas hasta estilos aesthetic.', icon: 'palette' }
+      { title: '100+ Estilos Pro', description: 'Ofrecemos la mayor variedad de fuentes: desde cursivas y góticas hasta estilos aesthetic.', icon: 'palette' }
     ],
     howToSteps: [
       'Escribe tu frase en el panel superior del conversor de letras bonitas.',
@@ -26,19 +26,19 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   cursivas: {
     path: '/letras-cursivas',
-    title: 'Conversor de Letras Cursivas y Manuscritas',
+    title: 'Conversor de Letras Cursivas y Manuscritas Elegantes',
     heading: 'Conversor de Letras Cursivas',
-    description: 'Utiliza nuestro conversor de letras cursivas para generar textos elegantes. El mejor conversor de letras cursivas para Instagram y tatuajes.',
+    description: 'Genera textos elegantes con nuestro conversor de letras cursivas. Más de 80 estilos de letras cursivas para copiar y pegar en Instagram.',
     content: '¿Buscas elegancia? Nuestro conversor de letras cursivas transforma instantáneamente tus frases en hermosa caligrafía manuscrita. Las fuentes script son ideales para transmitir sofisticación, y con este conversor de letras cursivas, puedes obtener estilos negrita, delicados o clásicos en segundos.',
     filter: (f) => f.category === 'script' || f.id.includes('italic') || f.pages.includes('cursivas'),
     whyFeatures: [
       { title: 'Elegancia Instantánea', description: 'Convierte textos aburridos en arte caligráfico sofisticado al instante.', icon: 'star' },
-      { title: '90+ Estilos Únicos', description: 'Ofrecemos la mayor biblioteca de cursivas, itálicas y manuscritas decoradas del mercado.', icon: 'palette' },
+      { title: '80+ Estilos Únicos', description: 'La mayor biblioteca de cursivas, itálicas y caligrafías del mercado.', icon: 'palette' },
       { title: 'Legibilidad Pro', description: 'Fuentes seleccionadas que mantienen la claridad incluso en pantallas pequeñas.', icon: 'check' }
     ],
     howToSteps: [
       'Introduce el texto en el conversor de letras cursivas.',
-      'Visualiza las más de 90 opciones script y handwriting disponibles.',
+      'Visualiza las 80+ opciones script y handwriting disponibles.',
       'Copia tu estilo preferido generado por el conversor.',
       'Úsalo donde quieras; es compatible universalmente.'
     ],
