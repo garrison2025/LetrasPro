@@ -3,46 +3,45 @@
 @tailwind utilities;
 
 /* 
-  SISTEMA DE FUENTES DE RESPALDO (ANTI-TOFUS)
-  Priorizamos fuentes con amplios rangos Unicode para evitar los cuadros [X].
+  Sistema de fuentes de respaldo mejorado para evitar "cuadros" (tofus)
 */
-
-:root {
-  --unicode-fallbacks: "Noto Sans", "Arial Unicode MS", "Segoe UI Symbol", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-}
 
 .fallback-char {
   display: inline-block;
-  color: inherit;
-  font-family: inherit; /* Mantener coherencia si es posible */
-  position: relative;
-  text-decoration: underline dotted #ccc;
 }
 
-/* Refuerzo por categorías */
+/* Contexto Decorativo / Graffiti: Pila de fuentes de símbolos extendida */
 .font-ctx-decorative {
-  font-family: 'Inter', var(--unicode-fallbacks);
+  font-family: 'Inter', 'Segoe UI Symbol', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Arial Unicode MS', 'Courier New', monospace;
 }
 
+.font-ctx-decorative .fallback-char {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+/* 1. Contexto: Script/Cursive */
 .font-ctx-script .fallback-char {
-  font-family: "Brush Script MT", "Segoe Script", var(--unicode-fallbacks);
+  font-family: 'Brush Script MT', 'Segoe Script', 'Apple Chancery', 'Lucida Calligraphy', 'Times New Roman', serif;
   font-style: italic;
-  font-weight: 500;
+  font-weight: 400;
+  transform: scale(1.1);
 }
 
+/* 2. Contexto: Gothic/Blackletter */
 .font-ctx-gothic .fallback-char {
-  font-family: "Georgia", "Times New Roman", var(--unicode-fallbacks);
-  font-weight: 700;
+  font-family: 'Times New Roman', 'Georgia', serif;
+  font-weight: bold;
+  letter-spacing: -0.5px;
 }
 
-/* Estabilización de renderizado para combinadores Unicode */
-p[role="img"] {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  word-break: break-all;
+/* 3. Contexto: Serif */
+.font-ctx-serif .fallback-char {
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
 }
 
-/* Animaciones */
+/* Animation utilities */
 .animate-shimmer {
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
@@ -51,6 +50,15 @@ p[role="img"] {
 @keyframes shimmer {
   0% { background-position: 100% 0; }
   100% { background-position: -100% 0; }
+}
+
+/* Hide scrollbar for history bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Custom Scrollbar */
@@ -66,10 +74,6 @@ p[role="img"] {
   @apply bg-slate-300 dark:bg-slate-700 rounded-full border-4 border-transparent bg-clip-content;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
 }

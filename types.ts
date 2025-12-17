@@ -1,19 +1,10 @@
 export interface FontStyle {
   id: string;
   name: string;
-  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy' | 'graffiti';
+  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative';
   map: Record<string, string>;
   isPremium?: boolean; 
-  pages: string[]; 
-  compatibility: 'high' | 'medium' | 'low';
-  tags?: string[]; 
-}
-
-export interface BioTemplate {
-  id: string;
-  name: string;
-  layout: string; // El layout usa placeholders como {text}
-  category: 'instagram' | 'tiktok' | 'gaming';
+  pages: string[]; // Strict allowlist of page IDs where this font should appear
 }
 
 export interface FeatureItem {
@@ -32,9 +23,10 @@ export interface PageConfig {
   title: string;
   description: string;
   heading: string;
-  content: string; 
+  content: string; // The existing general description
   filter: (font: FontStyle) => boolean;
   
+  // New SEO Content Sections
   whyFeatures: FeatureItem[];
   howToSteps: string[];
   faqs: FaqItem[];
@@ -49,19 +41,16 @@ export interface NavLink {
 export interface TextSegment {
   content: string;
   isFallback: boolean;
-  isCombined?: boolean; 
 }
-
-export type TextCase = 'original' | 'upper' | 'lower' | 'title';
 
 export interface BlogPost {
   id: string;
   slug: string;
   title: string;
   excerpt: string;
-  content: string; 
+  content: string; // HTML string for rich text content
   date: string;
   author: string;
   tags: string[];
-  imageUrl?: string; 
+  imageUrl?: string; // Optional cover image URL
 }
