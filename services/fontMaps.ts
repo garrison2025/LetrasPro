@@ -9,7 +9,7 @@ const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 const MAPS = {
   sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁ｕｖｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
-  sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖ𝘸ｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+  sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   sansBoldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞j𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐Ｖ𝙒𝙓𝙔𝙕',
   serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifItalic: '𝑎𝑏𝑐ｄ𝑒ｆｇｈ𝑖𝑗𝑘ｌｍｎｏｐ𝑞ｒｓｔ𝑢𝑣ｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
@@ -63,6 +63,7 @@ interface BaseStyle {
   name: string;
   cat: FontStyle['category'];
   chars: string;
+  comp: FontStyle['compatibility'];
 }
 
 interface Decorator {
@@ -71,6 +72,7 @@ interface Decorator {
   char?: string;
   prefix?: string;
   suffix?: string;
+  compBoost?: number; // Ajuste de compatibilidad (-1 low, 0 neutral)
 }
 
 const generateCollection = (prefix: string, bases: BaseStyle[], decos: Decorator[], pages: string[]): FontStyle[] => {
@@ -85,13 +87,18 @@ const generateCollection = (prefix: string, bases: BaseStyle[], decos: Decorator
         finalMap = createCombinerMap(d.char, baseMap);
       }
       
-      // Manejo de prefijos/sufijos si se requiere en el mapa futuro (opcional)
+      // Lógica de compatibilidad final
+      let finalComp = b.comp;
+      if (d.char && b.comp !== 'low') finalComp = 'medium'; // Combinar reduce compatibilidad
+      if (d.id === 'u' || d.id === 's' || d.id === 'un') finalComp = 'low'; // Subrayados son low por naturaleza en Unicode
+
       res.push({
         id: `${prefix}-${b.id}-${d.id}`,
         name: isBaseOnly ? b.name : `${b.name} ${d.name}`,
         category: b.cat,
         map: finalMap,
-        pages
+        pages,
+        compatibility: finalComp
       });
     });
   });
@@ -115,7 +122,6 @@ const DECOS_FACEBOOK = [
   { id: 'none', name: 'Classic' },
   { id: 'bold', name: 'Heavy', char: '\u0305' },
   { id: 'un', name: 'Focus', char: '\u0332' },
-  { id: 'br', name: '【Box】' }, // Manejado vía prefijo en UI pero aquí base
   { id: 'sp', name: 'Spark', char: ' \u2728' },
   { id: 'sq', name: 'Under', char: '\u0332\u0305' }
 ];
@@ -140,54 +146,61 @@ const DECOS_AMINO = [
 // 4. DEFINICIÓN DE BASES POR PÁGINA
 // ==========================================
 
+const getCompForBase = (key: string): FontStyle['compatibility'] => {
+  if (['sansBold', 'serifBold', 'sansItalic', 'serifItalic', 'monospace', 'fullWidth'].includes(key)) return 'high';
+  if (['bubble', 'bubbleBlack', 'squares', 'squaresBlack', 'tiny'].includes(key)) return 'low';
+  return 'medium';
+};
+
 // --- HOME BASES (24 BASES) ---
 const homeBases: BaseStyle[] = Object.entries(MAPS).map(([key, val]) => ({
   id: key,
   name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
   cat: key.includes('script') || key.includes('special') ? 'script' : (key.includes('fraktur') ? 'gothic' : 'serif'),
-  chars: val
+  chars: val,
+  comp: getCompForBase(key)
 }));
 
-// --- FACEBOOK BASES (10 BASES SELECCIONADAS) ---
+// --- FACEBOOK BASES ---
 const facebookBases: BaseStyle[] = [
-  { id: 'sb', name: 'Negrita Sans', cat: 'sans', chars: MAPS.sansBold },
-  { id: 'srb', name: 'Negrita Serif', cat: 'serif', chars: MAPS.serifBold },
-  { id: 'si', name: 'Itálica Pro', cat: 'sans', chars: MAPS.sansItalic },
-  { id: 'sc', name: 'Versalitas FB', cat: 'other', chars: MAPS.smallCaps },
-  { id: 'mono', name: 'Máquina FB', cat: 'other', chars: MAPS.monospace },
-  { id: 'db', name: 'Contorno FB', cat: 'other', chars: MAPS.doubleStruck },
-  { id: 'fld', name: 'Ancho Total', cat: 'other', chars: MAPS.fullWidth },
-  { id: 'tn', name: 'Diminuta FB', cat: 'other', chars: MAPS.tiny },
-  { id: 'bs', name: 'Cursiva Bold', cat: 'script', chars: MAPS.scriptBold },
-  { id: 'grk', name: 'Estilo Griego', cat: 'other', chars: MAPS.greek }
+  { id: 'sb', name: 'Negrita Sans', cat: 'sans', chars: MAPS.sansBold, comp: 'high' },
+  { id: 'srb', name: 'Negrita Serif', cat: 'serif', chars: MAPS.serifBold, comp: 'high' },
+  { id: 'si', name: 'Itálica Pro', cat: 'sans', chars: MAPS.sansItalic, comp: 'high' },
+  { id: 'sc', name: 'Versalitas FB', cat: 'other', chars: MAPS.smallCaps, comp: 'medium' },
+  { id: 'mono', name: 'Máquina FB', cat: 'other', chars: MAPS.monospace, comp: 'high' },
+  { id: 'db', name: 'Contorno FB', cat: 'other', chars: MAPS.doubleStruck, comp: 'medium' },
+  { id: 'fld', name: 'Ancho Total', cat: 'other', chars: MAPS.fullWidth, comp: 'high' },
+  { id: 'tn', name: 'Diminuta FB', cat: 'other', chars: MAPS.tiny, comp: 'low' },
+  { id: 'bs', name: 'Cursiva Bold', cat: 'script', chars: MAPS.scriptBold, comp: 'medium' },
+  { id: 'grk', name: 'Estilo Griego', cat: 'other', chars: MAPS.greek, comp: 'medium' }
 ];
 
-// --- AMINO BASES (10 BASES SELECCIONADAS) ---
+// --- AMINO BASES ---
 const aminoBases: BaseStyle[] = [
-  { id: 'sc', name: 'Small Caps Amino', cat: 'other', chars: MAPS.smallCaps },
-  { id: 'sf', name: 'Script Amino', cat: 'script', chars: MAPS.scriptFine },
-  { id: 'soft', name: 'Soft Aesthetic', cat: 'script', chars: MAPS.specialSoft },
-  { id: 'chic', name: 'Chic Aesthetic', cat: 'script', chars: MAPS.specialChic },
-  { id: 'bub', name: 'Bubble Amino', cat: 'decorative', chars: MAPS.bubble },
-  { id: 'mon', name: 'Typewriter', cat: 'other', chars: MAPS.monospace },
-  { id: 'dst', name: 'Outline', cat: 'other', chars: MAPS.doubleStruck },
-  { id: 'tn', name: 'Tiny Amino', cat: 'other', chars: MAPS.tiny },
-  { id: 'grk', name: 'Greek Soft', cat: 'other', chars: MAPS.greek },
-  { id: 'sri', name: 'Itálica Serif', cat: 'serif', chars: MAPS.serifItalic }
+  { id: 'sc', name: 'Small Caps Amino', cat: 'other', chars: MAPS.smallCaps, comp: 'medium' },
+  { id: 'sf', name: 'Script Amino', cat: 'script', chars: MAPS.scriptFine, comp: 'medium' },
+  { id: 'soft', name: 'Soft Aesthetic', cat: 'script', chars: MAPS.specialSoft, comp: 'medium' },
+  { id: 'chic', name: 'Chic Aesthetic', cat: 'script', chars: MAPS.specialChic, comp: 'medium' },
+  { id: 'bub', name: 'Bubble Amino', cat: 'decorative', chars: MAPS.bubble, comp: 'low' },
+  { id: 'mon', name: 'Typewriter', cat: 'other', chars: MAPS.monospace, comp: 'high' },
+  { id: 'dst', name: 'Outline', cat: 'other', chars: MAPS.doubleStruck, comp: 'medium' },
+  { id: 'tn', name: 'Tiny Amino', cat: 'other', chars: MAPS.tiny, comp: 'low' },
+  { id: 'grk', name: 'Greek Soft', cat: 'other', chars: MAPS.greek, comp: 'medium' },
+  { id: 'sri', name: 'Itálica Serif', cat: 'serif', chars: MAPS.serifItalic, comp: 'high' }
 ];
 
-// --- TATTOO BASES (10 BASES SELECCIONADAS) ---
+// --- TATTOO BASES ---
 const tattooBases: BaseStyle[] = [
-  { id: 'old', name: 'Old English Pro', cat: 'gothic', chars: MAPS.frakturBold },
-  { id: 'chic', name: 'Chicano Lettering', cat: 'script', chars: MAPS.specialChic },
-  { id: 'fine', name: 'Fine Line Tattoo', cat: 'script', chars: MAPS.scriptFine },
-  { id: 'got', name: 'Gótica Medieval', cat: 'gothic', chars: MAPS.fraktur },
-  { id: 'urb', name: 'Urban Ink', cat: 'decorative', chars: MAPS.specialUrban },
-  { id: 'tag', name: 'Handstyle Tag', cat: 'decorative', chars: MAPS.specialTag },
-  { id: 'trad', name: 'Traditional Block', cat: 'serif', chars: MAPS.serifBold },
-  { id: 'soft', name: 'Script Inked', cat: 'script', chars: MAPS.specialSoft },
-  { id: 'mono', name: 'Minimalist Dot', cat: 'other', chars: MAPS.monospace },
-  { id: 'dst', name: 'Tribal Double', cat: 'other', chars: MAPS.doubleStruck }
+  { id: 'old', name: 'Old English Pro', cat: 'gothic', chars: MAPS.frakturBold, comp: 'medium' },
+  { id: 'chic', name: 'Chicano Lettering', cat: 'script', chars: MAPS.specialChic, comp: 'medium' },
+  { id: 'fine', name: 'Fine Line Tattoo', cat: 'script', chars: MAPS.scriptFine, comp: 'medium' },
+  { id: 'got', name: 'Gótica Medieval', cat: 'gothic', chars: MAPS.fraktur, comp: 'medium' },
+  { id: 'urb', name: 'Urban Ink', cat: 'decorative', chars: MAPS.specialUrban, comp: 'medium' },
+  { id: 'tag', name: 'Handstyle Tag', cat: 'decorative', chars: MAPS.specialTag, comp: 'medium' },
+  { id: 'trad', name: 'Traditional Block', cat: 'serif', chars: MAPS.serifBold, comp: 'high' },
+  { id: 'soft', name: 'Script Inked', cat: 'script', chars: MAPS.specialSoft, comp: 'medium' },
+  { id: 'mono', name: 'Minimalist Dot', cat: 'other', chars: MAPS.monospace, comp: 'high' },
+  { id: 'dst', name: 'Tribal Double', cat: 'other', chars: MAPS.doubleStruck, comp: 'medium' }
 ];
 
 // ==========================================
@@ -199,7 +212,6 @@ const facebookFonts = generateCollection('fb', facebookBases, DECOS_FACEBOOK, ['
 const aminoFonts = generateCollection('am', aminoBases, DECOS_AMINO, ['amino']);
 const tattooFonts = generateCollection('tat', tattooBases, DECOS_TATTOO, ['tattoo', 'tatuajes']);
 
-// Añadir manuales para cursivas y góticas específicas si es necesario
 const extraCursive = generateCollection('exc', homeBases.filter(b => b.cat === 'script'), DECOS_HOME, ['cursivas']);
 const extraGothic = generateCollection('exg', homeBases.filter(b => b.cat === 'gothic'), DECOS_HOME, ['goticas']);
 

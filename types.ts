@@ -4,7 +4,8 @@ export interface FontStyle {
   category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative';
   map: Record<string, string>;
   isPremium?: boolean; 
-  pages: string[]; // Strict allowlist of page IDs where this font should appear
+  pages: string[]; 
+  compatibility: 'high' | 'medium' | 'low'; // Nueva métrica de fiabilidad
 }
 
 export interface FeatureItem {
@@ -23,10 +24,9 @@ export interface PageConfig {
   title: string;
   description: string;
   heading: string;
-  content: string; // The existing general description
+  content: string; 
   filter: (font: FontStyle) => boolean;
   
-  // New SEO Content Sections
   whyFeatures: FeatureItem[];
   howToSteps: string[];
   faqs: FaqItem[];
@@ -48,9 +48,9 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  content: string; // HTML string for rich text content
+  content: string; 
   date: string;
   author: string;
   tags: string[];
-  imageUrl?: string; // Optional cover image URL
+  imageUrl?: string; 
 }
