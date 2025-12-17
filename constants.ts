@@ -11,7 +11,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     whyFeatures: [
       { title: 'Conversor Gratuito', description: 'Este conversor de letras bonitas es 100% gratuito, ilimitado y no requiere registro.', icon: 'zap' },
       { title: 'Compatibilidad Total', description: 'Nuestro conversor genera caracteres Unicode probados para funcionar en todas las apps sociales.', icon: 'smartphone' },
-      { title: '100+ Estilos Pro', description: 'Ofrecemos la mayor variedad de fuentes: desde cursivas y góticas hasta estilos aesthetic.', icon: 'palette' }
+      { title: '150+ Estilos Pro', description: 'Ofrecemos la mayor variedad de fuentes: desde cursivas y góticas hasta estilos aesthetic.', icon: 'palette' }
     ],
     howToSteps: [
       'Escribe tu frase en el panel superior del conversor de letras bonitas.',
@@ -71,24 +71,25 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   goticas: {
     path: '/letras-goticas',
-    title: 'Conversor de Letras Góticas (Dark & Blackletter)',
+    title: 'Conversor de Letras Góticas Profesionales (70+ Estilos)',
     heading: 'Conversor de Letras Góticas',
-    description: 'Genera textos oscuros con el conversor de letras goticas. Ideal para nicks y bios darks, usa nuestro conversor de letras goticas gratis.',
-    content: 'El estilo Blackletter nunca pasa de moda, y nuestro conversor de letras goticas lo trae a la era digital. Este conversor es esencial para crear una estética "dark", misteriosa o antigua en tus perfiles.',
+    description: 'Genera textos oscuros con nuestro conversor de letras goticas. Más de 70 fuentes góticas, medievales y dark para Instagram y tatuajes.',
+    content: 'El estilo Blackletter nunca pasa de moda, y nuestro conversor de letras goticas lo trae a la era digital con una variedad sin precedentes. Este conversor es esencial para crear una estética "dark", misteriosa o antigua. Hemos incluido desde la clásica gótica Fraktur hasta estilos modernos de metal extremo y rituales oscuros.',
     filter: (f) => f.category === 'gothic' || f.pages.includes('goticas'),
     whyFeatures: [
-      { title: 'Impacto Visual', description: 'Genera textos Fraktur que captan la atención inmediatamente.', icon: 'shield' },
-      { title: 'Perfecto para Gamers', description: 'Crea nicks intimidantes en juegos competitivos.', icon: 'smartphone' },
-      { title: 'Estética Dark', description: 'Ideal para perfiles con temática oscura, emo o alternativa.', icon: 'star' }
+      { title: 'Impacto Visual', description: 'Genera textos Fraktur y Blackletter que captan la atención inmediatamente.', icon: 'shield' },
+      { title: '70+ Variantes Dark', description: 'La colección más grande de góticas con decoradores de cruces, dagas y calaveras.', icon: 'palette' },
+      { title: 'Perfecto para Gamers', description: 'Crea nicks intimidantes para Free Fire, PUBG o nicks de clanes.', icon: 'smartphone' }
     ],
     howToSteps: [
-      'Escribe tu nick en el conversor de letras goticas.',
-      'Selecciona entre Fraktur normal o negrita.',
-      'Copia el resultado directamente.',
-      'Pégalo en tu juego o red social favorita.'
+      'Escribe tu nick o frase en el conversor de letras goticas.',
+      'Selecciona entre Fraktur, Medieval, Vampírica o Chicana.',
+      'Añade decoradores dark automáticos.',
+      'Copia el resultado y úsalo en tus redes sociales.'
     ],
     faqs: [
-      { question: '¿El conversor funciona en Instagram?', answer: 'Sí, Instagram soporta perfectamente los caracteres generados por el conversor de letras goticas.' }
+      { question: '¿El conversor de letras góticas es compatible?', answer: 'Sí, utilizamos caracteres Unicode específicos que son compatibles con Instagram, TikTok y la mayoría de nicks de videojuegos.' },
+      { question: '¿Qué estilos góticos incluye?', answer: 'Incluye Fraktur, Old English, Medieval, estilos de Metal y variaciones con símbolos dark únicos.' }
     ]
   },
   graffiti: {
