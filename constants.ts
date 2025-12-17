@@ -117,17 +117,25 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   amino: {
     path: '/letras-amino',
-    title: 'Conversor de Letras Amino (Compatibles)',
+    title: 'Conversor de Letras Amino (40+ Estilos Aesthetic compatibles)',
     heading: 'Conversor de Letras Amino',
-    description: 'El único conversor de letras amino optimizado. Crea blogs estéticos.',
+    description: 'El único conversor de letras amino optimizado con más de 40 estilos estéticos. Crea wikis y blogs profesionales con fuentes compatibles con la App Amino.',
+    content: 'La comunidad de Amino valora la estética por encima de todo. Por ello, nuestro conversor de letras amino ha sido actualizado con 40 estilos únicos que cubren desde las deseadas "Small Caps" para títulos hasta caligrafías "Soft" para biografías. Todas las fuentes han sido verificadas para asegurar que no se vean como cuadros vacíos en la aplicación móvil.',
     filter: (f) => f.pages.includes('amino'),
-    content: 'La comunidad Amino valora la estética. Filtramos solo caracteres compatibles.',
     whyFeatures: [
-      { title: '100% Compatible', description: 'Sin errores de visualización.', icon: 'check' },
-      { title: 'Blogs Estéticos', description: 'Ideal para títulos y secciones.', icon: 'palette' }
+      { title: '40+ Estilos Amino', description: 'Versalitas, scripts suaves y contornos diseñados para la estética de la comunidad.', icon: 'palette' },
+      { title: '100% Compatible', description: 'Filtramos los caracteres que suelen dar error en Amino para asegurar visibilidad.', icon: 'check' },
+      { title: 'Aesthetic Real', description: 'Añade automáticamente corazones, destellos y símbolos minimalistas a tus textos.', icon: 'star' }
     ],
-    howToSteps: ['Escribe el título.', 'Copia el texto.', 'Pega en Amino.'],
-    faqs: [{ question: '¿Sirve para perfiles?', answer: 'Sí, para nicks y biografías.' }]
+    howToSteps: [
+      'Introduce el título de tu Blog o Wiki en el conversor de letras amino.',
+      'Elige entre los 40 estilos estéticos disponibles.',
+      'Copia el texto decorado con un solo clic.',
+      'Pega en tu post de Amino y sorprende a tu comunidad.'
+    ],
+    faqs: [
+      { question: '¿Por qué algunas letras no se ven en Amino?', answer: 'Amino utiliza un renderizado de texto específico. Nuestro conversor solo muestra los estilos que están verificados para funcionar correctamente en Android e iOS.' }
+    ]
   }
 };
 

@@ -12,7 +12,7 @@ const MAPS = {
   serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifItalic: '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫ＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗｘｙｚ𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
+  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁ｕ𝘃ｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
   sansItalic: '𝘢𝘣𝘤𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯ｵ𝘱𝗊ｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
@@ -65,15 +65,13 @@ interface Decorator {
   id: string;
   name: string;
   char: string;
-  prefix?: string;
-  suffix?: string;
 }
 
 const generateCollection = (prefix: string, bases: BaseStyle[], decos: Decorator[], pages: string[]): FontStyle[] => {
   const res: FontStyle[] = [];
   bases.forEach(b => {
     decos.forEach(d => {
-      const isBaseOnly = d.id === 'none' && !d.prefix && !d.suffix;
+      const isBaseOnly = d.id === 'none';
       const baseMap = createMap(lower + upper, b.chars);
       
       let finalMap = { ...baseMap };
@@ -132,9 +130,15 @@ const DECOS_FACEBOOK = [
   { id: 'none', name: 'Pro', char: '' },
   { id: 'un', name: 'Subrayado', char: '\u0332' },
   { id: 'st', name: 'Tachado', char: '\u0336' },
-  { id: 'br', name: '【Brackets】', char: '' }, // Decoradores sin combinadores se manejan en UI o map específico si fuera necesario
   { id: 'sp', name: 'Spark', char: ' \u2728' },
   { id: 'sq', name: 'Square', char: '\u0332\u0305' }
+];
+
+const DECOS_AMINO = [
+  { id: 'none', name: 'Soft', char: '' },
+  { id: 'heart', name: 'Aesthetic ♡', char: ' \u2661' },
+  { id: 'star', name: 'Magic ✧', char: ' ✧' },
+  { id: 'spr', name: '◌̥ Sparkle', char: '\u0324' }
 ];
 
 // --- 3.1 HOME ---
@@ -186,7 +190,7 @@ const tattooBases: BaseStyle[] = [
 ];
 const tattooFonts = generateCollection('tat', tattooBases, DECOS_TATTOO, ['tattoo', 'tatuajes']);
 
-// --- 3.6 FACEBOOK (NUEVA COLECCIÓN - 60 ESTILOS) ---
+// --- 3.6 FACEBOOK ---
 const facebookBases: BaseStyle[] = [
   { id: 'sb', name: 'Sans Bold FB', cat: 'sans', chars: MAPS.sansBold },
   { id: 'srb', name: 'Serif Bold FB', cat: 'serif', chars: MAPS.serifBold },
@@ -201,6 +205,21 @@ const facebookBases: BaseStyle[] = [
 ];
 const facebookFonts = generateCollection('fb', facebookBases, DECOS_FACEBOOK, ['facebook']);
 
+// --- 3.7 AMINO (NUEVA COLECCIÓN - 40 ESTILOS) ---
+const aminoBases: BaseStyle[] = [
+  { id: 'sc', name: 'Versalitas Amino', cat: 'other', chars: MAPS.smallCaps },
+  { id: 'srb', name: 'Negrita Estética', cat: 'serif', chars: MAPS.serifBold },
+  { id: 'snb', name: 'Sans Impacto', cat: 'sans', chars: MAPS.sansBold },
+  { id: 'scf', name: 'Script Elegante', cat: 'script', chars: MAPS.scriptFine },
+  { id: 'scb', name: 'Script Bold Pro', cat: 'script', chars: MAPS.scriptBold },
+  { id: 'mon', name: 'Máquina Escribir', cat: 'other', chars: MAPS.monospace },
+  { id: 'dst', name: 'Contorno Pro', cat: 'other', chars: MAPS.doubleStruck },
+  { id: 'sof', name: 'Soft Kawaii', cat: 'script', chars: MAPS.specialSoft },
+  { id: 'chi', name: 'Estética Chic', cat: 'script', chars: MAPS.specialChic },
+  { id: 'bub', name: 'Burbuja Amino', cat: 'decorative', chars: MAPS.bubble }
+];
+const aminoFonts = generateCollection('am', aminoBases, DECOS_AMINO, ['amino']);
+
 // ==========================================
 // 4. EXPORTACIÓN FINAL
 // ==========================================
@@ -212,7 +231,7 @@ export const FONTS: FontStyle[] = [
   ...urbanFonts,
   ...tattooFonts,
   ...facebookFonts,
-  { id: 'am-titles', name: 'Títulos Amino', category: 'other', map: createMap(lower, MAPS.smallCaps), pages: ['amino'] }
+  ...aminoFonts
 ];
 
 // ==========================================
