@@ -31,16 +31,41 @@ const STATIC_PATHS = [
   '/terminos-y-condiciones'
 ];
 
-// In a real scenario, we would also fetch blog posts to add dynamic slugs
-// For now, we will hardcode the existing blog post slugs
-const BLOG_SLUGS = [
-  'guia-definitiva-conversor-letras-bonitas-instagram-facebook',
-  'letras-para-tatuajes-guia-estilos-goticos-cursivos',
-  'mejores-nicks-free-fire-pubg-graffiti'
-];
+// Helper to extract slugs dynamically from the data file
+const getBlogSlugs = () => {
+  try {
+    const dataPath = path.resolve(__dirname, '../data/blogPosts.ts');
+    if (!fs.existsSync(dataPath)) {
+      console.warn('⚠️ Warning: blogPosts.ts not found. Skipping dynamic blog slugs.');
+      return [];
+    }
+    
+    // Read the file content as string
+    const content = fs.readFileSync(dataPath, 'utf-8');
+    
+    // Use regex to find all "slug: 'some-slug'" occurrences
+    // Matches slug: '...' or slug: "..."
+    const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
+    const slugs = [];
+    let match;
+    
+    while ((match = slugRegex.exec(content)) !== null) {
+      if (match[1]) {
+        slugs.push(match[1]);
+      }
+    }
+    
+    console.log(`📝 Found ${slugs.length} blog posts dynamically.`);
+    return slugs;
+  } catch (error) {
+    console.error('❌ Error reading blog slugs:', error);
+    return [];
+  }
+};
 
 const generateSitemap = () => {
   const currentDate = new Date().toISOString();
+  const blogSlugs = getBlogSlugs();
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
@@ -57,7 +82,7 @@ const generateSitemap = () => {
   });
 
   // Add Blog Posts
-  BLOG_SLUGS.forEach(slug => {
+  blogSlugs.forEach(slug => {
     xml += `
   <url>
     <loc>${BASE_URL}/blog/${slug}</loc>

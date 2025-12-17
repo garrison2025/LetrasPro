@@ -134,6 +134,8 @@ const BlogPostPage: React.FC = () => {
             <img 
               src={post.imageUrl} 
               alt={post.title}
+              width="1200"
+              height="675"
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               loading="eager"
             />

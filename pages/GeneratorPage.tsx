@@ -61,7 +61,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [activeDecorator, setActiveDecorator] = useState<string>('none');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isTyping, setIsTyping] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   
@@ -573,13 +572,17 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
            </div>
            <div className="space-y-4">
              {config.faqs.map((faq, i) => (
-               <div key={i} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary-200 dark:hover:border-primary-700">
-                  <button onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)} className="w-full flex items-center justify-between p-5 text-left focus:outline-none">
+               <details key={i} className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary-200 dark:hover:border-primary-700">
+                  <summary className="w-full flex items-center justify-between p-5 text-left cursor-pointer list-none focus:outline-none [&::-webkit-details-marker]:hidden">
                     <span className="font-bold text-slate-800 dark:text-slate-200 text-lg pr-4">{faq.question}</span>
-                    <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center transition-transform duration-300 ${openFaqIndex === i ? 'rotate-90 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300' : 'text-slate-400 dark:text-slate-500'}`}><ChevronRight size={20} /></div>
-                  </button>
-                  <div className={`px-5 text-slate-600 dark:text-slate-400 leading-relaxed overflow-hidden transition-all duration-300 ${openFaqIndex === i ? 'max-h-40 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>{faq.answer}</div>
-               </div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center transition-transform duration-300 group-open:rotate-90 group-open:bg-primary-50 dark:group-open:bg-primary-900/30 group-open:text-primary-600 dark:group-open:text-primary-300 text-slate-400 dark:text-slate-500">
+                      <ChevronRight size={20} />
+                    </div>
+                  </summary>
+                  <div className="px-5 pb-6 pt-0 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-transparent group-open:border-slate-100 dark:group-open:border-slate-700/50">
+                    <div className="mt-2">{faq.answer}</div>
+                  </div>
+               </details>
              ))}
            </div>
         </div>
