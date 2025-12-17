@@ -33,12 +33,12 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     filter: (f) => f.category === 'script' || f.id.includes('italic') || f.pages.includes('cursivas'),
     whyFeatures: [
       { title: 'Elegancia Instantánea', description: 'Convierte textos aburridos en arte caligráfico sofisticado al instante.', icon: 'star' },
-      { title: '90+ Estilos Únicos', description: 'La mayor variedad de cursivas, desde manuscritas finas hasta scripts negritas.', icon: 'palette' },
+      { title: 'Más de 90 Estilos', description: 'Ofrecemos la mayor biblioteca de cursivas y manuscritas del mercado.', icon: 'palette' },
       { title: 'Legibilidad Pro', description: 'Fuentes seleccionadas que mantienen la claridad incluso en pantallas pequeñas.', icon: 'check' }
     ],
     howToSteps: [
       'Introduce el texto en el conversor de letras cursivas.',
-      'Visualiza las 90+ opciones script y handwriting disponibles.',
+      'Visualiza las más de 90 opciones script y handwriting disponibles.',
       'Copia tu estilo preferido generado por el conversor.',
       'Úsalo donde quieras; es compatible universalmente.'
     ],
