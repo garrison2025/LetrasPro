@@ -315,7 +315,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           {/* Features Section */}
           <section>
             <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">¿Por qué usar LetrasPro?</h2>
+              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">¿Por qué usar {config.heading}?</h2>
               <div className="w-20 h-1.5 bg-primary-600 mx-auto rounded-full"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -336,7 +336,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                   <h2 className="text-4xl sm:text-6xl font-black mb-8 leading-tight">Cómo usar el Conversor <br/><span className="text-primary-400">Paso a Paso</span></h2>
+                   <h2 className="text-4xl sm:text-6xl font-black mb-8 leading-tight">Cómo usar <br/><span className="text-primary-400">Paso a Paso</span></h2>
                    <p className="text-slate-400 text-lg font-medium mb-12">{config.content}</p>
                 </div>
                 <div className="space-y-6">
@@ -354,7 +354,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           <section className="max-w-4xl mx-auto">
              <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">Preguntas Frecuentes</h2>
-              <p className="text-slate-500 dark:text-slate-400 font-medium">Resolvemos tus dudas sobre el conversor de letras bonitas.</p>
+              <p className="text-slate-500 dark:text-slate-400 font-medium">Resolvemos tus dudas sobre el {config.heading}.</p>
             </div>
             <div className="space-y-4">
                {config.faqs.map((faq, i) => (

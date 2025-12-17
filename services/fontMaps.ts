@@ -36,7 +36,6 @@ const COMBINERS = {
   acute: '\u0301'
 };
 
-// Función crítica para determinar la categoría
 const getCategoryFromId = (id: string): FontStyle['category'] => {
   if (id.includes('sans')) return 'sans';
   if (id.includes('serif')) return 'serif';
@@ -53,10 +52,10 @@ const getCategoryFromId = (id: string): FontStyle['category'] => {
   return 'decorative';
 };
 
-// Función crítica para mapear a los filtros de constants.ts
 const getPagesForFont = (cat: string): string[] => {
   const p = ['home'];
   
+  // Lógica de asignación de páginas basada en constantes.ts
   if (cat === 'script') {
     p.push('cursivas', 'tatuajes', 'tattoo', 'amino');
   } else if (cat === 'gothic') {
@@ -119,7 +118,7 @@ export const FONTS: FontStyle[] = baseFontsData.map(b => ({
   name: b.name,
   category: b.cat,
   map: b.id === 'block' ? createBlockMap('[̲̅a]') : createMap(lower + upper, b.chars),
-  pages: getPagesForFont(b.cat), // Esto asegura que aparezcan en los filtros
+  pages: getPagesForFont(b.cat),
   compatibility: b.comp,
   tags: b.cat === 'script' ? ['Elegante', 'Cute'] : 
         (b.cat === 'chicano' ? ['Elegante', 'Tatuajes'] : 
@@ -128,7 +127,7 @@ export const FONTS: FontStyle[] = baseFontsData.map(b => ({
         (b.cat === 'graffiti' ? ['Urbano', 'HipHop'] : ['Classic']))))
 }));
 
-// Nuevas variantes manuales asegurando que tengan pages asignadas
+// Nuevas variantes manuales
 FONTS.push({
   id: 'pro-vaporwave-spaced',
   name: 'Vaporwave ✨',
