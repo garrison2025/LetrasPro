@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PageConfig } from '../types';
 import { PAGE_CONFIGS } from '../constants';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import { DECORATORS, applyDecoration } from '../services/decorators';
-import { KAOMOJIS } from '../data/kaomojis'; // Import Kaomojis
+import { KAOMOJIS } from '../data/kaomojis';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle, AlertCircle, Wand2, Smile, X } from 'lucide-react';
+import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle, AlertCircle, Wand2, Smile, X, Info } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -27,7 +27,7 @@ const SYMBOLS = [
 ];
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
-  // Input State
+  const location = useLocation();
   const [inputText, setInputText] = useState(() => {
     try {
       return localStorage.getItem('let_pro_input') || '';
@@ -36,7 +36,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   });
 
-  // Favorites State
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('let_pro_favs');
@@ -46,7 +45,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   });
 
-  // History State
   const [history, setHistory] = useState<{fontName: string, text: string, timestamp: number}[]>(() => {
     try {
       const saved = localStorage.getItem('let_pro_history');
@@ -56,27 +54,30 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   });
 
-  // UI State
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [activeDecorator, setActiveDecorator] = useState<string>('none');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [isTyping, setIsTyping] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  
-  // Kaomoji Modal State
   const [isKaomojiOpen, setIsKaomojiOpen] = useState(false);
   const [activeKaomojiTab, setActiveKaomojiTab] = useState(KAOMOJIS[0].id);
+  const [showCompatibilityInfo, setShowCompatibilityInfo] = useState(false);
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
   const debouncedText = useDebounce(inputText, 300);
   
-  // Effects
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
     window.scrollTo(0, 0);
-  }, [config.path]);
+    // Mostrar aviso de compatibilidad solo en Graffiti si es necesario
+    if (location.pathname.includes('graffiti')) {
+       setShowCompatibilityInfo(true);
+    } else {
+       setShowCompatibilityInfo(false);
+    }
+  }, [config.path, location.pathname]);
 
   useEffect(() => {
     localStorage.setItem('let_pro_input', inputText);
@@ -106,7 +107,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handlers
   const toggleFavorite = (fontId: string) => {
     setFavorites(prev => 
       prev.includes(fontId) 
@@ -118,7 +118,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const addToHistory = (fontName: string, text: string) => {
     setHistory(prev => {
       const newItem = { fontName, text, timestamp: Date.now() };
-      // Remove duplicate texts if exist, keep last 10
       const filtered = prev.filter(item => item.text !== text);
       return [newItem, ...filtered].slice(0, 10);
     });
@@ -165,7 +164,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, sortedFonts.length));
   };
 
-  // Logic: Filter -> Sort (Favorites First) -> Slice
   const sortedFonts = useMemo(() => {
     const filtered = FONTS.filter(config.filter);
     return filtered.sort((a, b) => {
@@ -183,13 +181,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const relatedPages = useMemo(() => {
     return Object.values(PAGE_CONFIGS)
       .filter((page) => page.path !== config.path)
-      .sort(() => 0.5 - Math.random()) // Shuffle for randomness (SEO Internal Linking Strategy)
+      .sort(() => 0.5 - Math.random())
       .slice(0, 3);
   }, [config.path]);
 
-  // SEO: Internal Link Insertion Helper
   const getInternalLinkCard = (index: number) => {
-    if (index === 11) { // After 12th item
+    if (index === 11) {
         const targetPage = relatedPages[0];
         if (targetPage) return targetPage;
     }
@@ -224,32 +221,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       ]
     }
   ];
-
-  // Add HowTo Schema
-  if (config.howToSteps.length > 0) {
-    structuredData.push({
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": `Cómo usar el ${config.heading}`,
-      "step": config.howToSteps.map((step, index) => ({
-        "@type": "HowToStep",
-        "position": index + 1,
-        "text": step
-      }))
-    } as any);
-  }
-
-  if (config.faqs.length > 0) {
-    structuredData.push({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": config.faqs.map(faq => ({
-        "@type": "Question",
-        "name": faq.question,
-        "acceptedAnswer": { "@type": "Answer", "text": faq.answer }
-      }))
-    } as any);
-  }
 
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
@@ -311,6 +282,18 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
       <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 -mt-12 relative z-20" ref={inputContainerRef}>
         
+        {/* Aviso de Compatibilidad para Graffiti y similares */}
+        {showCompatibilityInfo && (
+          <div className="mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4 rounded-2xl flex items-start gap-4 animate-fade-in">
+            <Info className="text-amber-600 dark:text-amber-400 flex-shrink-0 mt-1" size={20} />
+            <div className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+              <p className="font-bold mb-1">¿Ves cuadros vacíos en lugar de letras?</p>
+              <p>Tu dispositivo puede no soportar algunos caracteres de burbuja. Prueba los estilos <strong>Safe Urban</strong> o <strong>Tag</strong> que aparecen primero en la lista, ¡son 100% compatibles!</p>
+              <button onClick={() => setShowCompatibilityInfo(false)} className="mt-2 text-xs font-bold underline hover:no-underline">Entendido, cerrar aviso</button>
+            </div>
+          </div>
+        )}
+
         {/* Sticky Input */}
         <div className="sticky top-20 z-30 mb-8">
           <div className="relative group">
@@ -328,13 +311,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     rows={2}
                   />
                   
-                  {/* Character Counter & Clear Button */}
                   <div className="absolute bottom-4 right-4 flex items-center gap-3">
                      <span className={`text-xs font-bold px-2 py-1 rounded-md transition-colors ${
                        isOverLimit 
                          ? 'bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400' 
                          : isNearLimit 
-                           ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400' 
+                           ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-red-400' 
                            : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500'
                      }`}>
                        {charCount} / {INSTAGRAM_BIO_LIMIT}
@@ -360,9 +342,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 </div>
               </div>
               <div className="border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 px-2 py-2">
-                <div className="flex items-center gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
                   
-                  {/* Kaomoji Button */}
                   <button 
                     onClick={() => setIsKaomojiOpen(!isKaomojiOpen)}
                     className={`flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-bold transition-all ${isKaomojiOpen ? 'bg-primary-100 border-primary-300 text-primary-700 dark:bg-primary-900/40 dark:border-primary-700 dark:text-primary-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
@@ -384,7 +365,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   ))}
                 </div>
                 
-                {/* Kaomoji Picker Panel */}
                 {isKaomojiOpen && (
                   <div className="mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg p-4 animate-fade-in relative z-20">
                      <div className="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-700 pb-2">
@@ -427,7 +407,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full xl:w-auto justify-end">
-              {/* Decorator Toggle */}
               <div className="relative group z-20 flex-grow sm:flex-grow-0">
                  <div className="flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 shadow-sm">
                     <Wand2 size={16} className="text-primary-500 mr-2" />
@@ -443,7 +422,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                  </div>
               </div>
 
-              {/* View Mode Toggle */}
               <div className="flex bg-white dark:bg-slate-800 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex-grow sm:flex-grow-0">
                   <button 
                     onClick={() => setViewMode('list')}
@@ -472,11 +450,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {visibleFonts.map((font, index) => {
              const internalLink = getInternalLinkCard(index);
-             // Apply font mapping first
              const mappedText = convertText(textToProcess, font.map);
-             // Apply decoration second
              const finalRawText = applyDecoration(mappedText, activeDecorator);
-             // Display segments
              const displaySegments = debouncedText || !isTyping ? getDisplaySegments(finalRawText, {}) : [];
 
              const card = (
@@ -492,7 +467,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                />
              );
 
-             // Inject Internal Link Card for SEO
              if (internalLink) {
                 return (
                   <React.Fragment key={font.id}>
@@ -529,7 +503,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           </div>
         )}
 
-        {/* Info Sections */}
         <div className="mb-20">
           <div className="text-center mb-10">
             <h2 className="font-display font-bold text-3xl text-slate-900 dark:text-white mb-3">¿Por qué usar esta herramienta?</h2>
@@ -626,7 +599,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
       <Toast message="¡Texto copiado al portapapeles!" isVisible={showToast} onClose={() => setShowToast(false)} />
 
-      {/* Back to Top FAB */}
       <button 
         onClick={scrollToTop}
         className={`fixed bottom-6 right-6 p-4 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl shadow-slate-900/20 dark:shadow-white/10 z-40 transition-all duration-300 hover:scale-110 hover:bg-primary-600 dark:hover:bg-primary-400 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}

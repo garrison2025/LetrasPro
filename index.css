@@ -3,14 +3,24 @@
 @tailwind utilities;
 
 /* 
-  Standard CSS Fallback System
+  Sistema de fuentes de respaldo mejorado para evitar "cuadros" (tofus)
 */
 
 .fallback-char {
   display: inline-block;
 }
 
-/* 1. Context: Script/Cursive */
+/* Contexto Decorativo / Graffiti: Pila de fuentes de símbolos extendida */
+.font-ctx-decorative {
+  font-family: 'Inter', 'Segoe UI Symbol', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Arial Unicode MS', 'Courier New', monospace;
+}
+
+.font-ctx-decorative .fallback-char {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+/* 1. Contexto: Script/Cursive */
 .font-ctx-script .fallback-char {
   font-family: 'Brush Script MT', 'Segoe Script', 'Apple Chancery', 'Lucida Calligraphy', 'Times New Roman', serif;
   font-style: italic;
@@ -18,20 +28,14 @@
   transform: scale(1.1);
 }
 
-/* 2. Context: Gothic/Blackletter */
+/* 2. Contexto: Gothic/Blackletter */
 .font-ctx-gothic .fallback-char {
   font-family: 'Times New Roman', 'Georgia', serif;
   font-weight: bold;
   letter-spacing: -0.5px;
 }
 
-/* 3. Context: Double Struck / Graffiti */
-.font-ctx-decorative .fallback-char {
-  font-family: 'Courier New', monospace;
-  font-weight: bold;
-}
-
-/* 4. Context: Serif */
+/* 3. Contexto: Serif */
 .font-ctx-serif .fallback-char {
   font-family: 'Times New Roman', serif;
   font-weight: bold;
@@ -57,7 +61,7 @@
   scrollbar-width: none;
 }
 
-/* Custom Scrollbar for modern feel in dark mode */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
