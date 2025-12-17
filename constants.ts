@@ -26,25 +26,25 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   cursivas: {
     path: '/letras-cursivas',
-    title: 'Conversor de Letras Cursivas y Manuscritas Elegantes',
+    title: 'Conversor de Letras Cursivas Elegantes (80+ Estilos Manuscritos)',
     heading: 'Conversor de Letras Cursivas',
-    description: 'Genera textos elegantes con nuestro conversor de letras cursivas. Más de 80 estilos de letras cursivas para copiar y pegar en Instagram.',
-    content: '¿Buscas elegancia? Nuestro conversor de letras cursivas transforma instantáneamente tus frases en hermosa caligrafía manuscrita. Las fuentes script son ideales para transmitir sofisticación, y con este conversor de letras cursivas, puedes obtener estilos negrita, delicados o clásicos en segundos.',
-    filter: (f) => f.category === 'script' || f.id.includes('italic') || f.pages.includes('cursivas'),
+    description: 'Genera textos elegantes con nuestro conversor de letras cursivas. Más de 80 estilos de letras cursivas y manuscritas para copiar y pegar en Instagram.',
+    content: '¿Buscas elegancia? Nuestro conversor de letras cursivas transforma instantáneamente tus frases en hermosa caligrafía manuscrita. Hemos expandido nuestra colección a más de 80 estilos únicos que incluyen desde la clásica cursiva inglesa hasta firmas modernas y trazos de rotulador. Las fuentes script son ideales para transmitir sofisticación, y con este conversor de letras cursivas, puedes obtener estilos premium gratuitos en segundos.',
+    filter: (f) => f.pages.includes('cursivas'),
     whyFeatures: [
-      { title: 'Elegancia Instantánea', description: 'Convierte textos aburridos en arte caligráfico sofisticado al instante.', icon: 'star' },
-      { title: '80+ Estilos Únicos', description: 'La mayor biblioteca de cursivas, itálicas y caligrafías del mercado.', icon: 'palette' },
-      { title: 'Legibilidad Pro', description: 'Fuentes seleccionadas que mantienen la claridad incluso en pantallas pequeñas.', icon: 'check' }
+      { title: '80+ Estilos Cursivos', description: 'La mayor biblioteca de caligrafías, itálicas y manuscritas del mercado.', icon: 'palette' },
+      { title: 'Elegancia Instantánea', description: 'Convierte textos planos en arte caligráfico sofisticado al instante.', icon: 'star' },
+      { title: 'Legibilidad Pro', description: 'Fuentes cursivas seleccionadas que mantienen la claridad incluso en móviles.', icon: 'check' }
     ],
     howToSteps: [
-      'Introduce el texto en el conversor de letras cursivas.',
-      'Visualiza las 80+ opciones script y handwriting disponibles.',
-      'Copia tu estilo preferido generado por el conversor.',
-      'Úsalo donde quieras; es compatible universalmente.'
+      'Introduce tu frase en el conversor de letras cursivas.',
+      'Visualiza las 80+ opciones script, manuscritas e itálicas disponibles.',
+      'Copia tu estilo caligráfico favorito generado por el conversor.',
+      'Úsalo en tu biografía de Instagram o estados de WhatsApp; es compatible universalmente.'
     ],
     faqs: [
-      { question: '¿Cómo funciona el conversor de letras cursivas?', answer: 'El conversor mapea cada letra a su equivalente matemático en formato script Unicode. Esto permite pegar el texto en sitios que normalmente no permiten cambiar fuentes.' },
-      { question: '¿Sirve este conversor para tatuajes?', answer: '¡Por supuesto! Es excelente para previsualizar nombres con elegancia antes de tatuarlos.' }
+      { question: '¿Cómo funciona el conversor de letras cursivas?', answer: 'El conversor mapea cada letra a su equivalente en símbolos Unicode caligráficos. Esto permite pegar el texto en redes sociales manteniendo el estilo visual de la cursiva.' },
+      { question: '¿Qué tipos de cursiva ofrece este conversor?', answer: 'Ofrecemos cursiva fina, negrita, caligrafía real, manuscrita casual, estilos de firma y variaciones decorativas con corazones y estrellas.' }
     ]
   },
   tatuajes: {
@@ -98,7 +98,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Conversor de Letras Graffiti',
     description: 'Crea textos urbanos con nuestro conversor de letras graffiti. Más de 40 estilos burbuja, goteos y tags callejeros en este conversor online.',
     content: 'Dale un toque callejero y rebelde a tu presencia digital con el conversor de letras graffiti. Hemos diseñado una colección exclusiva que simula el arte urbano real: desde letras "Burbuja" (throw-ups) hasta firmas rápidas tipo "Tag". Este conversor es perfecto para personalizar perfiles de Discord, nicks de juegos y comentarios llamativos en TikTok o Instagram.',
-    filter: (f) => f.category === 'decorative' || f.pages.includes('graffiti'),
+    filter: (f) => f.pages.includes('graffiti'),
     whyFeatures: [
       { title: 'Estilo Urbano Real', description: 'Incluye efectos de goteo de pintura y firmas tipo tag de rotulador.', icon: 'palette' },
       { title: '40+ Variantes Mural', description: 'Combina alfabetos de bloque y burbuja con decoradores de graffiti.', icon: 'zap' },
