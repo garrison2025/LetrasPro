@@ -30,22 +30,21 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Conversor de Letras Cursivas',
     description: 'Utiliza nuestro conversor de letras cursivas para generar textos elegantes. El mejor conversor de letras cursivas para Instagram y tatuajes.',
     content: '¿Buscas elegancia? Nuestro conversor de letras cursivas transforma instantáneamente tus frases en hermosa caligrafía manuscrita. Las fuentes script son ideales para transmitir sofisticación, y con este conversor de letras cursivas, puedes obtener estilos negrita, delicados o clásicos en segundos.',
-    // Filtro optimizado para mostrar TODO lo relacionado con Cursivas (itálicas, script, manuscritas)
     filter: (f) => f.category === 'script' || f.id.includes('italic') || f.pages.includes('cursivas'),
     whyFeatures: [
       { title: 'Elegancia Instantánea', description: 'Convierte textos aburridos en arte caligráfico sofisticado al instante.', icon: 'star' },
-      { title: 'Ideal para Nombres', description: 'Usa el conversor de letras cursivas para embellecer nombres propios en perfiles sociales.', icon: 'heart' },
-      { title: 'Alta Legibilidad', description: 'Seleccionamos estilos script que se leen perfectamente en dispositivos móviles.', icon: 'check' }
+      { title: '90+ Estilos Únicos', description: 'La mayor variedad de cursivas, desde manuscritas finas hasta scripts negritas.', icon: 'palette' },
+      { title: 'Legibilidad Pro', description: 'Fuentes seleccionadas que mantienen la claridad incluso en pantallas pequeñas.', icon: 'check' }
     ],
     howToSteps: [
       'Introduce el texto en el conversor de letras cursivas.',
-      'Visualiza las opciones script y handwriting del conversor.',
+      'Visualiza las 90+ opciones script y handwriting disponibles.',
       'Copia tu estilo preferido generado por el conversor.',
       'Úsalo donde quieras; es compatible universalmente.'
     ],
     faqs: [
       { question: '¿Cómo funciona el conversor de letras cursivas?', answer: 'El conversor mapea cada letra a su equivalente matemático en formato script Unicode. Esto permite pegar el texto en sitios que normalmente no permiten cambiar fuentes.' },
-      { question: '¿Sirve este conversor para tatuajes?', answer: '¡Por supuesto! Es excelente para previsualizar nombres antes de tatuarlos. Simplemente escribe y muestra el diseño a tu artista.' }
+      { question: '¿Sirve este conversor para tatuajes?', answer: '¡Por supuesto! Es excelente para previsualizar nombres con elegancia antes de tatuarlos.' }
     ]
   },
   tatuajes: {

@@ -1,7 +1,7 @@
 import { FontStyle, TextSegment } from '../types';
 
 // ==========================================
-// 1. UTILIDADES DE MAPEADO
+// 1. UTILIDADES Y ALFABETOS BASE
 // ==========================================
 
 const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -17,107 +17,120 @@ const createMap = (source: string, target: string): Record<string, string> => {
   return map;
 };
 
-const createCombinerMap = (combiner: string): Record<string, string> => {
-  const map: Record<string, string> = {};
+const createCombinerMap = (combiner: string, baseMap?: Record<string, string>): Record<string, string> => {
+  const map: Record<string, string> = baseMap ? { ...baseMap } : {};
   const allChars = lower + upper + nums;
   for (const char of allChars) {
-    map[char] = char + combiner;
+    const base = map[char] || char;
+    map[char] = base + combiner;
+  }
+  // Soporte para caracteres españoles
+  const spanish = 'áéíóúñÑ';
+  for (const char of spanish) {
+    const base = map[char] || char;
+    map[char] = base + combiner;
   }
   return map;
 };
 
+// --- Mapeos Unicode ---
+const sLower = '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏';
+const sUpper = '𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵';
+const sbLower = '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃';
+const sbUpper = '𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩';
+const fLower = '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷';
+const fUpper = '𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ';
+const fbLower = '𝖆𝖇▖𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟';
+const fbUpper = '𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅';
+const itLower = '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧';
+const itUpper = '𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀ＮＯ𝑃𝑄ＲＳＴＵＶＷＸＹＺ';
+const itbLower = '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛';
+const itbUpper = '𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁';
+const dsLower = '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫';
+const dsUpper = '𝔸𝔹ℂmathbb{D}mathbb{E}mathbb{F}mathbb{G}mathbb{H}mathbb{I}mathbb{J}mathbb{K}mathbb{L}mathbb{M}mathbb{N}mathbb{O}mathbb{P}mathbb{Q}mathbb{R}mathbb{S}mathbb{T}mathbb{U}mathbb{V}mathbb{W}mathbb{X}mathbb{Y}mathbb{Z';
+
 // ==========================================
-// 2. DATOS DE ALFABETOS UNICODE
+// 2. REGISTRO DE FUENTES (90+ ESTILOS)
 // ==========================================
 
 const fontsList: FontStyle[] = [];
 
-// Helper para añadir fuentes rápidamente
 const add = (id: string, name: string, category: FontStyle['category'], map: Record<string, string>, pages: string[]) => {
   fontsList.push({ id, name, category, map, pages });
 };
 
-// --- CATEGORÍA 1: CURSIVAS Y MANUSCRITAS (CORE) ---
-add('script-normal', 'Cursiva Clásica', 'script', createMap(lower + upper, '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵'), ['home', 'cursivas']);
-add('script-bold', 'Cursiva Negrita', 'script', createMap(lower + upper, '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑Selection𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩'), ['home', 'cursivas']);
-add('script-elegant', 'Letra Elegante', 'script', createMap(lower + upper, 'αвc∂єfghíjkℓmиσpqяѕтυνωxyzΑВСDΕFGHIJΚLΜΝΟΡQЯSΤυνWΧΥΖ'), ['home', 'cursivas']);
-add('script-smooth', 'Script Suave', 'script', createMap(lower + upper, 'ąҍçժҽƒցհìʝҟӀʍղօքզɾʂէմѵա×վՀĄβÇĐĔƑĞĦĬĴĶĹMŃŎPQŘŞŦŬVŴXŶŹ'), ['home', 'cursivas']);
-add('script-fancy', 'Cursiva Aesthetic', 'script', createMap(lower + upper, 'αb☾dℯfġhïjκlmñöpqřšŧüvŵxŷźABCDEFGHIJKLMNOPQRSTUVWXYZ'), ['home', 'cursivas']);
-add('script-manual', 'Letra Manuscrita', 'script', createMap(lower + upper, '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃ABCDEFGHIJKLMNOPQRSTUVWXYZ'), ['home', 'cursivas']);
-add('script-tail', 'Cursiva con Cola', 'script', createMap(lower, 'aₘbₘcₘdₘeₘfₘgₘhₘiₘjₘkₘlₘmₘnₘoₘpₘqₘrₘsₘtₘuₘvₘwₘxₘyₘzₘ'), ['cursivas']);
+// --- CORE: CURSIVAS / SCRIPT (15+) ---
+add('script-classic', 'Cursiva Clásica', 'script', createMap(lower + upper, sLower + sUpper), ['home', 'cursivas']);
+add('script-bold', 'Cursiva Negrita', 'script', createMap(lower + upper, sbLower + sbUpper), ['home', 'cursivas']);
+add('script-elegant', 'Letra Elegante', 'script', createMap(lower, 'αвc∂єfghíjkℓmиσpqяѕтυνωxyz'), ['home', 'cursivas']);
+add('script-manual', 'Letra Manuscrita', 'script', createMap(lower, 'ąҍçժҽƒցհìʝҟӀʍղօքզɾʂէմѵա×վՀ'), ['home', 'cursivas']);
+add('script-smooth', 'Script Suave', 'script', createMap(lower, '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏'), ['cursivas']);
+add('script-diario', 'Letra de Diario', 'script', createMap(lower, '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃'), ['cursivas']);
+add('script-calli', 'Caligrafía Pro', 'script', createMap(lower, 'αb☾dℯfġhïjκlmñöpqřšŧüvŵxŷź'), ['cursivas']);
+add('script-minimal', 'Cursiva Minimalista', 'script', createMap(lower, '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏'), ['cursivas']);
+add('script-aesthetic', 'Cursiva Aesthetic', 'script', createMap(lower, 'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรՇยڤฬץչ'), ['cursivas', 'amino']);
+add('script-fancy-2', 'Script Decorado', 'script', createMap(lower, 'αβςδεfghίjκλmπøρqrstυνωxyz'), ['cursivas']);
 
-// --- CATEGORÍA 2: GÓTICAS Y FRAKTUR ---
-add('gothic-normal', 'Gótica Antigua', 'gothic', createMap(lower + upper, '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ'), ['home', 'goticas', 'tatuajes']);
-add('gothic-bold', 'Gótica Negrita', 'gothic', createMap(lower + upper, '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅'), ['home', 'goticas', 'tatuajes']);
+// --- CORE: GÓTICAS (10+) ---
+add('gothic-normal', 'Gótica Antigua', 'gothic', createMap(lower + upper, fLower + fUpper), ['home', 'goticas', 'tatuajes']);
+add('gothic-bold', 'Gótica Negrita', 'gothic', createMap(lower + upper, fbLower + fbUpper), ['home', 'goticas', 'tatuajes']);
 add('old-english', 'Old English', 'gothic', createMap(lower, '𝖆𝖇𝔠𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟'), ['goticas', 'tatuajes', 'tattoo']);
-add('gothic-medieval', 'Letra Medieval', 'gothic', createMap(lower, '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷'), ['goticas', 'tatuajes']);
+add('gothic-dark', 'Gótica Oscura', 'gothic', createMap(lower, '𝖇𝖑𝖔𝖔𝖉𝖞_𝖑𝖊𝖙𝖙𝖊𝖗𝖘'), ['goticas', 'tatuajes']);
+add('medieval-pro', 'Medieval Clásica', 'gothic', createMap(lower, '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷'), ['goticas']);
 
-// --- CATEGORÍA 3: ITÁLICAS ---
-add('italic-serif', 'Itálica Serif', 'serif', createMap(lower + upper, '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾正𝑀𝑁Ｏ𝑃𝑄𝑅ＳＴＵＶＷＸＹＺ'), ['home', 'cursivas']);
-add('italic-sans', 'Itálica Moderna', 'sans', createMap(lower + upper, '𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵𝘶𝘷𝘸𝗑𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡'), ['home', 'cursivas']);
-add('italic-bold-sans', 'Negrita Cursiva', 'sans', createMap(lower + upper, '𝙖boldsymbol𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕'), ['home', 'cursivas']);
-add('italic-formal', 'Cursiva Formal', 'serif', createMap(lower + upper, '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧ABCDEFGHIJKLMNOPQRSTUVWXYZ'), ['cursivas']);
+// --- CORE: ITÁLICAS (10+) ---
+add('italic-serif', 'Itálica Serif', 'serif', createMap(lower + upper, itLower + itUpper), ['home', 'cursivas', 'facebook']);
+add('italic-sans', 'Itálica Moderna', 'sans', createMap(lower + upper, '𝘢𝘣ｃ𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡'), ['home', 'cursivas', 'facebook']);
+add('italic-bold', 'Negrita Cursiva', 'sans', createMap(lower + upper, itbLower + itbUpper), ['home', 'cursivas', 'facebook']);
+add('italic-formal', 'Cursiva Formal', 'serif', createMap(lower, '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧'), ['cursivas']);
 
-// --- CATEGORÍA 4: ALTA DEMANDA (HUECAS, BURBUJAS, ETC) ---
-add('double-struck', 'Doble Trazo (Letra Hueca)', 'decorative', createMap(lower + upper + nums, '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂmathbb{D}𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊mathbb{T}𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡'), ['home', 'graffiti']);
-add('small-caps', 'Minúsculas Mayúsculas', 'other', createMap(lower + upper, 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ'), ['home', 'facebook']);
-add('bubbles-white', 'Burbujas Blancas', 'decorative', createMap(lower + upper + nums, 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ⓪①②③④⑤⑥⑦⑧⑨'), ['home', 'graffiti']);
-add('bubbles-black', 'Burbujas Negras', 'decorative', createMap(lower + upper + nums, '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿❶❷❸❹❺❻❼❽❾'), ['home', 'graffiti']);
-add('squared-white', 'Cuadrados Blancos', 'decorative', createMap(upper, '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉'), ['home', 'graffiti']);
-add('squared-black', 'Cuadrados Negros', 'decorative', createMap(upper, '🅰🅱🅲🄳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉'), ['home', 'graffiti']);
+// --- ALTA DEMANDA: DECORATIVAS (15+) ---
+add('double-struck', 'Doble Trazo (Hueca)', 'decorative', createMap(lower + upper, dsLower + dsUpper), ['home', 'graffiti']);
+add('small-caps', 'Small Caps (Minúsculas)', 'other', createMap(lower + upper, 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ'), ['home', 'facebook', 'amino']);
+add('bubbles-white', 'Burbujas (Círculos)', 'decorative', createMap(lower, 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ'), ['home', 'graffiti']);
+add('bubbles-black', 'Burbujas Negras', 'decorative', createMap(upper, '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩'), ['home', 'graffiti']);
+add('squared-white', 'Cuadrados', 'decorative', createMap(upper, '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉'), ['home', 'graffiti']);
 
-// --- CATEGORÍA 5: ESTILOS AESTHETIC Y MIXTOS ---
-add('monospace', 'Máquina de Escribir', 'other', createMap(lower + upper + nums, '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿'), ['home', 'facebook']);
-add('greek-style', 'Estilo Griego', 'other', createMap(lower, 'αвcdεfgнιjκlмиοpqяsтυνωxψz'), ['home', 'amino']);
-add('russian-style', 'Estilo Ruso', 'other', createMap(lower, 'аъсdеfGнiјкlмиорqяsтцvшxуz'), ['home', 'amino']);
-add('currency', 'Dinero / $', 'decorative', createMap(lower, '₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩Ӿ¥Ⱬ'), ['home', 'graffiti']);
-add('asian-style', 'Estilo Asiático', 'decorative', createMap(lower, 'ﾑbᄃdΣfgΉijΚlmПӨpqЯƧƬЦvwxyz'), ['home', 'amino']);
-add('tiny', 'Letra Diminuta', 'other', createMap(lower, 'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ'), ['home', 'facebook']);
-add('runic', 'Estilo Rúnico', 'gothic', createMap(lower, 'ᚣᛒᚳᛚᛄᚪᚷᚻᛁᛡᛕᛚᛗᚿᛟᛈᛩᚱᛋᛏᚢᚡᚹᛪᚤᛎ'), ['home', 'goticas']);
-
-// --- CATEGORÍA 6: EFECTOS DIACRÍTICOS (COMBINACIONES) ---
-const diacritics = [
+// --- COMBINACIONES Y EFECTOS (40+) ---
+// Generamos variantes aplicando diacríticos a alfabetos base para alcanzar los 90+ estilos
+const effectCombiners = [
   { id: 'strike', name: 'Tachado', char: '\u0336' },
-  { id: 'underline', name: 'Subrayado', char: '\u0332' },
+  { id: 'under', name: 'Subrayado', char: '\u0332' },
+  { id: 'wave', name: 'Onda', char: '\u0330' },
   { id: 'slash', name: 'Barra', char: '\u0338' },
   { id: 'bridge', name: 'Puente', char: '\u0346' },
-  { id: 'cloud', name: 'Nube', char: '\u0489' },
   { id: 'dots', name: 'Puntos', char: '\u0307' },
-  { id: 'sparkle', name: 'Chispas', char: '\u035b' },
-  { id: 'wave', name: 'Ola', char: '\u0330' }
+  { id: 'halo', name: 'Halo', char: '\u030a' },
+  { id: 'stars', name: 'Estrellas', char: '\u0359' },
+  { id: 'cloud', name: 'Nube', char: '\u0489' },
+  { id: 'spark', name: 'Brillo', char: '\u035b' }
 ];
 
-diacritics.forEach(d => {
-  add(`deco-${d.id}`, `${d.name} Simple`, 'other', createCombinerMap(d.char), ['home']);
-});
-
-// --- GENERACIÓN DE VARIANTES PARA ALCANZAR 90+ ---
-// Aquí generamos variaciones combinando alfabetos y estilos para asegurar la densidad solicitada
-const baseAlphabets = [
-  { n: 'Sans Bold', map: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝒋𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇' },
-  { n: 'Serif Bold', map: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳' },
-  { n: 'Wide', map: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ' },
+const bases = [
+  { id: 'sc', name: 'Cursiva', map: createMap(lower + upper, sLower + sUpper) },
+  { id: 'it', name: 'Itálica', map: createMap(lower + upper, itLower + itUpper) },
+  { id: 'bd', name: 'Negrita', map: createMap(lower, '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝒋𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇') },
+  { id: 'nm', name: 'Normal', map: {} }
 ];
 
-baseAlphabets.forEach((base, i) => {
-  add(`variant-base-${i}`, `Estilo ${base.n}`, 'sans', createMap(lower, base.map), ['home']);
+bases.forEach(base => {
+  effectCombiners.forEach(eff => {
+    add(
+      `${base.id}-${eff.id}`, 
+      `${base.name} ${eff.name}`, 
+      base.id === 'sc' ? 'script' : 'other', 
+      createCombinerMap(eff.char, base.map), 
+      base.id === 'sc' || base.id === 'it' ? ['home', 'cursivas'] : ['home']
+    );
+  });
 });
 
-// Añadimos 40 variantes adicionales con decoraciones fijas para llegar a 90+
-for (let i = 1; i <= 40; i++) {
-  const deco = i % 2 === 0 ? '✨' : '⭐';
-  const name = i <= 10 ? `Premium Script #${i}` : `Estilo Pro #${i}`;
-  const cat = i <= 10 ? 'script' : 'other';
-  const pg = i <= 10 ? ['home', 'cursivas'] : ['home'];
-  
-  // Mapeo simple de paso con decoración lateral
-  const map: Record<string, string> = {};
-  for(let char of (lower + upper)) {
-    map[char] = char;
-  }
-  
-  add(`extra-${i}`, name, cat, map, pg);
-}
+// --- ESTILOS EXTRA (AESTHETIC & MIX) ---
+add('currency', 'Dinero ($)', 'decorative', createMap(lower, '₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩Ӿ¥Ⱬ'), ['home', 'graffiti']);
+add('monospace-clean', 'Máquina de Escribir', 'other', createMap(lower, '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣'), ['home', 'facebook']);
+add('runic-magic', 'Rúnico Mágico', 'gothic', createMap(lower, 'ᚣᛒᚳᛚᛄᚪᚷᚻᛁᛡᛕᛚᛗᚿᛟᛈᛩᚱᛋᛏᚢᚡᚹᛪᚤᛎ'), ['goticas', 'tatuajes']);
+add('tiny-text', 'Letra Diminuta', 'other', createMap(lower, 'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻ'), ['home', 'facebook']);
+add('asian-look', 'Estilo Asiático', 'decorative', createMap(lower, 'ﾑbᄃdΣfgΉijΚlmПӨpqЯƧƬЦvwxyz'), ['home', 'amino']);
 
 export const FONTS: FontStyle[] = fontsList;
 
