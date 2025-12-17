@@ -30,20 +30,19 @@ const createCombinerMap = (combiner: string, baseMap?: Record<string, string>): 
 // --- Alfabetos Unicode ---
 const sLower = '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏';
 const sUpper = '𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵';
-const sbLower = '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃';
+const sbLower = '𝓪𝓫𝓬𝓭𝓮\u0192\u0261\u0265𝓲照顾𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃';
 const sbUpper = '𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩';
 const fLower = '𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷';
 const fUpper = '𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ';
 const fbLower = '𝖆𝖇𝖈\u0264𝖊𝖋𝖌\u0265𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟';
 const fbUpper = '𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅';
 const itLower = '𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧';
-const itUpper = '𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀ＮＯＰＱＲＳＴＵＶＷＸＹＺ';
-// Define dsLower and dsUpper for Double Struck (Hollow) alphabet to fix build errors
+const itUpper = '𝐴𝐵ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ';
 const dsLower = '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫';
 const dsUpper = '𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ';
 
 // ==========================================
-// 2. REGISTRO DE FUENTES (MÁS DE 150 TOTALES)
+// 2. REGISTRO DE FUENTES (SISTEMA MODULAR)
 // ==========================================
 
 const fontsList: FontStyle[] = [];
@@ -52,76 +51,49 @@ const add = (id: string, name: string, category: FontStyle['category'], map: Rec
   fontsList.push({ id, name, category, map, pages });
 };
 
-// --- SECCIÓN: CURSIVAS (Optimizadas anteriormente) ---
+// --- CORE: CURSIVAS Y GÓTICAS (Anteriores) ---
 add('sc-1', 'Cursiva Fina', 'script', createMap(lower + upper, sLower + sUpper), ['home', 'cursivas']);
 add('sc-2', 'Cursiva Caligráfica', 'script', createMap(lower + upper, sbLower + sbUpper), ['home', 'cursivas']);
-add('sc-3', 'Manuscrita Elegante', 'script', createMap(lower, 'ąҍçժҽƒցհìʝҟӀʍղօքզɾʂէմѵա×վՀ'), ['cursivas']);
+add('gt-1', 'Gótica Real', 'gothic', createMap(lower + upper, fbLower + fbUpper), ['home', 'goticas']);
 
-// --- SECCIÓN: GÓTICAS (EXPANSIÓN 70+ ESTILOS) ---
+// --- SECCIÓN: GRAFFITI (40+ ESTILOS) ---
 
-// Bases Góticas
-const gothicBases = [
-  { id: 'fraktur', name: 'Gótica Fraktur', map: createMap(lower + upper, fLower + fUpper) },
-  { id: 'boldgot', name: 'Gótica Real', map: createMap(lower + upper, fbLower + fbUpper) },
-  { id: 'ancient', name: 'Gótica Antigua', map: createMap(lower, '𝔞𝔟𝔠𝔡𝔢\u0192\u0261\u0265𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷') },
-  { id: 'medieval', name: 'Manuscrito Medieval', map: createMap(lower, '𝖆𝖇𝔠\u0264𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚\u028B𝖜𝖝𝖞𝖟') },
-  { id: 'vampire', name: 'Estilo Vampírico', map: createMap(lower, 'αβςδεfghίjκλmπøρqrstυνωxyz') },
-  { id: 'ritual', name: 'Ritual Oscuro', map: createMap(lower, 'αb☾dℯfġhïjκlmñöpqřšŧüvŵxŷź') },
-  { id: 'chicano', name: 'Gótica Chicana', map: createMap(lower, 'ค๒ς๔єŦﻮђเןкl๓ภ๏קợгรՇยڤฬץչ') }
+const graffitiBases = [
+  { id: 'bubble', name: 'Burbuja Blanca', map: createMap(lower, 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ') },
+  { id: 'blackbubble', name: 'Burbuja de Spray', map: createMap(lower, '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩') },
+  { id: 'block', name: 'Bloque Urbano', map: createMap(lower + upper, dsLower + dsUpper) },
+  { id: 'square', name: 'Estilo Mural', map: createMap(lower, '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉') },
+  { id: 'marker', name: 'Tag de Rotulador', map: createMap(lower, 'ąҍçժҽƒցհìʝҟӀʍղօքզɾʂէմѵա×վՀ') },
+  { id: 'boldtag', name: 'Tag Grueso', map: createMap(lower + upper, sbLower + sbUpper) }
 ];
 
-// Decoradores Dark/Gothic
-const darkDecorators = [
-  { id: 'cross', name: 'con Cruz', char: '\u2020' },
-  { id: 'dagger', name: 'con Daga', char: '\u2021' },
-  { id: 'skull', name: 'Calavera', char: '☠' },
-  { id: 'chain', name: 'con Cadenas', char: '\u0333' },
-  { id: 'blood', name: 'con Sangre', char: '\u0323' },
-  { id: 'spikes', name: 'con Espinas', char: '\u0338' },
-  { id: 'ritual', name: 'Ritual', char: '\u035b' },
-  { id: 'stars', name: 'con Estrellas Dark', char: '\u0359' },
-  { id: 'shadow', name: 'Sombreada', char: '\u0332' },
-  { id: 'ghost', name: 'Fantasmagórica', char: '\u030a' }
+const urbanDecorators = [
+  { id: 'drip', name: 'con Goteo', char: '\u0323' },
+  { id: 'under', name: 'Subrayado Tag', char: '\u0332' },
+  { id: 'brick', name: 'Efecto Muro', char: '\u0333' },
+  { id: 'crown', name: 'Rey/King', char: '\u030a' },
+  { id: 'splash', name: 'Salpicadura', char: '\u035b' },
+  { id: 'slash', name: 'Corte Urbano', char: '\u0338' },
+  { id: 'halo', name: 'con Halo', char: '\u0307' },
+  { id: 'spark', name: 'Brillo Mural', char: '\u0359' }
 ];
 
-// Generar 70 variantes Góticas (7 bases * 10 decoradores)
-gothicBases.forEach(base => {
-  darkDecorators.forEach(deco => {
+// Generar 48 variantes de Graffiti (6 bases * 8 decoradores)
+graffitiBases.forEach(base => {
+  urbanDecorators.forEach(deco => {
     add(
-      `gt-${base.id}-${deco.id}`, 
+      `grf-${base.id}-${deco.id}`, 
       `${base.name} ${deco.name}`, 
-      'gothic', 
+      'decorative', 
       createCombinerMap(deco.char, base.map), 
-      ['goticas', 'tatuajes', 'tattoo']
+      ['graffiti']
     );
   });
 });
 
-// Estilos Góticos Estáticos Adicionales (Para superar los 75)
-add('gt-metal', 'Metal Extremo', 'gothic', createMap(lower, 'ℳ𝔈𝔗𝔄𝔏_𝔈𝔛𝔗ℜ𝔈𝔐℈'), ['goticas']);
-add('gt-catedral', 'Catedralicia Pro', 'gothic', createMap(lower, 'ℭ𝔞𝔱𝔢𝔡𝔯𝔞𝔩𝔦𝔠𝔦𝔞'), ['goticas', 'tatuajes']);
-add('gt-darkness', 'Oscuridad Eterna', 'gothic', createMap(lower, '𝔒𝔰𝔠𝔲𝔯𝔦𝔡𝔞𝔡_𝔈𝔱𝔢𝔯𝔫𝔞'), ['goticas']);
-
-// --- OTRAS CATEGORÍAS (Burbujas, Graffiti, etc) ---
-const otherBases = [
-  { id: 'italic', name: 'Itálica', map: createMap(lower + upper, itLower + itUpper) },
-  { id: 'hollow', name: 'Hueca', map: createMap(lower + upper, dsLower + dsUpper) },
-  { id: 'normal', name: 'Estilo', map: {} }
-];
-
-const generalDecorators = [
-  { id: 'nube', name: 'Nube', char: '\u0489' },
-  { id: 'brillo', name: 'Brillo', char: '\u035b' }
-];
-
-otherBases.forEach(base => {
-  generalDecorators.forEach(deco => {
-    add(`${base.id}-${deco.id}`, `${base.name} ${deco.name}`, 'other', createCombinerMap(deco.char, base.map), ['home']);
-  });
-});
-
-add('dec-1', 'Burbujas Blancas', 'decorative', createMap(lower, 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ'), ['home', 'graffiti']);
-add('dec-2', 'Burbujas Negras', 'decorative', createMap(upper, '🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩'), ['home', 'graffiti']);
+// Estilos de Graffiti Estáticos Adicionales
+add('grf-wild-1', 'Wildstyle Pro', 'decorative', createMap(lower, 'ฬเɭ๔รՇץɭє'), ['graffiti']);
+add('grf-urban-80', 'Old School 80s', 'decorative', createMap(lower, 'ⒼⓇⒶⒻⒻⒾⓉⒾ'), ['graffiti']);
 
 export const FONTS: FontStyle[] = fontsList;
 

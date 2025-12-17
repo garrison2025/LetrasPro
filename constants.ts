@@ -94,24 +94,25 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   graffiti: {
     path: '/letras-graffiti',
-    title: 'Conversor de Letras Graffiti y Urbano',
+    title: 'Conversor de Letras Graffiti y Urbano (40+ Estilos)',
     heading: 'Conversor de Letras Graffiti',
-    description: 'Crea textos urbanos con el conversor de letras graffiti. Estilos burbuja y callejeros en este conversor de letras graffiti online.',
-    content: 'Dale un toque callejero a tu presencia digital con el conversor de letras graffiti. Este estilo vibrante y rebelde es posible gracias a los caracteres de doble trazo y burbujas.',
+    description: 'Crea textos urbanos con nuestro conversor de letras graffiti. Más de 40 estilos burbuja, goteos y tags callejeros en este conversor online.',
+    content: 'Dale un toque callejero y rebelde a tu presencia digital con el conversor de letras graffiti. Hemos diseñado una colección exclusiva que simula el arte urbano real: desde letras "Burbuja" (throw-ups) hasta firmas rápidas tipo "Tag". Este conversor es perfecto para personalizar perfiles de Discord, nicks de juegos y comentarios llamativos en TikTok o Instagram.',
     filter: (f) => f.category === 'decorative' || f.pages.includes('graffiti'),
     whyFeatures: [
-      { title: 'Estilo Urbano', description: 'Lleva el arte callejero directamente a tus textos digitales.', icon: 'palette' },
-      { title: 'Destaca en Comentarios', description: 'Las fuentes ocupan más espacio visual y llaman la atención.', icon: 'star' },
-      { title: 'Diversión Pura', description: 'Perfecto para mensajes informales y divertidos.', icon: 'heart' }
+      { title: 'Estilo Urbano Real', description: 'Incluye efectos de goteo de pintura y firmas tipo tag de rotulador.', icon: 'palette' },
+      { title: '40+ Variantes Mural', description: 'Combina alfabetos de bloque y burbuja con decoradores de graffiti.', icon: 'zap' },
+      { title: 'Impacto en Redes', description: 'Fuentes diseñadas para ocupar espacio visual y destacar en cualquier feed.', icon: 'star' }
     ],
     howToSteps: [
-      'Introduce tu texto para "graffitear".',
-      'Elige estilos de burbujas o doble trazo.',
-      'Copia el arte generado.',
-      'Pégalo en comentarios o foros.'
+      'Introduce tu texto en el conversor de letras graffiti.',
+      'Explora las opciones de burbuja, bloque y tag caligráfico.',
+      'Selecciona el diseño con efecto de goteo o corona.',
+      'Copia y pega el arte urbano en tu perfil favorito.'
     ],
     faqs: [
-      { question: '¿Puedo usar números?', answer: 'Sí, el conversor también transforma números al estilo de doble trazo o burbuja.' }
+      { question: '¿Qué es el estilo graffiti Unicode?', answer: 'Son combinaciones de caracteres de burbuja y bloque con símbolos especiales que imitan la estética del arte callejero sin necesidad de imágenes.' },
+      { question: '¿Sirve para nombres de clanes?', answer: 'Sí, es muy popular para crear nicks impactantes en juegos como Free Fire o Call of Duty.' }
     ]
   },
   amino: {
