@@ -54,7 +54,7 @@ const FontCard: React.FC<FontCardProps> = ({
   // LIST VIEW (Default)
   const renderListView = () => (
     <div className="relative min-h-[3rem] flex items-center pr-2">
-      <p className="text-xl sm:text-2xl text-slate-800 break-all font-medium leading-relaxed group-hover:text-primary-900 transition-colors">
+      <p className="text-xl sm:text-2xl text-slate-800 dark:text-slate-100 break-all font-medium leading-relaxed group-hover:text-primary-900 dark:group-hover:text-white transition-colors">
         {renderTextContent()}
       </p>
     </div>
@@ -62,25 +62,25 @@ const FontCard: React.FC<FontCardProps> = ({
 
   // INSTAGRAM VIEW
   const renderInstagramView = () => (
-    <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 mt-2 w-full">
+    <div className="bg-slate-50 dark:bg-black/20 rounded-xl p-4 border border-slate-100 dark:border-slate-700 mt-2 w-full">
       <div className="flex items-center gap-4 mb-4">
         <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
-          <div className="w-full h-full rounded-full bg-white p-[2px]">
-            <div className="w-full h-full rounded-full bg-slate-200"></div>
+          <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 p-[2px]">
+            <div className="w-full h-full rounded-full bg-slate-200 dark:bg-slate-700"></div>
           </div>
         </div>
-        <div className="flex-1 flex justify-around text-center">
+        <div className="flex-1 flex justify-around text-center text-slate-900 dark:text-white">
           <div><div className="font-bold text-sm">124</div><div className="text-[10px] text-slate-500">Posts</div></div>
           <div><div className="font-bold text-sm">2.5k</div><div className="text-[10px] text-slate-500">Followers</div></div>
           <div><div className="font-bold text-sm">340</div><div className="text-[10px] text-slate-500">Following</div></div>
         </div>
       </div>
       <div className="text-sm">
-        <div className="font-bold mb-1">Tu Nombre</div>
-        <div className="text-slate-800 whitespace-pre-wrap leading-tight">
+        <div className="font-bold mb-1 text-slate-900 dark:text-white">Tu Nombre</div>
+        <div className="text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-tight">
           {renderTextContent()}
         </div>
-        <div className="mt-3 py-1.5 bg-white border border-slate-200 rounded-md text-center text-xs font-semibold text-slate-700 shadow-sm">
+        <div className="mt-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md text-center text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
           Edit Profile
         </div>
       </div>
@@ -89,17 +89,17 @@ const FontCard: React.FC<FontCardProps> = ({
 
   // WHATSAPP VIEW
   const renderWhatsappView = () => (
-    <div className="bg-[#e5ddd5] rounded-xl p-4 border border-slate-200 mt-2 relative overflow-hidden">
+    <div className="bg-[#e5ddd5] dark:bg-[#0b141a] rounded-xl p-4 border border-slate-200 dark:border-slate-700 mt-2 relative overflow-hidden">
       {/* Pattern Overlay simulation */}
       <div className="absolute inset-0 opacity-[0.05] bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png')] bg-repeat bg-[length:50px_50px]"></div>
       
       <div className="relative flex justify-end">
-        <div className="bg-[#dcf8c6] rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-[90%]">
-          <p className="text-sm text-slate-800 break-all leading-relaxed">
+        <div className="bg-[#dcf8c6] dark:bg-[#005c4b] rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-[90%]">
+          <p className="text-sm text-slate-800 dark:text-slate-100 break-all leading-relaxed">
             {renderTextContent()}
           </p>
           <div className="flex justify-end items-center gap-1 mt-1">
-            <span className="text-[10px] text-slate-500">12:45 PM</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400">12:45 PM</span>
             <Check size={12} className="text-blue-500" />
             <Check size={12} className="text-blue-500 -ml-1.5" />
           </div>
@@ -110,21 +110,21 @@ const FontCard: React.FC<FontCardProps> = ({
 
   return (
     <div 
-      className={`group relative bg-white rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden ${
+      className={`group relative bg-white dark:bg-slate-800 rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden ${
         justCopied
-          ? 'border-green-500 ring-2 ring-green-100 shadow-md scale-[1.02]' 
+          ? 'border-green-500 ring-2 ring-green-100 dark:ring-green-900 shadow-md scale-[1.02]' 
           : isFavorite 
-            ? 'border-primary-200 shadow-md ring-1 ring-primary-100 order-first' 
-            : 'border-slate-100 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1'
+            ? 'border-primary-200 dark:border-primary-700 shadow-md ring-1 ring-primary-100 dark:ring-primary-900 order-first' 
+            : 'border-slate-100 dark:border-slate-700 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1'
       } ${contextClass}`}
       onClick={handleCopy}
     >
-      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-bl-full -mr-10 -mt-10 transition-opacity pointer-events-none ${isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-bl-full -mr-10 -mt-10 transition-opacity pointer-events-none ${isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
 
       <div className="p-6">
         <div className="flex justify-between items-start mb-3">
            <div className="flex items-center gap-2">
-             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-500 uppercase tracking-wide group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">
+             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-wide group-hover:bg-primary-50 dark:group-hover:bg-primary-900/40 group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors">
                {font.name}
              </span>
              {isFavorite && (
@@ -138,8 +138,8 @@ const FontCard: React.FC<FontCardProps> = ({
              <button
                 className={`favorite-btn p-2 rounded-full transition-colors ${
                   isFavorite 
-                    ? 'text-yellow-400 hover:bg-yellow-50' 
-                    : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
+                    ? 'text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20' 
+                    : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -152,7 +152,7 @@ const FontCard: React.FC<FontCardProps> = ({
 
              <div className={`
                flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
-               ${justCopied ? 'bg-green-500 text-white scale-110 shadow-lg shadow-green-500/30' : 'bg-slate-100 text-slate-400 group-hover:bg-primary-500 group-hover:text-white'}
+               ${justCopied ? 'bg-green-500 text-white scale-110 shadow-lg shadow-green-500/30' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 group-hover:bg-primary-500 group-hover:text-white dark:group-hover:text-white'}
              `}>
                {justCopied ? <Check size={14} strokeWidth={3} /> : <Copy size={14} strokeWidth={2.5} />}
              </div>

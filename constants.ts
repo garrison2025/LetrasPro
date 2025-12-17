@@ -199,9 +199,11 @@ export const NAVIGATION_LINKS: NavLink[] = [
   { label: 'Inicio', path: '/' },
   { label: 'Cursivas', path: '/letras-cursivas' },
   { label: 'Góticas', path: '/letras-goticas' },
-  { label: 'Tatuajes', path: '/letras-tatuajes' },
   { label: 'Graffiti', path: '/letras-graffiti' },
-  { label: 'Repetidor', path: '/repetidor-de-texto' }, // New
-  { label: 'Texto Glitch', path: '/texto-glitch' }, // New
+  { label: 'Repetidor', path: '/repetidor-de-texto' },
+  { label: 'Invisible', path: '/texto-invisible' }, // New
+  { label: 'Al Revés', path: '/texto-al-reves' }, // New
+  { label: 'Grandes', path: '/letras-grandes' }, // New
+  { label: 'Glitch', path: '/texto-glitch' },
   { label: 'Blog', path: '/blog' },
 ];
