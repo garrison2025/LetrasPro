@@ -10,6 +10,8 @@ import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import BlogIndexPage from './pages/BlogIndexPage';
 import BlogPostPage from './pages/BlogPostPage';
+import RepeaterPage from './pages/RepeaterPage'; // Import
+import GlitchPage from './pages/GlitchPage'; // Import
 import { PAGE_CONFIGS } from './constants';
 
 function App() {
@@ -37,6 +39,10 @@ function App() {
               <Route path="/letras-facebook" element={<GeneratorPage config={PAGE_CONFIGS.facebook} />} />
               <Route path="/letras-tattoo" element={<GeneratorPage config={PAGE_CONFIGS.tattoo} />} />
               
+              {/* Tool Pages */}
+              <Route path="/repetidor-de-texto" element={<RepeaterPage />} />
+              <Route path="/texto-glitch" element={<GlitchPage />} />
+
               {/* Blog Pages */}
               <Route path="/blog" element={<BlogIndexPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />

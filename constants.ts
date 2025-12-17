@@ -201,8 +201,7 @@ export const NAVIGATION_LINKS: NavLink[] = [
   { label: 'Góticas', path: '/letras-goticas' },
   { label: 'Tatuajes', path: '/letras-tatuajes' },
   { label: 'Graffiti', path: '/letras-graffiti' },
-  { label: 'Amino', path: '/letras-amino' },
-  { label: 'Facebook', path: '/letras-facebook' },
-  { label: 'Tattoo', path: '/letras-tattoo' },
+  { label: 'Repetidor', path: '/repetidor-de-texto' }, // New
+  { label: 'Texto Glitch', path: '/texto-glitch' }, // New
   { label: 'Blog', path: '/blog' },
 ];

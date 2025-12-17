@@ -2,6 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { registerSW } from 'virtual:pwa-register';
+
+// Register PWA Service Worker
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if (confirm('Nueva versión disponible. ¿Recargar?')) {
+      updateSW(true);
+    }
+  },
+  onOfflineReady() {
+    console.log('App lista para trabajar offline.');
+  },
+});
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

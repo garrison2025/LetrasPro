@@ -5,10 +5,11 @@ import { PageConfig } from '../types';
 import { PAGE_CONFIGS } from '../constants';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import { DECORATORS, applyDecoration } from '../services/decorators';
+import { KAOMOJIS } from '../data/kaomojis'; // Import Kaomojis
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle, AlertCircle, Wand2 } from 'lucide-react';
+import { Sparkles, Type, Star, ChevronDown, Loader2, Zap, Check, Heart, Shield, Smartphone, Palette, ChevronRight, Home, Trash2, ArrowUp, LayoutList, Instagram, MessageCircle, ArrowRightCircle, AlertCircle, Wand2, Smile, X } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -63,6 +64,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  // Kaomoji Modal State
+  const [isKaomojiOpen, setIsKaomojiOpen] = useState(false);
+  const [activeKaomojiTab, setActiveKaomojiTab] = useState(KAOMOJIS[0].id);
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -343,6 +348,17 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               </div>
               <div className="border-t border-slate-100 bg-slate-50/50 px-2 py-2">
                 <div className="flex items-center gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                  
+                  {/* Kaomoji Button */}
+                  <button 
+                    onClick={() => setIsKaomojiOpen(!isKaomojiOpen)}
+                    className={`flex-shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-bold transition-all ${isKaomojiOpen ? 'bg-primary-100 border-primary-300 text-primary-700' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
+                  >
+                    <Smile size={16} /> Kaomoji
+                  </button>
+                  
+                  <div className="w-px h-6 bg-slate-200 mx-1 flex-shrink-0"></div>
+
                   <span className="text-xs font-bold text-slate-400 uppercase px-2 flex-shrink-0 select-none">Símbolos:</span>
                   {SYMBOLS.map((symbol, index) => (
                     <button
@@ -354,6 +370,39 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     </button>
                   ))}
                 </div>
+                
+                {/* Kaomoji Picker Panel */}
+                {isKaomojiOpen && (
+                  <div className="mt-2 bg-white border border-slate-200 rounded-xl shadow-lg p-4 animate-fade-in relative z-20">
+                     <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                       <h3 className="text-sm font-bold text-slate-700">Biblioteca de Kaomojis</h3>
+                       <button onClick={() => setIsKaomojiOpen(false)} className="text-slate-400 hover:text-slate-600"><X size={16} /></button>
+                     </div>
+                     <div className="flex gap-2 overflow-x-auto mb-3 pb-1 no-scrollbar">
+                       {KAOMOJIS.map(cat => (
+                         <button
+                           key={cat.id}
+                           onClick={() => setActiveKaomojiTab(cat.id)}
+                           className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors ${activeKaomojiTab === cat.id ? 'bg-primary-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                         >
+                           {cat.emoji} {cat.name}
+                         </button>
+                       ))}
+                     </div>
+                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 max-h-40 overflow-y-auto">
+                        {KAOMOJIS.find(k => k.id === activeKaomojiTab)?.items.map((emoji, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => { insertSymbol(emoji); setIsKaomojiOpen(false); }}
+                            className="p-2 text-xs sm:text-sm bg-slate-50 hover:bg-primary-50 hover:text-primary-700 rounded-lg text-center truncate border border-transparent hover:border-primary-200 transition-all"
+                            title={emoji}
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                     </div>
+                  </div>
+                )}
               </div>
               <div className="h-1 w-full bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-500 bg-[length:200%_100%] animate-shimmer"></div>
             </div>
@@ -414,15 +463,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
              const mappedText = convertText(textToProcess, font.map);
              // Apply decoration second
              const finalRawText = applyDecoration(mappedText, activeDecorator);
-             // For display segments, we need to handle decoration manually if we want correct segments
-             // For simplicity in display, we can wrap the segments or just rely on raw text for display if simpler
-             // But to keep fallback logic, let's just decorate the raw output for the segments.
-             // Note: getDisplaySegments handles fallback logic on the character level. 
-             // Applying decoration adds simple chars.
-             
-             // Strategy: To preserve fallback logic, we apply decoration to the *source* text if it's simple, 
-             // OR we just use the rawText for display in the card if we don't care about coloring fallback chars in the decoration itself.
-             // Let's keep it simple: Pass the fully processed string to displaySegments.
+             // Display segments
              const displaySegments = debouncedText || !isTyping ? getDisplaySegments(finalRawText, {}) : [];
 
              const card = (
