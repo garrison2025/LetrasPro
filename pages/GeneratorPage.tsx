@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PageConfig, TextCase } from '../types';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
@@ -8,7 +8,7 @@ import { BIO_TEMPLATES } from '../data/bioTemplates';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers } from 'lucide-react';
+import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -51,6 +51,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [showToast, setShowToast] = useState(false);
   
+  // UX: Sticky Input State
+  const [isStickyVisible, setIsStickyVisible] = useState(false);
+  const inputContainerRef = useRef<HTMLDivElement>(null);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debouncedText = useDebounce(inputText, 300);
 
@@ -82,6 +86,26 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     "featureList": config.whyFeatures.map(f => f.title).join(', '),
     "screenshot": ogImage
   };
+
+  // Breadcrumb Structured Data (JSON-LD)
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": config.heading,
+        "item": canonicalUrl
+      }
+    ]
+  };
   
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
@@ -93,6 +117,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     localStorage.setItem('let_pro_favs', JSON.stringify(favorites));
     localStorage.setItem('let_pro_history', JSON.stringify(history));
   }, [inputText, favorites, history]);
+
+  // Scroll Listener for Sticky Input
+  useEffect(() => {
+    const handleScroll = () => {
+      if (inputContainerRef.current) {
+        const rect = inputContainerRef.current.getBoundingClientRect();
+        // Show sticky input when the main input container bottom passes the navbar area (approx 80px)
+        setIsStickyVisible(rect.bottom < 80); 
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleFavorite = (fontId: string) => {
     setFavorites(prev => prev.includes(fontId) ? prev.filter(id => id !== fontId) : [...prev, fontId]);
@@ -195,13 +233,48 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta name="twitter:description" content={config.description} />
         <meta name="twitter:image" content={ogImage} />
         
-        {/* JSON-LD Schema */}
+        {/* JSON-LD Schemas */}
         <script type="application/ld+json">
-          {JSON.stringify(webAppSchema)}
+          {JSON.stringify([webAppSchema, breadcrumbSchema])}
         </script>
       </Helmet>
+      
+      {/* Sticky Input Header */}
+      <div className={`fixed top-[80px] left-0 right-0 z-40 bg-white/90 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 shadow-lg transition-all duration-300 transform ${isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <div className="max-w-6xl mx-auto px-4 py-3 flex gap-3 items-center">
+          <input 
+            type="text" 
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="Escribe aquí para cambiar el texto..."
+            className="flex-grow bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-primary-500 outline-none shadow-inner"
+          />
+          <button 
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              // Optional: Focus main textarea after scroll
+              setTimeout(() => textareaRef.current?.focus(), 500);
+            }}
+            className="p-2.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl hover:bg-primary-100 transition-colors"
+            aria-label="Volver arriba"
+          >
+            <ArrowUp size={20} />
+          </button>
+        </div>
+      </div>
 
       <div className="pt-12 pb-20 px-4 text-center">
+        {/* Breadcrumbs */}
+        <nav className="flex justify-center items-center gap-2 text-sm text-slate-500 mb-6" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-primary-600 transition-colors flex items-center gap-1 font-medium">
+            <Home size={14} /> Inicio
+          </Link>
+          <ChevronRight size={14} className="opacity-40" />
+          <span className="font-semibold text-slate-800 dark:text-slate-300 truncate max-w-[200px] sm:max-w-none">
+            {config.heading}
+          </span>
+        </nav>
+
         <h1 className="text-4xl sm:text-7xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
           {config.heading}
         </h1>
@@ -213,7 +286,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
       <div className="max-w-6xl mx-auto w-full px-4 -mt-10 relative z-20">
         
-        <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-8">
+        <div ref={inputContainerRef} className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-8">
           <div className="p-8">
             <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
               <div className="flex gap-2 items-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
