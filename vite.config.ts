@@ -100,6 +100,9 @@ export default defineConfig({
         // Wait for the event we dispatch in index.tsx
         renderAfterDocumentEvent: 'render-event',
       }),
+      // CRITICAL: Cloudflare Pages builds can hang if concurrency is too high or if JSDOM eats too much RAM.
+      // Setting this to 1 ensures sequential rendering, which is safer.
+      maxConcurrentRoutes: 1, 
       postProcess(renderedRoute) {
         // Optimize output: Remove the "render-event" script to avoid errors on client
         renderedRoute.html = renderedRoute.html.replace(
