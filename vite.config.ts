@@ -67,12 +67,19 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    minify: 'terser', // Use terser for better minification
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
-          icons: ['lucide-react'],
-          utils: ['clsx', 'tailwind-merge']
+          'react-vendor': ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
+          'ui-vendor': ['lucide-react'],
+          'utils-vendor': ['clsx', 'tailwind-merge']
         }
       }
     }

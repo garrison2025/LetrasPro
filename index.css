@@ -35,6 +35,16 @@
   font-weight: 700;
 }
 
+/* 
+  PERFORMANCE OPTIMIZATION:
+  Skip rendering of content that is off-screen.
+  This drastically reduces Main Thread work for long font lists.
+*/
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 200px; /* Estimate height of a font card */
+}
+
 /* Estabilización de renderizado para combinadores Unicode */
 p[role="img"] {
   text-rendering: optimizeLegibility;
