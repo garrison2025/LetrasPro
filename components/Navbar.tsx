@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
           className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
             isActive || isOpen
               ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+              : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
           {icon}
@@ -94,7 +94,7 @@ const Navbar: React.FC = () => {
     <nav 
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled || isOpen
-          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800 shadow-sm' 
+          ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800 shadow-sm' 
           : 'bg-transparent border-b border-transparent'
       }`}
       ref={dropdownRef}
@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
                 `px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
                     ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white'
                 }`
               }
             >
@@ -139,7 +139,7 @@ const Navbar: React.FC = () => {
                 `px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
                     ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white'
                 }`
               }
             >
@@ -194,7 +194,7 @@ const Navbar: React.FC = () => {
 
             {/* Generators Section */}
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
               <div className="grid grid-cols-1 gap-1">
                 {generators.map((link) => (
                   <RouterNavLink
@@ -218,7 +218,7 @@ const Navbar: React.FC = () => {
 
             {/* Tools Section */}
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
               <div className="grid grid-cols-1 gap-1">
                 {tools.map((link) => (
                   <RouterNavLink

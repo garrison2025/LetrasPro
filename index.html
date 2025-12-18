@@ -9,7 +9,7 @@
     <title>Conversor de Letras Bonitas - Copiar y Pegar</title>
     <meta name="description" content="Generador de fuentes y letras bonitas para Instagram, Facebook, TikTok y Tatuajes." />
     
-    <!-- Google Fonts Optimized (Non-blocking) -->
+    <!-- Google Fonts Optimized (Non-blocking with Preconnect) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
@@ -45,9 +45,31 @@
   }
 }
 </script>
+    <style>
+      /* Critical CSS for App Shell LCP Optimization */
+      body { margin: 0; background-color: #f8fafc; font-family: sans-serif; }
+      #shell-nav { height: 80px; display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+      #shell-logo { width: 40px; height: 40px; background: #7c3aed; border-radius: 12px; }
+      #shell-hero { text-align: center; padding-top: 48px; padding-bottom: 80px; px: 16px; }
+      #shell-h1 { font-size: 2.5rem; font-weight: 900; color: #0f172a; margin-bottom: 16px; letter-spacing: -0.05em; line-height: 1.1; }
+      #shell-p { font-size: 1.125rem; color: #64748b; max-width: 42rem; margin: 0 auto; }
+      @media (min-width: 640px) { #shell-h1 { font-size: 4.5rem; } }
+    </style>
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-primary-200 selection:text-primary-900 overflow-x-hidden">
-    <div id="root"></div>
+    <div id="root">
+      <!-- App Shell for Instant LCP -->
+      <nav id="shell-nav">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div id="shell-logo"></div>
+          <span style="font-size:1.5rem; font-weight:700; color:#1e293b;">LetrasPro</span>
+        </div>
+      </nav>
+      <div id="shell-hero">
+        <h1 id="shell-h1">Conversor de Letras Bonitas</h1>
+        <p id="shell-p">Generador de fuentes y letras bonitas para Instagram, Facebook, TikTok y Tatuajes.</p>
+      </div>
+    </div>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
