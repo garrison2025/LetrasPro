@@ -28,9 +28,6 @@
     "@tailwindcss/typography": "^0.5.10",
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
-    "vite-plugin-pwa": "^0.19.2",
-    "@prerenderer/rollup-plugin": "^0.1.0",
-    "@prerenderer/renderer-jsdom": "^0.2.0",
-    "jsdom": "^24.0.0"
+    "vite-plugin-pwa": "^0.19.2"
   }
 }

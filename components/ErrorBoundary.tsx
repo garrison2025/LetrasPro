@@ -1,22 +1,22 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 import { RefreshCcw, AlertTriangle } from 'lucide-react';
 
-interface ErrorBoundaryProps {
+interface Props {
   children?: ReactNode;
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean;
   error: Error | null;
 }
 
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  public state: ErrorBoundaryState = {
+class ErrorBoundary extends React.Component<Props, State> {
+  public state: State = {
     hasError: false,
     error: null
   };
 
-  public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 

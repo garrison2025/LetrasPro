@@ -1,13 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import prerender from '@prerenderer/rollup-plugin';
-import jsdomRenderer from '@prerenderer/renderer-jsdom';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [
@@ -69,59 +62,12 @@ export default defineConfig({
           }
         ]
       }
-    }),
-    prerender({
-      staticDir: path.join(__dirname, 'dist'),
-      routes: [
-        '/',
-        '/letras-cursivas',
-        '/letras-tatuajes',
-        '/letras-goticas',
-        '/letras-graffiti',
-        '/letras-amino',
-        '/letras-facebook',
-        '/letras-tattoo',
-        '/repetidor-de-texto',
-        '/texto-invisible',
-        '/texto-glitch',
-        '/texto-al-reves',
-        '/letras-grandes',
-        '/blog',
-        '/sobre-nosotros',
-        '/contacto',
-        '/politica-de-privacidad',
-        '/terminos-y-condiciones',
-        // Blog Posts
-        '/blog/guia-definitiva-conversor-letras-bonitas-instagram-facebook',
-        '/blog/letras-para-tatuajes-guia-estilos-goticos-cursivos',
-        '/blog/mejores-nicks-free-fire-pubg-graffiti'
-      ],
-      renderer: new jsdomRenderer({
-        // Wait for the event we dispatch in index.tsx
-        renderAfterDocumentEvent: 'render-event',
-        // Timeout to ensure process doesn't hang indefinitely if event is missed
-        timeout: 20000, 
-      }),
-      // CRITICAL: Cloudflare Pages builds hangs if concurrency is high.
-      // Setting to 1 ensures sequential rendering.
-      maxConcurrentRoutes: 1, 
-      postProcess(renderedRoute) {
-        // Log to show progress in Cloudflare logs
-        console.log(`Rendered: ${renderedRoute.route}`);
-        
-        // Optimize output: Remove the "render-event" script to avoid errors on client
-        renderedRoute.html = renderedRoute.html.replace(
-          /window.document.dispatchEvent\(new Event\("render-event"\)\);/g,
-          ''
-        );
-        return renderedRoute;
-      },
-    }),
+    })
   ],
   build: {
     outDir: 'dist',
     sourcemap: false,
-    minify: 'terser',
+    minify: 'terser', // Use terser for better minification
     terserOptions: {
       compress: {
         drop_console: true,
