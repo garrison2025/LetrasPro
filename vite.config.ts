@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import { vitePrerender } from 'vite-plugin-prerender';
+import prerender from '@prerenderer/rollup-plugin';
+import puppeteerRenderer from '@prerenderer/renderer-puppeteer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -69,7 +70,7 @@ export default defineConfig({
         ]
       }
     }),
-    vitePrerender({
+    prerender({
       staticDir: path.join(__dirname, 'dist'),
       routes: [
         '/',
@@ -95,13 +96,12 @@ export default defineConfig({
         '/blog/letras-para-tatuajes-guia-estilos-goticos-cursivos',
         '/blog/mejores-nicks-free-fire-pubg-graffiti'
       ],
-      renderer: {
-        // We use the default Puppeteer renderer logic implicit in the plugin
-        // but explicit configuration helps with debugging
+      renderer: new puppeteerRenderer({
+        // Wait for the event we dispatch in index.tsx
         renderAfterDocumentEvent: 'render-event',
-        renderAfterTime: 5000, // Fallback if event doesn't fire
+        renderAfterTime: 5000, 
         headless: true
-      },
+      }),
       postProcess(renderedRoute) {
         // Optimize output: Remove the "render-event" script to avoid errors on client
         renderedRoute.html = renderedRoute.html.replace(
