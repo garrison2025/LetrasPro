@@ -18,7 +18,7 @@ const MAPS: Record<string, string> = {
   
   // --- SCRIPT (Cursivas / Tattoo) ---
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
-  scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
+  scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝗺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
   
   // --- GOTHIC (Goticas / Tattoo / Free Fire) ---
   fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
@@ -63,10 +63,15 @@ const COMBINERS = {
   strikethrough: '\u0336',
   crosshatch: '\u0337',
   slash: '\u0338',
-  seagull: '\u033B',
+  seagull: '\u0338',
   arrowBelow: '\u034E',
-  tildeBelow: '\u0330'
+  tildeBelow: '\u0330',
+  wave: '\u0330', // Visual wave approximation
+  dot: '\u0323'
 };
+
+// Global registry for decorator lookups to avoid huge switch statements
+const DECORATOR_CONFIG: Record<string, { prefix: string, suffix: string }> = {};
 
 // Helper: Create Character Map
 const createMap = (target: string): Record<string, string> => {
@@ -114,37 +119,48 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
   const p = ['home'];
   const lowerId = id.toLowerCase();
 
-  // --- LOGIC FOR CURSIVAS (>60 needed) ---
+  // --- LOGIC FOR CURSIVAS ---
   if (cat === 'script' || lowerId.includes('italic') || lowerId.includes('hand') || lowerId.includes('cursive') || lowerId.includes('serif-italic')) {
     p.push('cursivas');
   }
-  // Allow heavily decorated fonts in cursivas too if they feel elegant
   if (cat === 'decorative' && (lowerId.includes('love') || lowerId.includes('heart') || lowerId.includes('flower'))) {
     p.push('cursivas');
   }
 
   // --- LOGIC FOR GOTICAS ---
-  if (cat === 'gothic' || lowerId.includes('fraktur') || lowerId.includes('old') || lowerId.includes('dark')) {
+  if (cat === 'gothic' || lowerId.includes('goth') || lowerId.includes('fraktur') || lowerId.includes('medieval') || lowerId.includes('dark') || lowerId.includes('vampire') || lowerId.includes('demon')) {
+    p.push('goticas');
+  }
+  if (lowerId.includes('double-struck') || lowerId.includes('heavy') || lowerId.includes('zalgo')) {
     p.push('goticas');
   }
 
   // --- LOGIC FOR GRAFFITI ---
-  if (cat === 'graffiti' || cat === 'block' || lowerId.includes('bubble') || lowerId.includes('square')) {
+  if (cat === 'graffiti' || cat === 'block' || lowerId.includes('bubble') || lowerId.includes('square') || lowerId.includes('graf') || lowerId.includes('wide') || lowerId.includes('urban') || lowerId.includes('tag')) {
     p.push('graffiti');
+  }
+  if (cat === 'aesthetic' && (lowerId.includes('mono') || lowerId.includes('stencil'))) {
+     p.push('graffiti');
   }
 
   // --- LOGIC FOR TATTOOS ---
-  if (cat === 'script' || cat === 'gothic' || cat === 'chicano' || cat === 'serif' || lowerId.includes('typewriter')) {
+  if (cat === 'script' || cat === 'gothic' || cat === 'chicano' || cat === 'serif' || lowerId.includes('typewriter') || lowerId.includes('tat-') || lowerId.includes('tattoo')) {
     p.push('tatuajes', 'tattoo');
   }
 
   // --- LOGIC FOR FACEBOOK ---
-  if ((cat === 'sans' || cat === 'serif' || cat === 'block') && !lowerId.includes('decorated') && !lowerId.includes('emoji')) {
+  if (cat === 'facebook' || lowerId.includes('fb-') || cat === 'sans' || cat === 'serif' || cat === 'block' || lowerId.includes('bold') || lowerId.includes('italic') || lowerId.includes('heavy') || lowerId.includes('wide')) {
+    if (!lowerId.includes('decorated') && !lowerId.includes('emoji')) {
+      p.push('facebook');
+    }
+  }
+  if (cat === 'script' || cat === 'aesthetic') {
     p.push('facebook');
   }
   
-  // --- LOGIC FOR AMINO ---
-  if (cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small')) {
+  // --- LOGIC FOR AMINO (30+ Needed) ---
+  // Amino users like Aesthetic, Small Caps, Vaporwave, and Decorated styles
+  if (cat === 'amino' || lowerId.includes('ami-') || cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small') || lowerId.includes('spaced')) {
     p.push('amino');
   }
 
@@ -176,134 +192,273 @@ const initFonts = () => {
   addFont('bubble-black', 'Bubble Dark', 'graffiti', createMap(MAPS.bubbleBlack), ['Urbano'], 'low');
   addFont('square', 'Square', 'block', createMap(MAPS.square), ['Bloques'], 'medium');
   addFont('square-black', 'Square Dark', 'block', createMap(MAPS.squareBlack), ['Negrita'], 'medium');
+  addFont('heavy-sans', 'Heavy Bold', 'heavy', createMap(MAPS.heavySans), ['Impact'], 'high');
+  addFont('wide', 'Vaporwave', 'vaporwave', createMap(MAPS.wide), ['Aesthetic'], 'high');
 
-  // --- CURSIVAS MASSIVE EXPANSION (60+ VARIANTS) ---
-  
-  // 1. Variantes de Trazo (Line Variants)
-  addFont('script-under', 'Script Subrayado', 'script', createCombinerMap('scriptFine', COMBINERS.underline), ['Decorado'], 'medium');
-  addFont('script-double-u', 'Script Doble Línea', 'script', createCombinerMap('scriptBold', COMBINERS.doubleUnderline), ['Decorado'], 'medium');
-  addFont('script-strike', 'Script Tachado', 'script', createCombinerMap('scriptFine', COMBINERS.strikethrough), ['Decorado'], 'medium');
-  addFont('serif-italic-under', 'Italic Subrayado', 'serif', createCombinerMap('serifItalic', COMBINERS.underline), ['Formal'], 'high');
-
-  // 2. Variantes Temáticas (Decorators)
+  // --- CURSIVAS EXPANSION ---
   const cursiveStyles = [
     { id: 'wings1', name: 'Script Alas 1', pre: '꧁ ', suf: ' ꧂', map: MAPS.scriptBold },
     { id: 'wings2', name: 'Script Alas 2', pre: '༺ ', suf: ' ༻', map: MAPS.scriptFine },
     { id: 'wings3', name: 'Script Alas 3', pre: '࿐ ', suf: ' ࿐', map: MAPS.scriptBold },
-    
     { id: 'stars1', name: 'Script Estrellas', pre: '★ ', suf: ' ★', map: MAPS.scriptBold },
     { id: 'stars2', name: 'Script Sparkle', pre: '✨ ', suf: ' ✨', map: MAPS.scriptFine },
-    { id: 'stars3', name: 'Script Magic', pre: '✪ ', suf: ' ✪', map: MAPS.scriptBold },
-    
     { id: 'hearts1', name: 'Script Love', pre: '❤ ', suf: ' ❤', map: MAPS.scriptBold },
     { id: 'hearts2', name: 'Script Cute', pre: '❥ ', suf: ' ❥', map: MAPS.scriptFine },
-    { id: 'hearts3', name: 'Script Heart', pre: 'ღ ', suf: ' ღ', map: MAPS.scriptBold },
-    
     { id: 'flower1', name: 'Script Floral', pre: '✿ ', suf: ' ✿', map: MAPS.scriptFine },
     { id: 'flower2', name: 'Script Rose', pre: '🌹 ', suf: ' 🌹', map: MAPS.scriptBold },
-    { id: 'flower3', name: 'Script Nature', pre: '☘ ', suf: ' ☘', map: MAPS.scriptFine },
-    { id: 'flower4', name: 'Script Cherry', pre: '🍒 ', suf: ' 🍒', map: MAPS.scriptBold },
-    
     { id: 'royal1', name: 'Script Queen', pre: '♕ ', suf: ' ♕', map: MAPS.scriptBold },
-    { id: 'royal2', name: 'Script King', pre: '♚ ', suf: ' ♚', map: MAPS.scriptBold },
-    { id: 'royal3', name: 'Script Princess', pre: '♛ ', suf: ' ♛', map: MAPS.scriptFine },
-    
     { id: 'arrow1', name: 'Script Arrow', pre: '➳ ', suf: ' ➳', map: MAPS.scriptFine },
-    { id: 'arrow2', name: 'Script Bow', pre: '➶ ', suf: ' ➷', map: MAPS.scriptBold },
-    
     { id: 'music1', name: 'Script Music', pre: '♫ ', suf: ' ♫', map: MAPS.scriptFine },
-    { id: 'music2', name: 'Script Melody', pre: '♪ ', suf: ' ♪', map: MAPS.scriptBold },
-    
     { id: 'fire', name: 'Script Fire', pre: '🔥 ', suf: ' 🔥', map: MAPS.scriptBold },
     { id: 'butterfly', name: 'Script Butterfly', pre: '🦋 ', suf: ' 🦋', map: MAPS.scriptFine },
-    { id: 'bow', name: 'Script Bowtie', pre: '🎀 ', suf: ' 🎀', map: MAPS.scriptFine },
-    { id: 'moon', name: 'Script Moon', pre: '☾ ', suf: ' ☽', map: MAPS.scriptFine },
-    { id: 'sun', name: 'Script Sun', pre: '☀ ', suf: ' ☀', map: MAPS.scriptBold },
-    { id: 'cloud', name: 'Script Cloud', pre: '☁ ', suf: ' ☁', map: MAPS.scriptFine },
-    { id: 'zap', name: 'Script Zap', pre: '⚡ ', suf: ' ⚡', map: MAPS.scriptBold },
-    { id: 'peace', name: 'Script Peace', pre: '☮ ', suf: ' ☮', map: MAPS.scriptFine },
-    { id: 'infinity', name: 'Script Infinite', pre: '∞ ', suf: ' ∞', map: MAPS.scriptBold },
-    { id: 'anchor', name: 'Script Anchor', pre: '⚓ ', suf: ' ⚓', map: MAPS.scriptBold },
-    
     { id: 'bracket1', name: 'Script Bracket', pre: '【 ', suf: ' 】', map: MAPS.scriptBold },
-    { id: 'bracket2', name: 'Script Corner', pre: '『 ', suf: ' 』', map: MAPS.scriptFine },
-    { id: 'bracket3', name: 'Script Guillemet', pre: '« ', suf: ' »', map: MAPS.scriptBold },
-    
     { id: 'line1', name: 'Script Lined', pre: '━ ', suf: ' ━', map: MAPS.scriptFine },
-    { id: 'line2', name: 'Script Waved', pre: '〰 ', suf: ' 〰', map: MAPS.scriptBold },
-    { id: 'line3', name: 'Script Dotted', pre: '• ', suf: ' •', map: MAPS.scriptFine },
-    
-    { id: 'wedding', name: 'Script Boda', pre: '💍 ', suf: ' 💍', map: MAPS.scriptFine },
-    { id: 'diamond', name: 'Script Lujo', pre: '💎 ', suf: ' 💎', map: MAPS.scriptBold },
-    { id: 'kiss', name: 'Script Kiss', pre: '💋 ', suf: ' 💋', map: MAPS.scriptFine },
-    
-    // Italic Variants (For variety in Cursivas page)
-    { id: 'italic-star', name: 'Italic Star', pre: '★ ', suf: ' ★', map: MAPS.sansItalic },
-    { id: 'italic-heart', name: 'Italic Heart', pre: '♥ ', suf: ' ♥', map: MAPS.sansBoldItalic },
-    { id: 'italic-arrow', name: 'Italic Arrow', pre: '➤ ', suf: ' ◄', map: MAPS.serifItalic },
-    { id: 'italic-bracket', name: 'Italic Bracket', pre: '「 ', suf: ' 」', map: MAPS.serifBoldItalic },
-    { id: 'italic-flowers', name: 'Italic Floral', pre: '❀ ', suf: ' ❀', map: MAPS.serifItalic },
-    { id: 'italic-sparkle', name: 'Italic Shine', pre: '✨ ', suf: ' ✨', map: MAPS.sansItalic },
   ];
 
-  // Generate Cursive Variants
   cursiveStyles.forEach(s => {
-    generatedFonts.push({
-      id: `cursive-${s.id}`,
-      name: s.name,
-      category: 'script',
-      map: createMap(s.map), // Map characters
-      pages: ['home', 'cursivas', 'tatuajes', 'tattoo', 'facebook', 'amino'],
-      compatibility: 'medium',
-      tags: ['Decorado', 'Cursiva']
-    });
+    const fullId = `cursive-${s.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
+    addFont(s.id, s.name, 'script', createMap(s.map), ['Decorado', 'Cursiva'], 'medium');
   });
 
-  // 3. Gothic Decorators (Preserving existing logic)
+  // --- GOTHIC EXPANSION ---
+  addFont('goth-spaced', 'Gothic Spaced', 'gothic', createCombinerMap('frakturBold', ' '), ['Aesthetic'], 'medium');
+
   const gothicDecorators = [
-    { id: 'dark', name: 'Dark Gothic', pre: '☠ ', suf: ' ☠', map: MAPS.frakturBold },
-    { id: 'sword', name: 'Sword Gothic', pre: '⚔ ', suf: ' ⚔', map: MAPS.fraktur },
-    { id: 'bat', name: 'Bat Gothic', pre: '🦇 ', suf: ' 🦇', map: MAPS.frakturBold },
-    { id: 'spider', name: 'Spider Gothic', pre: '🕷 ', suf: ' 🕷', map: MAPS.frakturBold },
-    { id: 'chain', name: 'Chain Gothic', pre: '⛓ ', suf: ' ⛓', map: MAPS.fraktur },
-    { id: 'cross', name: 'Holy Gothic', pre: '✞ ', suf: ' ✞', map: MAPS.frakturBold },
-    { id: 'thunder', name: 'Storm Gothic', pre: '⚡ ', suf: ' ⚡', map: MAPS.fraktur },
-    { id: 'star-g', name: 'Star Gothic', pre: '★ ', suf: ' ★', map: MAPS.fraktur }
+    { id: 'goth-simple', name: 'Gothic Simple', pre: '', suf: '', map: MAPS.fraktur },
+    { id: 'goth-bold', name: 'Gothic Bold', pre: '', suf: '', map: MAPS.frakturBold },
+    { id: 'goth-old', name: 'Old English', pre: '', suf: '', map: MAPS.frakturBold },
+    { id: 'goth-brackets', name: 'Gothic Bracket', pre: '【 ', suf: ' 】', map: MAPS.frakturBold },
+    { id: 'goth-corner', name: 'Gothic Corner', pre: '『 ', suf: ' 』', map: MAPS.fraktur },
+    { id: 'goth-lines', name: 'Gothic Lined', pre: '║ ', suf: ' ║', map: MAPS.fraktur },
+    { id: 'goth-slash', name: 'Gothic Slash', pre: '// ', suf: ' //', map: MAPS.frakturBold },
+    { id: 'goth-decorative', name: 'Gothic Decor', pre: '✧ ', suf: ' ✧', map: MAPS.fraktur },
+    { id: 'goth-dark', name: 'Dark Soul', pre: '☠ ', suf: ' ☠', map: MAPS.frakturBold },
+    { id: 'goth-demon', name: 'Demon Gothic', pre: '👹 ', suf: ' 👹', map: MAPS.frakturBold },
+    { id: 'goth-vampire', name: 'Vampire', pre: '🧛 ', suf: ' 🧛', map: MAPS.fraktur },
+    { id: 'goth-blood', name: 'Blood Gothic', pre: '🩸 ', suf: ' 🩸', map: MAPS.frakturBold },
+    { id: 'goth-cemetery', name: 'Cemetery', pre: '⚰️ ', suf: ' ⚰️', map: MAPS.fraktur },
+    { id: 'goth-ghost', name: 'Ghost Gothic', pre: '👻 ', suf: ' 👻', map: MAPS.fraktur },
+    { id: 'goth-spider', name: 'Spider Web', pre: '🕸️ ', suf: ' 🕷', map: MAPS.frakturBold },
+    { id: 'goth-bat', name: 'Vampire Bat', pre: '🦇 ', suf: ' 🦇', map: MAPS.frakturBold },
+    { id: 'goth-sword', name: 'Sword Master', pre: '⚔ ', suf: ' ⚔', map: MAPS.fraktur },
+    { id: 'goth-shield', name: 'Shield Gothic', pre: '🛡️ ', suf: ' 🛡️', map: MAPS.frakturBold },
+    { id: 'goth-chain', name: 'Chained Text', pre: '⛓ ', suf: ' ⛓', map: MAPS.fraktur },
+    { id: 'goth-crown', name: 'King Gothic', pre: '♔ ', suf: ' ♔', map: MAPS.frakturBold },
+    { id: 'goth-dragon', name: 'Dragon Born', pre: '🐉 ', suf: ' 🐉', map: MAPS.frakturBold },
+    { id: 'goth-magic', name: 'Magic Spell', pre: '🔮 ', suf: ' 🔮', map: MAPS.fraktur },
+    { id: 'goth-fleur', name: 'Fleur de Lis', pre: '⚜ ', suf: ' ⚜', map: MAPS.frakturBold },
+    { id: 'goth-sad', name: 'Sad Gothic', pre: '💔 ', suf: ' 💔', map: MAPS.fraktur },
+    { id: 'goth-heart', name: 'Black Heart', pre: '🖤 ', suf: ' 🖤', map: MAPS.frakturBold },
+    { id: 'goth-cross', name: 'Holy Cross', pre: '✞ ', suf: ' ✞', map: MAPS.frakturBold },
+    { id: 'goth-inv-cross', name: 'Unholy Cross', pre: '⸸ ', suf: ' ⸸', map: MAPS.frakturBold },
+    { id: 'goth-rose', name: 'Black Rose', pre: '🥀 ', suf: ' 🥀', map: MAPS.fraktur },
+    { id: 'goth-moon', name: 'Moon Phase', pre: '☾ ', suf: ' ☽', map: MAPS.fraktur },
+    { id: 'goth-fire', name: 'Hell Fire', pre: '🔥 ', suf: ' 🔥', map: MAPS.frakturBold },
+    { id: 'goth-tribal', name: 'Tribal Gothic', pre: '༒ ', suf: ' ༒', map: MAPS.frakturBold },
+    { id: 'goth-wings1', name: 'Gothic Wings', pre: '꧁ ', suf: ' ꧂', map: MAPS.fraktur },
+    { id: 'goth-wings2', name: 'Dark Wings', pre: '༺ ', suf: ' ༻', map: MAPS.frakturBold },
+    { id: 'goth-stars', name: 'Gothic Stars', pre: '★ ', suf: ' ★', map: MAPS.frakturBold },
+    { id: 'goth-sparkle', name: 'Dark Sparkle', pre: '❇ ', suf: ' ❇', map: MAPS.fraktur },
+    { id: 'goth-spanish', name: 'Gótico ES', pre: '¡ ', suf: ' !', map: MAPS.frakturBold },
+    { id: 'goth-question', name: 'Mystery', pre: '¿ ', suf: ' ?', map: MAPS.fraktur },
+    { id: 'goth-rock', name: 'Rock Gothic', pre: '🤘 ', suf: ' 🤘', map: MAPS.frakturBold }
   ];
 
   gothicDecorators.forEach(d => {
-    generatedFonts.push({
-      id: `gothic-${d.id}`,
-      name: d.name,
-      category: 'gothic',
-      map: createMap(d.map),
-      pages: ['home', 'goticas', 'tatuajes', 'tattoo', 'graffiti'],
-      compatibility: 'medium',
-      tags: ['Dark']
-    });
+    const fullId = `gothic-${d.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
+    addFont(d.id, d.name, 'gothic', createMap(d.map), ['Dark', 'Medieval'], 'medium');
   });
+  
+  addFont('zalgo-goth', 'Zalgo Gothic', 'gothic', createCombinerMap('fraktur', '\u0352'), ['Glitch', 'Miedo'], 'low');
 
-  // 4. Graffiti Decorators
+  // --- TATTOO EXPANSION ---
+  const tattooStyles = [
+    { id: 'tat-fine-simple', name: 'Fine Line Simple', pre: '', suf: '', map: MAPS.sans },
+    { id: 'tat-fine-spaced', name: 'Fine Line Spaced', pre: '', suf: '', map: MAPS.sans },
+    { id: 'tat-minimal-caps', name: 'Minimalist Caps', pre: '', suf: '', map: MAPS.smallCaps },
+    { id: 'tat-typewriter', name: 'Typewriter Ink', pre: '', suf: '', map: MAPS.monospace },
+    { id: 'tat-quote', name: 'Quote Tattoo', pre: '“', suf: '”', map: MAPS.serifItalic },
+    { id: 'tat-coord', name: 'Coordinates', pre: '📍 ', suf: '', map: MAPS.sans },
+    { id: 'tat-date', name: 'Roman Date', pre: '📅 ', suf: '', map: MAPS.serifBold },
+    { id: 'tat-infinity', name: 'Infinity Love', pre: '∞ ', suf: ' ∞', map: MAPS.scriptFine },
+    { id: 'tat-heartbeat', name: 'Pulse Line', pre: 'ﮩ٨ـ', suf: 'ﮩ٨ـ', map: MAPS.scriptFine },
+    { id: 'tat-unalome', name: 'Spiritual Unalome', pre: '⸎ ', suf: ' ⸎', map: MAPS.sans },
+    { id: 'tat-constellation', name: 'Constellation', pre: '✨ ', suf: ' ✨', map: MAPS.sans },
+    { id: 'tat-moon-phase', name: 'Moon Phase', pre: '☾ ', suf: ' ☽', map: MAPS.serifItalic },
+    { id: 'tat-angel', name: 'Angel Number', pre: '11:11 ', suf: ' 👼', map: MAPS.sansBold },
+    { id: 'tat-butterfly-ink', name: 'Butterfly Effect', pre: '🦋 ', suf: '', map: MAPS.scriptFine },
+    { id: 'tat-star-ink', name: 'Star Ink', pre: '★ ', suf: '', map: MAPS.monospace },
+    { id: 'tat-trad-anchor', name: 'Old School Anchor', pre: '⚓ ', suf: ' ⚓', map: MAPS.serifBold },
+    { id: 'tat-trad-swallow', name: 'Traditional Bird', pre: '🐦 ', suf: ' 🐦', map: MAPS.serifBold },
+    { id: 'tat-trad-lucky', name: 'Lucky Dice', pre: '🎲 ', suf: ' 🎲', map: MAPS.serifBold },
+    { id: 'tat-trad-rose', name: 'Traditional Rose', pre: '🌹 ', suf: ' 🌹', map: MAPS.serifBold },
+    { id: 'tat-trad-dagger', name: 'Dagger Tattoo', pre: '🗡 ', suf: ' 🗡', map: MAPS.serifBold },
+    { id: 'tat-trad-heart', name: 'Mom Heart', pre: '♥ ', suf: ' ♥', map: MAPS.serifBold },
+    { id: 'tat-trad-diamond', name: 'Diamond Ink', pre: '💎 ', suf: ' 💎', map: MAPS.serifBold },
+    { id: 'tat-chicano-smile', name: 'Smile Now', pre: '🎭 ', suf: '', map: MAPS.chicano },
+    { id: 'tat-chicano-pray', name: 'Blessed Hands', pre: '🙏 ', suf: '', map: MAPS.chicano },
+    { id: 'tat-chicano-13', name: 'Street 13', pre: '13 ', suf: '', map: MAPS.chicano },
+    { id: 'tat-match-lock', name: 'Lock & Key', pre: '🔒 ', suf: ' 🔑', map: MAPS.scriptBold },
+    { id: 'tat-match-king', name: 'King & Queen', pre: '♔ ', suf: ' ♕', map: MAPS.frakturBold },
+    { id: 'tat-spanish-excl', name: 'Tatuaje Español', pre: '¡ ', suf: ' !', map: MAPS.scriptFine },
+    { id: 'tat-spanish-quest', name: 'Pregunta', pre: '¿ ', suf: ' ?', map: MAPS.scriptFine },
+  ];
+
+  tattooStyles.forEach(d => {
+    const fullId = `tattoo-${d.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
+    addFont(d.id, d.name, 'gothic', createMap(d.map), ['Tattoo', 'Ink'], 'medium');
+  });
+  
+  addFont('tat-min-spaced-v2', 'Minimal Spaced', 'sans', createCombinerMap('sans', ' '), ['Minimal'], 'medium');
+
+  // --- GRAFFITI / URBAN EXPANSION ---
   const graffitiDecorators = [
-    { id: 'spray', name: 'Spray Tag', pre: '', suf: '', map: MAPS.bubbleBlack },
-    { id: 'brick', name: 'Wall Text', pre: '🧱 ', suf: ' 🧱', map: MAPS.squareBlack },
-    { id: 'cool', name: 'Cool Bubble', pre: '😎 ', suf: '', map: MAPS.bubble },
-    { id: 'star-bub', name: 'Star Bubble', pre: '✪ ', suf: ' ✪', map: MAPS.bubble },
-    { id: 'wide-br', name: 'Wide Bracket', pre: '【 ', suf: ' 】', map: MAPS.wide },
-    { id: 'block-arr', name: 'Block Arrow', pre: '► ', suf: ' ◄', map: MAPS.squareBlack }
+    { id: 'graf-bubble', name: 'Bubble Gum', pre: '', suf: '', map: MAPS.bubble },
+    { id: 'graf-dark', name: 'Dark Bubble', pre: '', suf: '', map: MAPS.bubbleBlack },
+    { id: 'graf-square', name: 'Square Box', pre: '', suf: '', map: MAPS.square },
+    { id: 'graf-solid', name: 'Solid Block', pre: '', suf: '', map: MAPS.squareBlack },
+    { id: 'graf-wide', name: 'Wide Tag', pre: '', suf: '', map: MAPS.wide },
+    { id: 'graf-stencil', name: 'Stencil Font', pre: '', suf: '', map: MAPS.doubleStruck },
+    { id: 'graf-spray', name: 'Spray Paint', pre: '🥫 ', suf: ' 💨', map: MAPS.bubbleBlack },
+    { id: 'graf-wall', name: 'Brick Wall', pre: '🧱 ', suf: ' 🧱', map: MAPS.squareBlack },
+    { id: 'graf-train', name: 'Subway Art', pre: '🚇 ', suf: ' 🚇', map: MAPS.wide },
+    { id: 'graf-city', name: 'City Life', pre: '🏙️ ', suf: ' 🏙️', map: MAPS.sansBold },
+    { id: 'graf-skate', name: 'Skater Tag', pre: '🛹 ', suf: ' 🛹', map: MAPS.scriptBold },
+    { id: 'graf-king', name: 'King Crown', pre: '👑 ', suf: ' 👑', map: MAPS.bubble },
+    { id: 'graf-fresh', name: 'Fresh Style', pre: '✨ ', suf: ' ✨', map: MAPS.wide },
+    { id: 'graf-cool', name: 'Cool Vibe', pre: '😎 ', suf: ' 😎', map: MAPS.bubble },
+    { id: 'graf-boom', name: 'Boom Box', pre: '📻 ', suf: ' 🎵', map: MAPS.monospace },
+    { id: 'graf-fire', name: 'On Fire', pre: '🔥 ', suf: ' 🔥', map: MAPS.bubbleBlack },
+    { id: 'graf-star', name: 'Star Power', pre: '✪ ', suf: ' ✪', map: MAPS.bubble },
+    { id: 'graf-heart', name: 'Love Tag', pre: '♥ ', suf: ' ♥', map: MAPS.bubble },
+    { id: 'graf-cloud', name: 'Cloud 9', pre: '☁️ ', suf: ' ☁️', map: MAPS.bubble },
+    { id: 'graf-ghost', name: 'Ghost Tag', pre: '👻 ', suf: ' 👻', map: MAPS.sansBoldItalic },
+    { id: 'graf-alien', name: 'Alien Area', pre: '👽 ', suf: ' 👽', map: MAPS.wide },
+    { id: 'graf-chain', name: 'Chained', pre: '⛓️ ', suf: ' ⛓️', map: MAPS.squareBlack },
+    { id: 'graf-danger', name: 'Hazard', pre: '⚠️ ', suf: ' ⚠️', map: MAPS.square },
+    { id: 'graf-money', name: 'Rich Kid', pre: '💲 ', suf: ' 💲', map: MAPS.squareBlack },
+    { id: 'graf-lightning', name: 'High Voltage', pre: '⚡ ', suf: ' ⚡', map: MAPS.sansBoldItalic },
+    { id: 'graf-bracket', name: 'Bracketed', pre: '【 ', suf: ' 】', map: MAPS.wide },
+    { id: 'graf-corner', name: 'Cornered', pre: '『 ', suf: ' 』', map: MAPS.square },
+    { id: 'graf-arrow', name: 'Arrow Flow', pre: '► ', suf: ' ◄', map: MAPS.squareBlack },
+    { id: 'graf-lines', name: 'Lined Up', pre: '║ ', suf: ' ║', map: MAPS.monospace },
+    { id: 'graf-slash', name: 'Slasher', pre: '// ', suf: ' //', map: MAPS.wide },
+    { id: 'graf-invert', name: 'Upside Down', pre: '🙃 ', suf: '', map: MAPS.inverted },
+    { id: 'graf-russian', name: 'Cyrillic Tag', pre: '☭ ', suf: '', map: MAPS.russian },
+    { id: 'graf-greek', name: 'Greek Style', pre: '🏛️ ', suf: '', map: MAPS.greek },
   ];
 
   graffitiDecorators.forEach(d => {
-    generatedFonts.push({
-      id: `graffiti-${d.id}`,
-      name: d.name,
-      category: 'graffiti',
-      map: createMap(d.map),
-      pages: ['home', 'graffiti', 'facebook', 'amino'],
-      compatibility: 'medium',
-      tags: ['Urbano']
-    });
+    const fullId = `graffiti-${d.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
+    addFont(d.id, d.name, 'graffiti', createMap(d.map), ['Urbano'], 'medium');
   });
+
+  // --- FACEBOOK EXPANSION ---
+  addFont('fb-strike', 'Tachado', 'facebook', createCombinerMap('sans', COMBINERS.strikethrough), ['Efecto', 'FB'], 'high');
+  addFont('fb-underline', 'Subrayado', 'facebook', createCombinerMap('sans', COMBINERS.underline), ['Efecto', 'FB'], 'high');
+  addFont('fb-double-under', 'Doble Subrayado', 'facebook', createCombinerMap('sans', COMBINERS.doubleUnderline), ['Efecto', 'FB'], 'medium');
+  addFont('fb-dot-under', 'Punteado', 'facebook', createCombinerMap('sans', COMBINERS.dot), ['Efecto', 'FB'], 'medium');
+  addFont('fb-slash', 'Barrado', 'facebook', createCombinerMap('sans', COMBINERS.slash), ['Efecto', 'FB'], 'high');
+  addFont('fb-crosshatch', 'Cruzado', 'facebook', createCombinerMap('sans', COMBINERS.crosshatch), ['Efecto', 'FB'], 'medium');
+  addFont('fb-wave', 'Ondulado', 'facebook', createCombinerMap('sans', COMBINERS.wave), ['Efecto', 'FB'], 'medium');
+  addFont('fb-arrow-below', 'Flecha Abajo', 'facebook', createCombinerMap('sans', COMBINERS.arrowBelow), ['Efecto', 'FB'], 'medium');
+  
+  addFont('fb-bold-strike', 'Negrita Tachada', 'facebook', createCombinerMap('sansBold', COMBINERS.strikethrough), ['Negrita', 'FB'], 'high');
+  addFont('fb-bold-under', 'Negrita Subrayada', 'facebook', createCombinerMap('sansBold', COMBINERS.underline), ['Negrita', 'FB'], 'high');
+  addFont('fb-italic-strike', 'Cursiva Tachada', 'facebook', createCombinerMap('sansItalic', COMBINERS.strikethrough), ['Cursiva', 'FB'], 'high');
+  addFont('fb-italic-under', 'Cursiva Subrayada', 'facebook', createCombinerMap('sansItalic', COMBINERS.underline), ['Cursiva', 'FB'], 'high');
+  addFont('fb-serif-strike', 'Serif Tachado', 'facebook', createCombinerMap('serifBold', COMBINERS.strikethrough), ['Elegante', 'FB'], 'high');
+  
+  addFont('fb-spaced', 'Espaciado', 'facebook', createCombinerMap('sans', ' '), ['Aesthetic', 'FB'], 'high');
+  addFont('fb-heavy-spaced', 'Heavy Spaced', 'facebook', createCombinerMap('heavySans', ' '), ['Impact', 'FB'], 'high');
+
+  const fbDecorators = [
+    { id: 'fb-list-check', name: 'Lista Check', pre: '✓ ', suf: '', map: MAPS.sans },
+    { id: 'fb-list-arrow', name: 'Lista Flecha', pre: '➢ ', suf: '', map: MAPS.sansBold },
+    { id: 'fb-list-star', name: 'Lista Estrella', pre: '★ ', suf: '', map: MAPS.sans },
+    { id: 'fb-list-dot', name: 'Lista Punto', pre: '• ', suf: '', map: MAPS.sansBold },
+    { id: 'fb-list-heart', name: 'Lista Corazón', pre: '♥ ', suf: '', map: MAPS.sans },
+    { id: 'fb-list-diam', name: 'Lista Diamante', pre: '❖ ', suf: '', map: MAPS.sans },
+    { id: 'fb-list-tri', name: 'Lista Triángulo', pre: '► ', suf: '', map: MAPS.sansBold },
+    { id: 'fb-head-brack', name: 'Header [ ]', pre: '[ ', suf: ' ]', map: MAPS.sansBold },
+    { id: 'fb-head-paren', name: 'Header ( )', pre: '( ', suf: ' )', map: MAPS.sansBold },
+    { id: 'fb-head-curly', name: 'Header { }', pre: '{ ', suf: ' }', map: MAPS.monospace },
+    { id: 'fb-head-angle', name: 'Header « »', pre: '« ', suf: ' »', map: MAPS.serifBold },
+    { id: 'fb-head-line', name: 'Header ——', pre: '—— ', suf: ' ——', map: MAPS.sansBold },
+    { id: 'fb-head-star', name: 'Header ⭐', pre: '⭐ ', suf: ' ⭐', map: MAPS.sansBold },
+    { id: 'fb-head-block', name: 'Header Block', pre: '█ ', suf: ' █', map: MAPS.sansBold },
+    { id: 'fb-mood-happy', name: 'Estado Feliz', pre: '😊 ', suf: ' 😊', map: MAPS.sans },
+    { id: 'fb-mood-fire', name: 'Estado Fuego', pre: '🔥 ', suf: ' 🔥', map: MAPS.sansBoldItalic },
+    { id: 'fb-mood-alert', name: 'Estado Alerta', pre: '⚠️ ', suf: ' ⚠️', map: MAPS.heavySans },
+    { id: 'fb-mood-love', name: 'Estado Love', pre: '💖 ', suf: ' 💖', map: MAPS.scriptBold },
+    { id: 'fb-mood-music', name: 'Estado Música', pre: '🎵 ', suf: ' 🎵', map: MAPS.sansItalic },
+    { id: 'fb-aes-sparkle', name: 'FB Aesthetic 1', pre: '✨ ', suf: ' ✨', map: MAPS.smallCaps },
+    { id: 'fb-aes-flower', name: 'FB Aesthetic 2', pre: '🌸 ', suf: ' 🌸', map: MAPS.serifItalic },
+    { id: 'fb-aes-cloud', name: 'FB Aesthetic 3', pre: '☁️ ', suf: ' ☁️', map: MAPS.bubble },
+    { id: 'fb-aes-moon', name: 'FB Aesthetic 4', pre: '🌙 ', suf: ' 🌙', map: MAPS.wide },
+    { id: 'fb-span-excl', name: '¡Gritando!', pre: '¡¡ ', suf: ' !!', map: MAPS.heavySans },
+    { id: 'fb-span-quest', name: '¿Pregunta?', pre: '¿¿ ', suf: ' ??', map: MAPS.sansBoldItalic },
+  ];
+
+  fbDecorators.forEach(d => {
+    const fullId = `facebook-${d.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
+    addFont(d.id, d.name, 'facebook', createMap(d.map), ['Post', 'Estado'], 'high');
+  });
+
+  // --- AMINO EXPANSION (NEW - 30+ UNIQUE STYLES) ---
+  
+  // 1. Basics & Formatting for Amino Blogs/Wikis
+  addFont('ami-small', 'Amino Small Caps', 'amino', createMap(MAPS.smallCaps), ['Wiki', 'Header'], 'high');
+  addFont('ami-typewriter', 'Amino Typewriter', 'amino', createMap(MAPS.monospace), ['Blog', 'Retro'], 'high');
+  addFont('ami-spaced', 'Amino Spaced', 'amino', createCombinerMap('sans', ' '), ['Aesthetic', 'Soft'], 'high');
+  addFont('ami-spaced-bold', 'Amino Bold Spaced', 'amino', createCombinerMap('sansBold', ' '), ['Aesthetic', 'Header'], 'high');
+
+  // 2. Boxed & Enclosed
+  addFont('ami-square', 'Amino Box', 'amino', createMap(MAPS.square), ['Wiki', 'Bloque'], 'medium');
+  addFont('ami-bubble', 'Amino Bubble', 'amino', createMap(MAPS.bubble), ['Cute', 'Redondo'], 'medium');
+  addFont('ami-bracket', 'Amino [Brackets]', 'amino', createMap(MAPS.parenthesized), ['Wiki'], 'high');
+
+  // 3. Aesthetic Decorators (Using Sans or Monospace base)
+  const aminoDecorators = [
+    { id: 'ami-star', name: 'Amino Stars', pre: '★ ', suf: ' ★', map: MAPS.sans },
+    { id: 'ami-sparkle', name: 'Amino Sparkles', pre: '✨ ', suf: ' ✨', map: MAPS.smallCaps },
+    { id: 'ami-heart', name: 'Amino Love', pre: '♥ ', suf: ' ♥', map: MAPS.sansBold },
+    { id: 'ami-flower', name: 'Amino Floral', pre: '✿ ', suf: ' ✿', map: MAPS.monospace },
+    { id: 'ami-cherry', name: 'Amino Cherry', pre: '🍒 ', suf: ' 🍒', map: MAPS.sans },
+    { id: 'ami-cloud', name: 'Amino Cloud', pre: '☁️ ', suf: ' ☁️', map: MAPS.bubble },
+    { id: 'ami-moon', name: 'Amino Moon', pre: '☾ ', suf: ' ☽', map: MAPS.smallCaps },
+    { id: 'ami-wings1', name: 'Amino Wings', pre: '꧁ ', suf: ' ꧂', map: MAPS.sans },
+    { id: 'ami-arrow', name: 'Amino Arrows', pre: '» ', suf: ' «', map: MAPS.sansBold },
+    { id: 'ami-line', name: 'Amino Lined', pre: '━ ', suf: ' ━', map: MAPS.sans },
+    { id: 'ami-wave', name: 'Amino Waves', pre: '〰 ', suf: ' 〰', map: MAPS.sans },
+    { id: 'ami-bow', name: 'Amino Bow', pre: '🎀 ', suf: ' 🎀', map: MAPS.scriptFine },
+    { id: 'ami-bunny', name: 'Amino Bunny', pre: '૮ ˶ᵔ ᵕ ᵔ˶ ა ', suf: '', map: MAPS.sans }, // Kaomoji prefix
+    { id: 'ami-bear', name: 'Amino Bear', pre: 'ʕ•ᴥ•ʔ ', suf: '', map: MAPS.monospace },
+    { id: 'ami-cat', name: 'Amino Cat', pre: '🐱 ', suf: ' 🐱', map: MAPS.sans },
+    { id: 'ami-music', name: 'Amino Music', pre: '♫ ', suf: ' ♫', map: MAPS.sansItalic },
+    { id: 'ami-header-1', name: 'Amino Header ///', pre: '/// ', suf: ' ///', map: MAPS.heavySans },
+    { id: 'ami-header-2', name: 'Amino Header [ ]', pre: '[ ', suf: ' ]', map: MAPS.wide },
+    { id: 'ami-span-excl', name: 'Amino ¡Grito!', pre: '¡¡ ', suf: ' !!', map: MAPS.heavySans },
+    { id: 'ami-span-quest', name: 'Amino ¿Duda?', pre: '¿¿ ', suf: ' ??', map: MAPS.sansItalic },
+  ];
+
+  aminoDecorators.forEach(d => {
+    const fullId = `amino-${d.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
+    addFont(d.id, d.name, 'amino', createMap(d.map), ['Aesthetic', 'Wiki'], 'high');
+  });
+
+  // 4. Stylized Amino
+  addFont('ami-strike', 'Amino Tacha', 'amino', createCombinerMap('sans', COMBINERS.strikethrough), ['Blog', 'Edgy'], 'high');
+  addFont('ami-under', 'Amino Subraya', 'amino', createCombinerMap('sans', COMBINERS.underline), ['Header', 'Wiki'], 'high');
+  addFont('ami-slash', 'Amino Slash', 'amino', createCombinerMap('sans', COMBINERS.slash), ['Edgy', 'Wiki'], 'high');
+  addFont('ami-glitch', 'Amino Glitch', 'amino', createCombinerMap('sans', '\u0310'), ['Glitch', 'Edgy'], 'medium');
+
 
   // Extra Combiners
   addFont('arrow-below', 'Arrow Below', 'sans', createCombinerMap('sansBold', COMBINERS.arrowBelow), ['Decorado'], 'high');
@@ -323,71 +478,19 @@ export const convertText = (text: string, map: Record<string, string>, isVaporwa
   const fontDef = generatedFonts.find(f => f.map === map);
   const fontId = fontDef?.id || '';
 
-  // Reverse lookup to find decorator config based on ID (simulated)
-  // This is a mapping from ID to prefix/suffix to avoid storing it in FontStyle interface for now
+  // Efficient Lookup using Registry
   let prefix = '';
   let suffix = '';
-
-  // Cursive Prefixes
-  if (fontId.includes('wings1')) { prefix = '꧁ '; suffix = ' ꧂'; }
-  else if (fontId.includes('wings2')) { prefix = '༺ '; suffix = ' ༻'; }
-  else if (fontId.includes('wings3')) { prefix = '࿐ '; suffix = ' ࿐'; }
-  else if (fontId.includes('stars1')) { prefix = '★ '; suffix = ' ★'; }
-  else if (fontId.includes('stars2')) { prefix = '✨ '; suffix = ' ✨'; }
-  else if (fontId.includes('stars3')) { prefix = '✪ '; suffix = ' ✪'; }
-  else if (fontId.includes('hearts1')) { prefix = '❤ '; suffix = ' ❤'; }
-  else if (fontId.includes('hearts2')) { prefix = '❥ '; suffix = ' ❥'; }
-  else if (fontId.includes('hearts3')) { prefix = 'ღ '; suffix = ' ღ'; }
-  else if (fontId.includes('flower1')) { prefix = '✿ '; suffix = ' ✿'; }
-  else if (fontId.includes('flower2')) { prefix = '🌹 '; suffix = ' 🌹'; }
-  else if (fontId.includes('flower3')) { prefix = '☘ '; suffix = ' ☘'; }
-  else if (fontId.includes('flower4')) { prefix = '🍒 '; suffix = ' 🍒'; }
-  else if (fontId.includes('royal1')) { prefix = '♕ '; suffix = ' ♕'; }
-  else if (fontId.includes('royal2')) { prefix = '♚ '; suffix = ' ♚'; }
-  else if (fontId.includes('royal3')) { prefix = '♛ '; suffix = ' ♛'; }
-  else if (fontId.includes('arrow1')) { prefix = '➳ '; suffix = ' ➳'; }
-  else if (fontId.includes('arrow2')) { prefix = '➶ '; suffix = ' ➷'; }
-  else if (fontId.includes('music1')) { prefix = '♫ '; suffix = ' ♫'; }
-  else if (fontId.includes('music2')) { prefix = '♪ '; suffix = ' ♪'; }
-  else if (fontId.includes('fire')) { prefix = '🔥 '; suffix = ' 🔥'; }
-  else if (fontId.includes('butterfly')) { prefix = '🦋 '; suffix = ' 🦋'; }
-  else if (fontId.includes('bow')) { prefix = '🎀 '; suffix = ' 🎀'; }
-  else if (fontId.includes('moon')) { prefix = '☾ '; suffix = ' ☽'; }
-  else if (fontId.includes('sun')) { prefix = '☀ '; suffix = ' ☀'; }
-  else if (fontId.includes('cloud')) { prefix = '☁ '; suffix = ' ☁'; }
-  else if (fontId.includes('zap')) { prefix = '⚡ '; suffix = ' ⚡'; }
-  else if (fontId.includes('peace')) { prefix = '☮ '; suffix = ' ☮'; }
-  else if (fontId.includes('infinity')) { prefix = '∞ '; suffix = ' ∞'; }
-  else if (fontId.includes('anchor')) { prefix = '⚓ '; suffix = ' ⚓'; }
-  else if (fontId.includes('bracket1')) { prefix = '【 '; suffix = ' 】'; }
-  else if (fontId.includes('bracket2')) { prefix = '『 '; suffix = ' 』'; }
-  else if (fontId.includes('bracket3')) { prefix = '« '; suffix = ' »'; }
-  else if (fontId.includes('line1')) { prefix = '━ '; suffix = ' ━'; }
-  else if (fontId.includes('line2')) { prefix = '〰 '; suffix = ' 〰'; }
-  else if (fontId.includes('line3')) { prefix = '• '; suffix = ' •'; }
-  else if (fontId.includes('wedding')) { prefix = '💍 '; suffix = ' 💍'; }
-  else if (fontId.includes('diamond')) { prefix = '💎 '; suffix = ' 💎'; }
-  else if (fontId.includes('kiss')) { prefix = '💋 '; suffix = ' 💋'; }
   
-  // Italic Prefixes
+  if (DECORATOR_CONFIG[fontId]) {
+    prefix = DECORATOR_CONFIG[fontId].prefix;
+    suffix = DECORATOR_CONFIG[fontId].suffix;
+  }
+  
+  // Fallback for non-registered legacy decorators (if any exist)
   else if (fontId.includes('italic-star')) { prefix = '★ '; suffix = ' ★'; }
   else if (fontId.includes('italic-heart')) { prefix = '♥ '; suffix = ' ♥'; }
-  else if (fontId.includes('italic-arrow')) { prefix = '➤ '; suffix = ' ◄'; }
-  else if (fontId.includes('italic-bracket')) { prefix = '「 '; suffix = ' 」'; }
-  else if (fontId.includes('italic-flowers')) { prefix = '❀ '; suffix = ' ❀'; }
-  else if (fontId.includes('italic-sparkle')) { prefix = '✨ '; suffix = ' ✨'; }
-  
-  // Gothic/Graffiti Prefixes
-  else if (fontId.includes('dark')) { prefix = '☠ '; suffix = ' ☠'; }
-  else if (fontId.includes('sword')) { prefix = '⚔ '; suffix = ' ⚔'; }
-  else if (fontId.includes('bat')) { prefix = '🦇 '; suffix = ' 🦇'; }
-  else if (fontId.includes('spider')) { prefix = '🕷 '; suffix = ' 🕷'; }
-  else if (fontId.includes('chain')) { prefix = '⛓ '; suffix = ' ⛓'; }
-  else if (fontId.includes('cross')) { prefix = '✞ '; suffix = ' ✞'; }
-  else if (fontId.includes('thunder')) { prefix = '⚡ '; suffix = ' ⚡'; }
-  else if (fontId.includes('brick')) { prefix = '🧱 '; suffix = ' 🧱'; }
-  else if (fontId.includes('cool')) { prefix = '😎 '; suffix = ''; }
-  
+
   const mapped = [...normalized].map(char => {
     if (map[char]) return map[char];
     const baseChar = ACCENT_MAP[char];
