@@ -9,23 +9,15 @@
     <title>Conversor de Letras Bonitas - Copiar y Pegar</title>
     <meta name="description" content="Generador de fuentes y letras bonitas para Instagram, Facebook, TikTok y Tatuajes." />
     
-    <!-- Google Fonts Optimized (Non-blocking with Preconnect) -->
+    <!-- LCP Optimization: Preconnect to font domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Load CSS asynchronously to prevent render blocking -->
+    <!-- LCP Optimization: Load fonts synchronously with display=swap to prevent Layout Shifts and LCP delays -->
     <link 
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" 
-      rel="stylesheet" 
-      media="print" 
-      onload="this.media='all'"
+      rel="stylesheet"
     >
-    <noscript>
-      <link 
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" 
-        rel="stylesheet"
-      >
-    </noscript>
     
     <script type="importmap">
 {
@@ -47,12 +39,12 @@
 </script>
     <style>
       /* Critical CSS for App Shell LCP Optimization */
-      body { margin: 0; background-color: #f8fafc; font-family: sans-serif; }
+      body { margin: 0; background-color: #f8fafc; font-family: 'Inter', sans-serif; }
       #shell-nav { height: 80px; display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 16px; }
-      #shell-logo { width: 40px; height: 40px; background: #7c3aed; border-radius: 12px; }
-      #shell-hero { text-align: center; padding-top: 48px; padding-bottom: 80px; px: 16px; }
-      #shell-h1 { font-size: 2.5rem; font-weight: 900; color: #0f172a; margin-bottom: 16px; letter-spacing: -0.05em; line-height: 1.1; }
-      #shell-p { font-size: 1.125rem; color: #64748b; max-width: 42rem; margin: 0 auto; }
+      #shell-logo { width: 40px; height: 40px; background: linear-gradient(45deg, #7c3aed, #db2777); border-radius: 12px; }
+      #shell-hero { text-align: center; padding-top: 48px; padding-bottom: 80px; padding-left: 16px; padding-right: 16px; }
+      #shell-h1 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 900; color: #0f172a; margin-bottom: 16px; letter-spacing: -0.05em; line-height: 1.1; }
+      #shell-p { font-size: 1.125rem; color: #475569; max-width: 42rem; margin: 0 auto; }
       @media (min-width: 640px) { #shell-h1 { font-size: 4.5rem; } }
     </style>
   </head>
@@ -62,7 +54,7 @@
       <nav id="shell-nav">
         <div style="display:flex; gap:8px; align-items:center;">
           <div id="shell-logo"></div>
-          <span style="font-size:1.5rem; font-weight:700; color:#1e293b;">LetrasPro</span>
+          <span style="font-size:1.5rem; font-weight:700; color:#1e293b; font-family: 'Outfit', sans-serif;">LetrasPro</span>
         </div>
       </nav>
       <div id="shell-hero">
