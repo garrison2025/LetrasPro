@@ -2,7 +2,7 @@
 export interface FontStyle {
   id: string;
   name: string;
-  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy' | 'graffiti' | 'facebook' | 'amino' | 'belico' | 'nature' | 'coquette' | 'number' | 'tool';
+  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy' | 'graffiti' | 'facebook' | 'amino';
   map: Record<string, string>;
   isPremium?: boolean; 
   pages: string[]; 
