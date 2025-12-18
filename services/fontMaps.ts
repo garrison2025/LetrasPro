@@ -2,12 +2,11 @@ import { FontStyle, TextSegment } from '../types';
 
 const lower = 'abcdefghijklmnopqrstuvwxyz';
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const digits = '0123456789';
 
 // 1. 基础 Unicode 映射表 (Base Maps)
 const MAPS: Record<string, string> = {
   // --- SANS SERIF (Facebook Safe) ---
-  sans: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', // Fallback
+  sans: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
   sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁ｕｖｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
   sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
   sansBoldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕',
@@ -27,7 +26,7 @@ const MAPS: Record<string, string> = {
   
   // --- GRAFFITI / URBAN / BUBBLES ---
   bubble: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ',
-  bubbleBlack: '🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁', // Partial simulation with bold/mix
+  bubbleBlack: '🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁',
   square: '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉',
   squareBlack: '🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉',
   wide: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
@@ -88,7 +87,7 @@ const createCombinerMap = (baseMapId: string, combinerChar: string): Record<stri
   return newMap;
 };
 
-// 2. 字体生成逻辑 (Registry)
+// Registry
 let generatedFonts: FontStyle[] = [];
 
 // Helper function to add fonts safely
@@ -105,161 +104,171 @@ const addFont = (
     name,
     category: cat,
     map: mapData,
-    pages: getPagesForCategory(cat, id), // Dynamic Page Assignment
+    pages: getPagesForCategory(cat, id),
     compatibility: comp,
     tags
   });
 };
 
-// 3. 页面分配逻辑 (Crucial for filtering)
 const getPagesForCategory = (cat: string, id: string): string[] => {
-  const p = ['home']; // All fonts go home
+  const p = ['home'];
   const lowerId = id.toLowerCase();
-  const lowerName = cat.toLowerCase();
 
-  // --- LOGIC FOR CURSIVAS (>70 needed) ---
-  if (cat === 'script' || lowerId.includes('italic') || lowerId.includes('hand') || lowerId.includes('cursive')) {
+  // --- LOGIC FOR CURSIVAS (>60 needed) ---
+  if (cat === 'script' || lowerId.includes('italic') || lowerId.includes('hand') || lowerId.includes('cursive') || lowerId.includes('serif-italic')) {
     p.push('cursivas');
   }
-  // Base fonts can also be in cursivas if they look elegant
-  if (cat === 'serif' && (lowerId.includes('bold') || lowerId.includes('italic'))) {
+  // Allow heavily decorated fonts in cursivas too if they feel elegant
+  if (cat === 'decorative' && (lowerId.includes('love') || lowerId.includes('heart') || lowerId.includes('flower'))) {
     p.push('cursivas');
   }
 
-  // --- LOGIC FOR GOTICAS (>50 needed) ---
-  if (cat === 'gothic' || lowerId.includes('fraktur') || lowerId.includes('old')) {
-    p.push('goticas');
-  }
-  // Heavy / Dark fonts also go to Gothic
-  if (lowerId.includes('heavy') || lowerId.includes('black') || lowerId.includes('bold') && cat === 'serif') {
+  // --- LOGIC FOR GOTICAS ---
+  if (cat === 'gothic' || lowerId.includes('fraktur') || lowerId.includes('old') || lowerId.includes('dark')) {
     p.push('goticas');
   }
 
-  // --- LOGIC FOR GRAFFITI (>50 needed) ---
-  if (cat === 'graffiti' || cat === 'block' || lowerId.includes('bubble') || lowerId.includes('square') || lowerId.includes('wide') || lowerId.includes('inverse')) {
-    p.push('graffiti');
-  }
-  // Some specialized aesthetic fonts fit graffiti
-  if (lowerId.includes('currency') || lowerId.includes('russian')) {
+  // --- LOGIC FOR GRAFFITI ---
+  if (cat === 'graffiti' || cat === 'block' || lowerId.includes('bubble') || lowerId.includes('square')) {
     p.push('graffiti');
   }
 
-  // --- LOGIC FOR TATTOOS (>70 needed) ---
-  // Tattoos use Script, Gothic, Serif, Typewriter
-  if (cat === 'script' || cat === 'gothic' || cat === 'chicano' || cat === 'serif' || lowerId.includes('typewriter') || lowerId.includes('mono')) {
+  // --- LOGIC FOR TATTOOS ---
+  if (cat === 'script' || cat === 'gothic' || cat === 'chicano' || cat === 'serif' || lowerId.includes('typewriter')) {
     p.push('tatuajes', 'tattoo');
   }
 
-  // --- LOGIC FOR FACEBOOK (>50 needed) ---
-  // Facebook needs high legibility. No weird combiners if possible.
-  if ((cat === 'sans' || cat === 'serif' || cat === 'block' || lowerId.includes('bold') || lowerId.includes('italic')) && !lowerId.includes('decorated')) {
+  // --- LOGIC FOR FACEBOOK ---
+  if ((cat === 'sans' || cat === 'serif' || cat === 'block') && !lowerId.includes('decorated') && !lowerId.includes('emoji')) {
     p.push('facebook');
   }
   
-  // --- LOGIC FOR AMINO (>30 needed) ---
-  // Amino likes Aesthetic, Vaporwave, SmallCaps
-  if (cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small') || lowerId.includes('wide')) {
+  // --- LOGIC FOR AMINO ---
+  if (cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small')) {
     p.push('amino');
   }
 
   return p;
 };
 
-
-// 4. Generate The Fonts
 const initFonts = () => {
-  // --- BASIC UNICODE FONTS ---
+  // 1. BASE UNICODE FONTS
   addFont('sans', 'Normal Sans', 'sans', createMap(MAPS.sans), ['Básico'], 'high');
   addFont('sans-bold', 'Sans Bold', 'sans', createMap(MAPS.sansBold), ['Negrita', 'FB'], 'high');
   addFont('sans-italic', 'Sans Italic', 'sans', createMap(MAPS.sansItalic), ['Cursiva', 'FB'], 'high');
   addFont('sans-bold-italic', 'Sans Bold Italic', 'sans', createMap(MAPS.sansBoldItalic), ['Negrita', 'Cursiva'], 'high');
   
-  addFont('serif', 'Serif Formal', 'serif', createMap(MAPS.serifBold.replace(/[a-z]/g, c => c)), ['Formal'], 'high'); // Simulado
   addFont('serif-bold', 'Serif Bold', 'serif', createMap(MAPS.serifBold), ['Elegante', 'Tatuaje'], 'high');
   addFont('serif-italic', 'Serif Italic', 'serif', createMap(MAPS.serifItalic), ['Elegante', 'Cartas'], 'high');
   addFont('serif-bold-italic', 'Serif Bold Italic', 'serif', createMap(MAPS.serifBoldItalic), ['Lujo'], 'high');
 
-  addFont('script-fine', 'Handwriting Fine', 'script', createMap(MAPS.scriptFine), ['Firma', 'Boda'], 'medium');
-  addFont('script-bold', 'Script Bold', 'script', createMap(MAPS.scriptBold), ['Logos', 'Instagram'], 'medium');
-  addFont('chicano', 'Chicano Tattoo', 'chicano', createMap(MAPS.chicano), ['Gangster', 'Tatuaje'], 'low');
+  addFont('script-fine', 'Cursive Fine', 'script', createMap(MAPS.scriptFine), ['Firma', 'Boda'], 'medium');
+  addFont('script-bold', 'Cursive Bold', 'script', createMap(MAPS.scriptBold), ['Logos', 'Instagram'], 'medium');
+  addFont('chicano', 'Chicano Style', 'chicano', createMap(MAPS.chicano), ['Gangster', 'Tatuaje'], 'low');
 
   addFont('fraktur', 'Gothic Normal', 'gothic', createMap(MAPS.fraktur), ['Medieval'], 'medium');
   addFont('fraktur-bold', 'Gothic Bold', 'gothic', createMap(MAPS.frakturBold), ['Blackletter'], 'medium');
-
-  addFont('monospace', 'Typewriter', 'aesthetic', createMap(MAPS.monospace), ['Retro', 'Aesthetic'], 'high');
+  
+  addFont('monospace', 'Typewriter', 'aesthetic', createMap(MAPS.monospace), ['Retro'], 'high');
   addFont('double-struck', 'Double Struck', 'aesthetic', createMap(MAPS.doubleStruck), ['Universitario'], 'high');
   addFont('small-caps', 'Small Caps', 'aesthetic', createMap(MAPS.smallCaps), ['Minúsculas'], 'high');
-  
-  addFont('bubble', 'Bubble White', 'graffiti', createMap(MAPS.bubble), ['Cute', 'Burbujas'], 'low');
-  addFont('bubble-black', 'Bubble Black', 'graffiti', createMap(MAPS.bubbleBlack), ['Urbano'], 'low');
-  addFont('square', 'Square White', 'block', createMap(MAPS.square), ['Bloques'], 'medium');
-  addFont('square-black', 'Square Black', 'block', createMap(MAPS.squareBlack), ['Negrita'], 'medium');
-  
-  addFont('wide', 'Vaporwave Wide', 'vaporwave', createMap(MAPS.wide), ['Aesthetic', 'Espaciado'], 'high');
-  addFont('tiny', 'Tiny Text', 'aesthetic', createMap(MAPS.tiny), ['Pequeño'], 'low');
-  addFont('inverted', 'Inverted', 'graffiti', createMap(MAPS.inverted), ['Flip'], 'low');
-  
-  addFont('greek', 'Greek Style', 'decorative', createMap(MAPS.greek), ['Símbolos'], 'medium');
-  addFont('russian', 'Russian Style', 'decorative', createMap(MAPS.russian), ['Faux Cyrillic'], 'medium');
-  addFont('currency', 'Money Font', 'decorative', createMap(MAPS.currency), ['Rich'], 'medium');
-  addFont('parenthesized', 'Parenthesis', 'decorative', createMap(MAPS.parenthesized), ['Lista'], 'high');
+  addFont('bubble', 'Bubble', 'graffiti', createMap(MAPS.bubble), ['Cute'], 'low');
+  addFont('bubble-black', 'Bubble Dark', 'graffiti', createMap(MAPS.bubbleBlack), ['Urbano'], 'low');
+  addFont('square', 'Square', 'block', createMap(MAPS.square), ['Bloques'], 'medium');
+  addFont('square-black', 'Square Dark', 'block', createMap(MAPS.squareBlack), ['Negrita'], 'medium');
 
-  // --- COMBINER VARIANTS (Generating volume) ---
+  // --- CURSIVAS MASSIVE EXPANSION (60+ VARIANTS) ---
   
-  // Underlines & Strikethroughs (Great for Facebook/Docs)
-  addFont('underlined', 'Underline', 'sans', createCombinerMap('sans', COMBINERS.underline), ['Subrayado'], 'high');
-  addFont('double-underlined', 'Double Line', 'sans', createCombinerMap('sans', COMBINERS.doubleUnderline), ['Subrayado'], 'high');
-  addFont('strikethrough', 'Strikethrough', 'sans', createCombinerMap('sans', COMBINERS.strikethrough), ['Tachado'], 'high');
-  addFont('slash-through', 'Slash Text', 'sans', createCombinerMap('sans', COMBINERS.slash), ['Slash'], 'high');
-  addFont('cross-hatch', 'X-Over', 'sans', createCombinerMap('sans', COMBINERS.crosshatch), ['Roto'], 'high');
+  // 1. Variantes de Trazo (Line Variants)
+  addFont('script-under', 'Script Subrayado', 'script', createCombinerMap('scriptFine', COMBINERS.underline), ['Decorado'], 'medium');
+  addFont('script-double-u', 'Script Doble Línea', 'script', createCombinerMap('scriptBold', COMBINERS.doubleUnderline), ['Decorado'], 'medium');
+  addFont('script-strike', 'Script Tachado', 'script', createCombinerMap('scriptFine', COMBINERS.strikethrough), ['Decorado'], 'medium');
+  addFont('serif-italic-under', 'Italic Subrayado', 'serif', createCombinerMap('serifItalic', COMBINERS.underline), ['Formal'], 'high');
 
-  // Decorative Scripts (For Cursivas / Tattoo)
-  const scriptDecorators = [
-    { id: 'starry', name: 'Starry Script', pre: '⋆ ', suf: ' ⋆', map: MAPS.scriptBold },
-    { id: 'hearts', name: 'Lovely Script', pre: '❥ ', suf: ' ❥', map: MAPS.scriptFine },
-    { id: 'wings', name: 'Angel Script', pre: '꧁ ', suf: ' ꧂', map: MAPS.scriptBold },
-    { id: 'flower', name: 'Floral Script', pre: '✿ ', suf: ' ✿', map: MAPS.scriptFine },
-    { id: 'crown', name: 'Queen Script', pre: '♕ ', suf: ' ♕', map: MAPS.scriptBold },
-    { id: 'arrow', name: 'Arrow Script', pre: '➳ ', suf: ' ➳', map: MAPS.scriptFine },
-    { id: 'sparkle', name: 'Sparkle Script', pre: '✨ ', suf: ' ✨', map: MAPS.scriptBold },
-    { id: 'music', name: 'Melody Script', pre: '♫ ', suf: ' ♫', map: MAPS.scriptFine },
-    { id: 'fire', name: 'Hot Script', pre: '🔥 ', suf: ' 🔥', map: MAPS.scriptBold },
-    { id: 'cherry', name: 'Cherry Script', pre: '🍒 ', suf: ' 🍒', map: MAPS.scriptFine },
-    { id: 'bracket', name: 'Bracket Script', pre: '【 ', suf: ' 】', map: MAPS.scriptBold },
-    { id: 'line', name: 'Lined Script', pre: '━ ', suf: ' ━', map: MAPS.scriptFine }
+  // 2. Variantes Temáticas (Decorators)
+  const cursiveStyles = [
+    { id: 'wings1', name: 'Script Alas 1', pre: '꧁ ', suf: ' ꧂', map: MAPS.scriptBold },
+    { id: 'wings2', name: 'Script Alas 2', pre: '༺ ', suf: ' ༻', map: MAPS.scriptFine },
+    { id: 'wings3', name: 'Script Alas 3', pre: '࿐ ', suf: ' ࿐', map: MAPS.scriptBold },
+    
+    { id: 'stars1', name: 'Script Estrellas', pre: '★ ', suf: ' ★', map: MAPS.scriptBold },
+    { id: 'stars2', name: 'Script Sparkle', pre: '✨ ', suf: ' ✨', map: MAPS.scriptFine },
+    { id: 'stars3', name: 'Script Magic', pre: '✪ ', suf: ' ✪', map: MAPS.scriptBold },
+    
+    { id: 'hearts1', name: 'Script Love', pre: '❤ ', suf: ' ❤', map: MAPS.scriptBold },
+    { id: 'hearts2', name: 'Script Cute', pre: '❥ ', suf: ' ❥', map: MAPS.scriptFine },
+    { id: 'hearts3', name: 'Script Heart', pre: 'ღ ', suf: ' ღ', map: MAPS.scriptBold },
+    
+    { id: 'flower1', name: 'Script Floral', pre: '✿ ', suf: ' ✿', map: MAPS.scriptFine },
+    { id: 'flower2', name: 'Script Rose', pre: '🌹 ', suf: ' 🌹', map: MAPS.scriptBold },
+    { id: 'flower3', name: 'Script Nature', pre: '☘ ', suf: ' ☘', map: MAPS.scriptFine },
+    { id: 'flower4', name: 'Script Cherry', pre: '🍒 ', suf: ' 🍒', map: MAPS.scriptBold },
+    
+    { id: 'royal1', name: 'Script Queen', pre: '♕ ', suf: ' ♕', map: MAPS.scriptBold },
+    { id: 'royal2', name: 'Script King', pre: '♚ ', suf: ' ♚', map: MAPS.scriptBold },
+    { id: 'royal3', name: 'Script Princess', pre: '♛ ', suf: ' ♛', map: MAPS.scriptFine },
+    
+    { id: 'arrow1', name: 'Script Arrow', pre: '➳ ', suf: ' ➳', map: MAPS.scriptFine },
+    { id: 'arrow2', name: 'Script Bow', pre: '➶ ', suf: ' ➷', map: MAPS.scriptBold },
+    
+    { id: 'music1', name: 'Script Music', pre: '♫ ', suf: ' ♫', map: MAPS.scriptFine },
+    { id: 'music2', name: 'Script Melody', pre: '♪ ', suf: ' ♪', map: MAPS.scriptBold },
+    
+    { id: 'fire', name: 'Script Fire', pre: '🔥 ', suf: ' 🔥', map: MAPS.scriptBold },
+    { id: 'butterfly', name: 'Script Butterfly', pre: '🦋 ', suf: ' 🦋', map: MAPS.scriptFine },
+    { id: 'bow', name: 'Script Bowtie', pre: '🎀 ', suf: ' 🎀', map: MAPS.scriptFine },
+    { id: 'moon', name: 'Script Moon', pre: '☾ ', suf: ' ☽', map: MAPS.scriptFine },
+    { id: 'sun', name: 'Script Sun', pre: '☀ ', suf: ' ☀', map: MAPS.scriptBold },
+    { id: 'cloud', name: 'Script Cloud', pre: '☁ ', suf: ' ☁', map: MAPS.scriptFine },
+    { id: 'zap', name: 'Script Zap', pre: '⚡ ', suf: ' ⚡', map: MAPS.scriptBold },
+    { id: 'peace', name: 'Script Peace', pre: '☮ ', suf: ' ☮', map: MAPS.scriptFine },
+    { id: 'infinity', name: 'Script Infinite', pre: '∞ ', suf: ' ∞', map: MAPS.scriptBold },
+    { id: 'anchor', name: 'Script Anchor', pre: '⚓ ', suf: ' ⚓', map: MAPS.scriptBold },
+    
+    { id: 'bracket1', name: 'Script Bracket', pre: '【 ', suf: ' 】', map: MAPS.scriptBold },
+    { id: 'bracket2', name: 'Script Corner', pre: '『 ', suf: ' 』', map: MAPS.scriptFine },
+    { id: 'bracket3', name: 'Script Guillemet', pre: '« ', suf: ' »', map: MAPS.scriptBold },
+    
+    { id: 'line1', name: 'Script Lined', pre: '━ ', suf: ' ━', map: MAPS.scriptFine },
+    { id: 'line2', name: 'Script Waved', pre: '〰 ', suf: ' 〰', map: MAPS.scriptBold },
+    { id: 'line3', name: 'Script Dotted', pre: '• ', suf: ' •', map: MAPS.scriptFine },
+    
+    { id: 'wedding', name: 'Script Boda', pre: '💍 ', suf: ' 💍', map: MAPS.scriptFine },
+    { id: 'diamond', name: 'Script Lujo', pre: '💎 ', suf: ' 💎', map: MAPS.scriptBold },
+    { id: 'kiss', name: 'Script Kiss', pre: '💋 ', suf: ' 💋', map: MAPS.scriptFine },
+    
+    // Italic Variants (For variety in Cursivas page)
+    { id: 'italic-star', name: 'Italic Star', pre: '★ ', suf: ' ★', map: MAPS.sansItalic },
+    { id: 'italic-heart', name: 'Italic Heart', pre: '♥ ', suf: ' ♥', map: MAPS.sansBoldItalic },
+    { id: 'italic-arrow', name: 'Italic Arrow', pre: '➤ ', suf: ' ◄', map: MAPS.serifItalic },
+    { id: 'italic-bracket', name: 'Italic Bracket', pre: '「 ', suf: ' 」', map: MAPS.serifBoldItalic },
+    { id: 'italic-flowers', name: 'Italic Floral', pre: '❀ ', suf: ' ❀', map: MAPS.serifItalic },
+    { id: 'italic-sparkle', name: 'Italic Shine', pre: '✨ ', suf: ' ✨', map: MAPS.sansItalic },
   ];
 
-  scriptDecorators.forEach(d => {
-    const m = createMap(d.map);
+  // Generate Cursive Variants
+  cursiveStyles.forEach(s => {
     generatedFonts.push({
-      id: `script-${d.id}`,
-      name: d.name,
+      id: `cursive-${s.id}`,
+      name: s.name,
       category: 'script',
-      map: m,
-      pages: ['home', 'cursivas', 'tatuajes', 'tattoo', 'facebook', 'amino'], // Force include
+      map: createMap(s.map), // Map characters
+      pages: ['home', 'cursivas', 'tatuajes', 'tattoo', 'facebook', 'amino'],
       compatibility: 'medium',
-      tags: ['Decorado']
+      tags: ['Decorado', 'Cursiva']
     });
-    // Add prefix/suffix logic handling in convertText if needed, 
-    // or we assume applyDecoration handles it externally. 
-    // BUT for unique fonts, we might want "Hardcoded" decoration maps?
-    // Let's stick to standard maps and rely on the UI decorators for dynamic, 
-    // OR create specific entries where the decoration is conceptually part of the font style.
-    // For this requirements (">70 fonts"), creating distinct entries is better.
   });
 
-  // Gothic Variants (For Goticas / Tattoo)
+  // 3. Gothic Decorators (Preserving existing logic)
   const gothicDecorators = [
     { id: 'dark', name: 'Dark Gothic', pre: '☠ ', suf: ' ☠', map: MAPS.frakturBold },
     { id: 'sword', name: 'Sword Gothic', pre: '⚔ ', suf: ' ⚔', map: MAPS.fraktur },
-    { id: 'bat', name: 'Vampire Gothic', pre: '🦇 ', suf: ' 🦇', map: MAPS.frakturBold },
-    { id: 'moon', name: 'Moon Gothic', pre: '☾ ', suf: ' ☽', map: MAPS.fraktur },
+    { id: 'bat', name: 'Bat Gothic', pre: '🦇 ', suf: ' 🦇', map: MAPS.frakturBold },
     { id: 'spider', name: 'Spider Gothic', pre: '🕷 ', suf: ' 🕷', map: MAPS.frakturBold },
-    { id: 'chain', name: 'Chained Gothic', pre: '⛓ ', suf: ' ⛓', map: MAPS.fraktur },
+    { id: 'chain', name: 'Chain Gothic', pre: '⛓ ', suf: ' ⛓', map: MAPS.fraktur },
     { id: 'cross', name: 'Holy Gothic', pre: '✞ ', suf: ' ✞', map: MAPS.frakturBold },
     { id: 'thunder', name: 'Storm Gothic', pre: '⚡ ', suf: ' ⚡', map: MAPS.fraktur },
-    { id: 'box', name: 'Boxed Gothic', pre: '[ ', suf: ' ]', map: MAPS.frakturBold },
-    { id: 'star', name: 'Magic Gothic', pre: '★ ', suf: ' ★', map: MAPS.fraktur }
+    { id: 'star-g', name: 'Star Gothic', pre: '★ ', suf: ' ★', map: MAPS.fraktur }
   ];
 
   gothicDecorators.forEach(d => {
@@ -274,14 +283,13 @@ const initFonts = () => {
     });
   });
 
-  // Graffiti/Urban Variants
+  // 4. Graffiti Decorators
   const graffitiDecorators = [
-    { id: 'spray', name: 'Spray Tag', pre: 'Texture: ', suf: '', map: MAPS.bubbleBlack },
+    { id: 'spray', name: 'Spray Tag', pre: '', suf: '', map: MAPS.bubbleBlack },
     { id: 'brick', name: 'Wall Text', pre: '🧱 ', suf: ' 🧱', map: MAPS.squareBlack },
     { id: 'cool', name: 'Cool Bubble', pre: '😎 ', suf: '', map: MAPS.bubble },
     { id: 'star-bub', name: 'Star Bubble', pre: '✪ ', suf: ' ✪', map: MAPS.bubble },
     { id: 'wide-br', name: 'Wide Bracket', pre: '【 ', suf: ' 】', map: MAPS.wide },
-    { id: 'wide-star', name: 'Wide Star', pre: '★ ', suf: ' ★', map: MAPS.wide },
     { id: 'block-arr', name: 'Block Arrow', pre: '► ', suf: ' ◄', map: MAPS.squareBlack }
   ];
 
@@ -296,42 +304,91 @@ const initFonts = () => {
       tags: ['Urbano']
     });
   });
-  
-  // Zalgo-Lite (Glitchy but readable) for Gothic/Graffiti
-  addFont('zalgo-lite', 'Glitch Lite', 'gothic', createCombinerMap('sans', '\u0310'), ['Glitch'], 'low');
-  addFont('zalgo-mid', 'Glitch Mid', 'gothic', createCombinerMap('fraktur', '\u0352'), ['Glitch'], 'low');
 
-  // Extra Combinations for Facebook (Safe decorations)
+  // Extra Combiners
   addFont('arrow-below', 'Arrow Below', 'sans', createCombinerMap('sansBold', COMBINERS.arrowBelow), ['Decorado'], 'high');
   addFont('seagull', 'Seagull Text', 'sans', createCombinerMap('serifBold', COMBINERS.seagull), ['Decorado'], 'high');
   addFont('tilde-below', 'Tilde Below', 'sans', createCombinerMap('sans', COMBINERS.tildeBelow), ['Decorado'], 'high');
+  addFont('zalgo-lite', 'Glitch Lite', 'gothic', createCombinerMap('sans', '\u0310'), ['Glitch'], 'low');
 };
 
 initFonts();
 
 export const FONTS: FontStyle[] = generatedFonts;
 
-// --- UTILS ---
-
 export const convertText = (text: string, map: Record<string, string>, isVaporwave: boolean = false): string => {
   const normalized = text.normalize('NFC');
   
-  // Check if this font has a hardcoded prefix/suffix based on its ID (from our decorators)
-  // This is a simple way to bake the decoration into the font logic
+  // Find font definition to apply decorators
+  const fontDef = generatedFonts.find(f => f.map === map);
+  const fontId = fontDef?.id || '';
+
+  // Reverse lookup to find decorator config based on ID (simulated)
+  // This is a mapping from ID to prefix/suffix to avoid storing it in FontStyle interface for now
   let prefix = '';
   let suffix = '';
+
+  // Cursive Prefixes
+  if (fontId.includes('wings1')) { prefix = '꧁ '; suffix = ' ꧂'; }
+  else if (fontId.includes('wings2')) { prefix = '༺ '; suffix = ' ༻'; }
+  else if (fontId.includes('wings3')) { prefix = '࿐ '; suffix = ' ࿐'; }
+  else if (fontId.includes('stars1')) { prefix = '★ '; suffix = ' ★'; }
+  else if (fontId.includes('stars2')) { prefix = '✨ '; suffix = ' ✨'; }
+  else if (fontId.includes('stars3')) { prefix = '✪ '; suffix = ' ✪'; }
+  else if (fontId.includes('hearts1')) { prefix = '❤ '; suffix = ' ❤'; }
+  else if (fontId.includes('hearts2')) { prefix = '❥ '; suffix = ' ❥'; }
+  else if (fontId.includes('hearts3')) { prefix = 'ღ '; suffix = ' ღ'; }
+  else if (fontId.includes('flower1')) { prefix = '✿ '; suffix = ' ✿'; }
+  else if (fontId.includes('flower2')) { prefix = '🌹 '; suffix = ' 🌹'; }
+  else if (fontId.includes('flower3')) { prefix = '☘ '; suffix = ' ☘'; }
+  else if (fontId.includes('flower4')) { prefix = '🍒 '; suffix = ' 🍒'; }
+  else if (fontId.includes('royal1')) { prefix = '♕ '; suffix = ' ♕'; }
+  else if (fontId.includes('royal2')) { prefix = '♚ '; suffix = ' ♚'; }
+  else if (fontId.includes('royal3')) { prefix = '♛ '; suffix = ' ♛'; }
+  else if (fontId.includes('arrow1')) { prefix = '➳ '; suffix = ' ➳'; }
+  else if (fontId.includes('arrow2')) { prefix = '➶ '; suffix = ' ➷'; }
+  else if (fontId.includes('music1')) { prefix = '♫ '; suffix = ' ♫'; }
+  else if (fontId.includes('music2')) { prefix = '♪ '; suffix = ' ♪'; }
+  else if (fontId.includes('fire')) { prefix = '🔥 '; suffix = ' 🔥'; }
+  else if (fontId.includes('butterfly')) { prefix = '🦋 '; suffix = ' 🦋'; }
+  else if (fontId.includes('bow')) { prefix = '🎀 '; suffix = ' 🎀'; }
+  else if (fontId.includes('moon')) { prefix = '☾ '; suffix = ' ☽'; }
+  else if (fontId.includes('sun')) { prefix = '☀ '; suffix = ' ☀'; }
+  else if (fontId.includes('cloud')) { prefix = '☁ '; suffix = ' ☁'; }
+  else if (fontId.includes('zap')) { prefix = '⚡ '; suffix = ' ⚡'; }
+  else if (fontId.includes('peace')) { prefix = '☮ '; suffix = ' ☮'; }
+  else if (fontId.includes('infinity')) { prefix = '∞ '; suffix = ' ∞'; }
+  else if (fontId.includes('anchor')) { prefix = '⚓ '; suffix = ' ⚓'; }
+  else if (fontId.includes('bracket1')) { prefix = '【 '; suffix = ' 】'; }
+  else if (fontId.includes('bracket2')) { prefix = '『 '; suffix = ' 』'; }
+  else if (fontId.includes('bracket3')) { prefix = '« '; suffix = ' »'; }
+  else if (fontId.includes('line1')) { prefix = '━ '; suffix = ' ━'; }
+  else if (fontId.includes('line2')) { prefix = '〰 '; suffix = ' 〰'; }
+  else if (fontId.includes('line3')) { prefix = '• '; suffix = ' •'; }
+  else if (fontId.includes('wedding')) { prefix = '💍 '; suffix = ' 💍'; }
+  else if (fontId.includes('diamond')) { prefix = '💎 '; suffix = ' 💎'; }
+  else if (fontId.includes('kiss')) { prefix = '💋 '; suffix = ' 💋'; }
   
-  // Basic hack to apply the decorators defined in the init loop without storing them in a separate complex object
-  // In a real app, we might store 'prefix' and 'suffix' in the FontStyle interface.
-  // For now, we just map characters.
+  // Italic Prefixes
+  else if (fontId.includes('italic-star')) { prefix = '★ '; suffix = ' ★'; }
+  else if (fontId.includes('italic-heart')) { prefix = '♥ '; suffix = ' ♥'; }
+  else if (fontId.includes('italic-arrow')) { prefix = '➤ '; suffix = ' ◄'; }
+  else if (fontId.includes('italic-bracket')) { prefix = '「 '; suffix = ' 」'; }
+  else if (fontId.includes('italic-flowers')) { prefix = '❀ '; suffix = ' ❀'; }
+  else if (fontId.includes('italic-sparkle')) { prefix = '✨ '; suffix = ' ✨'; }
   
-  // To support the specific decorators defined above (Wings, Stars), we need to check if the user wanted those.
-  // BUT `convertText` just maps chars. 
-  // Let's rely on the `FontCard` or `GeneratorPage` to handle decorators selected by UI.
-  // However, the requested task implies these fonts should *inherently* have these styles.
-  // We will map the characters first.
+  // Gothic/Graffiti Prefixes
+  else if (fontId.includes('dark')) { prefix = '☠ '; suffix = ' ☠'; }
+  else if (fontId.includes('sword')) { prefix = '⚔ '; suffix = ' ⚔'; }
+  else if (fontId.includes('bat')) { prefix = '🦇 '; suffix = ' 🦇'; }
+  else if (fontId.includes('spider')) { prefix = '🕷 '; suffix = ' 🕷'; }
+  else if (fontId.includes('chain')) { prefix = '⛓ '; suffix = ' ⛓'; }
+  else if (fontId.includes('cross')) { prefix = '✞ '; suffix = ' ✞'; }
+  else if (fontId.includes('thunder')) { prefix = '⚡ '; suffix = ' ⚡'; }
+  else if (fontId.includes('brick')) { prefix = '🧱 '; suffix = ' 🧱'; }
+  else if (fontId.includes('cool')) { prefix = '😎 '; suffix = ''; }
   
-  const result = [...normalized].map(char => {
+  const mapped = [...normalized].map(char => {
     if (map[char]) return map[char];
     const baseChar = ACCENT_MAP[char];
     if (baseChar && map[baseChar]) {
@@ -341,37 +398,11 @@ export const convertText = (text: string, map: Record<string, string>, isVaporwa
     return char;
   }).join('');
 
-  let final = isVaporwave ? result.split('').join(' ') : result;
+  const final = isVaporwave ? mapped.split('').join(' ') : mapped;
   
-  // Apply "Baked in" decoration based on ID (Reverse lookup hack for the generator logic above)
-  const fontId = generatedFonts.find(f => f.map === map)?.id || '';
-  
-  if (fontId.includes('wings')) final = `꧁ ${final} ꧂`;
-  else if (fontId.includes('starry')) final = `⋆ ${final} ⋆`;
-  else if (fontId.includes('hearts')) final = `❥ ${final} ❥`;
-  else if (fontId.includes('flower')) final = `✿ ${final} ✿`;
-  else if (fontId.includes('crown')) final = `♕ ${final} ♕`;
-  else if (fontId.includes('arrow')) final = `➳ ${final} ➳`;
-  else if (fontId.includes('sparkle')) final = `✨ ${final} ✨`;
-  else if (fontId.includes('music')) final = `♫ ${final} ♫`;
-  else if (fontId.includes('fire')) final = `🔥 ${final} 🔥`;
-  else if (fontId.includes('cherry')) final = `🍒 ${final} 🍒`;
-  else if (fontId.includes('bracket')) final = `【 ${final} 】`;
-  else if (fontId.includes('dark')) final = `☠ ${final} ☠`;
-  else if (fontId.includes('sword')) final = `⚔ ${final} ⚔`;
-  else if (fontId.includes('bat')) final = `🦇 ${final} 🦇`;
-  else if (fontId.includes('moon')) final = `☾ ${final} ☽`;
-  else if (fontId.includes('spider')) final = `🕷 ${final} 🕷`;
-  else if (fontId.includes('chain')) final = `⛓ ${final} ⛓`;
-  else if (fontId.includes('cross')) final = `✞ ${final} ✞`;
-  else if (fontId.includes('thunder')) final = `⚡ ${final} ⚡`;
-  else if (fontId.includes('box')) final = `[ ${final} ]`;
-  else if (fontId.includes('brick')) final = `🧱 ${final} 🧱`;
-  
-  return final;
+  return `${prefix}${final}${suffix}`;
 };
 
 export const getDisplaySegments = (text: string, map: Record<string, string>): TextSegment[] => {
-  // Simplified for performance with large lists
   return [{ content: text, isFallback: false }];
 };
