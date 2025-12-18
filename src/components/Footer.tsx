@@ -1,0 +1,55 @@
+import React from 'react';
+import { Type, Heart } from 'lucide-react';
+
+const Footer: React.FC = () => {
+  return (
+    <footer className="bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 pt-16 pb-8 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12">
+          
+          <div className="md:col-span-5 space-y-4">
+            <div className="flex items-center gap-2">
+               <div className="bg-primary-600 text-white p-1.5 rounded-lg">
+                  <Type size={20} strokeWidth={2.5} />
+               </div>
+               <span className="font-display font-bold text-xl text-slate-900 dark:text-white">LetrasPro</span>
+            </div>
+            <p className="text-slate-700 dark:text-slate-400 leading-relaxed max-w-sm">
+              La herramienta definitiva para creadores de contenido. Personaliza tus textos para Instagram, TikTok, Twitter y más con un solo clic.
+            </p>
+          </div>
+          
+          <div className="md:col-span-3">
+            <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Explorar Estilos</h3>
+            <ul className="space-y-3 text-sm font-medium text-slate-700 dark:text-slate-400">
+              <li><a href="/letras-cursivas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Letras Cursivas</a></li>
+              <li><a href="/letras-goticas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Letras Góticas</a></li>
+              <li><a href="/texto-invisible" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Texto Invisible</a></li>
+              <li><a href="/letras-graffiti" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Graffiti & Burbujas</a></li>
+              <li><a href="/blog" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-primary-500"></span>Blog & Artículos</a></li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-4">
+             <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Información Legal</h3>
+             <ul className="space-y-3 text-sm font-medium text-slate-700 dark:text-slate-400 mb-6">
+                <li><a href="/sobre-nosotros" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sobre Nosotros</a></li>
+                <li><a href="/contacto" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contacto</a></li>
+                <li><a href="/politica-de-privacidad" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Política de Privacidad</a></li>
+                <li><a href="/terminos-y-condiciones" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Términos y Condiciones</a></li>
+             </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-slate-100 dark:border-slate-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+           <p className="text-xs text-slate-600 dark:text-slate-500">© {new Date().getFullYear()} ConversorDeLetrasBonitas.org. Todos los derechos reservados.</p>
+           <p className="text-xs text-slate-600 dark:text-slate-500 flex items-center gap-1">
+              Diseñado con <Heart size={12} className="fill-red-400 text-red-400" /> para creadores
+           </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
