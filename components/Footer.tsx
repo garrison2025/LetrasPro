@@ -23,26 +23,26 @@ const Footer: React.FC = () => {
           <div className="md:col-span-3">
             <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Explorar Estilos</h3>
             <ul className="space-y-3 text-sm font-medium text-slate-600 dark:text-slate-400">
-              <li><Link to="/letras-cursivas" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Letras Cursivas</Link></li>
-              <li><Link to="/letras-goticas" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Letras Góticas</Link></li>
-              <li><Link to="/texto-invisible" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Texto Invisible</Link></li>
-              <li><Link to="/letras-graffiti" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Graffiti & Burbujas</Link></li>
-              <li><Link to="/blog" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-primary-500"></span>Blog & Artículos</Link></li>
+              <li><Link to="/letras-cursivas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Letras Cursivas</Link></li>
+              <li><Link to="/letras-goticas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Letras Góticas</Link></li>
+              <li><Link to="/texto-invisible" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Texto Invisible</Link></li>
+              <li><Link to="/letras-graffiti" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Graffiti & Burbujas</Link></li>
+              <li><Link to="/blog" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-primary-500"></span>Blog & Artículos</Link></li>
             </ul>
           </div>
 
           <div className="md:col-span-4">
              <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Información Legal</h3>
              <ul className="space-y-3 text-sm font-medium text-slate-600 dark:text-slate-400 mb-6">
-                <li><Link to="/sobre-nosotros" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Sobre Nosotros</Link></li>
-                <li><Link to="/contacto" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Contacto</Link></li>
-                <li><Link to="/politica-de-privacidad" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Política de Privacidad</Link></li>
-                <li><Link to="/terminos-y-condiciones" className="hover:text-primary-700 dark:hover:text-primary-300 transition-colors">Términos y Condiciones</Link></li>
+                <li><Link to="/sobre-nosotros" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sobre Nosotros</Link></li>
+                <li><Link to="/contacto" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contacto</Link></li>
+                <li><Link to="/politica-de-privacidad" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Política de Privacidad</Link></li>
+                <li><Link to="/terminos-y-condiciones" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Términos y Condiciones</Link></li>
              </ul>
              
              <div className="flex flex-wrap gap-2">
                 {['Instagram', 'TikTok', 'Facebook', 'Twitter', 'WhatsApp'].map(tag => (
-                  <span key={tag} className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                  <span key={tag} className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
                     {tag}
                   </span>
                 ))}

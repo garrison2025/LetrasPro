@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
           aria-label={`Abrir menú de ${title}`}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
             isActive || isOpen
-              ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200'
+              ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
               : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
@@ -74,8 +74,8 @@ const Navbar: React.FC = () => {
                    className={({ isActive }) =>
                      `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                        isActive
-                         ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-200 font-bold'
-                         : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium'
+                         ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-bold'
+                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium'
                      }`
                    }
                  >
@@ -94,7 +94,7 @@ const Navbar: React.FC = () => {
     <nav 
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled || isOpen
-          ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800 shadow-sm' 
+          ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800 shadow-sm' 
           : 'bg-transparent border-b border-transparent'
       }`}
       ref={dropdownRef}
@@ -109,7 +109,7 @@ const Navbar: React.FC = () => {
               <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
                 <Sparkles size={22} strokeWidth={2.5} className="fill-white/20" />
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight text-slate-900 dark:text-white">
+              <span className="font-display font-bold text-2xl tracking-tight text-slate-800 dark:text-white">
                 Letras<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-500">Pro</span>
               </span>
             </RouterNavLink>
@@ -122,7 +122,7 @@ const Navbar: React.FC = () => {
               className={({ isActive }) =>
                 `px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
-                    ? 'text-primary-700 dark:text-primary-400'
+                    ? 'text-primary-600 dark:text-primary-400'
                     : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white'
                 }`
               }
@@ -138,7 +138,7 @@ const Navbar: React.FC = () => {
               className={({ isActive }) =>
                 `px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
-                    ? 'text-primary-700 dark:text-primary-400'
+                    ? 'text-primary-600 dark:text-primary-400'
                     : 'text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white'
                 }`
               }
@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
+              className="p-2.5 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
               aria-label={theme === 'light' ? "Activar modo oscuro" : "Activar modo claro"}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
@@ -161,7 +161,7 @@ const Navbar: React.FC = () => {
             <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
+                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
                 aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
                 aria-expanded={isOpen}
               >
@@ -184,7 +184,7 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
                     `block px-4 py-3 rounded-xl text-base font-bold ${
-                      isActive ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300' : 'text-slate-700 dark:text-slate-200'
+                      isActive ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-300' : 'text-slate-700 dark:text-slate-300'
                     }`
                   }
                >
@@ -194,7 +194,7 @@ const Navbar: React.FC = () => {
 
             {/* Generators Section */}
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
               <div className="grid grid-cols-1 gap-1">
                 {generators.map((link) => (
                   <RouterNavLink
@@ -204,8 +204,8 @@ const Navbar: React.FC = () => {
                     className={({ isActive }) =>
                       `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                         isActive
-                          ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                          ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-300'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                       }`
                     }
                   >
@@ -218,7 +218,7 @@ const Navbar: React.FC = () => {
 
             {/* Tools Section */}
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
               <div className="grid grid-cols-1 gap-1">
                 {tools.map((link) => (
                   <RouterNavLink
@@ -229,7 +229,7 @@ const Navbar: React.FC = () => {
                       `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                         isActive
                           ? 'bg-secondary-50 dark:bg-secondary-900/20 text-secondary-600 dark:text-secondary-300'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                       }`
                     }
                   >
@@ -247,7 +247,7 @@ const Navbar: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                   className={({ isActive }) =>
                     `block px-4 py-3 rounded-xl text-base font-bold ${
-                      isActive ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300' : 'text-slate-700 dark:text-slate-200'
+                      isActive ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-300' : 'text-slate-700 dark:text-slate-300'
                     }`
                   }
                >

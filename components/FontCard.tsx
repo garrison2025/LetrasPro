@@ -27,26 +27,14 @@ const FontCard: React.FC<FontCardProps> = ({
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const performCopy = () => {
+  const handleCopy = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button')) return;
+
     navigator.clipboard.writeText(rawText).then(() => {
       setJustCopied(true);
       onCopy(); 
       setTimeout(() => setJustCopied(false), 800); 
     });
-  };
-
-  const handleCopy = (e: React.MouseEvent) => {
-    // Prevent firing if clicking on inner buttons
-    if ((e.target as HTMLElement).closest('button')) return;
-    performCopy();
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Accessibility: Allow copying via Enter or Space when focused
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      performCopy();
-    }
   };
 
   const handleDownloadImage = async (e: React.MouseEvent) => {
@@ -168,7 +156,6 @@ const FontCard: React.FC<FontCardProps> = ({
             : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:-translate-y-3'
       }`}
       onClick={handleCopy}
-      onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       aria-label={`Copiar estilo de letra ${font.name}`}
