@@ -99,11 +99,16 @@ export default defineConfig({
       renderer: new jsdomRenderer({
         // Wait for the event we dispatch in index.tsx
         renderAfterDocumentEvent: 'render-event',
+        // Timeout to ensure process doesn't hang indefinitely if event is missed
+        timeout: 20000, 
       }),
-      // CRITICAL: Cloudflare Pages builds can hang if concurrency is too high or if JSDOM eats too much RAM.
-      // Setting this to 1 ensures sequential rendering, which is safer.
+      // CRITICAL: Cloudflare Pages builds hangs if concurrency is high.
+      // Setting to 1 ensures sequential rendering.
       maxConcurrentRoutes: 1, 
       postProcess(renderedRoute) {
+        // Log to show progress in Cloudflare logs
+        console.log(`Rendered: ${renderedRoute.route}`);
+        
         // Optimize output: Remove the "render-event" script to avoid errors on client
         renderedRoute.html = renderedRoute.html.replace(
           /window.document.dispatchEvent\(new Event\("render-event"\)\);/g,
