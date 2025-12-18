@@ -1,54 +1,63 @@
+
 import { FontStyle, TextSegment } from '../types';
 
 const lower = 'abcdefghijklmnopqrstuvwxyz';
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const numbers = '0123456789';
 
 // 1. 基础 Unicode 映射表 (Base Maps)
 const MAPS: Record<string, string> = {
   // --- SANS SERIF (Facebook Safe) ---
-  sans: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁ｕｖｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭',
-  sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  sansBoldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕',
+  sans: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+  sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁ｕｖｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
+  sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ0123456789',
+  sansBoldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
   
   // --- SERIF (Tattoo / Formal) ---
-  serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  serifItalic: '𝑎𝑏𝑐ｄ𝑒ｆｇｈ𝑖𝑗𝑘ｌｍｎｏｐ𝑞ｒｓｔ𝑢𝑣ｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁',
+  serifBold: '𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗',
+  serifItalic: '𝑎𝑏𝑐ｄ𝑒ｆｇｈ𝑖𝑗𝑘ｌｍｎｏｐ𝑞ｒｓｔ𝑢𝑣ｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ0123456789',
+  serifBoldItalic: '𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗',
   
   // --- SCRIPT (Cursivas / Tattoo) ---
-  scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
-  scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝗺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
-  handwriting: 'αвc∂єfɢнιjкℓмиσρqяѕтυνωχуz𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩', // Hybrid for signatures
-  lovely: 'ꍏ♭☾◗€ƒ⍙hï♪k↳♔♫⊙ρq®ⓢ☂u☋ωx☿zkＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ', // Decorative mix
+  scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵0123456789',
+  scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝗺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩0123456789',
+  scriptItalic: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝗺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩0123456789', // Fallback for scriptItalic
+  handwriting: 'αвc∂єfɢнιjкℓмиσρqяѕтυνωχуz𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩0123456789',
+  lovely: 'ꍏ♭☾◗€ƒ⍙hï♪k↳♔♫⊙ρq®ⓢ☂u☋ωx☿zkＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ0123456789',
   
   // --- GOTHIC (Goticas / Tattoo / Free Fire) ---
-  fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
-  frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅',
+  fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ0123456789',
+  frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅0123456789',
   
   // --- GRAFFITI / URBAN / BUBBLES ---
-  bubble: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ',
-  bubbleBlack: '🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁',
-  square: '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉',
-  squareBlack: '🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉',
-  wide: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
+  bubble: 'ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ⓪①②③④⑤⑥⑦⑧⑨',
+  bubbleBlack: '🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁🅐𝑩𝑪𝑨𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁⓿❶❷❸❹❺❻❼❽❾',
+  square: '🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉0123456789',
+  squareBlack: '🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789',
+  wide: 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９',
   
   // --- DECORATIVE / AESTHETIC ---
-  smallCaps: 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠｗｘｙｚᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ',
-  tiny: 'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻ',
-  monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ',
-  doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙＱＲＳＴ𝕌𝕍𝕎𝕏𝕐ℤ',
-  inverted: 'ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz∀ᗺƆᗡƎℲ⅁HIᗿK˥WNOԀΌᴚS⊥∩ΛMX⅄Z',
+  smallCaps: 'ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠｗｘｙｚᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ0123456789',
+  tiny: 'ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻ⁰¹²³⁴⁵⁶⁷⁸⁹',
+  monospace: '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿',
+  doubleStruck: '𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙＱＲＳＴ𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡',
+  inverted: 'ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz∀ᗺƆᗡƎℲ⅁HIᗿK˥WNOԀΌᴚS⊥∩ΛMX⅄Z0123456789',
   
   // --- SPECIALTY ---
-  greek: 'αвc∂єfɢнιjкℓмиσρqяѕтυνωχуzΑΒCDEFGHΙJKLMΝOPQRSTUVWΧΥZ',
-  russian: 'аъcdэfɢнїjкlмиорqяsтцvшxчzАБCDЭFGHЇJКLМИОPQЯSТЦVШXЧZ',
-  currency: '₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎ♄₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎ♄',
-  parenthesized: '⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵',
+  greek: 'αвc∂єfɢнιjкℓмиσρqяѕтυνωχуzΑΒCDEFGHΙJKLMΝOPQRSTUVWΧΥZ0123456789',
+  russian: 'аъcdэfɢнїjкlмиорqяsтцvшxчzАБCDЭFGHЇJКLМИОPQЯSТЦVШXЧZ0123456789',
+  currency: '₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎ♄₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎ♄0123456789',
+  parenthesized: '⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⑴⑵⑶⑷⑸⑹⑺⑻⑼',
   
+  // --- NEW BASES (Fixed) ---
+  regional: '🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿0123456789',
+  tagging: 'Ⱥƀ↻ժeƒǥhìʝƙꝆɱñøþqɾ$†uƲw×¥ƵȺƀ↻ժeƒǥhìʝƙꝆɱñøþqɾ$†uƲw×¥Ƶ0123456789', 
+  oldSchool: '𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗',
+  censored: '████████████████████████████████████████████████████0123456789',
+
   // --- BASE FOR MANUAL CREATIONS ---
-  chicano: '𝓐𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
-  heavySans: '𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗ𝗫𝘆𝘇'
+  chicano: '𝓐𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩0123456789',
+  heavySans: '𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃ｗ𝗫𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵'
 };
 
 const ACCENT_MAP: Record<string, string> = {
@@ -75,11 +84,14 @@ const COMBINERS = {
 // Global registry for decorator lookups to avoid huge switch statements
 const DECORATOR_CONFIG: Record<string, { prefix: string, suffix: string }> = {};
 
-// Helper: Create Character Map
-const createMap = (target: string): Record<string, string> => {
+// Helper: Create Character Map with Safety Check
+const createMap = (target: string | undefined): Record<string, string> => {
   const map: Record<string, string> = {};
-  const sChars = [...(lower + upper)];
-  const tChars = [...target];
+  if (!target) return map; // SAFETY CHECK TO PREVENT CRASH
+  
+  const sChars = [...(lower + upper + numbers)];
+  const tChars = [...target]; // Handles surrogate pairs (emojis) correctly
+  
   sChars.forEach((c, i) => { if (tChars[i]) map[c] = tChars[i]; });
   return map;
 };
@@ -106,8 +118,9 @@ const addFont = (
   tags: string[] = [], 
   comp: FontStyle['compatibility'] = 'medium'
 ) => {
+  const fullId = `pro-${id}`;
   generatedFonts.push({
-    id: `pro-${id}`,
+    id: fullId,
     name,
     category: cat,
     map: mapData,
@@ -115,6 +128,7 @@ const addFont = (
     compatibility: comp,
     tags
   });
+  return fullId; // Return full ID for registry sync
 };
 
 const getPagesForCategory = (cat: string, id: string): string[] => {
@@ -133,7 +147,7 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
   if (cat === 'gothic' || lowerId.includes('goth') || lowerId.includes('fraktur') || lowerId.includes('medieval') || lowerId.includes('dark') || lowerId.includes('vampire') || lowerId.includes('demon')) {
     p.push('goticas');
   }
-  if (lowerId.includes('double-struck') || lowerId.includes('heavy') || lowerId.includes('zalgo')) {
+  if (lowerId.includes('double-struck') || lowerId.includes('heavy') || lowerId.includes('zalgo') || lowerId.includes('belico') || lowerId.includes('metal')) {
     p.push('goticas');
   }
 
@@ -164,6 +178,11 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
   if (cat === 'amino' || lowerId.includes('ami-') || cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small') || lowerId.includes('spaced')) {
     p.push('amino');
   }
+  
+  // --- LOGIC FOR TOOLS ---
+  if (lowerId.includes('regional') || lowerId.includes('censored')) {
+    p.push('home');
+  }
 
   return p;
 };
@@ -171,6 +190,9 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
 const initFonts = () => {
   // 1. BASE UNICODE FONTS
   addFont('sans', 'Normal Sans', 'sans', createMap(MAPS.sans), ['Básico'], 'high');
+  addFont('regional', 'Letras Azules', 'decorative', createMap(MAPS.regional), ['Destacado', 'FB'], 'high');
+  addFont('censored', 'Texto Censurado', 'other', createMap(MAPS.censored), ['Misterio'], 'high');
+
   addFont('sans-bold', 'Sans Bold', 'sans', createMap(MAPS.sansBold), ['Negrita', 'FB'], 'high');
   addFont('sans-italic', 'Sans Italic', 'sans', createMap(MAPS.sansItalic), ['Cursiva', 'FB'], 'high');
   addFont('sans-bold-italic', 'Sans Bold Italic', 'sans', createMap(MAPS.sansBoldItalic), ['Negrita', 'Cursiva'], 'high');
@@ -199,6 +221,10 @@ const initFonts = () => {
   addFont('square-black', 'Square Dark', 'block', createMap(MAPS.squareBlack), ['Negrita'], 'medium');
   addFont('heavy-sans', 'Heavy Bold', 'heavy', createMap(MAPS.heavySans), ['Impact'], 'high');
   addFont('wide', 'Vaporwave', 'vaporwave', createMap(MAPS.wide), ['Aesthetic'], 'high');
+  
+  // New Bases from first request
+  addFont('tagging', 'Tagging Marker', 'graffiti', createMap(MAPS.tagging), ['Street'], 'medium');
+  addFont('old-school', 'Old School Serif', 'serif', createMap(MAPS.oldSchool), ['Tatuaje'], 'medium');
 
   // --- CURSIVAS MASSIVE EXPANSION (60+ STYLES) ---
   
@@ -223,9 +249,8 @@ const initFonts = () => {
   ];
 
   coquetteStyles.forEach(s => {
-    const fullId = `cursive-${s.id}`;
+    const fullId = addFont(s.id, s.name, 'script', createMap(s.map), ['Coquette', 'Cute'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
-    addFont(s.id, s.name, 'script', createMap(s.map), ['Coquette', 'Cute'], 'medium');
   });
 
   // 3. Boho / Nature / Naturaleza
@@ -243,9 +268,8 @@ const initFonts = () => {
   ];
 
   bohoStyles.forEach(s => {
-    const fullId = `cursive-${s.id}`;
+    const fullId = addFont(s.id, s.name, 'script', createMap(s.map), ['Boho', 'Naturaleza'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
-    addFont(s.id, s.name, 'script', createMap(s.map), ['Boho', 'Naturaleza'], 'medium');
   });
 
   // 4. Princess / Disney Vibe
@@ -261,9 +285,8 @@ const initFonts = () => {
   ];
 
   princessStyles.forEach(s => {
-    const fullId = `cursive-${s.id}`;
+    const fullId = addFont(s.id, s.name, 'script', createMap(s.map), ['Princess', 'Disney'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
-    addFont(s.id, s.name, 'script', createMap(s.map), ['Princess', 'Disney'], 'medium');
   });
 
   // 5. Firma Realista & Signature
@@ -277,9 +300,8 @@ const initFonts = () => {
   ];
 
   signatureStyles.forEach(s => {
-    const fullId = `cursive-${s.id}`;
+    const fullId = addFont(s.id, s.name, 'script', createMap(s.map), ['Firma', 'Elegante'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
-    addFont(s.id, s.name, 'script', createMap(s.map), ['Firma', 'Elegante'], 'medium');
   });
 
   // 6. General Decorative Cursives (Love, Stars, etc.)
@@ -303,9 +325,8 @@ const initFonts = () => {
   ];
 
   decoStyles.forEach(s => {
-    const fullId = `cursive-${s.id}`;
+    const fullId = addFont(s.id, s.name, 'script', createMap(s.map), ['Decorado', 'Cursiva'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
-    addFont(s.id, s.name, 'script', createMap(s.map), ['Decorado', 'Cursiva'], 'medium');
   });
 
   // --- GOTHIC EXPANSION ---
@@ -353,9 +374,8 @@ const initFonts = () => {
   ];
 
   gothicDecorators.forEach(d => {
-    const fullId = `gothic-${d.id}`;
+    const fullId = addFont(d.id, d.name, 'gothic', createMap(d.map), ['Dark', 'Medieval'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
-    addFont(d.id, d.name, 'gothic', createMap(d.map), ['Dark', 'Medieval'], 'medium');
   });
   
   addFont('zalgo-goth', 'Zalgo Gothic', 'gothic', createCombinerMap('fraktur', '\u0352'), ['Glitch', 'Miedo'], 'low');
@@ -377,13 +397,13 @@ const initFonts = () => {
     { id: 'tat-angel', name: 'Angel Number', pre: '11:11 ', suf: ' 👼', map: MAPS.sansBold },
     { id: 'tat-butterfly-ink', name: 'Butterfly Effect', pre: '🦋 ', suf: '', map: MAPS.scriptFine },
     { id: 'tat-star-ink', name: 'Star Ink', pre: '★ ', suf: '', map: MAPS.monospace },
-    { id: 'tat-trad-anchor', name: 'Old School Anchor', pre: '⚓ ', suf: ' ⚓', map: MAPS.serifBold },
-    { id: 'tat-trad-swallow', name: 'Traditional Bird', pre: '🐦 ', suf: ' 🐦', map: MAPS.serifBold },
-    { id: 'tat-trad-lucky', name: 'Lucky Dice', pre: '🎲 ', suf: ' 🎲', map: MAPS.serifBold },
-    { id: 'tat-trad-rose', name: 'Traditional Rose', pre: '🌹 ', suf: ' 🌹', map: MAPS.serifBold },
-    { id: 'tat-trad-dagger', name: 'Dagger Tattoo', pre: '🗡 ', suf: ' 🗡', map: MAPS.serifBold },
-    { id: 'tat-trad-heart', name: 'Mom Heart', pre: '♥ ', suf: ' ♥', map: MAPS.serifBold },
-    { id: 'tat-trad-diamond', name: 'Diamond Ink', pre: '💎 ', suf: ' 💎', map: MAPS.serifBold },
+    { id: 'tat-trad-anchor', name: 'Old School Anchor', pre: '⚓ ', suf: ' ⚓', map: MAPS.oldSchool },
+    { id: 'tat-trad-swallow', name: 'Traditional Bird', pre: '🐦 ', suf: ' 🐦', map: MAPS.oldSchool },
+    { id: 'tat-trad-lucky', name: 'Lucky Dice', pre: '🎲 ', suf: ' 🎲', map: MAPS.oldSchool },
+    { id: 'tat-trad-rose', name: 'Traditional Rose', pre: '🌹 ', suf: ' 🌹', map: MAPS.oldSchool },
+    { id: 'tat-trad-dagger', name: 'Dagger Tattoo', pre: '🗡 ', suf: ' 🗡', map: MAPS.oldSchool },
+    { id: 'tat-trad-heart', name: 'Mom Heart', pre: '♥ ', suf: ' ♥', map: MAPS.oldSchool },
+    { id: 'tat-trad-diamond', name: 'Diamond Ink', pre: '💎 ', suf: ' 💎', map: MAPS.oldSchool },
     { id: 'tat-chicano-smile', name: 'Smile Now', pre: '🎭 ', suf: '', map: MAPS.chicano },
     { id: 'tat-chicano-pray', name: 'Blessed Hands', pre: '🙏 ', suf: '', map: MAPS.chicano },
     { id: 'tat-chicano-13', name: 'Street 13', pre: '13 ', suf: '', map: MAPS.chicano },
@@ -394,9 +414,8 @@ const initFonts = () => {
   ];
 
   tattooStyles.forEach(d => {
-    const fullId = `tattoo-${d.id}`;
+    const fullId = addFont(d.id, d.name, 'gothic', createMap(d.map), ['Tattoo', 'Ink'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
-    addFont(d.id, d.name, 'gothic', createMap(d.map), ['Tattoo', 'Ink'], 'medium');
   });
   
   addFont('tat-min-spaced-v2', 'Minimal Spaced', 'sans', createCombinerMap('sans', ' '), ['Minimal'], 'medium');
@@ -439,9 +458,8 @@ const initFonts = () => {
   ];
 
   graffitiDecorators.forEach(d => {
-    const fullId = `graffiti-${d.id}`;
+    const fullId = addFont(d.id, d.name, 'graffiti', createMap(d.map), ['Urbano'], 'medium');
     DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
-    addFont(d.id, d.name, 'graffiti', createMap(d.map), ['Urbano'], 'medium');
   });
 
   // --- FACEBOOK EXPANSION ---
@@ -492,9 +510,8 @@ const initFonts = () => {
   ];
 
   fbDecorators.forEach(d => {
-    const fullId = `facebook-${d.id}`;
+    const fullId = addFont(d.id, d.name, 'facebook', createMap(d.map), ['Post', 'Estado'], 'high');
     DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
-    addFont(d.id, d.name, 'facebook', createMap(d.map), ['Post', 'Estado'], 'high');
   });
 
   // --- AMINO EXPANSION ---
@@ -535,9 +552,8 @@ const initFonts = () => {
   ];
 
   aminoDecorators.forEach(d => {
-    const fullId = `amino-${d.id}`;
+    const fullId = addFont(d.id, d.name, 'amino', createMap(d.map), ['Aesthetic', 'Wiki'], 'high');
     DECORATOR_CONFIG[fullId] = { prefix: d.pre, suffix: d.suf };
-    addFont(d.id, d.name, 'amino', createMap(d.map), ['Aesthetic', 'Wiki'], 'high');
   });
 
   // 4. Stylized Amino
