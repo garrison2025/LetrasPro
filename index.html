@@ -27,8 +27,7 @@
     <style>
       /* 
        * CRITICAL CSS (Inlined)
-       * This CSS renders the "Above the Fold" content immediately.
-       * It mimics the Tailwind classes used in Navbar and Hero.
+       * We keep this to prevent layout shift (CLS) before CSS loads.
        */
       :root {
         --bg-color: #f8fafc; /* slate-50 */
@@ -55,120 +54,9 @@
         text-rendering: optimizeLegibility;
       }
 
-      /* Navbar Structure */
-      .sh-nav {
-        height: 80px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        max-width: 80rem; /* max-w-7xl */
-        margin: 0 auto;
-        padding: 0 1rem; /* px-4 */
-        position: sticky;
-        top: 0;
-        z-index: 50;
-      }
-      
-      .sh-logo {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-      }
-      
-      .sh-icon-box {
-        padding: 0.5rem;
-        border-radius: 0.75rem;
-        background: linear-gradient(to top right, var(--primary-600), #db2777);
-        box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      .sh-icon-svg {
-        width: 22px;
-        height: 22px;
-        fill: rgba(255,255,255,0.2);
-        stroke: white;
-        stroke-width: 2.5;
-      }
-      
-      .sh-brand {
-        font-family: system-ui, sans-serif; /* Will switch to Outfit once loaded */
-        font-weight: 700;
-        font-size: 1.5rem; /* text-2xl */
-        letter-spacing: -0.025em;
-        color: var(--text-main);
-      }
-
-      /* Hero Structure (LCP Element) */
-      .sh-hero-container {
-        padding-top: 3rem; /* pt-12 */
-        padding-bottom: 5rem; /* pb-20 */
-        padding-left: 1rem;
-        padding-right: 1rem;
-        text-align: center;
-      }
-
-      .sh-breadcrumb {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #64748b;
-        margin-bottom: 1.5rem;
-      }
-
-      .sh-h1 {
-        font-family: system-ui, sans-serif; /* Will switch to Outfit */
-        font-weight: 900;
-        font-size: 2.25rem; /* text-4xl mobile */
-        line-height: 1.1;
-        letter-spacing: -0.05em;
-        margin-bottom: 1rem;
-        color: var(--text-main);
-        margin-top: 0;
-      }
-
-      .sh-p {
-        font-size: 1.125rem; /* text-lg */
-        font-weight: 500;
-        color: var(--text-sub);
-        max-width: 42rem;
-        margin: 0 auto;
-        line-height: 1.75;
-      }
-
-      /* Input Shell placeholder */
-      .sh-input-shell {
-        max-width: 72rem; /* max-w-6xl */
-        margin: -2.5rem auto 0;
-        padding: 0 1rem;
-        position: relative;
-        z-index: 20;
-      }
-      
-      .sh-card {
-        background-color: white;
-        border-radius: 2.5rem;
-        height: 300px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        border: 1px solid #f1f5f9;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .sh-card {
-          background-color: #1e293b;
-          border-color: #334155;
-        }
-      }
-
-      @media (min-width: 640px) {
-        .sh-nav { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .sh-h1 { font-size: 4.5rem; /* sm:text-7xl */ }
-      }
+      /* Base Layout Holders */
+      .sh-nav { height: 80px; }
+      .sh-hero-container { padding-top: 3rem; padding-bottom: 5rem; text-align: center; }
     </style>
   <script type="importmap">
 {
@@ -184,43 +72,15 @@
     "path": "https://esm.sh/path@^0.12.7",
     "url": "https://esm.sh/url@^0.11.4",
     "vite-plugin-pwa": "https://esm.sh/vite-plugin-pwa@^1.2.0",
-    "react-helmet-async": "https://esm.sh/react-helmet-async@^2.0.5"
+    "react-helmet-async": "https://esm.sh/react-helmet-async@^2.0.5",
+    "vite-plugin-prerender": "https://esm.sh/vite-plugin-prerender@^2.0.0"
   }
 }
 </script>
 </head>
   <body>
-    <div id="root">
-      <!-- 
-        APP SHELL (Server-Side-Rendering Fake)
-        This HTML renders INSTANTLY before React loads.
-        It must match the initial state of App.tsx + GeneratorPage.tsx perfectly
-        to avoid Layout Shift (CLS).
-      -->
-      <nav class="sh-nav">
-        <div class="sh-logo">
-          <div class="sh-icon-box">
-            <!-- Sparkles Icon SVG -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          </div>
-          <span class="sh-brand">LetrasPro</span>
-        </div>
-      </nav>
-
-      <div class="sh-hero-container">
-        <nav class="sh-breadcrumb">
-          <span>Inicio</span>
-          <span>&gt;</span>
-          <span>Conversor de Letras Bonitas</span>
-        </nav>
-        <h1 class="sh-h1">Conversor de Letras Bonitas</h1>
-        <p class="sh-p">Generador de fuentes y letras bonitas para Instagram, Facebook, TikTok y Tatuajes.</p>
-      </div>
-      
-      <div class="sh-input-shell">
-        <div class="sh-card"></div>
-      </div>
-    </div>
+    <!-- The Prerenderer will inject the static HTML here -->
+    <div id="root"></div>
     
     <script type="module" src="/index.tsx"></script>
   </body>

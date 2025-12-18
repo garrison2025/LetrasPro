@@ -1,6 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { vitePrerender } from 'vite-plugin-prerender';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [
@@ -62,12 +68,54 @@ export default defineConfig({
           }
         ]
       }
-    })
+    }),
+    vitePrerender({
+      staticDir: path.join(__dirname, 'dist'),
+      routes: [
+        '/',
+        '/letras-cursivas',
+        '/letras-tatuajes',
+        '/letras-goticas',
+        '/letras-graffiti',
+        '/letras-amino',
+        '/letras-facebook',
+        '/letras-tattoo',
+        '/repetidor-de-texto',
+        '/texto-invisible',
+        '/texto-glitch',
+        '/texto-al-reves',
+        '/letras-grandes',
+        '/blog',
+        '/sobre-nosotros',
+        '/contacto',
+        '/politica-de-privacidad',
+        '/terminos-y-condiciones',
+        // Blog Posts
+        '/blog/guia-definitiva-conversor-letras-bonitas-instagram-facebook',
+        '/blog/letras-para-tatuajes-guia-estilos-goticos-cursivos',
+        '/blog/mejores-nicks-free-fire-pubg-graffiti'
+      ],
+      renderer: {
+        // We use the default Puppeteer renderer logic implicit in the plugin
+        // but explicit configuration helps with debugging
+        renderAfterDocumentEvent: 'render-event',
+        renderAfterTime: 5000, // Fallback if event doesn't fire
+        headless: true
+      },
+      postProcess(renderedRoute) {
+        // Optimize output: Remove the "render-event" script to avoid errors on client
+        renderedRoute.html = renderedRoute.html.replace(
+          /window.document.dispatchEvent\(new Event\("render-event"\)\);/g,
+          ''
+        );
+        return renderedRoute;
+      },
+    }),
   ],
   build: {
     outDir: 'dist',
     sourcemap: false,
-    minify: 'terser', // Use terser for better minification
+    minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,

@@ -28,6 +28,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
+    "vite-plugin-prerender": "^1.0.10",
     "vite-plugin-pwa": "^0.19.2"
   }
 }
