@@ -1,16 +1,26 @@
+
 export interface FontStyle {
   id: string;
   name: string;
-  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative';
+  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy' | 'graffiti';
   map: Record<string, string>;
   isPremium?: boolean; 
-  pages: string[]; // Strict allowlist of page IDs where this font should appear
+  pages: string[]; 
+  compatibility: 'high' | 'medium' | 'low';
+  tags?: string[]; 
+}
+
+export interface BioTemplate {
+  id: string;
+  name: string;
+  layout: string; // El layout usa placeholders como {text}
+  category: 'instagram' | 'tiktok' | 'gaming';
 }
 
 export interface FeatureItem {
   title: string;
   description: string;
-  icon: 'star' | 'zap' | 'check' | 'heart' | 'shield' | 'smartphone' | 'palette';
+  icon: 'star' | 'zap' | 'check' | 'heart' | 'shield' | 'smartphone' | 'palette' | 'eye' | 'pen-tool' | 'moon' | 'gamepad' | 'list' | 'trending-up' | 'bold' | 'layers';
 }
 
 export interface FaqItem {
@@ -23,10 +33,9 @@ export interface PageConfig {
   title: string;
   description: string;
   heading: string;
-  content: string; // The existing general description
+  content: string; 
   filter: (font: FontStyle) => boolean;
   
-  // New SEO Content Sections
   whyFeatures: FeatureItem[];
   howToSteps: string[];
   faqs: FaqItem[];
@@ -41,16 +50,19 @@ export interface NavLink {
 export interface TextSegment {
   content: string;
   isFallback: boolean;
+  isCombined?: boolean; 
 }
+
+export type TextCase = 'original' | 'upper' | 'lower' | 'title';
 
 export interface BlogPost {
   id: string;
   slug: string;
   title: string;
   excerpt: string;
-  content: string; // HTML string for rich text content
+  content: string; 
   date: string;
   author: string;
   tags: string[];
-  imageUrl?: string; // Optional cover image URL
+  imageUrl?: string; 
 }

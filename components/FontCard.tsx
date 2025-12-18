@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Copy, Check, Star, Download, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
 
 export type ViewMode = 'list' | 'instagram' | 'whatsapp';
@@ -25,289 +25,202 @@ const FontCard: React.FC<FontCardProps> = ({
 }) => {
   const [justCopied, setJustCopied] = useState(false);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = (e: React.MouseEvent) => {
-    // Prevent triggering if clicking buttons
     if ((e.target as HTMLElement).closest('button')) return;
 
     navigator.clipboard.writeText(rawText).then(() => {
       setJustCopied(true);
       onCopy(); 
-      setTimeout(() => setJustCopied(false), 500); 
+      setTimeout(() => setJustCopied(false), 800); 
     });
   };
 
   const handleDownloadImage = async (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsGeneratingImg(true);
-
+    
     try {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      // Canvas Config
-      const width = 1080;
-      const padding = 80;
-      // Estimate height based on text length (rough approximation)
-      const estimatedLines = Math.ceil(rawText.length / 25); 
-      const height = Math.max(1080, 600 + (estimatedLines * 100)); // Square or portrait
-
-      canvas.width = width;
-      canvas.height = height;
-
-      // 1. Draw Background (Gradient)
-      const gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, '#7c3aed'); // Primary 600
-      gradient.addColorStop(1, '#db2777'); // Secondary 600
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
-
-      // 2. Draw Glassmorphism Card
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.roundRect(padding, padding, width - (padding * 2), height - (padding * 2), 40);
-      ctx.fill();
+      const lines = rawText.split('\n');
+      const fontSize = 54;
+      ctx.font = `900 ${fontSize}px sans-serif`;
       
-      // 3. Draw Header (Font Name)
-      ctx.fillStyle = '#64748b'; // Slate 500
-      ctx.font = 'bold 40px Inter, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(font.name.toUpperCase(), width / 2, padding + 100);
+      const maxLineWidth = Math.max(...lines.map(l => ctx.measureText(l).width));
+      
+      canvas.width = maxLineWidth + 160;
+      canvas.height = (lines.length * (fontSize * 1.6)) + 120;
 
-      // 4. Draw Main Text
-      ctx.fillStyle = '#1e293b'; // Slate 900
-      ctx.font = '500 70px Inter, sans-serif'; // Use standard font to ensure emojis render if possible, system will fallback
+      // Fondo Gradiente
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#f8fafc');
+      grad.addColorStop(1, '#f1f5f9');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Texto
+      ctx.fillStyle = '#0f172a'; // Slate 900
+      ctx.font = `900 ${fontSize}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      
-      // Simple word wrap logic for canvas
-      const maxWidth = width - (padding * 4);
-      const lineHeight = 90;
-      const x = width / 2;
-      let y = (height / 2); // Start center
 
-      // Very basic wrapping
-      const words = rawText.split(''); // Split by char for fancy fonts often works better or standard wrap
-      // For fancy fonts, we often treat the whole string. 
-      // Let's just draw it. If it's too long, we might need better logic, but for now:
-      
-      const wrapText = (text: string, x: number, y: number, maxWidth: number, lineHeight: number) => {
-          const chars = Array.from(text);
-          let line = '';
-          const lines = [];
+      lines.forEach((line, i) => {
+        ctx.fillText(line, canvas.width / 2, (canvas.height / 2) - ((lines.length - 1) * fontSize * 0.8) + (i * fontSize * 1.6));
+      });
 
-          for(let n = 0; n < chars.length; n++) {
-            const testLine = line + chars[n];
-            const metrics = ctx.measureText(testLine);
-            const testWidth = metrics.width;
-            if (testWidth > maxWidth && n > 0) {
-              lines.push(line);
-              line = chars[n];
-            } else {
-              line = testLine;
-            }
-          }
-          lines.push(line);
+      // Branding
+      ctx.fillStyle = '#8b5cf6';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('LetrasPro.org', canvas.width / 2, canvas.height - 40);
 
-          // Adjust Y start based on number of lines to center vertically
-          let startY = y - ((lines.length - 1) * lineHeight) / 2;
-
-          for(let k = 0; k < lines.length; k++) {
-             ctx.fillText(lines[k], x, startY + (k * lineHeight));
-          }
-      }
-
-      wrapText(rawText, x, y, maxWidth, lineHeight);
-
-      // 5. Draw Watermark
-      ctx.fillStyle = '#94a3b8'; // Slate 400
-      ctx.font = 'bold 30px sans-serif';
-      ctx.fillText('ConversorDeLetrasBonitas.org', width / 2, height - padding - 40);
-
-      // 6. Download
       const link = document.createElement('a');
-      link.download = `letras-pro-${font.id}-${Date.now()}.png`;
+      link.download = `letras-pro-${font.id}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-
     } catch (err) {
-      console.error("Error generating image", err);
+      console.error('Error al generar imagen:', err);
     } finally {
       setIsGeneratingImg(false);
     }
   };
 
-  const contextClass = `font-ctx-${font.category}`;
-
-  // Helper to render the text content
   const renderTextContent = () => (
     displaySegments.length > 0 ? (
       displaySegments.map((seg, i) => (
-        seg.isFallback ? 
-          <span key={i} className="fallback-char">{seg.content}</span> : 
-          <span key={i}>{seg.content}</span>
+        <span 
+          key={i} 
+          className={`${seg.isFallback ? 'fallback-char opacity-40' : ''} ${seg.isCombined ? 'text-primary-600 dark:text-primary-400 font-black' : ''} relative group/seg`}
+        >
+          {seg.content}
+          {seg.isCombined && (
+            <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] px-2 py-1.5 rounded-xl opacity-0 group-hover/seg:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-2xl pointer-events-none font-bold">
+              Modo Español Smart ✨
+            </span>
+          )}
+        </span>
       ))
     ) : (
-      <span className="opacity-50 italic">Vista Previa...</span>
+      <span className="opacity-20 italic font-light">Escribe algo...</span>
     )
   );
 
-  // LIST VIEW (Default)
-  const renderListView = () => (
-    <div className="relative min-h-[3rem] flex items-center pr-2">
-      {/* 
-         SEO/Accessibility Improvement: 
-         role="img" + aria-label tells screen readers/Google: "This block represents the text [rawText]".
-         This prevents them from trying to read "Mathematical Script Capital H..." 
-      */}
-      <p 
-        className="text-xl sm:text-2xl text-slate-800 dark:text-slate-100 break-all font-medium leading-relaxed group-hover:text-primary-900 dark:group-hover:text-white transition-colors"
-        role="img" 
-        aria-label={rawText}
-      >
-        {renderTextContent()}
-      </p>
-    </div>
-  );
-
-  // INSTAGRAM VIEW
   const renderInstagramView = () => (
-    <div className="bg-slate-50 dark:bg-black/20 rounded-xl p-4 border border-slate-100 dark:border-slate-700 mt-2 w-full">
-      <div className="flex items-center gap-4 mb-4">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
-          <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 p-[2px]">
-            <div className="w-full h-full rounded-full bg-slate-200 dark:bg-slate-700"></div>
-          </div>
-        </div>
-        <div className="flex-1 flex justify-around text-center text-slate-900 dark:text-white">
-          <div><div className="font-bold text-sm">124</div><div className="text-[10px] text-slate-500">Posts</div></div>
-          <div><div className="font-bold text-sm">2.5k</div><div className="text-[10px] text-slate-500">Followers</div></div>
-          <div><div className="font-bold text-sm">340</div><div className="text-[10px] text-slate-500">Following</div></div>
-        </div>
-      </div>
-      <div className="text-sm">
-        <div className="font-bold mb-1 text-slate-900 dark:text-white">Tu Nombre</div>
-        <div 
-          className="text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-tight"
-          role="img" 
-          aria-label={rawText}
-        >
-          {renderTextContent()}
-        </div>
-        <div className="mt-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md text-center text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-sm">
-          Edit Profile
-        </div>
-      </div>
+    <div className="bg-slate-50 dark:bg-black/20 rounded-[2rem] p-7 border border-slate-100 dark:border-slate-700/50 mt-4 w-full animate-fade-in shadow-inner">
+       <div className="flex items-center gap-5 mb-6">
+         <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600 p-[3px] shadow-xl">
+           <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 p-[3px]">
+             <div className="w-full h-full rounded-full bg-slate-200 dark:bg-slate-700"></div>
+           </div>
+         </div>
+         <div className="flex-1 flex justify-between text-slate-900 dark:text-white px-2">
+           <div className="text-center"><div className="font-black text-lg tracking-tighter">142</div><div className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Posts</div></div>
+           <div className="text-center"><div className="font-black text-lg tracking-tighter">12k</div><div className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Fans</div></div>
+           <div className="text-center"><div className="font-black text-lg tracking-tighter">450</div><div className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Follow</div></div>
+         </div>
+       </div>
+       <div className="space-y-1">
+         <div className="font-black text-sm text-slate-900 dark:text-white">Perfil Profesional</div>
+         <div className="text-slate-500 dark:text-slate-400 text-[11px] mb-3 font-bold">Digital Creator / Influencer</div>
+         <div className="text-slate-800 dark:text-slate-200 text-sm whitespace-pre-wrap leading-tight font-bold tracking-tight">
+           {renderTextContent()}
+         </div>
+       </div>
     </div>
   );
 
-  // WHATSAPP VIEW
-  const renderWhatsappView = () => (
-    <div className="bg-[#e5ddd5] dark:bg-[#0b141a] rounded-xl p-4 border border-slate-200 dark:border-slate-700 mt-2 relative overflow-hidden">
-      {/* Pattern Overlay simulation */}
-      <div className="absolute inset-0 opacity-[0.05] bg-[url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png')] bg-repeat bg-[length:50px_50px]"></div>
-      
-      <div className="relative flex justify-end">
-        <div className="bg-[#dcf8c6] dark:bg-[#005c4b] rounded-lg rounded-tr-none px-3 py-2 shadow-sm max-w-[90%]">
-          <p 
-            className="text-sm text-slate-800 dark:text-slate-100 break-all leading-relaxed"
-            role="img" 
-            aria-label={rawText}
-          >
-            {renderTextContent()}
-          </p>
-          <div className="flex justify-end items-center gap-1 mt-1">
-            <span className="text-[10px] text-slate-500 dark:text-slate-400">12:45 PM</span>
-            <Check size={12} className="text-blue-500" />
-            <Check size={12} className="text-blue-500 -ml-1.5" />
-          </div>
-        </div>
-      </div>
+  const renderWhatsAppView = () => (
+    <div className="bg-[#e5ddd5] dark:bg-slate-900 rounded-[2rem] p-6 mt-4 w-full animate-fade-in relative overflow-hidden shadow-inner border border-slate-200 dark:border-slate-800">
+       <div className="absolute inset-0 opacity-10 pointer-events-none pattern-bg"></div>
+       <div className="relative z-10 flex flex-col gap-3">
+         <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-none shadow-md max-w-[85%] relative border border-slate-100 dark:border-slate-700">
+            <div className="text-slate-800 dark:text-slate-200 text-sm font-bold leading-relaxed break-words">
+              {renderTextContent()}
+            </div>
+            <div className="text-[9px] text-slate-400 text-right mt-1 font-black">12:45 PM ✓✓</div>
+         </div>
+       </div>
     </div>
   );
 
   return (
     <div 
-      className={`group relative bg-white dark:bg-slate-800 rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden ${
+      className={`group relative bg-white dark:bg-slate-800 rounded-[3rem] border transition-all duration-700 cursor-pointer overflow-hidden ${
         justCopied
-          ? 'border-green-500 ring-2 ring-green-100 dark:ring-green-900 shadow-md scale-[1.02]' 
+          ? 'border-green-500 ring-8 ring-green-100 dark:ring-green-900/40 shadow-2xl scale-[1.03]' 
           : isFavorite 
-            ? 'border-primary-200 dark:border-primary-700 shadow-md ring-1 ring-primary-100 dark:ring-primary-900 order-first' 
-            : 'border-slate-100 dark:border-slate-700 shadow-[0_2px_10px_-4px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1'
-      } ${contextClass}`}
+            ? 'border-primary-200 dark:border-primary-700 shadow-2xl ring-2 ring-primary-100 dark:ring-primary-900/20' 
+            : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:-translate-y-3'
+      }`}
       onClick={handleCopy}
     >
-      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-bl-full -mr-10 -mt-10 transition-opacity pointer-events-none ${isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-3">
-           <div className="flex items-center gap-2">
-             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-wide group-hover:bg-primary-50 dark:group-hover:bg-primary-900/40 group-hover:text-primary-600 dark:group-hover:text-primary-300 transition-colors">
+      <div className="p-8">
+        <div className="flex justify-between items-start mb-6">
+           <div className="flex flex-wrap items-center gap-2">
+             <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] shadow-sm">
                {font.name}
              </span>
-             {isFavorite && (
-               <span className="text-yellow-400">
-                 <Star size={12} fill="currentColor" />
-               </span>
+             {font.compatibility === 'high' ? (
+               <div className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full text-[9px] font-black uppercase" title="Alta Compatibilidad">
+                 <ShieldCheck size={14} /> Safe
+               </div>
+             ) : font.compatibility === 'medium' ? (
+               <div className="flex items-center gap-1 px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-full text-[9px] font-black uppercase" title="Compatibilidad Media">
+                 <AlertCircle size={14} /> Mid
+               </div>
+             ) : (
+               <div className="flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full text-[9px] font-black uppercase" title="Baja Compatibilidad">
+                 <AlertTriangle size={14} /> Beta
+               </div>
              )}
            </div>
            
-           <div className="flex items-center gap-2 z-10">
-              {/* Image Download Button */}
-              <button
-                className="p-2 rounded-full text-slate-300 dark:text-slate-600 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors hidden sm:block opacity-0 group-hover:opacity-100"
-                onClick={handleDownloadImage}
-                title="Descargar como Imagen"
-              >
-                {isGeneratingImg ? (
-                  <div className="animate-spin w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full" />
-                ) : (
-                  <ImageIcon size={18} strokeWidth={2} />
-                )}
-              </button>
-
+           <div className="flex items-center gap-3 z-10">
              <button
-                className={`favorite-btn p-2 rounded-full transition-colors ${
-                  isFavorite 
-                    ? 'text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20' 
-                    : 'text-slate-300 dark:text-slate-600 hover:text-yellow-400 hover:bg-slate-50 dark:hover:bg-slate-700'
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleFavorite();
-                }}
-                aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+                onClick={handleDownloadImage}
+                disabled={isGeneratingImg}
+                className="p-3 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition-all active:scale-90 shadow-sm"
+                title="Descargar PNG Pro"
              >
-                <Star size={18} fill={isFavorite ? "currentColor" : "none"} strokeWidth={isFavorite ? 0 : 2} />
+                <Download size={20} />
              </button>
-
-             <div className={`
-               flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
-               ${justCopied ? 'bg-green-500 text-white scale-110 shadow-lg shadow-green-500/30' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 group-hover:bg-primary-500 group-hover:text-white dark:group-hover:text-white'}
-             `}>
-               {justCopied ? <Check size={14} strokeWidth={3} /> : <Copy size={14} strokeWidth={2.5} />}
+             <button
+                className={`p-3 rounded-2xl transition-all active:scale-90 shadow-sm ${
+                  isFavorite ? 'text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
+                }`}
+                onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+             >
+                <Star size={20} fill={isFavorite ? "currentColor" : "none"} />
+             </button>
+             <div className={`p-3 rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}>
+               {justCopied ? <Check size={20} strokeWidth={4} /> : <Copy size={20} />}
              </div>
            </div>
         </div>
 
-        {viewMode === 'list' && renderListView()}
-        {viewMode === 'instagram' && renderInstagramView()}
-        {viewMode === 'whatsapp' && renderWhatsappView()}
-
+        <div className="min-h-[5rem] flex items-center">
+           <div className="w-full">
+             {viewMode === 'list' && (
+               <p className="text-2xl sm:text-4xl text-slate-900 dark:text-slate-100 break-words font-black leading-tight tracking-tighter">
+                 {renderTextContent()}
+               </p>
+             )}
+             {viewMode === 'instagram' && renderInstagramView()}
+             {viewMode === 'whatsapp' && renderWhatsAppView()}
+           </div>
+        </div>
+        
+        <div className="mt-6 flex gap-1 items-center">
+          {font.tags?.map(t => (
+            <span key={t} className="text-[8px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-// React.memo optimization: Only re-render if essential props change
-export default React.memo(FontCard, (prev, next) => {
-  return (
-    prev.font.id === next.font.id &&
-    prev.rawText === next.rawText &&
-    prev.isFavorite === next.isFavorite &&
-    prev.viewMode === next.viewMode &&
-    // Segments usually change with rawText, but deep compare if needed. 
-    // Usually rawText equality implies segment equality unless utility changes.
-    prev.displaySegments === next.displaySegments
-  );
-});
+export default React.memo(FontCard);
