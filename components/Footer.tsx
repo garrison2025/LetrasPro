@@ -15,7 +15,8 @@ const Footer: React.FC = () => {
                </div>
                <span className="font-display font-bold text-xl text-slate-900 dark:text-white">LetrasPro</span>
             </div>
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm">
+            {/* Improved Contrast: slate-700 for text */}
+            <p className="text-slate-700 dark:text-slate-400 leading-relaxed max-w-sm">
               La herramienta definitiva para creadores de contenido. Personaliza tus textos para Instagram, TikTok, Twitter y más con un solo clic.
             </p>
           </div>
@@ -42,7 +43,7 @@ const Footer: React.FC = () => {
              
              <div className="flex flex-wrap gap-2">
                 {['Instagram', 'TikTok', 'Facebook', 'Twitter', 'WhatsApp'].map(tag => (
-                  <span key={tag} className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
+                  <span key={tag} className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-xs font-semibold border border-slate-200 dark:border-slate-700">
                     {tag}
                   </span>
                 ))}
@@ -51,8 +52,8 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-slate-100 dark:border-slate-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-           <p className="text-xs text-slate-500 dark:text-slate-500">© {new Date().getFullYear()} ConversorDeLetrasBonitas.org. Todos los derechos reservados.</p>
-           <p className="text-xs text-slate-500 dark:text-slate-500 flex items-center gap-1">
+           <p className="text-xs text-slate-600 dark:text-slate-500">© {new Date().getFullYear()} ConversorDeLetrasBonitas.org. Todos los derechos reservados.</p>
+           <p className="text-xs text-slate-600 dark:text-slate-500 flex items-center gap-1">
               Diseñado con <Heart size={12} className="fill-red-400 text-red-400" /> para creadores
            </p>
         </div>

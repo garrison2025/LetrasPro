@@ -19,7 +19,6 @@ const Navbar: React.FC = () => {
     };
     window.addEventListener('scroll', handleScroll);
     
-    // Close dropdown on click outside
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setActiveDropdown(null);
@@ -33,7 +32,6 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Close dropdown and mobile menu on route change
   useEffect(() => {
     setActiveDropdown(null);
     setIsOpen(false);
@@ -94,7 +92,7 @@ const Navbar: React.FC = () => {
     <nav 
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled || isOpen
-          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800 shadow-sm' 
+          ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200/60 dark:border-slate-800 shadow-sm' 
           : 'bg-transparent border-b border-transparent'
       }`}
       ref={dropdownRef}
@@ -103,7 +101,6 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo */}
           <div className="flex items-center">
             <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Ir a la página de inicio">
               <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
@@ -115,7 +112,6 @@ const Navbar: React.FC = () => {
             </RouterNavLink>
           </div>
           
-          {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-2">
             <RouterNavLink
               to="/"
@@ -148,21 +144,19 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
+              className="p-2.5 rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
               aria-label={theme === 'light' ? "Activar modo oscuro" : "Activar modo claro"}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
 
-            {/* Mobile menu button */}
             <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
-                aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
+                aria-label={isOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
                 aria-expanded={isOpen}
               >
                 {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -172,12 +166,9 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
         <div className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 fixed w-full left-0 shadow-2xl animate-fade-in h-[calc(100vh-80px)] overflow-y-auto">
           <div className="px-4 py-6 space-y-6">
-            
-            {/* Main Links */}
             <div className="space-y-1">
                <RouterNavLink
                   to="/"
@@ -192,9 +183,8 @@ const Navbar: React.FC = () => {
                </RouterNavLink>
             </div>
 
-            {/* Generators Section */}
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
               <div className="grid grid-cols-1 gap-1">
                 {generators.map((link) => (
                   <RouterNavLink
@@ -216,9 +206,8 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Tools Section */}
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
               <div className="grid grid-cols-1 gap-1">
                 {tools.map((link) => (
                   <RouterNavLink
@@ -240,7 +229,6 @@ const Navbar: React.FC = () => {
               </div>
             </div>
 
-             {/* Blog Link */}
              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
                <RouterNavLink
                   to="/blog"

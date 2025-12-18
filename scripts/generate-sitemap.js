@@ -8,8 +8,6 @@ const __dirname = path.dirname(__filename);
 // Define Base URL
 const BASE_URL = 'https://conversordeletrasbonitas.org';
 
-// Manual definition of paths to avoid TypeScript compilation issues in standalone script
-// This mirrors the structure in constants.ts
 const STATIC_PATHS = [
   '/', 
   '/letras-cursivas',
@@ -31,31 +29,17 @@ const STATIC_PATHS = [
   '/terminos-y-condiciones'
 ];
 
-// Helper to extract slugs dynamically from the data file
 const getBlogSlugs = () => {
   try {
     const dataPath = path.resolve(__dirname, '../data/blogPosts.ts');
-    if (!fs.existsSync(dataPath)) {
-      console.warn('⚠️ Warning: blogPosts.ts not found. Skipping dynamic blog slugs.');
-      return [];
-    }
-    
-    // Read the file content as string
+    if (!fs.existsSync(dataPath)) return [];
     const content = fs.readFileSync(dataPath, 'utf-8');
-    
-    // Use regex to find all "slug: 'some-slug'" occurrences
-    // Matches slug: '...' or slug: "..."
     const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
     const slugs = [];
     let match;
-    
     while ((match = slugRegex.exec(content)) !== null) {
-      if (match[1]) {
-        slugs.push(match[1]);
-      }
+      if (match[1]) slugs.push(match[1]);
     }
-    
-    console.log(`📝 Found ${slugs.length} blog posts dynamically.`);
     return slugs;
   } catch (error) {
     console.error('❌ Error reading blog slugs:', error);
@@ -63,16 +47,24 @@ const getBlogSlugs = () => {
   }
 };
 
-const generateSitemap = () => {
+const generateFiles = () => {
+  // 1. Setup paths
+  const targetDirName = process.argv[2] || 'public';
+  const targetPath = path.resolve(__dirname, '..', targetDirName);
+  
+  if (!fs.existsSync(targetPath)) {
+    fs.mkdirSync(targetPath, { recursive: true });
+  }
+
   const currentDate = new Date().toISOString();
   const blogSlugs = getBlogSlugs();
 
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+  // 2. Generate Sitemap
+  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
 
-  // Add Static Pages
   STATIC_PATHS.forEach(route => {
-    xml += `
+    sitemap += `
   <url>
     <loc>${BASE_URL}${route === '/' ? '' : route}</loc>
     <lastmod>${currentDate}</lastmod>
@@ -81,9 +73,8 @@ const generateSitemap = () => {
   </url>`;
   });
 
-  // Add Blog Posts
   blogSlugs.forEach(slug => {
-    xml += `
+    sitemap += `
   <url>
     <loc>${BASE_URL}/blog/${slug}</loc>
     <lastmod>${currentDate}</lastmod>
@@ -92,22 +83,21 @@ const generateSitemap = () => {
   </url>`;
   });
 
-  xml += `
+  sitemap += `
 </urlset>`;
 
-  // Determine output directory from arguments, default to 'public'
-  const targetDirName = process.argv[2] || 'public';
-  const targetPath = path.resolve(__dirname, '..', targetDirName);
+  fs.writeFileSync(path.join(targetPath, 'sitemap.xml'), sitemap);
+  console.log(`✅ Sitemap generated at ${path.join(targetPath, 'sitemap.xml')}`);
 
-  // Ensure directory exists (Critical fix for CI/CD environments)
-  if (!fs.existsSync(targetPath)) {
-    fs.mkdirSync(targetPath, { recursive: true });
-  }
+  // 3. Generate Robots.txt (CRITICAL FOR CLOUDFLARE)
+  // Generating it here ensures it physically exists in 'dist' after build
+  const robotsTxt = `User-agent: *
+Allow: /
 
-  const outputPath = path.join(targetPath, 'sitemap.xml');
-  
-  fs.writeFileSync(outputPath, xml);
-  console.log(`✅ Sitemap generated at ${outputPath}`);
+Sitemap: https://conversordeletrasbonitas.org/sitemap.xml`;
+
+  fs.writeFileSync(path.join(targetPath, 'robots.txt'), robotsTxt);
+  console.log(`✅ Robots.txt generated at ${path.join(targetPath, 'robots.txt')}`);
 };
 
-generateSitemap();
+generateFiles();
