@@ -148,7 +148,7 @@ const FontCard: React.FC<FontCardProps> = ({
 
   return (
     <div 
-      className={`group relative bg-white dark:bg-slate-800 rounded-[3rem] border transition-all duration-700 cursor-pointer overflow-hidden ${
+      className={`group relative bg-white dark:bg-slate-800 rounded-[3rem] border transition-all duration-700 cursor-pointer overflow-hidden content-visibility-auto contain-content ${
         justCopied
           ? 'border-green-500 ring-8 ring-green-100 dark:ring-green-900/40 shadow-2xl scale-[1.03]' 
           : isFavorite 
@@ -184,6 +184,7 @@ const FontCard: React.FC<FontCardProps> = ({
                 disabled={isGeneratingImg}
                 className="p-3 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition-all active:scale-90 shadow-sm"
                 title="Descargar PNG Pro"
+                aria-label={`Descargar imagen de estilo ${font.name}`}
              >
                 <Download size={20} />
              </button>
@@ -192,6 +193,7 @@ const FontCard: React.FC<FontCardProps> = ({
                   isFavorite ? 'text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
                 }`}
                 onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+                aria-label={isFavorite ? `Quitar ${font.name} de favoritos` : `Añadir ${font.name} a favoritos`}
              >
                 <Star size={20} fill={isFavorite ? "currentColor" : "none"} />
              </button>

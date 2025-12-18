@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -253,6 +252,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                    <button 
                     key={s} 
                     onClick={() => insertSymbol(s)} 
+                    aria-label={`Insertar símbolo ${s}`}
                     className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 transition-all text-base font-bold border border-transparent hover:border-primary-100"
                    >
                      {s}
@@ -272,7 +272,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                    </div>
                  </div>
                  {inputText && (
-                   <button onClick={() => setInputText('')} className="p-4 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-3xl hover:bg-red-100 transition-all active:scale-90">
+                   <button onClick={() => setInputText('')} aria-label="Borrar texto" className="p-4 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-3xl hover:bg-red-100 transition-all active:scale-90">
                      <Trash2 size={24} />
                    </button>
                  )}
@@ -306,9 +306,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
              <div className="flex items-center gap-3 ml-auto">
                 <div className="flex bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                   <button onClick={() => setViewMode('list')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista de lista"><LayoutList size={20}/></button>
-                   <button onClick={() => setViewMode('instagram')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup Instagram"><Instagram size={20}/></button>
-                   <button onClick={() => setViewMode('whatsapp')} className={`p-2.5 rounded-xl transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup WhatsApp"><MessageCircle size={20}/></button>
+                   <button onClick={() => setViewMode('list')} aria-label="Vista de lista" className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista de lista"><LayoutList size={20}/></button>
+                   <button onClick={() => setViewMode('instagram')} aria-label="Vista Instagram" className={`p-2.5 rounded-xl transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup Instagram"><Instagram size={20}/></button>
+                   <button onClick={() => setViewMode('whatsapp')} aria-label="Vista WhatsApp" className={`p-2.5 rounded-xl transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup WhatsApp"><MessageCircle size={20}/></button>
                 </div>
              </div>
           </div>
@@ -316,27 +316,30 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
         <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {visibleFonts.map((font) => {
-            const baseText = debouncedText || 'Vista Previa';
-            const transformed = transformText(baseText, textCase);
-            const mappedText = convertText(transformed, font.map, font.category === 'vaporwave');
-            const finalRawText = applyDecoration(mappedText, activeDecorator);
-            const segments = getDisplaySegments(finalRawText, {});
-            
-            return (
-              <FontCard
-                key={font.id}
-                font={font}
-                rawText={finalRawText}
-                displaySegments={segments}
-                isFavorite={favorites.includes(font.id)}
-                viewMode={viewMode}
-                onToggleFavorite={() => toggleFavorite(font.id)}
-                onCopy={() => addToHistory(font.name, finalRawText)}
-              />
-            );
-          })}
+        {/* Min-height container to reduce CLS when filtering fonts */}
+        <div className="min-h-[600px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {visibleFonts.map((font) => {
+              const baseText = debouncedText || 'Vista Previa';
+              const transformed = transformText(baseText, textCase);
+              const mappedText = convertText(transformed, font.map, font.category === 'vaporwave');
+              const finalRawText = applyDecoration(mappedText, activeDecorator);
+              const segments = getDisplaySegments(finalRawText, {});
+              
+              return (
+                <FontCard
+                  key={font.id}
+                  font={font}
+                  rawText={finalRawText}
+                  displaySegments={segments}
+                  isFavorite={favorites.includes(font.id)}
+                  viewMode={viewMode}
+                  onToggleFavorite={() => toggleFavorite(font.id)}
+                  onCopy={() => addToHistory(font.name, finalRawText)}
+                />
+              );
+            })}
+          </div>
         </div>
 
         {hasMore && (
@@ -403,12 +406,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     <button 
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
                       className="w-full px-8 py-6 flex justify-between items-center text-left hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                      aria-expanded={openFaq === i}
+                      aria-controls={`faq-answer-${i}`}
                     >
                       <span className="text-lg font-black text-slate-800 dark:text-white">{faq.question}</span>
                       <ChevronDown className={`text-primary-600 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
                     </button>
                     {openFaq === i && (
-                      <div className="px-8 pb-8 animate-fade-in">
+                      <div id={`faq-answer-${i}`} className="px-8 pb-8 animate-fade-in">
                         <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{faq.answer}</p>
                       </div>
                     )}

@@ -9,10 +9,23 @@
     <title>Conversor de Letras Bonitas - Copiar y Pegar</title>
     <meta name="description" content="Generador de fuentes y letras bonitas para Instagram, Facebook, TikTok y Tatuajes." />
     
-    <!-- Google Fonts (Optimized loading) -->
+    <!-- Google Fonts Optimized (Non-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Load CSS asynchronously to prevent render blocking -->
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" 
+      rel="stylesheet" 
+      media="print" 
+      onload="this.media='all'"
+    >
+    <noscript>
+      <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" 
+        rel="stylesheet"
+      >
+    </noscript>
     
     <script type="importmap">
 {

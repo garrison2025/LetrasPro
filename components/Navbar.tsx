@@ -51,6 +51,7 @@ const Navbar: React.FC = () => {
       <div className="relative group">
         <button
           onClick={() => setActiveDropdown(isOpen ? null : id)}
+          aria-expanded={isOpen}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
             isActive || isOpen
               ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
@@ -102,7 +103,7 @@ const Navbar: React.FC = () => {
           
           {/* Logo */}
           <div className="flex items-center">
-            <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)}>
+            <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Ir al inicio">
               <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
                 <Sparkles size={22} strokeWidth={2.5} className="fill-white/20" />
               </div>
@@ -149,7 +150,7 @@ const Navbar: React.FC = () => {
             <button
               onClick={toggleTheme}
               className="p-2.5 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
-              aria-label="Alternar modo oscuro"
+              aria-label={theme === 'light' ? "Activar modo oscuro" : "Activar modo claro"}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
@@ -159,7 +160,8 @@ const Navbar: React.FC = () => {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
-                aria-label="Abrir menú"
+                aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+                aria-expanded={isOpen}
               >
                 {isOpen ? <X size={28} /> : <Menu size={28} />}
               </button>
