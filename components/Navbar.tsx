@@ -146,7 +146,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
+              className="p-2.5 rounded-full text-slate-700 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
               aria-label={theme === 'light' ? "Activar modo oscuro" : "Activar modo claro"}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
@@ -155,7 +155,7 @@ const Navbar: React.FC = () => {
             <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
+                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-800 dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
                 aria-label={isOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
                 aria-expanded={isOpen}
               >
@@ -184,7 +184,7 @@ const Navbar: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
               <div className="grid grid-cols-1 gap-1">
                 {generators.map((link) => (
                   <RouterNavLink
@@ -207,7 +207,7 @@ const Navbar: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
               <div className="grid grid-cols-1 gap-1">
                 {tools.map((link) => (
                   <RouterNavLink

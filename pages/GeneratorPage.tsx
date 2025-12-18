@@ -182,8 +182,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <h1 className="text-4xl sm:text-7xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
           {config.heading}
         </h1>
-        {/* Contrast fix: slate-500 -> slate-600 */}
-        <p className="max-w-2xl mx-auto text-lg text-slate-600 dark:text-slate-400 font-medium">
+        {/* Contrast fix: slate-500 -> slate-700 */}
+        <p className="max-w-2xl mx-auto text-lg text-slate-700 dark:text-slate-400 font-medium">
           {config.description}
         </p>
       </div>
@@ -237,7 +237,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Escribe tu mensaje o nombre aquí..."
-              className="w-full text-2xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:opacity-10 dark:text-white min-h-[140px] resize-none leading-tight"
+              className="w-full text-2xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-700 dark:text-white min-h-[140px] resize-none leading-tight"
             />
             
             <div className="flex flex-wrap items-center justify-between gap-6 mt-8 pt-8 border-t border-slate-50 dark:border-slate-700/50">
@@ -282,7 +282,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   placeholder="Filtrar por nombre o estilo..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-6 py-3 bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm"
+                  className="w-full pl-12 pr-6 py-3 bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white"
                 />
              </div>
              

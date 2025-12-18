@@ -83,13 +83,13 @@ const BlogPostPage: React.FC = () => {
       </Helmet>
 
       <div className="max-w-3xl mx-auto">
-        {/* Breadcrumb / Back Navigation */}
-        <nav className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-8" aria-label="Breadcrumb">
+        {/* Breadcrumb / Back Navigation - Improved Contrast */}
+        <nav className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 mb-8" aria-label="Breadcrumb">
            <Link to="/" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"><Home size={16} /></Link>
-           <span className="text-slate-300 dark:text-slate-600">/</span>
-           <Link to="/blog" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">Blog</Link>
-           <span className="text-slate-300 dark:text-slate-600">/</span>
-           <span className="text-slate-800 dark:text-slate-200 truncate max-w-[200px] sm:max-w-xs">{post.title}</span>
+           <span className="text-slate-400 dark:text-slate-600">/</span>
+           <Link to="/blog" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-bold">Blog</Link>
+           <span className="text-slate-400 dark:text-slate-600">/</span>
+           <span className="text-slate-900 dark:text-slate-200 truncate max-w-[200px] sm:max-w-xs font-medium">{post.title}</span>
         </nav>
 
         {/* Header */}
@@ -107,14 +107,14 @@ const BlogPostPage: React.FC = () => {
             {post.title}
           </h1>
 
-          <div className="flex flex-col sm:flex-row items-center gap-6 text-sm text-slate-500 dark:text-slate-400 pb-8 border-b border-slate-100 dark:border-slate-800 justify-center sm:justify-start">
+          <div className="flex flex-col sm:flex-row items-center gap-6 text-sm text-slate-600 dark:text-slate-400 pb-8 border-b border-slate-100 dark:border-slate-800 justify-center sm:justify-start">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900 dark:to-secondary-900 flex items-center justify-center text-primary-700 dark:text-primary-300 border border-white dark:border-slate-800 shadow-sm">
                 <User size={20} />
               </div>
               <div className="text-left">
                 <span className="block font-bold text-slate-900 dark:text-white text-base">{post.author}</span>
-                <span className="text-xs text-slate-500 dark:text-slate-500 uppercase tracking-wider">Equipo Editorial</span>
+                <span className="text-xs text-slate-500 dark:text-slate-500 uppercase tracking-wider font-bold">Equipo Editorial</span>
               </div>
             </div>
             <div className="hidden sm:block w-px h-10 bg-slate-200 dark:bg-slate-700"></div>
@@ -142,14 +142,14 @@ const BlogPostPage: React.FC = () => {
           </div>
         )}
 
-        {/* Content */}
+        {/* Content - Darkened text colors for contrast */}
         <div 
           className="prose prose-slate dark:prose-invert prose-lg max-w-none 
             /* Spacing adjustments for Paragraphs */
-            prose-p:text-slate-600 dark:prose-p:text-slate-400 prose-p:leading-8 prose-p:mb-8 prose-p:mt-0
+            prose-p:text-slate-700 dark:prose-p:text-slate-400 prose-p:leading-8 prose-p:mb-8 prose-p:mt-0
             
             /* Custom Lead Paragraph Style (needs 'lead' class in HTML) */
-            [&_.lead]:text-xl [&_.lead]:leading-relaxed [&_.lead]:text-slate-800 dark:[&_.lead]:text-slate-200 [&_.lead]:font-medium [&_.lead]:mb-12
+            [&_.lead]:text-xl [&_.lead]:leading-relaxed [&_.lead]:text-slate-900 dark:[&_.lead]:text-slate-200 [&_.lead]:font-medium [&_.lead]:mb-12
             
             /* Headings Spacing */
             prose-headings:font-display prose-headings:font-bold prose-headings:text-slate-900 dark:prose-headings:text-white prose-headings:leading-tight
@@ -163,10 +163,10 @@ const BlogPostPage: React.FC = () => {
             prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-12
             
             /* Lists */
-            prose-li:text-slate-600 dark:prose-li:text-slate-400 prose-li:mb-3 prose-ul:my-8 prose-ol:my-8 prose-ul:list-disc prose-ol:list-decimal
+            prose-li:text-slate-700 dark:prose-li:text-slate-400 prose-li:mb-3 prose-ul:my-8 prose-ol:my-8 prose-ul:list-disc prose-ol:list-decimal
             
             /* Blockquotes */
-            prose-blockquote:border-l-4 prose-blockquote:border-primary-500 prose-blockquote:bg-slate-50 dark:prose-blockquote:bg-slate-800/50 prose-blockquote:py-8 prose-blockquote:px-8 prose-blockquote:rounded-r-2xl prose-blockquote:my-12 prose-blockquote:not-italic prose-blockquote:shadow-sm prose-blockquote:text-slate-700 dark:prose-blockquote:text-slate-300
+            prose-blockquote:border-l-4 prose-blockquote:border-primary-500 prose-blockquote:bg-slate-50 dark:prose-blockquote:bg-slate-800/50 prose-blockquote:py-8 prose-blockquote:px-8 prose-blockquote:rounded-r-2xl prose-blockquote:my-12 prose-blockquote:not-italic prose-blockquote:shadow-sm prose-blockquote:text-slate-800 dark:prose-blockquote:text-slate-300
             
             /* Strong/Bold */
             prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-bold"
