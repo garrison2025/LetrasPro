@@ -62,6 +62,25 @@ const BlogPostPage: React.FC = () => {
     }
   ];
 
+  // Optimization: Generate Unsplash srcset
+  const getResponsiveImageProps = (originalUrl: string) => {
+    // Remove existing width param if present to add our own
+    const baseUrl = originalUrl.split('&w=')[0]; 
+    
+    // Define widths for srcset
+    const widths = [640, 768, 1024, 1280];
+    
+    const srcset = widths
+      .map(w => `${baseUrl}&w=${w}&auto=format&fit=crop ${w}w`)
+      .join(', ');
+
+    return {
+      src: `${baseUrl}&w=1280&auto=format&fit=crop`,
+      srcset,
+      sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px" // Adjusted sizes for container
+    };
+  };
+
   return (
     <article className="pt-24 pb-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-900 min-h-screen font-sans transition-colors duration-300">
       <Helmet>
@@ -127,15 +146,15 @@ const BlogPostPage: React.FC = () => {
           </div>
         </header>
 
-        {/* Cover Image */}
+        {/* Cover Image with srcset */}
         {post.imageUrl && (
-          <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 aspect-video relative group">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 aspect-video relative group bg-slate-100 dark:bg-slate-800">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
             <img 
-              src={post.imageUrl} 
+              {...getResponsiveImageProps(post.imageUrl)}
               alt={post.title}
-              width="1200"
-              height="675"
+              width="1280"
+              height="720"
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
               loading="eager"
             />

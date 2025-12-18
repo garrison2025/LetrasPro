@@ -64,6 +64,24 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     
   // Social Media Image (Open Graph)
   const ogImage = `${baseUrl}/og-image.svg`;
+
+  // WebApplication Structured Data (JSON-LD)
+  const webAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": config.title,
+    "url": canonicalUrl,
+    "description": config.description,
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": config.whyFeatures.map(f => f.title).join(', '),
+    "screenshot": ogImage
+  };
   
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
@@ -176,6 +194,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta name="twitter:title" content={config.title} />
         <meta name="twitter:description" content={config.description} />
         <meta name="twitter:image" content={ogImage} />
+        
+        {/* JSON-LD Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify(webAppSchema)}
+        </script>
       </Helmet>
 
       <div className="pt-12 pb-20 px-4 text-center">
