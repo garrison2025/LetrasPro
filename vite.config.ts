@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import prerender from '@prerenderer/rollup-plugin';
-import puppeteerRenderer from '@prerenderer/renderer-puppeteer';
+import jsdomRenderer from '@prerenderer/renderer-jsdom';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -96,11 +96,9 @@ export default defineConfig({
         '/blog/letras-para-tatuajes-guia-estilos-goticos-cursivos',
         '/blog/mejores-nicks-free-fire-pubg-graffiti'
       ],
-      renderer: new puppeteerRenderer({
+      renderer: new jsdomRenderer({
         // Wait for the event we dispatch in index.tsx
         renderAfterDocumentEvent: 'render-event',
-        renderAfterTime: 5000, 
-        headless: true
       }),
       postProcess(renderedRoute) {
         // Optimize output: Remove the "render-event" script to avoid errors on client

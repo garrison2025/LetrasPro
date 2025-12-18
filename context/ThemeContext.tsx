@@ -16,7 +16,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const savedTheme = localStorage.getItem('theme') as Theme;
       if (savedTheme) return savedTheme;
       
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // Safety check: matchMedia might not exist in JSDOM environment during build
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         return 'dark';
       }
     }
