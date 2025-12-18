@@ -156,6 +156,9 @@ const FontCard: React.FC<FontCardProps> = ({
             : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:-translate-y-3'
       }`}
       onClick={handleCopy}
+      role="button"
+      tabIndex={0}
+      aria-label={`Copiar estilo de letra ${font.name}`}
     >
       <div className="p-8">
         <div className="flex justify-between items-start mb-6">
@@ -199,7 +202,7 @@ const FontCard: React.FC<FontCardProps> = ({
              </button>
              <div 
                className={`p-3 rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}
-               aria-label="Copiar"
+               aria-hidden="true"
              >
                {justCopied ? <Check size={20} strokeWidth={4} /> : <Copy size={20} />}
              </div>

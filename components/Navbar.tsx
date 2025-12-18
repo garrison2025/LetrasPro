@@ -41,7 +41,6 @@ const Navbar: React.FC = () => {
 
   const generators = NAVIGATION_LINKS.filter(l => l.group === 'generators');
   const tools = NAVIGATION_LINKS.filter(l => l.group === 'tools');
-  const others = NAVIGATION_LINKS.filter(l => !l.group); // Inicio, Blog
 
   const renderDropdown = (title: string, items: NavLink[], id: string, icon: React.ReactNode) => {
     const isActive = items.some(item => item.path === location.pathname);
@@ -99,13 +98,14 @@ const Navbar: React.FC = () => {
           : 'bg-transparent border-b border-transparent'
       }`}
       ref={dropdownRef}
+      aria-label="Navegación principal"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
           {/* Logo */}
           <div className="flex items-center">
-            <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Volver al inicio">
+            <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Ir a la página de inicio">
               <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
                 <Sparkles size={22} strokeWidth={2.5} className="fill-white/20" />
               </div>
