@@ -54,6 +54,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debouncedText = useDebounce(inputText, 300);
+
+  // SEO & Meta Tag Logic
+  const baseUrl = 'https://conversordeletrasbonitas.org';
+  
+  // Canonical URL logic:
+  // If home, use base URL (often with trailing slash preference or without, keeping without for now).
+  // If subpage, append path.
+  const canonicalUrl = config.path === '/' 
+    ? `${baseUrl}/` 
+    : `${baseUrl}${config.path}`;
+    
+  // Social Media Image (Open Graph)
+  const ogImage = `${baseUrl}/og-image.svg`;
   
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
@@ -150,8 +163,27 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   return (
     <div className="flex flex-col pb-20 dark:bg-slate-900 transition-colors duration-300">
       <Helmet>
+        {/* Standard SEO */}
         <title>{config.title}</title>
         <meta name="description" content={config.description} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={config.title} />
+        <meta property="og:description" content={config.description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:alt" content={config.title} />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="Conversor de Letras Bonitas" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={canonicalUrl} />
+        <meta name="twitter:title" content={config.title} />
+        <meta name="twitter:description" content={config.description} />
+        <meta name="twitter:image" content={ogImage} />
       </Helmet>
 
       <div className="pt-12 pb-20 px-4 text-center">
