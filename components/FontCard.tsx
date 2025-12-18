@@ -197,7 +197,10 @@ const FontCard: React.FC<FontCardProps> = ({
              >
                 <Star size={20} fill={isFavorite ? "currentColor" : "none"} />
              </button>
-             <div className={`p-3 rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}>
+             <div 
+               className={`p-3 rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}
+               aria-label="Copiar"
+             >
                {justCopied ? <Check size={20} strokeWidth={4} /> : <Copy size={20} />}
              </div>
            </div>

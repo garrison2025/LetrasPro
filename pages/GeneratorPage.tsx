@@ -307,8 +307,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
              <div className="flex items-center gap-3 ml-auto">
                 <div className="flex bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
                    <button onClick={() => setViewMode('list')} aria-label="Vista de lista" className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista de lista"><LayoutList size={20}/></button>
-                   <button onClick={() => setViewMode('instagram')} aria-label="Vista Instagram" className={`p-2.5 rounded-xl transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup Instagram"><Instagram size={20}/></button>
-                   <button onClick={() => setViewMode('whatsapp')} aria-label="Vista WhatsApp" className={`p-2.5 rounded-xl transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup WhatsApp"><MessageCircle size={20}/></button>
+                   <button onClick={() => setViewMode('instagram')} aria-label="Vista Mockup Instagram" className={`p-2.5 rounded-xl transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup Instagram"><Instagram size={20}/></button>
+                   <button onClick={() => setViewMode('whatsapp')} aria-label="Vista Mockup WhatsApp" className={`p-2.5 rounded-xl transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup WhatsApp"><MessageCircle size={20}/></button>
                 </div>
              </div>
           </div>

@@ -52,6 +52,8 @@ const Navbar: React.FC = () => {
         <button
           onClick={() => setActiveDropdown(isOpen ? null : id)}
           aria-expanded={isOpen}
+          aria-haspopup="true"
+          aria-label={`Abrir menú de ${title}`}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
             isActive || isOpen
               ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
@@ -103,7 +105,7 @@ const Navbar: React.FC = () => {
           
           {/* Logo */}
           <div className="flex items-center">
-            <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Ir al inicio">
+            <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Volver al inicio">
               <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
                 <Sparkles size={22} strokeWidth={2.5} className="fill-white/20" />
               </div>
