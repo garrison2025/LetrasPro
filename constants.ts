@@ -1,9 +1,10 @@
+
 import { PageConfig, NavLink } from './types';
 
 export const PAGE_CONFIGS: Record<string, PageConfig> = {
   home: {
     path: '/',
-    title: 'Conversor de Letras Bonitas (Copiar y Pegar) - Fuentes Pro 2025',
+    title: 'Conversor de Letras Bonitas - Copiar y Pegar',
     heading: 'Conversor de Letras Bonitas',
     description: 'El mejor conversor de letras bonitas para Instagram, TikTok y WhatsApp. Transforma tu texto con nuestro conversor de letras bonitas gratuito.',
     content: 'Si buscas destacar en redes sociales, nuestro conversor de letras bonitas es la herramienta definitiva que estabas esperando. A diferencia de otros sitios, este conversor de letras bonitas utiliza tecnología Unicode avanzada para transformar tu texto plano en más de 140 estilos tipográficos únicos. Usar un conversor de letras bonitas profesional te garantiza que tus biografías, estados y mensajes sean legibles y estéticamente perfectos en cualquier dispositivo. Deja de usar fuentes aburridas; el conversor de letras bonitas es tu aliado para viralizar contenido.',
