@@ -57,9 +57,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   // SEO & Meta Tag Logic
   const baseUrl = 'https://conversordeletrasbonitas.org';
   
-  // Canonical URL logic:
-  // If home, use base URL (often with trailing slash preference or without, keeping without for now).
-  // If subpage, append path.
+  // Canonical URL logic
   const canonicalUrl = config.path === '/' 
     ? `${baseUrl}/` 
     : `${baseUrl}${config.path}`;
@@ -162,12 +160,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   return (
     <div className="flex flex-col pb-20 dark:bg-slate-900 transition-colors duration-300">
       <Helmet>
-        {/* Standard SEO */}
         <title>{config.title}</title>
         <meta name="description" content={config.description} />
         <link rel="canonical" href={canonicalUrl} />
-
-        {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={config.title} />
@@ -176,8 +171,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:image:alt" content={config.title} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Conversor de Letras Bonitas" />
-
-        {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={canonicalUrl} />
         <meta name="twitter:title" content={config.title} />
@@ -189,7 +182,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <h1 className="text-4xl sm:text-7xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
           {config.heading}
         </h1>
-        <p className="max-w-2xl mx-auto text-lg text-slate-500 dark:text-slate-400 font-medium">
+        {/* Contrast fix: slate-500 -> slate-600 */}
+        <p className="max-w-2xl mx-auto text-lg text-slate-600 dark:text-slate-400 font-medium">
           {config.description}
         </p>
       </div>
@@ -316,7 +310,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
         <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
 
-        {/* Min-height container to reduce CLS when filtering fonts */}
         <div className="min-h-[600px]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {visibleFonts.map((font) => {
@@ -353,10 +346,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           </div>
         )}
 
-        {/* SEO CONTENT SECTIONS - RESTORED */}
         <div className="mt-32 space-y-24 animate-fade-in">
           
-          {/* Features Section */}
           <section>
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">¿Por qué usar {config.heading}?</h2>
@@ -369,13 +360,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     {getIcon(f.icon)}
                   </div>
                   <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3">{f.title}</h3>
-                  <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{f.description}</p>
+                  <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{f.description}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          {/* How to use section */}
           <section className="bg-slate-900 text-white rounded-[3rem] p-10 sm:p-20 relative overflow-hidden">
              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -394,11 +384,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
              </div>
           </section>
 
-          {/* FAQ Section */}
           <section className="max-w-4xl mx-auto">
              <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">Preguntas Frecuentes</h2>
-              <p className="text-slate-500 dark:text-slate-400 font-medium">Resolvemos tus dudas sobre el {config.heading}.</p>
+              <p className="text-slate-600 dark:text-slate-400 font-medium">Resolvemos tus dudas sobre el {config.heading}.</p>
             </div>
             <div className="space-y-4">
                {config.faqs.map((faq, i) => (
@@ -414,7 +403,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     </button>
                     {openFaq === i && (
                       <div id={`faq-answer-${i}`} className="px-8 pb-8 animate-fade-in">
-                        <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{faq.answer}</p>
+                        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{faq.answer}</p>
                       </div>
                     )}
                  </div>

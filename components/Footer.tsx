@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
           
           <div className="md:col-span-3">
             <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Explorar Estilos</h3>
-            <ul className="space-y-3 text-sm font-medium text-slate-600 dark:text-slate-400">
+            <ul className="space-y-3 text-sm font-medium text-slate-700 dark:text-slate-400">
               <li><Link to="/letras-cursivas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Letras Cursivas</Link></li>
               <li><Link to="/letras-goticas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Letras Góticas</Link></li>
               <li><Link to="/texto-invisible" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Texto Invisible</Link></li>
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
 
           <div className="md:col-span-4">
              <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Información Legal</h3>
-             <ul className="space-y-3 text-sm font-medium text-slate-600 dark:text-slate-400 mb-6">
+             <ul className="space-y-3 text-sm font-medium text-slate-700 dark:text-slate-400 mb-6">
                 <li><Link to="/sobre-nosotros" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sobre Nosotros</Link></li>
                 <li><Link to="/contacto" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contacto</Link></li>
                 <li><Link to="/politica-de-privacidad" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Política de Privacidad</Link></li>

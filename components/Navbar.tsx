@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
           className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
             isActive || isOpen
               ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
-              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+              : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
           }`}
         >
           {icon}
@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
                      `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                        isActive
                          ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-bold'
-                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium'
+                         : 'text-slate-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium'
                      }`
                    }
                  >
@@ -119,7 +119,7 @@ const Navbar: React.FC = () => {
                 `px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
                     ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                 }`
               }
             >
@@ -135,7 +135,7 @@ const Navbar: React.FC = () => {
                 `px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 ${
                   isActive
                     ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                 }`
               }
             >
@@ -155,7 +155,7 @@ const Navbar: React.FC = () => {
             <div className="flex items-center lg:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
+                className="inline-flex items-center justify-center p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
                 aria-label={isOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
                 aria-expanded={isOpen}
               >
@@ -195,7 +195,7 @@ const Navbar: React.FC = () => {
                       `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                         isActive
                           ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-300'
-                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                          : 'text-slate-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                       }`
                     }
                   >
@@ -218,7 +218,7 @@ const Navbar: React.FC = () => {
                       `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                         isActive
                           ? 'bg-secondary-50 dark:bg-secondary-900/20 text-secondary-600 dark:text-secondary-300'
-                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                          : 'text-slate-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                       }`
                     }
                   >
