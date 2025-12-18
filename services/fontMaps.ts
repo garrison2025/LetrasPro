@@ -19,6 +19,8 @@ const MAPS: Record<string, string> = {
   // --- SCRIPT (Cursivas / Tattoo) ---
   scriptFine: '𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟ＥＦＧＨＩＪＫＬＭＮＯＰＱＲ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵',
   scriptBold: '𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝗺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩',
+  handwriting: 'αвc∂єfɢнιjкℓмиσρqяѕтυνωχуz𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩', // Hybrid
+  lovely: 'ꍏ♭☾◗€ƒ⍙hï♪k↳♔♫⊙ρq®ⓢ☂u☋ωx☿zkＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ', // Decorative mix
   
   // --- GOTHIC (Goticas / Tattoo / Free Fire) ---
   fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ',
@@ -119,11 +121,15 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
   const p = ['home'];
   const lowerId = id.toLowerCase();
 
-  // --- LOGIC FOR CURSIVAS ---
+  // --- LOGIC FOR CURSIVAS (Expanded) ---
   if (cat === 'script' || lowerId.includes('italic') || lowerId.includes('hand') || lowerId.includes('cursive') || lowerId.includes('serif-italic')) {
     p.push('cursivas');
   }
-  if (cat === 'decorative' && (lowerId.includes('love') || lowerId.includes('heart') || lowerId.includes('flower'))) {
+  if ((cat === 'decorative' || cat === 'amino') && (lowerId.includes('cur-') || lowerId.includes('love') || lowerId.includes('heart') || lowerId.includes('flower'))) {
+    p.push('cursivas');
+  }
+  // Spanish & Decorators for Cursivas
+  if (lowerId.includes('cur-span') || lowerId.includes('cur-deco')) {
     p.push('cursivas');
   }
 
@@ -158,8 +164,7 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
     p.push('facebook');
   }
   
-  // --- LOGIC FOR AMINO (30+ Needed) ---
-  // Amino users like Aesthetic, Small Caps, Vaporwave, and Decorated styles
+  // --- LOGIC FOR AMINO ---
   if (cat === 'amino' || lowerId.includes('ami-') || cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small') || lowerId.includes('spaced')) {
     p.push('amino');
   }
@@ -195,30 +200,77 @@ const initFonts = () => {
   addFont('heavy-sans', 'Heavy Bold', 'heavy', createMap(MAPS.heavySans), ['Impact'], 'high');
   addFont('wide', 'Vaporwave', 'vaporwave', createMap(MAPS.wide), ['Aesthetic'], 'high');
 
-  // --- CURSIVAS EXPANSION ---
-  const cursiveStyles = [
-    { id: 'wings1', name: 'Script Alas 1', pre: '꧁ ', suf: ' ꧂', map: MAPS.scriptBold },
-    { id: 'wings2', name: 'Script Alas 2', pre: '༺ ', suf: ' ༻', map: MAPS.scriptFine },
-    { id: 'wings3', name: 'Script Alas 3', pre: '࿐ ', suf: ' ࿐', map: MAPS.scriptBold },
-    { id: 'stars1', name: 'Script Estrellas', pre: '★ ', suf: ' ★', map: MAPS.scriptBold },
-    { id: 'stars2', name: 'Script Sparkle', pre: '✨ ', suf: ' ✨', map: MAPS.scriptFine },
-    { id: 'hearts1', name: 'Script Love', pre: '❤ ', suf: ' ❤', map: MAPS.scriptBold },
-    { id: 'hearts2', name: 'Script Cute', pre: '❥ ', suf: ' ❥', map: MAPS.scriptFine },
-    { id: 'flower1', name: 'Script Floral', pre: '✿ ', suf: ' ✿', map: MAPS.scriptFine },
-    { id: 'flower2', name: 'Script Rose', pre: '🌹 ', suf: ' 🌹', map: MAPS.scriptBold },
-    { id: 'royal1', name: 'Script Queen', pre: '♕ ', suf: ' ♕', map: MAPS.scriptBold },
-    { id: 'arrow1', name: 'Script Arrow', pre: '➳ ', suf: ' ➳', map: MAPS.scriptFine },
-    { id: 'music1', name: 'Script Music', pre: '♫ ', suf: ' ♫', map: MAPS.scriptFine },
-    { id: 'fire', name: 'Script Fire', pre: '🔥 ', suf: ' 🔥', map: MAPS.scriptBold },
-    { id: 'butterfly', name: 'Script Butterfly', pre: '🦋 ', suf: ' 🦋', map: MAPS.scriptFine },
-    { id: 'bracket1', name: 'Script Bracket', pre: '【 ', suf: ' 】', map: MAPS.scriptBold },
-    { id: 'line1', name: 'Script Lined', pre: '━ ', suf: ' ━', map: MAPS.scriptFine },
+  // --- CURSIVAS EXPANSION (60+ STYLES TOTAL) ---
+  
+  // 1. New Bases
+  addFont('cur-handwriting', 'Handwriting Mix', 'script', createMap(MAPS.handwriting), ['Aesthetic', 'Raro'], 'medium');
+  addFont('cur-lovely', 'Lovely Cursive', 'script', createMap(MAPS.lovely), ['Cute', 'Soft'], 'medium');
+
+  // 2. Combiners for Cursives (Effects)
+  addFont('cur-under', 'Script Subrayado', 'script', createCombinerMap('scriptFine', COMBINERS.underline), ['Elegante'], 'medium');
+  addFont('cur-strike', 'Script Tachado', 'script', createCombinerMap('scriptFine', COMBINERS.strikethrough), ['Elegante'], 'medium');
+  addFont('cur-wave', 'Script Ondulado', 'script', createCombinerMap('scriptFine', COMBINERS.wave), ['Elegante'], 'medium');
+  addFont('cur-bold-under', 'Bold Script Subrayado', 'script', createCombinerMap('scriptBold', COMBINERS.underline), ['Elegante'], 'medium');
+
+  // 3. Extensive Decorative Cursives
+  const cursiveDecorators = [
+    { id: 'wings1', name: 'Alas Reales', pre: '꧁ ', suf: ' ꧂', map: MAPS.scriptBold },
+    { id: 'wings2', name: 'Alas Finas', pre: '༺ ', suf: ' ༻', map: MAPS.scriptFine },
+    { id: 'wings3', name: 'Alas Viento', pre: '࿐ ', suf: ' ࿐', map: MAPS.scriptBold },
+    { id: 'stars1', name: 'Estrellas Bold', pre: '★ ', suf: ' ★', map: MAPS.scriptBold },
+    { id: 'stars2', name: 'Estrellas Fine', pre: '✨ ', suf: ' ✨', map: MAPS.scriptFine },
+    { id: 'hearts1', name: 'Corazones Bold', pre: '❤ ', suf: ' ❤', map: MAPS.scriptBold },
+    { id: 'hearts2', name: 'Corazones Fine', pre: '❥ ', suf: ' ❥', map: MAPS.scriptFine },
+    { id: 'hearts3', name: 'Love Vibes', pre: 'ღ ', suf: ' ღ', map: MAPS.scriptFine },
+    { id: 'flower1', name: 'Floral Fine', pre: '✿ ', suf: ' ✿', map: MAPS.scriptFine },
+    { id: 'flower2', name: 'Rosa Romántica', pre: '🌹 ', suf: ' 🌹', map: MAPS.scriptBold },
+    { id: 'flower3', name: 'Girasol', pre: '🌻 ', suf: ' 🌻', map: MAPS.scriptFine },
+    { id: 'flower4', name: 'Flor de Cerezo', pre: '🌸 ', suf: ' 🌸', map: MAPS.scriptItalic },
+    { id: 'royal1', name: 'Reina Script', pre: '♕ ', suf: ' ♕', map: MAPS.scriptBold },
+    { id: 'royal2', name: 'Rey Script', pre: '♔ ', suf: ' ♔', map: MAPS.scriptBold },
+    { id: 'arrow1', name: 'Flecha Cupido', pre: '➳ ', suf: ' ➳', map: MAPS.scriptFine },
+    { id: 'arrow2', name: 'Flecha Simple', pre: '➜ ', suf: '', map: MAPS.serifItalic },
+    { id: 'music1', name: 'Melodía Suave', pre: '♫ ', suf: ' ♫', map: MAPS.scriptFine },
+    { id: 'music2', name: 'Notas Musicales', pre: '♪ ', suf: ' ♯', map: MAPS.scriptBold },
+    { id: 'fire', name: 'Fuego Pasión', pre: '🔥 ', suf: ' 🔥', map: MAPS.scriptBold },
+    { id: 'butterfly1', name: 'Mariposa Blue', pre: '🦋 ', suf: ' 🦋', map: MAPS.scriptFine },
+    { id: 'butterfly2', name: 'Mariposa Ink', pre: 'ʚ ', suf: ' ɞ', map: MAPS.scriptBold },
+    { id: 'bracket1', name: 'Corchetes Bold', pre: '【 ', suf: ' 】', map: MAPS.scriptBold },
+    { id: 'bracket2', name: 'Rincón Asiático', pre: '『 ', suf: ' 』', map: MAPS.scriptFine },
+    { id: 'line1', name: 'Línea Elegante', pre: '━ ', suf: ' ━', map: MAPS.scriptFine },
+    { id: 'line2', name: 'Ondas del Mar', pre: '〰 ', suf: ' 〰', map: MAPS.scriptFine },
+    { id: 'cloud', name: 'Nube Script', pre: '☁️ ', suf: ' ☁️', map: MAPS.serifItalic },
+    { id: 'moon', name: 'Luna Script', pre: '☾ ', suf: ' ☽', map: MAPS.scriptFine },
+    { id: 'sun', name: 'Sol Radiante', pre: '☼ ', suf: ' ☼', map: MAPS.scriptBold },
+    { id: 'leaf', name: 'Naturaleza', pre: '🌿 ', suf: ' 🌿', map: MAPS.scriptFine },
+    { id: 'bow', name: 'Lazo Coquette', pre: '🎀 ', suf: ' 🎀', map: MAPS.scriptFine },
+    { id: 'sparkle2', name: 'Destellos', pre: '❇ ', suf: ' ❇', map: MAPS.scriptFine },
+    { id: 'feather', name: 'Pluma Escritura', pre: '🪶 ', suf: ' 🪶', map: MAPS.scriptItalic },
+    { id: 'fairy', name: 'Hada Mágica', pre: '🧚 ', suf: ' 🧚', map: MAPS.scriptFine },
+    { id: 'angel', name: 'Angel Script', pre: '👼 ', suf: ' 👼', map: MAPS.scriptFine },
+    { id: 'bear', name: 'Osito Cute', pre: '🧸 ', suf: ' 🧸', map: MAPS.lovely },
+    { id: 'cat', name: 'Gato Script', pre: '🐱 ', suf: ' 🐱', map: MAPS.handwriting },
+    { id: 'star3', name: 'Estrella Fugaz', pre: '💫 ', suf: ' 💫', map: MAPS.scriptBold },
   ];
 
-  cursiveStyles.forEach(s => {
-    const fullId = `cursive-${s.id}`;
+  cursiveDecorators.forEach(s => {
+    const fullId = `cur-deco-${s.id}`;
     DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
     addFont(s.id, s.name, 'script', createMap(s.map), ['Decorado', 'Cursiva'], 'medium');
+  });
+
+  // 4. Spanish Specifics (Cursivas)
+  const spanishCursive = [
+    { id: 'cur-span-excl', name: '¡Gritando!', pre: '¡ ', suf: ' !', map: MAPS.scriptBold },
+    { id: 'cur-span-quest', name: '¿Pregunta?', pre: '¿ ', suf: ' ?', map: MAPS.scriptFine },
+    { id: 'cur-span-quote', name: '«Cita»', pre: '« ', suf: ' »', map: MAPS.serifItalic },
+    { id: 'cur-span-dash', name: '—Diálogo—', pre: '— ', suf: ' —', map: MAPS.scriptFine },
+  ];
+
+  spanishCursive.forEach(s => {
+    const fullId = `cur-span-${s.id}`;
+    DECORATOR_CONFIG[fullId] = { prefix: s.pre, suffix: s.suf };
+    addFont(s.id, s.name, 'script', createMap(s.map), ['Español', 'Cursiva'], 'high');
   });
 
   // --- GOTHIC EXPANSION ---
@@ -410,7 +462,7 @@ const initFonts = () => {
     addFont(d.id, d.name, 'facebook', createMap(d.map), ['Post', 'Estado'], 'high');
   });
 
-  // --- AMINO EXPANSION (NEW - 30+ UNIQUE STYLES) ---
+  // --- AMINO EXPANSION ---
   
   // 1. Basics & Formatting for Amino Blogs/Wikis
   addFont('ami-small', 'Amino Small Caps', 'amino', createMap(MAPS.smallCaps), ['Wiki', 'Header'], 'high');
@@ -423,7 +475,7 @@ const initFonts = () => {
   addFont('ami-bubble', 'Amino Bubble', 'amino', createMap(MAPS.bubble), ['Cute', 'Redondo'], 'medium');
   addFont('ami-bracket', 'Amino [Brackets]', 'amino', createMap(MAPS.parenthesized), ['Wiki'], 'high');
 
-  // 3. Aesthetic Decorators (Using Sans or Monospace base)
+  // 3. Aesthetic Decorators
   const aminoDecorators = [
     { id: 'ami-star', name: 'Amino Stars', pre: '★ ', suf: ' ★', map: MAPS.sans },
     { id: 'ami-sparkle', name: 'Amino Sparkles', pre: '✨ ', suf: ' ✨', map: MAPS.smallCaps },
@@ -437,7 +489,7 @@ const initFonts = () => {
     { id: 'ami-line', name: 'Amino Lined', pre: '━ ', suf: ' ━', map: MAPS.sans },
     { id: 'ami-wave', name: 'Amino Waves', pre: '〰 ', suf: ' 〰', map: MAPS.sans },
     { id: 'ami-bow', name: 'Amino Bow', pre: '🎀 ', suf: ' 🎀', map: MAPS.scriptFine },
-    { id: 'ami-bunny', name: 'Amino Bunny', pre: '૮ ˶ᵔ ᵕ ᵔ˶ ა ', suf: '', map: MAPS.sans }, // Kaomoji prefix
+    { id: 'ami-bunny', name: 'Amino Bunny', pre: '૮ ˶ᵔ ᵕ ᵔ˶ ა ', suf: '', map: MAPS.sans },
     { id: 'ami-bear', name: 'Amino Bear', pre: 'ʕ•ᴥ•ʔ ', suf: '', map: MAPS.monospace },
     { id: 'ami-cat', name: 'Amino Cat', pre: '🐱 ', suf: ' 🐱', map: MAPS.sans },
     { id: 'ami-music', name: 'Amino Music', pre: '♫ ', suf: ' ♫', map: MAPS.sansItalic },
@@ -458,7 +510,6 @@ const initFonts = () => {
   addFont('ami-under', 'Amino Subraya', 'amino', createCombinerMap('sans', COMBINERS.underline), ['Header', 'Wiki'], 'high');
   addFont('ami-slash', 'Amino Slash', 'amino', createCombinerMap('sans', COMBINERS.slash), ['Edgy', 'Wiki'], 'high');
   addFont('ami-glitch', 'Amino Glitch', 'amino', createCombinerMap('sans', '\u0310'), ['Glitch', 'Edgy'], 'medium');
-
 
   // Extra Combiners
   addFont('arrow-below', 'Arrow Below', 'sans', createCombinerMap('sansBold', COMBINERS.arrowBelow), ['Decorado'], 'high');
