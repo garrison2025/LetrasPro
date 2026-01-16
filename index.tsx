@@ -21,9 +21,22 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// SEO OPTIMIZATION: Hydration Logic
+// If the root element has children, it means vite-plugin-prerender has already 
+// populated the HTML. We use hydrateRoot to attach event listeners to existing markup.
+// If it's empty (dev mode or fallback), we use createRoot.
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrateRoot(
+    rootElement,
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+} else {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}

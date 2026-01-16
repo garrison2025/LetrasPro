@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
@@ -168,7 +167,7 @@ const FontCard: React.FC<FontCardProps> = ({
     <article 
       className={`group relative bg-white dark:bg-slate-800 rounded-[2.5rem] border transition-all duration-300 cursor-pointer overflow-hidden content-visibility-auto contain-content ${
         justCopied
-          ? 'border-green-500 ring-4 ring-green-100 dark:ring-green-900/40 shadow-xl scale-[1.02]' 
+          ? 'border-green-500 ring-4 ring-green-100 dark:ring-green-900/40 shadow-xl scale-[1.02] bg-green-50/10' 
           : isFavorite 
             ? 'border-primary-200 dark:border-primary-700 shadow-xl ring-2 ring-primary-100 dark:ring-primary-900/20' 
             : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1'
@@ -178,10 +177,13 @@ const FontCard: React.FC<FontCardProps> = ({
       tabIndex={0}
       aria-label={`Copiar estilo de letra ${font.name}`}
     >
+      {/* Visual Feedback Overlay */}
+      <div className={`absolute inset-0 bg-green-400/10 transition-opacity duration-300 pointer-events-none ${justCopied ? 'opacity-100' : 'opacity-0'}`}></div>
+
       {/* Semantic Heading for SEO Structure - Visually Hidden */}
       <h3 className="sr-only">Estilo {font.name}</h3>
 
-      <div className="p-6 md:p-8">
+      <div className="p-6 md:p-8 relative z-10">
         <div className="flex justify-between items-start mb-4 md:mb-6">
            <div className="flex flex-wrap items-center gap-2">
              <span className="inline-flex items-center px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] shadow-sm">
@@ -222,7 +224,7 @@ const FontCard: React.FC<FontCardProps> = ({
                 <Star size={18} fill={isFavorite ? "currentColor" : "none"} />
              </button>
              <div 
-               className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}
+               className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 dark:bg-green-900/30 scale-125 shadow-xl' : 'text-slate-300'}`}
                aria-hidden="true"
              >
                {justCopied ? <Check size={18} strokeWidth={4} /> : <Copy size={18} />}

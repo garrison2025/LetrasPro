@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PageConfig, TextCase } from '../types';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
@@ -26,13 +25,17 @@ const TONES = ['Todos', 'Elegante', 'Gaming', 'Cute', 'Urbano', 'Aesthetic', 'Pr
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { month, year, fullDate } = useDynamicDate(); // Dynamic Date Hook
   
   const [inputText, setInputText] = useState(() => {
     try { return localStorage.getItem('let_pro_input') || ''; } catch (e) { return ''; }
   });
   const [textCase, setTextCase] = useState<TextCase>('original');
-  const [searchQuery, setSearchQuery] = useState('');
+  
+  // UX: Initialize search query from URL if present (SEO friendly search results)
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '');
+  
   const [activeTone, setActiveTone] = useState('Todos');
   const [showBioTemplates, setShowBioTemplates] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -73,7 +76,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const ogImage = `${baseUrl}/og-image.png`;
 
   // Dynamic Title Logic (CTR Booster)
-  // Replaces static "2025" with dynamic year, or appends "Month Year" if not present
   const dynamicTitle = useMemo(() => {
     let t = config.title;
     if (t.includes('2025')) {
@@ -89,6 +91,23 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   // Aggregate Rating Data (Simulated for Schema)
   const ratingValue = 4.8;
   const ratingCount = 2450; 
+
+  // SEO: WebSite Schema with Sitelinks Search Box
+  // This allows Google to show a search box for your site in SERPs
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Conversor de Letras Pro",
+    "url": baseUrl,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${baseUrl}/?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
 
   // WebApplication Structured Data (JSON-LD)
   const webAppSchema = {
@@ -177,6 +196,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   }, [config.path, location.pathname]);
 
+  // Sync Search Query with URL for shareability
+  useEffect(() => {
+    if (searchQuery) {
+      setSearchParams({ q: searchQuery }, { replace: true });
+    } else {
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchQuery, setSearchParams]);
+
   useEffect(() => {
     localStorage.setItem('let_pro_input', inputText);
     localStorage.setItem('let_pro_favs', JSON.stringify(favorites));
@@ -244,7 +272,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(f => f.name.toLowerCase().includes(q) || f.category.includes(q));
+      result = result.filter(f => f.name.toLowerCase().includes(q) || f.category.includes(q) || f.tags?.some(t => t.toLowerCase().includes(q)));
     }
     
     if (activeTone !== 'Todos') {
@@ -316,7 +344,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         
         {/* JSON-LD Schemas */}
         <script type="application/ld+json">
-          {JSON.stringify([webAppSchema, breadcrumbSchema, faqSchema, howToSchema])}
+          {JSON.stringify([
+            // Add WebSite schema only for home page, or always if you want site-wide search box
+            config.path === '/' ? websiteSchema : null, 
+            webAppSchema, 
+            breadcrumbSchema, 
+            faqSchema, 
+            howToSchema
+          ].filter(Boolean))}
         </script>
       </Helmet>
       

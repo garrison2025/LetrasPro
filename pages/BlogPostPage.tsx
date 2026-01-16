@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -153,6 +152,7 @@ const BlogPostPage: React.FC = () => {
         {post.imageUrl && (
           <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 relative group aspect-video">
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+            {/* CLS FIX: Explicit width and height attributes */}
             <img 
               {...getResponsiveImageProps(post.imageUrl)}
               alt={post.title}
