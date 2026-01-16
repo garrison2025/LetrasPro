@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -8,7 +9,7 @@ import { BIO_TEMPLATES } from '../data/bioTemplates';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import Toast from '../components/Toast';
-import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp } from 'lucide-react';
+import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 
 interface GeneratorPageProps {
@@ -138,8 +139,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     const handleScroll = () => {
       if (inputContainerRef.current) {
         const rect = inputContainerRef.current.getBoundingClientRect();
-        // Show sticky input when the main input container bottom passes the navbar area (approx 80px)
-        setIsStickyVisible(rect.bottom < 80); 
+        // Show sticky input when the main input container top passes the navbar area
+        // Navbar is 64px on mobile, 80px on desktop
+        const threshold = window.innerWidth < 1024 ? 64 : 80;
+        setIsStickyVisible(rect.bottom < threshold); 
       }
     };
     
@@ -224,6 +227,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       case 'trending-up': return <TrendingUp size={24} />;
       case 'bold': return <Bold size={24} />;
       case 'layers': return <Layers size={24} />;
+      case 'message-circle': return <MessageCircle size={24} />;
+      case 'skull': return <Skull size={24} />;
+      case 'crosshair': return <Crosshair size={24} />;
+      case 'check-circle': return <CheckCircle size={24} />;
+      case 'message-square': return <MessageSquare size={24} />;
+      case 'user': return <User size={24} />;
+      case 'download-cloud': return <DownloadCloud size={24} />;
+      case 'sparkles': return <Sparkles size={24} />;
+      case 'users': return <Users size={24} />;
       default: return <Check size={24} />;
     }
   };
@@ -256,22 +268,22 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         </script>
       </Helmet>
       
-      {/* Sticky Input Header */}
-      <div className={`fixed top-[80px] left-0 right-0 z-40 bg-white/90 dark:bg-slate-900/95 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 shadow-lg transition-all duration-300 transform ${isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
-        <div className="max-w-6xl mx-auto px-4 py-3 flex gap-3 items-center">
+      {/* Sticky Input Header - Position adjusted for new navbar height (64px mobile / 80px desktop) */}
+      <div className={`fixed top-[64px] lg:top-[80px] left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-lg transition-all duration-300 transform ${isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+        <div className="max-w-6xl mx-auto px-4 py-2 flex gap-2 items-center">
           <input 
             type="text" 
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Escribe aquí para cambiar el texto..."
-            className="flex-grow bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-2.5 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-primary-500 outline-none shadow-inner"
+            placeholder="Escribe aquí..."
+            className="flex-grow bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-primary-500 outline-none shadow-inner text-base"
           />
           <button 
             onClick={() => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
               setTimeout(() => textareaRef.current?.focus(), 500);
             }}
-            className="p-2.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl hover:bg-primary-100 transition-colors"
+            className="p-3 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl hover:bg-primary-100 transition-colors"
             aria-label="Volver arriba"
           >
             <ArrowUp size={20} />
@@ -279,65 +291,68 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         </div>
       </div>
 
-      <div className="pt-12 pb-20 px-4 text-center">
+      {/* Reduced top padding for mobile to bring input above fold */}
+      <div className="pt-6 md:pt-12 pb-8 md:pb-20 px-4 text-center">
         {/* Breadcrumbs */}
-        <nav className="flex justify-center items-center gap-2 text-sm text-slate-500 mb-6" aria-label="Breadcrumb">
+        <nav className="flex justify-center items-center gap-2 text-xs md:text-sm text-slate-500 mb-3 md:mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-primary-600 transition-colors flex items-center gap-1 font-medium">
-            <Home size={14} /> Inicio
+            <Home size={12} /> Inicio
           </Link>
-          <ChevronRight size={14} className="opacity-40" />
-          <span className="font-semibold text-slate-800 dark:text-slate-300 truncate max-w-[200px] sm:max-w-none">
+          <ChevronRight size={12} className="opacity-40" />
+          <span className="font-semibold text-slate-800 dark:text-slate-300 truncate max-w-[150px] sm:max-w-none">
             {config.heading}
           </span>
         </nav>
 
-        <h1 className="text-4xl sm:text-7xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
+        {/* Compact Title for Mobile */}
+        <h1 className="text-3xl sm:text-7xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter leading-tight">
           {config.heading}
         </h1>
-        <p className="max-w-2xl mx-auto text-lg text-slate-700 dark:text-slate-400 font-medium">
+        <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-700 dark:text-slate-400 font-medium leading-snug">
           {config.description}
         </p>
       </div>
 
-      <div className="max-w-6xl mx-auto w-full px-4 -mt-10 relative z-20">
+      <div className="max-w-6xl mx-auto w-full px-4 -mt-4 md:-mt-10 relative z-20">
         
-        <div ref={inputContainerRef} className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-8">
-          <div className="p-8">
-            <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-              <div className="flex gap-2 items-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
-                <Type size={14} /> Panel de Control
+        <div ref={inputContainerRef} className="bg-white dark:bg-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-6 md:mb-8">
+          <div className="p-5 md:p-8">
+            <div className="flex flex-wrap justify-between items-center mb-4 md:mb-6 gap-3">
+              <div className="hidden sm:flex gap-2 items-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
+                <Type size={14} /> Panel
               </div>
-              <div className="flex gap-2">
-                {(['upper', 'lower', 'title'] as TextCase[]).map(mode => (
-                  <button
-                    key={mode}
-                    onClick={() => setTextCase(textCase === mode ? 'original' : mode)}
-                    className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500'}`}
-                  >
-                    {mode === 'upper' ? 'AB' : mode === 'lower' ? 'ab' : 'Ab'}
-                  </button>
-                ))}
-                <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+              <div className="flex gap-1.5 md:gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                <div className="flex gap-1.5 md:gap-2">
+                  {(['upper', 'lower', 'title'] as TextCase[]).map(mode => (
+                    <button
+                      key={mode}
+                      onClick={() => setTextCase(textCase === mode ? 'original' : mode)}
+                      className={`flex-1 sm:flex-none px-3 py-2 md:py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500'}`}
+                    >
+                      {mode === 'upper' ? 'AB' : mode === 'lower' ? 'ab' : 'Ab'}
+                    </button>
+                  ))}
+                </div>
+                <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
                 <button 
                   onClick={() => setShowBioTemplates(!showBioTemplates)}
-                  className="flex items-center gap-2 px-4 py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl text-[10px] font-black uppercase tracking-tighter hover:bg-primary-100 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 md:py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter hover:bg-primary-100 transition-colors"
                 >
-                  <Wand2 size={14} /> Plantillas
+                  <Wand2 size={14} /> <span className="hidden sm:inline">Plantillas</span>
                 </button>
               </div>
             </div>
 
             {showBioTemplates && (
-              <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in">
+              <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 animate-fade-in">
                 {BIO_TEMPLATES.map(bt => (
                   <button
                     key={bt.id}
                     onClick={() => applyBioTemplate(bt.layout)}
-                    className="p-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-3xl text-left hover:border-primary-400 hover:shadow-lg transition-all group"
+                    className="p-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl text-left hover:border-primary-400 hover:shadow-lg transition-all group"
                   >
                     <div className="text-[10px] font-black text-primary-500 uppercase mb-1">{bt.category}</div>
                     <div className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">{bt.name}</div>
-                    <div className="text-[10px] text-slate-400 line-clamp-1 italic">{bt.layout.substring(0, 30)}...</div>
                   </button>
                 ))}
               </div>
@@ -347,73 +362,73 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               ref={textareaRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Escribe tu mensaje o nombre aquí..."
-              className="w-full text-2xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-700 dark:text-white min-h-[140px] resize-none leading-tight"
+              placeholder="Escribe aquí..."
+              className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-700 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
             />
             
-            <div className="flex flex-wrap items-center justify-between gap-6 mt-8 pt-8 border-t border-slate-50 dark:border-slate-700/50">
-               <div className="flex flex-wrap gap-2">
-                 {QUICK_SYMBOLS.map(s => (
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
+               <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                 {QUICK_SYMBOLS.slice(0, window.innerWidth < 640 ? 7 : undefined).map(s => (
                    <button 
                     key={s} 
                     onClick={() => insertSymbol(s)} 
                     aria-label={`Insertar símbolo ${s}`}
-                    className="w-10 h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 transition-all text-base font-bold border border-transparent hover:border-primary-100"
+                    className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100"
                    >
                      {s}
                    </button>
                  ))}
                </div>
-               <div className="flex items-center gap-6">
-                 <div className="flex flex-col items-end">
+               <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-6">
+                 <div className="flex flex-col items-start sm:items-end">
                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
-                     <Instagram size={12} /> Instagram Bio
+                     <Instagram size={12} /> Bio
                    </div>
                    <div className="flex items-baseline gap-1">
-                     <span className={`text-2xl font-black ${inputText.length > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
+                     <span className={`text-xl md:text-2xl font-black ${inputText.length > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
                        {inputText.length}
                      </span>
-                     <span className="text-slate-300 dark:text-slate-600 font-bold">/ {INSTAGRAM_BIO_LIMIT}</span>
+                     <span className="text-slate-300 dark:text-slate-600 font-bold text-xs md:text-sm">/ {INSTAGRAM_BIO_LIMIT}</span>
                    </div>
                  </div>
                  {inputText && (
-                   <button onClick={() => setInputText('')} aria-label="Borrar texto" className="p-4 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-3xl hover:bg-red-100 transition-all active:scale-90">
-                     <Trash2 size={24} />
+                   <button onClick={() => setInputText('')} aria-label="Borrar texto" className="p-3 md:p-4 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-2xl md:rounded-3xl hover:bg-red-100 transition-all active:scale-90">
+                     <Trash2 size={20} />
                    </button>
                  )}
                </div>
             </div>
           </div>
           
-          <div className="bg-slate-50/50 dark:bg-slate-900/30 p-5 border-t border-slate-100 dark:border-slate-700 flex flex-wrap gap-4 items-center">
-             <div className="relative flex-grow max-sm:max-w-none max-w-sm">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <div className="bg-slate-50/50 dark:bg-slate-900/30 p-4 md:p-5 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3 md:gap-4 items-stretch sm:items-center">
+             <div className="relative flex-grow">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                 <input 
                   type="text" 
-                  placeholder="Filtrar por nombre o estilo..." 
+                  placeholder="Buscar estilo..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-6 py-3 bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white"
+                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white"
                 />
              </div>
              
-             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 px-1">
+             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
                 {TONES.map(t => (
                   <button
                     key={t}
                     onClick={() => setActiveTone(t)}
-                    className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
+                    className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
                   >
                     {t}
                   </button>
                 ))}
              </div>
 
-             <div className="flex items-center gap-3 ml-auto">
-                <div className="flex bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                   <button onClick={() => setViewMode('list')} aria-label="Vista de lista" className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista de lista"><LayoutList size={20}/></button>
-                   <button onClick={() => setViewMode('instagram')} aria-label="Vista Mockup Instagram" className={`p-2.5 rounded-xl transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup Instagram"><Instagram size={20}/></button>
-                   <button onClick={() => setViewMode('whatsapp')} aria-label="Vista Mockup WhatsApp" className={`p-2.5 rounded-xl transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`} title="Vista Mockup WhatsApp"><MessageCircle size={20}/></button>
+             <div className="flex items-center gap-2 justify-end">
+                <div className="flex bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                   <button onClick={() => setViewMode('list')} aria-label="Lista" className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><LayoutList size={18}/></button>
+                   <button onClick={() => setViewMode('instagram')} aria-label="Instagram" className={`p-2 rounded-lg transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><Instagram size={18}/></button>
+                   <button onClick={() => setViewMode('whatsapp')} aria-label="WhatsApp" className={`p-2 rounded-lg transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><MessageCircle size={18}/></button>
                 </div>
              </div>
           </div>
@@ -422,7 +437,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
 
         <div className="min-h-[600px]">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {visibleFonts.map((font) => {
               const baseText = debouncedText || 'Vista Previa';
               const transformed = transformText(baseText, textCase);
@@ -447,48 +462,48 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         </div>
 
         {hasMore && (
-          <div className="mt-16 text-center">
+          <div className="mt-12 text-center">
             <button 
               onClick={() => setVisibleCount(v => v + ITEMS_PER_PAGE)}
-              className="px-16 py-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-[2rem] hover:scale-105 transition-all shadow-2xl shadow-slate-900/10 active:scale-95 text-lg uppercase tracking-widest"
+              className="px-10 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-3xl hover:scale-105 transition-all shadow-xl shadow-slate-900/10 active:scale-95 text-base uppercase tracking-widest"
             >
-              Explorar más estilos
+              Cargar más estilos
             </button>
           </div>
         )}
 
-        <div className="mt-32 space-y-24 animate-fade-in">
+        <div className="mt-24 space-y-20 animate-fade-in">
           
           <section>
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">¿Por qué usar {config.heading}?</h2>
-              <div className="w-20 h-1.5 bg-primary-600 mx-auto rounded-full"></div>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-3">¿Por qué usar este Conversor?</h2>
+              <div className="w-16 h-1.5 bg-primary-600 mx-auto rounded-full"></div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {config.whyFeatures.map((f, i) => (
-                <div key={i} className="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-700 hover:scale-105 transition-transform">
-                  <div className="w-14 h-14 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-2xl flex items-center justify-center mb-6">
+                <div key={i} className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-700 hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-2xl flex items-center justify-center mb-5">
                     {getIcon(f.icon)}
                   </div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white mb-3">{f.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{f.description}</p>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2">{f.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed text-sm">{f.description}</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="bg-slate-900 text-white rounded-[3rem] p-10 sm:p-20 relative overflow-hidden">
+          <section className="bg-slate-900 text-white rounded-[2.5rem] p-8 sm:p-16 relative overflow-hidden">
              <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
-             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 <div>
-                   <h2 className="text-4xl sm:text-6xl font-black mb-8 leading-tight">Cómo usar <br/><span className="text-primary-400">Paso a Paso</span></h2>
-                   <p className="text-slate-400 text-lg font-medium mb-12">{config.content}</p>
+                   <h2 className="text-3xl sm:text-5xl font-black mb-6 leading-tight">Guía Rápida <br/><span className="text-primary-400">Paso a Paso</span></h2>
+                   <p className="text-slate-400 text-base font-medium mb-8">{config.content}</p>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-4">
                    {config.howToSteps.map((step, i) => (
-                     <div key={i} className="flex gap-6 items-start">
-                        <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-black flex-shrink-0">{i + 1}</div>
-                        <p className="text-lg text-slate-200 font-bold">{step}</p>
+                     <div key={i} className="flex gap-4 items-start">
+                        <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white font-black flex-shrink-0 text-sm">{i + 1}</div>
+                        <p className="text-base text-slate-200 font-bold">{step}</p>
                      </div>
                    ))}
                 </div>
@@ -496,25 +511,25 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           </section>
 
           <section className="max-w-4xl mx-auto">
-             <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4">Preguntas Frecuentes</h2>
-              <p className="text-slate-600 dark:text-slate-400 font-medium">Resolvemos tus dudas sobre el {config.heading}.</p>
+             <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-3">Preguntas Frecuentes</h2>
+              <p className="text-slate-600 dark:text-slate-400 font-medium">Todo sobre el {config.heading}.</p>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
                {config.faqs.map((faq, i) => (
-                 <div key={i} className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 overflow-hidden transition-all">
+                 <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden transition-all">
                     <button 
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full px-8 py-6 flex justify-between items-center text-left hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                      className="w-full px-6 py-5 flex justify-between items-center text-left hover:bg-slate-50 dark:hover:bg-slate-700/50"
                       aria-expanded={openFaq === i}
                       aria-controls={`faq-answer-${i}`}
                     >
-                      <span className="text-lg font-black text-slate-800 dark:text-white">{faq.question}</span>
-                      <ChevronDown className={`text-primary-600 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+                      <span className="text-base font-black text-slate-800 dark:text-white pr-4">{faq.question}</span>
+                      <ChevronDown className={`text-primary-600 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
                     </button>
                     {openFaq === i && (
-                      <div id={`faq-answer-${i}`} className="px-8 pb-8 animate-fade-in">
-                        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{faq.answer}</p>
+                      <div id={`faq-answer-${i}`} className="px-6 pb-6 animate-fade-in">
+                        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed text-sm">{faq.answer}</p>
                       </div>
                     )}
                  </div>

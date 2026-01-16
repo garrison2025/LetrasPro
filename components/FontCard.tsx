@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
@@ -29,6 +30,11 @@ const FontCard: React.FC<FontCardProps> = ({
 
   const handleCopy = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
+
+    // Haptic Feedback for Mobile
+    if (navigator.vibrate) {
+      navigator.vibrate(20);
+    }
 
     navigator.clipboard.writeText(rawText).then(() => {
       setJustCopied(true);
@@ -148,68 +154,68 @@ const FontCard: React.FC<FontCardProps> = ({
 
   return (
     <div 
-      className={`group relative bg-white dark:bg-slate-800 rounded-[3rem] border transition-all duration-700 cursor-pointer overflow-hidden content-visibility-auto contain-content ${
+      className={`group relative bg-white dark:bg-slate-800 rounded-[2.5rem] border transition-all duration-300 cursor-pointer overflow-hidden content-visibility-auto contain-content ${
         justCopied
-          ? 'border-green-500 ring-8 ring-green-100 dark:ring-green-900/40 shadow-2xl scale-[1.03]' 
+          ? 'border-green-500 ring-4 ring-green-100 dark:ring-green-900/40 shadow-xl scale-[1.02]' 
           : isFavorite 
-            ? 'border-primary-200 dark:border-primary-700 shadow-2xl ring-2 ring-primary-100 dark:ring-primary-900/20' 
-            : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:-translate-y-3'
+            ? 'border-primary-200 dark:border-primary-700 shadow-xl ring-2 ring-primary-100 dark:ring-primary-900/20' 
+            : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1'
       }`}
       onClick={handleCopy}
       role="button"
       tabIndex={0}
       aria-label={`Copiar estilo de letra ${font.name}`}
     >
-      <div className="p-8">
-        <div className="flex justify-between items-start mb-6">
+      <div className="p-6 md:p-8">
+        <div className="flex justify-between items-start mb-4 md:mb-6">
            <div className="flex flex-wrap items-center gap-2">
-             <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] shadow-sm">
+             <span className="inline-flex items-center px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] shadow-sm">
                {font.name}
              </span>
              {font.compatibility === 'high' ? (
                <div className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full text-[9px] font-black uppercase" title="Alta Compatibilidad">
-                 <ShieldCheck size={14} /> Safe
+                 <ShieldCheck size={12} /> Safe
                </div>
              ) : font.compatibility === 'medium' ? (
                <div className="flex items-center gap-1 px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-full text-[9px] font-black uppercase" title="Compatibilidad Media">
-                 <AlertCircle size={14} /> Mid
+                 <AlertCircle size={12} /> Mid
                </div>
              ) : (
                <div className="flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full text-[9px] font-black uppercase" title="Baja Compatibilidad">
-                 <AlertTriangle size={14} /> Beta
+                 <AlertTriangle size={12} /> Beta
                </div>
              )}
            </div>
            
-           <div className="flex items-center gap-3 z-10">
+           <div className="flex items-center gap-2 z-10">
              <button
                 onClick={handleDownloadImage}
                 disabled={isGeneratingImg}
-                className="p-3 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-2xl transition-all active:scale-90 shadow-sm"
+                className="p-2 md:p-3 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm"
                 title="Descargar PNG Pro"
                 aria-label={`Descargar imagen de estilo ${font.name}`}
              >
-                <Download size={20} />
+                <Download size={18} />
              </button>
              <button
-                className={`p-3 rounded-2xl transition-all active:scale-90 shadow-sm ${
+                className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm ${
                   isFavorite ? 'text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
                 }`}
                 onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
                 aria-label={isFavorite ? `Quitar ${font.name} de favoritos` : `Añadir ${font.name} a favoritos`}
              >
-                <Star size={20} fill={isFavorite ? "currentColor" : "none"} />
+                <Star size={18} fill={isFavorite ? "currentColor" : "none"} />
              </button>
              <div 
-               className={`p-3 rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}
+               className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 scale-125 shadow-xl' : 'text-slate-300'}`}
                aria-hidden="true"
              >
-               {justCopied ? <Check size={20} strokeWidth={4} /> : <Copy size={20} />}
+               {justCopied ? <Check size={18} strokeWidth={4} /> : <Copy size={18} />}
              </div>
            </div>
         </div>
 
-        <div className="min-h-[5rem] flex items-center">
+        <div className="min-h-[4rem] flex items-center">
            <div className="w-full">
              {viewMode === 'list' && (
                <p className="text-2xl sm:text-4xl text-slate-900 dark:text-slate-100 break-words font-black leading-tight tracking-tighter">
@@ -221,7 +227,7 @@ const FontCard: React.FC<FontCardProps> = ({
            </div>
         </div>
         
-        <div className="mt-6 flex gap-1 items-center">
+        <div className="mt-4 md:mt-6 flex flex-wrap gap-1 items-center">
           {font.tags?.map(t => (
             <span key={t} className="text-[8px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
           ))}

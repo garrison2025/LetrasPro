@@ -1,3 +1,4 @@
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -17,6 +18,11 @@ const STATIC_PATHS = [
   '/letras-amino',
   '/letras-facebook',
   '/letras-tattoo',
+  '/letras-para-instagram',
+  '/nicks-para-free-fire',
+  '/letras-para-whatsapp',
+  '/letras-para-tiktok',
+  '/letras-para-discord',
   '/repetidor-de-texto',
   '/texto-invisible',
   '/texto-glitch',

@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -52,6 +53,13 @@ function App() {
                     <Route path="/letras-facebook" element={<GeneratorPage config={PAGE_CONFIGS.facebook} />} />
                     <Route path="/letras-tattoo" element={<GeneratorPage config={PAGE_CONFIGS.tattoo} />} />
                     
+                    {/* Platform Specific Landing Pages (Expansion Strategy) */}
+                    <Route path="/letras-para-instagram" element={<GeneratorPage config={PAGE_CONFIGS.instagram} />} />
+                    <Route path="/nicks-para-free-fire" element={<GeneratorPage config={PAGE_CONFIGS.freefire} />} />
+                    <Route path="/letras-para-whatsapp" element={<GeneratorPage config={PAGE_CONFIGS.whatsapp} />} />
+                    <Route path="/letras-para-tiktok" element={<GeneratorPage config={PAGE_CONFIGS.tiktok} />} />
+                    <Route path="/letras-para-discord" element={<GeneratorPage config={PAGE_CONFIGS.discord} />} />
+
                     {/* Tool Pages */}
                     <Route path="/repetidor-de-texto" element={<RepeaterPage />} />
                     <Route path="/texto-glitch" element={<GlitchPage />} />

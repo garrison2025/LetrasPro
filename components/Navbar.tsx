@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink as RouterNavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Sparkles, Moon, Sun, ChevronDown, ChevronRight, Zap, PenTool } from 'lucide-react';
@@ -99,14 +100,15 @@ const Navbar: React.FC = () => {
       aria-label="Navegación principal"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        {/* Mobile Height: h-16, Desktop Height: h-20 */}
+        <div className="flex justify-between items-center h-16 lg:h-20 transition-all duration-300">
           
           <div className="flex items-center">
             <RouterNavLink to="/" className="flex-shrink-0 flex items-center gap-2 group" onClick={() => setIsOpen(false)} aria-label="Ir a la página de inicio">
-              <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
-                <Sparkles size={22} strokeWidth={2.5} className="fill-white/20" />
+              <div className="bg-gradient-to-tr from-primary-600 to-secondary-500 text-white p-1.5 lg:p-2 rounded-xl shadow-lg shadow-primary-500/30 group-hover:scale-105 transition-transform duration-300">
+                <Sparkles size={20} strokeWidth={2.5} className="fill-white/20 lg:w-[22px] lg:h-[22px]" />
               </div>
-              <span className="font-display font-bold text-2xl tracking-tight text-slate-800 dark:text-white">
+              <span className="font-display font-bold text-xl lg:text-2xl tracking-tight text-slate-800 dark:text-white">
                 Letras<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-500">Pro</span>
               </span>
             </RouterNavLink>
@@ -143,10 +145,10 @@ const Navbar: React.FC = () => {
             </RouterNavLink>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 lg:gap-3">
             <button
               onClick={toggleTheme}
-              className="p-2.5 rounded-full text-slate-700 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
+              className="p-2 lg:p-2.5 rounded-full text-slate-700 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900"
               aria-label={theme === 'light' ? "Activar modo oscuro" : "Activar modo claro"}
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
@@ -159,7 +161,7 @@ const Navbar: React.FC = () => {
                 aria-label={isOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
                 aria-expanded={isOpen}
               >
-                {isOpen ? <X size={28} /> : <Menu size={28} />}
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
@@ -167,7 +169,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {isOpen && (
-        <div className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 fixed w-full left-0 shadow-2xl animate-fade-in h-[calc(100vh-80px)] overflow-y-auto">
+        <div className="lg:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 fixed w-full left-0 shadow-2xl animate-fade-in h-[calc(100vh-64px)] overflow-y-auto pb-20">
           <div className="px-4 py-6 space-y-6">
             <div className="space-y-1">
                <RouterNavLink
@@ -184,7 +186,7 @@ const Navbar: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores de Fuentes</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores</h3>
               <div className="grid grid-cols-1 gap-1">
                 {generators.map((link) => (
                   <RouterNavLink
@@ -207,7 +209,7 @@ const Navbar: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Herramientas Útiles</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Herramientas</h3>
               <div className="grid grid-cols-1 gap-1">
                 {tools.map((link) => (
                   <RouterNavLink

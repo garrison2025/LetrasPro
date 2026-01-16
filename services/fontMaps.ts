@@ -10,7 +10,7 @@ const MAPS: Record<string, string> = {
   // --- SANS SERIF (Facebook Safe) ---
   sans: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
   sansBold: '𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵ｉｊ𝒌𝗹𝗺ｎ𝗼𝗽𝗾𝗿𝘀𝘁ｕｖｗｘｙｚＡ𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦ＴＵＶＷ𝗫𝗬𝗭𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
-  sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝘮𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ0123456789',
+  sansItalic: '𝘢𝘣ｃ𝘥𝑒𝘧𝘨𝘩ɪ𝘫𝑘𝘭𝗺𝘯𝘰𝘱𝗊𝘳𝘴𝘵ｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ0123456789',
   sansBoldItalic: '𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵',
   
   // --- SERIF (Tattoo / Formal) ---
@@ -26,7 +26,7 @@ const MAPS: Record<string, string> = {
   lovely: 'ꍏ♭☾◗€ƒ⍙hï♪k↳♔♫⊙ρq®ⓢ☂u☋ωx☿zkＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ0123456789',
   
   // --- GOTHIC (Goticas / Tattoo / Free Fire) ---
-  fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ0123456789',
+  fraktur: '𝔞𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ0123456789',
   frakturBold: '𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅0123456789',
   
   // --- GRAFFITI / URBAN / BUBBLES ---
@@ -152,7 +152,7 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
   }
 
   // --- LOGIC FOR GRAFFITI ---
-  if (cat === 'graffiti' || cat === 'block' || lowerId.includes('bubble') || lowerId.includes('square') || lowerId.includes('graf') || lowerId.includes('wide') || lowerId.includes('urban') || lowerId.includes('tag')) {
+  if (cat === 'graffiti' || cat === 'block' || lowerId.includes('bubble') || lowerId.includes('square') || lowerId.includes('graf') || lowerId.includes('wide') || lowerId.includes('urban') || lowerId.includes('tag') || cat === 'monospace') {
     p.push('graffiti');
   }
   if (cat === 'aesthetic' && (lowerId.includes('mono') || lowerId.includes('stencil'))) {
@@ -170,12 +170,12 @@ const getPagesForCategory = (cat: string, id: string): string[] => {
       p.push('facebook');
     }
   }
-  if (cat === 'script' || cat === 'aesthetic') {
+  if (cat === 'script' || cat === 'aesthetic' || cat === 'monospace') {
     p.push('facebook');
   }
   
   // --- LOGIC FOR AMINO ---
-  if (cat === 'amino' || lowerId.includes('ami-') || cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small') || lowerId.includes('spaced')) {
+  if (cat === 'amino' || lowerId.includes('ami-') || cat === 'aesthetic' || cat === 'vaporwave' || cat === 'decorative' || lowerId.includes('small') || lowerId.includes('spaced') || cat === 'monospace') {
     p.push('amino');
   }
   
@@ -212,7 +212,7 @@ const initFonts = () => {
   addFont('fraktur', 'Gothic Normal', 'gothic', createMap(MAPS.fraktur), ['Medieval'], 'medium');
   addFont('fraktur-bold', 'Gothic Bold', 'gothic', createMap(MAPS.frakturBold), ['Blackletter'], 'medium');
   
-  addFont('monospace', 'Typewriter', 'aesthetic', createMap(MAPS.monospace), ['Retro'], 'high');
+  addFont('monospace', 'Typewriter', 'monospace', createMap(MAPS.monospace), ['Retro'], 'high');
   addFont('double-struck', 'Double Struck', 'aesthetic', createMap(MAPS.doubleStruck), ['Universitario'], 'high');
   addFont('small-caps', 'Small Caps', 'aesthetic', createMap(MAPS.smallCaps), ['Minúsculas'], 'high');
   addFont('bubble', 'Bubble', 'graffiti', createMap(MAPS.bubble), ['Cute'], 'low');

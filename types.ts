@@ -2,7 +2,7 @@
 export interface FontStyle {
   id: string;
   name: string;
-  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy' | 'graffiti' | 'facebook' | 'amino';
+  category: 'sans' | 'serif' | 'script' | 'gothic' | 'other' | 'decorative' | 'aesthetic' | 'gaming' | 'vaporwave' | 'block' | 'mirror' | 'chicano' | 'heavy' | 'graffiti' | 'facebook' | 'amino' | 'monospace';
   map: Record<string, string>;
   isPremium?: boolean; 
   pages: string[]; 
@@ -20,7 +20,7 @@ export interface BioTemplate {
 export interface FeatureItem {
   title: string;
   description: string;
-  icon: 'star' | 'zap' | 'check' | 'heart' | 'shield' | 'smartphone' | 'palette' | 'eye' | 'pen-tool' | 'moon' | 'gamepad' | 'list' | 'trending-up' | 'bold' | 'layers';
+  icon: 'star' | 'zap' | 'check' | 'heart' | 'shield' | 'smartphone' | 'palette' | 'eye' | 'pen-tool' | 'moon' | 'gamepad' | 'list' | 'trending-up' | 'bold' | 'layers' | 'message-circle' | 'skull' | 'crosshair' | 'check-circle' | 'message-square' | 'user' | 'download-cloud' | 'sparkles' | 'users';
 }
 
 export interface FaqItem {
