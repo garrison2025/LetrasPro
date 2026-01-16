@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -129,6 +128,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         "@type": "Answer",
         "text": faq.answer
       }
+    }))
+  };
+
+  // HowTo Structured Data (JSON-LD) - New Addition for Rich Snippets
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": `Cómo usar el ${config.heading}`,
+    "description": `Guía paso a paso para usar el ${config.heading.toLowerCase()} y copiar fuentes personalizadas.`,
+    "step": config.howToSteps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": `Paso ${index + 1}`,
+      "text": step
     }))
   };
   
@@ -285,9 +298,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta name="twitter:description" content={config.description} />
         <meta name="twitter:image" content={ogImage} />
         
-        {/* JSON-LD Schemas including AggregateRating and FAQ */}
+        {/* JSON-LD Schemas including HowTo */}
         <script type="application/ld+json">
-          {JSON.stringify([webAppSchema, breadcrumbSchema, faqSchema])}
+          {JSON.stringify([webAppSchema, breadcrumbSchema, faqSchema, howToSchema])}
         </script>
       </Helmet>
       
@@ -470,6 +483,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   key={font.id}
                   font={font}
                   rawText={finalRawText}
+                  originalText={transformed} // Pass readable text for accessibility
                   displaySegments={segments}
                   isFavorite={favorites.includes(font.id)}
                   viewMode={viewMode}

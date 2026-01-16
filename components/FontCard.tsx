@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
@@ -8,6 +7,7 @@ export type ViewMode = 'list' | 'instagram' | 'whatsapp';
 interface FontCardProps {
   font: FontStyle;
   rawText: string;
+  originalText: string; // New prop for accessibility
   displaySegments: TextSegment[];
   isFavorite: boolean;
   viewMode: ViewMode;
@@ -17,7 +17,8 @@ interface FontCardProps {
 
 const FontCard: React.FC<FontCardProps> = ({ 
   font, 
-  rawText, 
+  rawText,
+  originalText, 
   displaySegments, 
   isFavorite, 
   viewMode,
@@ -131,7 +132,12 @@ const FontCard: React.FC<FontCardProps> = ({
        <div className="space-y-1">
          <div className="font-black text-sm text-slate-900 dark:text-white">Perfil Profesional</div>
          <div className="text-slate-500 dark:text-slate-400 text-[11px] mb-3 font-bold">Digital Creator / Influencer</div>
-         <div className="text-slate-800 dark:text-slate-200 text-sm whitespace-pre-wrap leading-tight font-bold tracking-tight">
+         {/* Accessibility: Hide visual text, expose readable text via aria-label */}
+         <div 
+           role="img"
+           aria-label={`Biografía con estilo: ${originalText}`}
+           className="text-slate-800 dark:text-slate-200 text-sm whitespace-pre-wrap leading-tight font-bold tracking-tight"
+         >
            {renderTextContent()}
          </div>
        </div>
@@ -143,7 +149,12 @@ const FontCard: React.FC<FontCardProps> = ({
        <div className="absolute inset-0 opacity-10 pointer-events-none pattern-bg"></div>
        <div className="relative z-10 flex flex-col gap-3">
          <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-none shadow-md max-w-[85%] relative border border-slate-100 dark:border-slate-700">
-            <div className="text-slate-800 dark:text-slate-200 text-sm font-bold leading-relaxed break-words">
+            {/* Accessibility: Hide visual text, expose readable text via aria-label */}
+            <div 
+              role="img"
+              aria-label={`Mensaje estilo WhatsApp: ${originalText}`}
+              className="text-slate-800 dark:text-slate-200 text-sm font-bold leading-relaxed break-words"
+            >
               {renderTextContent()}
             </div>
             <div className="text-[9px] text-slate-400 text-right mt-1 font-black">12:45 PM ✓✓</div>
@@ -218,7 +229,12 @@ const FontCard: React.FC<FontCardProps> = ({
         <div className="min-h-[4rem] flex items-center">
            <div className="w-full">
              {viewMode === 'list' && (
-               <p className="text-2xl sm:text-4xl text-slate-900 dark:text-slate-100 break-words font-black leading-tight tracking-tighter">
+               /* Accessibility: Critical Fix for Unicode */
+               <p 
+                 role="img" 
+                 aria-label={originalText}
+                 className="text-2xl sm:text-4xl text-slate-900 dark:text-slate-100 break-words font-black leading-tight tracking-tighter"
+               >
                  {renderTextContent()}
                </p>
              )}
