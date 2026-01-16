@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo.svg', 'robots.txt', 'sitemap.xml', 'og-image.svg'],
+      includeAssets: ['logo.svg', 'robots.txt', 'sitemap.xml', 'og-image.png'],
       manifest: {
         name: 'Conversor de Letras Pro',
         short_name: 'LetrasPro',

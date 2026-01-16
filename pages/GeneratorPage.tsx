@@ -67,7 +67,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     : `${baseUrl}${config.path}`;
     
   // Social Media Image (Open Graph)
-  const ogImage = `${baseUrl}/og-image.svg`;
+  // Use PNG for better compatibility with platforms like WhatsApp/Facebook
+  const ogImage = `${baseUrl}/og-image.png`;
 
   // WebApplication Structured Data (JSON-LD)
   const webAppSchema = {
@@ -105,6 +106,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         "item": canonicalUrl
       }
     ]
+  };
+
+  // FAQ Structured Data (JSON-LD) - Added for SEO Rich Results
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": config.faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
   };
   
   useEffect(() => {
@@ -224,6 +239,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:title" content={config.title} />
         <meta property="og:description" content={config.description} />
         <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={config.title} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Conversor de Letras Bonitas" />
@@ -233,9 +250,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta name="twitter:description" content={config.description} />
         <meta name="twitter:image" content={ogImage} />
         
-        {/* JSON-LD Schemas */}
+        {/* JSON-LD Schemas including FAQ */}
         <script type="application/ld+json">
-          {JSON.stringify([webAppSchema, breadcrumbSchema])}
+          {JSON.stringify([webAppSchema, breadcrumbSchema, faqSchema])}
         </script>
       </Helmet>
       
@@ -252,7 +269,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           <button 
             onClick={() => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
-              // Optional: Focus main textarea after scroll
               setTimeout(() => textareaRef.current?.focus(), 500);
             }}
             className="p-2.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl hover:bg-primary-100 transition-colors"
@@ -278,7 +294,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <h1 className="text-4xl sm:text-7xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
           {config.heading}
         </h1>
-        {/* Contrast fix: slate-500 -> slate-700 */}
         <p className="max-w-2xl mx-auto text-lg text-slate-700 dark:text-slate-400 font-medium">
           {config.description}
         </p>
