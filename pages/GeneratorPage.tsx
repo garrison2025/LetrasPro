@@ -411,7 +411,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     <button
                       key={mode}
                       onClick={() => setTextCase(textCase === mode ? 'original' : mode)}
-                      className={`flex-1 sm:flex-none px-3 py-2 md:py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500'}`}
+                      className={`flex-1 sm:flex-none px-3 py-2 md:py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800'}`}
+                      aria-label={`Convertir a ${mode}`}
                     >
                       {mode === 'upper' ? 'AB' : mode === 'lower' ? 'ab' : 'Ab'}
                     </button>
@@ -447,7 +448,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Escribe aquí..."
-              className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-300 dark:placeholder:text-slate-700 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
+              // INCREASED CONTRAST FOR PLACEHOLDER: text-slate-400 instead of 300
+              className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-400 dark:placeholder:text-slate-600 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
             />
             
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
@@ -457,7 +459,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     key={s} 
                     onClick={() => insertSymbol(s)} 
                     aria-label={`Insertar símbolo ${s}`}
-                    className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100"
+                    // INCREASED CONTRAST: text-slate-600 instead of default/500
+                    className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 text-slate-600 dark:text-slate-400 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100"
                    >
                      {s}
                    </button>
@@ -472,7 +475,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                      <span className={`text-xl md:text-2xl font-black ${inputText.length > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
                        {inputText.length}
                      </span>
-                     <span className="text-slate-300 dark:text-slate-600 font-bold text-xs md:text-sm">/ {INSTAGRAM_BIO_LIMIT}</span>
+                     {/* INCREASED CONTRAST: text-slate-500 instead of 300 */}
+                     <span className="text-slate-500 dark:text-slate-500 font-bold text-xs md:text-sm">/ {INSTAGRAM_BIO_LIMIT}</span>
                    </div>
                  </div>
                  {inputText && (
@@ -486,13 +490,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           
           <div className="bg-slate-50/50 dark:bg-slate-900/30 p-4 md:p-5 border-t border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row gap-3 md:gap-4 items-stretch sm:items-center">
              <div className="relative flex-grow">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                {/* INCREASED CONTRAST: text-slate-500 */}
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" size={16} />
                 <input 
                   type="text" 
                   placeholder="Buscar estilo..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white"
+                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white placeholder:text-slate-400"
                 />
              </div>
              
@@ -501,7 +506,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   <button
                     key={t}
                     onClick={() => setActiveTone(t)}
-                    className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
+                    className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
                   >
                     {t}
                   </button>
@@ -510,9 +515,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
              <div className="flex items-center gap-2 justify-end">
                 <div className="flex bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                   <button onClick={() => setViewMode('list')} aria-label="Lista" className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><LayoutList size={18}/></button>
-                   <button onClick={() => setViewMode('instagram')} aria-label="Instagram" className={`p-2 rounded-lg transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><Instagram size={18}/></button>
-                   <button onClick={() => setViewMode('whatsapp')} aria-label="WhatsApp" className={`p-2 rounded-lg transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><MessageCircle size={18}/></button>
+                   <button onClick={() => setViewMode('list')} aria-label="Vista de Lista" className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><LayoutList size={18}/></button>
+                   <button onClick={() => setViewMode('instagram')} aria-label="Vista Previa Instagram" className={`p-2 rounded-lg transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><Instagram size={18}/></button>
+                   <button onClick={() => setViewMode('whatsapp')} aria-label="Vista Previa WhatsApp" className={`p-2 rounded-lg transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><MessageCircle size={18}/></button>
                 </div>
              </div>
           </div>
@@ -521,6 +526,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
 
         <div className="min-h-[600px]">
+          {/* ACCESSIBILITY FIX: Hidden H2 to fix heading hierarchy structure (H1 -> H2 -> H3) */}
+          <h2 className="sr-only">Resultados de estilos</h2>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {visibleFonts.map((font) => {
               const baseText = debouncedText || 'Vista Previa';

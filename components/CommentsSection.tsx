@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, ThumbsUp, Send, User } from 'lucide-react';
 import { STATIC_COMMENTS, Comment } from '../data/staticComments';
@@ -74,6 +73,7 @@ const CommentsSection: React.FC = () => {
             <button 
               type="submit"
               disabled={!newComment.trim()}
+              aria-label="Enviar comentario"
               className="absolute bottom-3 right-3 p-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-primary-600/20"
             >
               <Send size={18} />

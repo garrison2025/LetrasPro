@@ -190,15 +190,15 @@ const FontCard: React.FC<FontCardProps> = ({
                {font.name}
              </span>
              {font.compatibility === 'high' ? (
-               <div className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full text-[9px] font-black uppercase" title="Alta Compatibilidad">
+               <div className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-full text-[9px] font-black uppercase" title="Alta Compatibilidad">
                  <ShieldCheck size={12} /> Safe
                </div>
              ) : font.compatibility === 'medium' ? (
-               <div className="flex items-center gap-1 px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-full text-[9px] font-black uppercase" title="Compatibilidad Media">
+               <div className="flex items-center gap-1 px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 rounded-full text-[9px] font-black uppercase" title="Compatibilidad Media">
                  <AlertCircle size={12} /> Mid
                </div>
              ) : (
-               <div className="flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-full text-[9px] font-black uppercase" title="Baja Compatibilidad">
+               <div className="flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-full text-[9px] font-black uppercase" title="Baja Compatibilidad">
                  <AlertTriangle size={12} /> Beta
                </div>
              )}
@@ -208,7 +208,7 @@ const FontCard: React.FC<FontCardProps> = ({
              <button
                 onClick={handleDownloadImage}
                 disabled={isGeneratingImg}
-                className="p-2 md:p-3 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm"
+                className="p-2 md:p-3 text-slate-500 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm"
                 title="Descargar PNG Pro"
                 aria-label={`Descargar imagen de estilo ${font.name}`}
              >
@@ -251,7 +251,7 @@ const FontCard: React.FC<FontCardProps> = ({
         
         <div className="mt-4 md:mt-6 flex flex-wrap gap-1 items-center">
           {font.tags?.map(t => (
-            <span key={t} className="text-[8px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
+            <span key={t} className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
           ))}
         </div>
       </div>
