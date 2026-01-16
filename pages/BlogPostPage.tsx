@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -62,20 +63,22 @@ const BlogPostPage: React.FC = () => {
     }
   ];
 
-  // Optimization: Generate Unsplash srcset
+  // Optimization: Generate Unsplash srcset with WebP enforcement
   const getResponsiveImageProps = (originalUrl: string) => {
-    // Remove existing width param if present to add our own
-    const baseUrl = originalUrl.split('&w=')[0]; 
+    // Remove existing width params to add our own dynamic ones
+    // Unsplash URLs usually have query params we want to preserve except size/format
+    const baseUrl = originalUrl.split('?')[0]; 
+    const baseParams = '?q=80&fit=crop&auto=format&fm=webp';
     
     // Define widths for srcset
     const widths = [640, 768, 1024, 1280];
     
     const srcset = widths
-      .map(w => `${baseUrl}&w=${w}&auto=format&fit=crop ${w}w`)
+      .map(w => `${baseUrl}${baseParams}&w=${w} ${w}w`)
       .join(', ');
 
     return {
-      src: `${baseUrl}&w=1280&auto=format&fit=crop`,
+      src: `${baseUrl}${baseParams}&w=1280`,
       srcset,
       sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px" // Adjusted sizes for container
     };
@@ -146,9 +149,9 @@ const BlogPostPage: React.FC = () => {
           </div>
         </header>
 
-        {/* Cover Image with srcset */}
+        {/* Cover Image with srcset and explicit dimensions to prevent CLS */}
         {post.imageUrl && (
-          <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 aspect-video relative group bg-slate-100 dark:bg-slate-800">
+          <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 relative group aspect-video">
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
             <img 
               {...getResponsiveImageProps(post.imageUrl)}
@@ -156,7 +159,7 @@ const BlogPostPage: React.FC = () => {
               width="1280"
               height="720"
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-              loading="eager"
+              loading="eager" // LCP Priority
             />
           </div>
         )}

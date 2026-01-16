@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import { DECORATORS, applyDecoration } from '../services/decorators';
 import { BIO_TEMPLATES } from '../data/bioTemplates';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
+import CommentsSection from '../components/CommentsSection';
 import Toast from '../components/Toast';
 import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles, ExternalLink, ArrowRight } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
@@ -511,6 +513,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               ))}
             </div>
           </section>
+
+          {/* New UGC Section: Community Comments */}
+          <CommentsSection />
 
           {/* Related Tools (Internal Linking Mesh) */}
           {config.recommendations && config.recommendations.length > 0 && (

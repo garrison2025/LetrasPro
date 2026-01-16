@@ -1,3 +1,4 @@
+
 import { BlogPost } from '../types';
 
 // Updated Date for all posts as requested
@@ -12,7 +13,8 @@ export const BLOG_POSTS: BlogPost[] = [
     date: CURRENT_DATE,
     author: 'Equipo LetrasPro',
     tags: ['Instagram', 'Facebook', 'Marketing', 'Tipografía'],
-    imageUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop',
+    // IMAGE OPTIMIZATION: force WebP and q=80 for performance (LCP)
+    imageUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
       <p class="lead">En el saturado mundo de las redes sociales, destacar es cada vez más difícil. Ya no basta con tener buenas fotos; la estética de tu texto juega un papel fundamental. Aquí es donde entra en juego una herramienta poderosa y a menudo subestimada: el <strong>conversor de letras bonitas</strong>.</p>
 
@@ -98,7 +100,8 @@ export const BLOG_POSTS: BlogPost[] = [
     date: CURRENT_DATE,
     author: 'Equipo LetrasPro',
     tags: ['Tatuajes', 'Diseño', 'Arte Corporal', 'Estilo de Vida'],
-    imageUrl: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1000&auto=format&fit=crop',
+    // IMAGE OPTIMIZATION: force WebP and q=80 for performance (LCP)
+    imageUrl: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
       <p class="lead">Un tatuaje es para siempre (o casi). Por eso, elegir la tipografía correcta para una frase, un nombre o una fecha es una decisión crítica. A diferencia del papel, la piel envejece, se estira y cambia con el tiempo. Un buen <strong>conversor de letras para tatuajes</strong> no solo te ayuda a visualizar el diseño, sino que puede ser la herramienta que evite un desastre estético en el futuro.</p>
 
@@ -172,7 +175,8 @@ export const BLOG_POSTS: BlogPost[] = [
     date: CURRENT_DATE,
     author: 'Equipo LetrasPro',
     tags: ['Gaming', 'Free Fire', 'Nicks', 'Graffiti'],
-    imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000&auto=format&fit=crop',
+    // IMAGE OPTIMIZATION: force WebP and q=80 for performance (LCP)
+    imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
       <p class="lead">En el lobby de cualquier Battle Royale, tu nombre es lo primero que ven tus enemigos (y lo último que ven en la killcam cuando los eliminas). Un nick genérico como "Juan123" no transmite nada. Pero un nick estilizado como "𝕵𝖚𝖆𝖓☠" o "Jᴜᴀɴ⚡" impone respeto inmediato. Para lograr esto, necesitas dominar el uso del <strong>conversor de letras graffiti</strong> y otras herramientas de símbolos.</p>
 
