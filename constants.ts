@@ -24,6 +24,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       { question: '¿Qué es un conversor de letras chidas?', answer: 'Es una herramienta que transforma texto normal en símbolos Unicode que parecen fuentes tipográficas únicas y estéticas.' },
       { question: '¿Sirve para Nicks de Free Fire?', answer: '¡Sí! Muchos de nuestros estilos (como góticas y con símbolos) son perfectos para crear nicks veteranos y perrones.' },
       { question: '¿Puedo usar estas letras en Instagram?', answer: 'Totalmente. Puedes pegarlas en tu biografía (bio), historias, comentarios y captions sin problemas.' }
+    ],
+    recommendations: [
+      { title: 'Letras para Instagram', path: '/letras-para-instagram', description: 'Decora tu biografía y stories.', color: 'from-pink-500 to-purple-500' },
+      { title: 'Nicks Free Fire', path: '/nicks-para-free-fire', description: 'Nombres insanos y veteranos.', color: 'from-orange-500 to-red-600' },
+      { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Escritura elegante y manuscrita.', color: 'from-blue-400 to-indigo-500' },
     ]
   },
   instagram: {
@@ -47,6 +52,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Me pueden banear de Instagram por usar esto?', answer: 'No, Instagram permite caracteres Unicode en la biografía y comentarios sin problemas.' },
       { question: '¿Cómo poner negritas en Instagram?', answer: 'Usa nuestro estilo "Sans Bold" o "Serif Bold", cópialo y pégalo en tu descripción.' }
+    ],
+    recommendations: [
+      { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Perfectas para nombres de perfil.', color: 'from-pink-400 to-rose-500' },
+      { title: 'Espacios Invisibles', path: '/texto-invisible', description: 'Crea espacios en tu biografía.', color: 'from-slate-400 to-slate-600' },
+      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Spam divertido para comentarios.', color: 'from-green-400 to-emerald-600' },
     ]
   },
   freefire: {
@@ -70,6 +80,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Cómo hacer un nick invisible?', answer: 'Usa nuestra herramienta de "Texto Invisible" en el menú para copiar el espacio en blanco (U+3164).' },
       { question: '¿Qué símbolos permite Free Fire?', answer: 'Soporta la mayoría de Unicode, pero recomendamos usar los de nuestra lista verificada para evitar errores.' }
+    ],
+    recommendations: [
+      { title: 'Nick Invisible', path: '/texto-invisible', description: 'Oculta tu nombre en partida.', color: 'from-gray-700 to-black' },
+      { title: 'Texto Glitch', path: '/texto-glitch', description: 'Nicks de terror y malditos.', color: 'from-red-600 to-red-900' },
+      { title: 'Letras Góticas', path: '/letras-goticas', description: 'Estilo clásico veterano.', color: 'from-purple-600 to-indigo-900' },
     ]
   },
   whatsapp: {
@@ -93,6 +108,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿El destinatario necesita instalar algo?', answer: 'No, ellos verán la fuente tal cual la envías porque son caracteres universales.' },
       { question: '¿Cómo escribir en azul en WhatsApp?', answer: 'Busca el estilo "Letras Azules" (Regional) en nuestro generador.' }
+    ],
+    recommendations: [
+      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Haz bromas infinitas.', color: 'from-green-500 to-teal-600' },
+      { title: 'Texto al Revés', path: '/texto-al-reves', description: 'Confunde a tus grupos.', color: 'from-blue-500 to-cyan-500' },
+      { title: 'Letras Grandes', path: '/letras-grandes', description: 'Arte ASCII para chats.', color: 'from-orange-400 to-amber-500' },
     ]
   },
   tiktok: {
@@ -116,6 +136,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿TikTok permite cambiar la fuente del nombre?', answer: 'Sí, puedes usar caracteres Unicode en tu nombre de perfil y descripción.' },
       { question: '¿Qué estilo es el más viral?', answer: 'Los estilos "Small Caps" (Minúsculas pequeñas) y "Serif Italic" son muy populares ahora.' }
+    ],
+    recommendations: [
+      { title: 'Texto Aesthetic', path: '/letras-amino', description: 'Fuentes soft y vaporwave.', color: 'from-purple-400 to-pink-400' },
+      { title: 'Texto Invisible', path: '/texto-invisible', description: 'Comentarios vacíos virales.', color: 'from-slate-500 to-slate-700' },
+      { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Estilos coquette.', color: 'from-pink-300 to-rose-400' },
     ]
   },
   discord: {
@@ -139,6 +164,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Funciona en los canales de texto?', answer: 'Sí, funciona en cualquier canal de texto, MD y en tu perfil.' },
       { question: '¿Puedo usarlo para nombres de canales?', answer: 'Sí, pero recomendamos usar fuentes legibles y minúsculas para los canales.' }
+    ],
+    recommendations: [
+      { title: 'Texto Zalgo/Glitch', path: '/texto-glitch', description: 'Para servidores dark.', color: 'from-red-600 to-black' },
+      { title: 'Letras Grandes', path: '/letras-grandes', description: 'Arte ASCII para chat.', color: 'from-indigo-500 to-blue-600' },
+      { title: 'Letras Góticas', path: '/letras-goticas', description: 'Nicks de rol medieval.', color: 'from-slate-700 to-black' },
     ]
   },
   cursivas: {
@@ -162,6 +192,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Funcionan las letras cursivas en Instagram?', answer: 'Sí, son compatibles con la biografía y captions de Instagram, así como en TikTok.' },
       { question: '¿Tienen tildes estas letras?', answer: 'Nuestro conversor avanzado soporta la mayoría de caracteres acentuados y la letra ñ.' }
+    ],
+    recommendations: [
+      { title: 'Letras para Instagram', path: '/letras-para-instagram', description: 'Úsalas en tu bio.', color: 'from-pink-500 to-purple-500' },
+      { title: 'Letras Tatuajes', path: '/letras-tatuajes', description: 'Diseña tu próximo tattoo.', color: 'from-slate-600 to-black' },
+      { title: 'Letras Bonitas', path: '/', description: 'Ver todos los estilos.', color: 'from-indigo-500 to-purple-600' },
     ]
   },
   tatuajes: {
@@ -185,6 +220,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Son precisas estas fuentes para tatuar?', answer: 'Son referencias excelentes. Tu tatuador podrá usarlas para crear la plantilla final.' },
       { question: '¿Qué estilos de tatuaje tienen?', answer: 'Tenemos Chicano, Blackwork, Minimalista, Tradicional y Gótico.' }
+    ],
+    recommendations: [
+      { title: 'Letras Góticas', path: '/letras-goticas', description: 'Estilo Blackwork y Old English.', color: 'from-slate-800 to-black' },
+      { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Estilo Fine Line y Script.', color: 'from-pink-400 to-rose-500' },
+      { title: 'Letras Tattoo', path: '/letras-tattoo', description: 'Más estilos de tinta.', color: 'from-zinc-500 to-zinc-700' },
     ]
   },
   goticas: {
@@ -208,6 +248,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Sirven estas letras para Free Fire?', answer: 'Sí, son las más usadas por jugadores profesionales y veteranos para sus nicks.' },
       { question: '¿Qué es el estilo Fraktur?', answer: 'Es un tipo de letra gótica alemana muy popular por su estética densa y antigua.' }
+    ],
+    recommendations: [
+      { title: 'Texto Glitch', path: '/texto-glitch', description: 'Combina gótico con terror.', color: 'from-red-700 to-black' },
+      { title: 'Nicks Free Fire', path: '/nicks-para-free-fire', description: 'Herramienta especializada.', color: 'from-orange-500 to-red-600' },
+      { title: 'Letras Tatuajes', path: '/letras-tatuajes', description: 'Inspiración Blackletter.', color: 'from-slate-600 to-gray-800' },
     ]
   },
   graffiti: {
@@ -231,6 +276,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Se leen bien estas letras?', answer: 'Sí, las letras burbuja son muy legibles y llamativas en fondo blanco o negro.' },
       { question: '¿Es gratis usar estos estilos?', answer: 'Totalmente, disfruta de todos los estilos urbanos sin costo.' }
+    ],
+    recommendations: [
+      { title: 'Letras Grandes', path: '/letras-grandes', description: 'Para impactar más.', color: 'from-indigo-500 to-purple-600' },
+      { title: 'Letras Facebook', path: '/letras-facebook', description: 'Destaca tus posts.', color: 'from-blue-600 to-blue-800' },
+      { title: 'Nicks Free Fire', path: '/nicks-para-free-fire', description: 'Estilo urbano gamer.', color: 'from-orange-500 to-red-600' },
     ]
   },
   amino: {
@@ -254,6 +304,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Por qué usar letras diferentes en Amino?', answer: 'Ayuda a que tus publicaciones destaquen en el feed y sean más fáciles de leer.' },
       { question: '¿Funciona en Android e iOS?', answer: 'Sí, está optimizado para ambos sistemas operativos.' }
+    ],
+    recommendations: [
+      { title: 'Texto Invisible', path: '/texto-invisible', description: 'Espacios para maquetar.', color: 'from-slate-400 to-slate-600' },
+      { title: 'Letras TikTok', path: '/letras-para-tiktok', description: 'Estética similar.', color: 'from-pink-500 to-cyan-400' },
+      { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Toque elegante.', color: 'from-purple-400 to-pink-500' },
     ]
   },
   facebook: {
@@ -277,6 +332,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Me pueden banear por usar esto?', answer: 'No, son caracteres Unicode legítimos, no es un hack.' },
       { question: '¿Se ve en celulares?', answer: 'Sí, el texto es visible en la app móvil, Lite y escritorio.' }
+    ],
+    recommendations: [
+      { title: 'Letras Grandes', path: '/letras-grandes', description: 'Carteles para comentarios.', color: 'from-blue-600 to-blue-800' },
+      { title: 'Texto al Revés', path: '/texto-al-reves', description: 'Bromas para amigos.', color: 'from-indigo-500 to-purple-600' },
+      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Flood de comentarios.', color: 'from-green-500 to-emerald-600' },
     ]
   },
   tattoo: {
@@ -300,6 +360,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Es útil para tatuadores?', answer: 'Sí, muchos profesionales lo usan como referencia rápida para clientes.' },
       { question: '¿Qué estilos incluye?', answer: 'Chicano, Blackwork, Minimalista, Tradicional y Manuscrito.' }
+    ],
+    recommendations: [
+      { title: 'Letras Tatuajes', path: '/letras-tatuajes', description: 'Más estilos.', color: 'from-slate-700 to-black' },
+      { title: 'Letras Góticas', path: '/letras-goticas', description: 'Estilo Blackletter clásico.', color: 'from-stone-700 to-stone-900' },
+      { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Nombres y fechas.', color: 'from-pink-400 to-purple-500' },
     ]
   }
 };

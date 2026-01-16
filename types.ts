@@ -28,6 +28,13 @@ export interface FaqItem {
   answer: string;
 }
 
+export interface RecommendationLink {
+  title: string;
+  path: string;
+  description: string;
+  color: string; // Tailwind color class specific (e.g. 'bg-purple-500')
+}
+
 export interface PageConfig {
   path: string;
   title: string;
@@ -39,6 +46,7 @@ export interface PageConfig {
   whyFeatures: FeatureItem[];
   howToSteps: string[];
   faqs: FaqItem[];
+  recommendations?: RecommendationLink[];
 }
 
 export interface NavLink {
