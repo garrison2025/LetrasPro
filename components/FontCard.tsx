@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
@@ -164,7 +165,7 @@ const FontCard: React.FC<FontCardProps> = ({
   );
 
   return (
-    <div 
+    <article 
       className={`group relative bg-white dark:bg-slate-800 rounded-[2.5rem] border transition-all duration-300 cursor-pointer overflow-hidden content-visibility-auto contain-content ${
         justCopied
           ? 'border-green-500 ring-4 ring-green-100 dark:ring-green-900/40 shadow-xl scale-[1.02]' 
@@ -177,6 +178,9 @@ const FontCard: React.FC<FontCardProps> = ({
       tabIndex={0}
       aria-label={`Copiar estilo de letra ${font.name}`}
     >
+      {/* Semantic Heading for SEO Structure - Visually Hidden */}
+      <h3 className="sr-only">Estilo {font.name}</h3>
+
       <div className="p-6 md:p-8">
         <div className="flex justify-between items-start mb-4 md:mb-6">
            <div className="flex flex-wrap items-center gap-2">
@@ -249,7 +253,7 @@ const FontCard: React.FC<FontCardProps> = ({
           ))}
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

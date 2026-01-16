@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -11,6 +12,7 @@ import CommentsSection from '../components/CommentsSection';
 import Toast from '../components/Toast';
 import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles, ExternalLink, ArrowRight } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
+import { useDynamicDate } from '../hooks/useDynamicDate';
 
 interface GeneratorPageProps {
   config: PageConfig;
@@ -24,6 +26,8 @@ const TONES = ['Todos', 'Elegante', 'Gaming', 'Cute', 'Urbano', 'Aesthetic', 'Pr
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const location = useLocation();
+  const { month, year, fullDate } = useDynamicDate(); // Dynamic Date Hook
+  
   const [inputText, setInputText] = useState(() => {
     try { return localStorage.getItem('let_pro_input') || ''; } catch (e) { return ''; }
   });
@@ -68,9 +72,23 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const canonicalUrl = config.path === '/' ? `${baseUrl}/` : `${baseUrl}${config.path}`;
   const ogImage = `${baseUrl}/og-image.png`;
 
+  // Dynamic Title Logic (CTR Booster)
+  // Replaces static "2025" with dynamic year, or appends "Month Year" if not present
+  const dynamicTitle = useMemo(() => {
+    let t = config.title;
+    if (t.includes('2025')) {
+      t = t.replace('2025', `${month} ${year}`);
+    } else {
+      t = `${t} (${month} ${year})`;
+    }
+    return t;
+  }, [config.title, month, year]);
+
+  const dynamicDescription = config.description.replace('2025', year);
+
   // Aggregate Rating Data (Simulated for Schema)
   const ratingValue = 4.8;
-  const ratingCount = 2450; // Dynamic looking static number
+  const ratingCount = 2450; 
 
   // WebApplication Structured Data (JSON-LD)
   const webAppSchema = {
@@ -78,9 +96,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     "@type": "WebApplication",
     "name": config.title,
     "url": canonicalUrl,
-    "description": config.description,
+    "description": dynamicDescription,
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
+    "dateModified": fullDate, // Freshness Signal
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -131,7 +150,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }))
   };
 
-  // HowTo Structured Data (JSON-LD) - New Addition for Rich Snippets
+  // HowTo Structured Data (JSON-LD)
   const howToSchema = {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -148,7 +167,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
     window.scrollTo(0, 0);
-    // Load local rating if exists
     const storedRating = localStorage.getItem(`rating_${config.path}`);
     if (storedRating) {
       setUserRating(parseInt(storedRating));
@@ -165,7 +183,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     localStorage.setItem('let_pro_history', JSON.stringify(history));
   }, [inputText, favorites, history]);
 
-  // Scroll Listener for Sticky Input
   useEffect(() => {
     const handleScroll = () => {
       if (inputContainerRef.current) {
@@ -183,7 +200,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     setUserRating(stars);
     setHasRated(true);
     localStorage.setItem(`rating_${config.path}`, String(stars));
-    // Here you would typically send this to an analytics service
   };
 
   const toggleFavorite = (fontId: string) => {
@@ -279,13 +295,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   return (
     <div className="flex flex-col pb-20 dark:bg-slate-900 transition-colors duration-300">
       <Helmet>
-        <title>{config.title}</title>
-        <meta name="description" content={config.description} />
+        <title>{dynamicTitle}</title>
+        <meta name="description" content={dynamicDescription} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:title" content={config.title} />
-        <meta property="og:description" content={config.description} />
+        <meta property="og:title" content={dynamicTitle} />
+        <meta property="og:description" content={dynamicDescription} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -294,11 +310,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:site_name" content="Conversor de Letras Bonitas" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={canonicalUrl} />
-        <meta name="twitter:title" content={config.title} />
-        <meta name="twitter:description" content={config.description} />
+        <meta name="twitter:title" content={dynamicTitle} />
+        <meta name="twitter:description" content={dynamicDescription} />
         <meta name="twitter:image" content={ogImage} />
         
-        {/* JSON-LD Schemas including HowTo */}
+        {/* JSON-LD Schemas */}
         <script type="application/ld+json">
           {JSON.stringify([webAppSchema, breadcrumbSchema, faqSchema, howToSchema])}
         </script>
