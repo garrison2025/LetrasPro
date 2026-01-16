@@ -29,7 +29,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
     "vite-plugin-pwa": "^0.19.2",
-    "vite-plugin-prerender": "^4.4.0",
+    "vite-plugin-prerender": "^1.0.8",
     "puppeteer": "^22.0.0"
   }
 }
