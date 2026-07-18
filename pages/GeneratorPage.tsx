@@ -523,6 +523,65 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           </div>
         </div>
 
+        {/* Gumroad Premium Templates Promo Banner */}
+        <div className="mb-8 p-6 md:p-8 rounded-[2rem] bg-gradient-to-br from-violet-600/10 via-fuchsia-500/5 to-pink-500/10 dark:from-violet-950/20 dark:via-fuchsia-950/10 dark:to-pink-950/20 border border-violet-100 dark:border-violet-900/50 shadow-md relative overflow-hidden group">
+          {/* Subtle decorative glow */}
+          <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-violet-400/20 dark:bg-violet-600/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-700 pointer-events-none"></div>
+          
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 relative z-10">
+            <div className="flex-1 space-y-4 text-left">
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full text-[10px] font-black bg-violet-600 text-white uppercase tracking-wider animate-pulse">
+                  Recomendado 🔥
+                </span>
+                <span className="text-xs font-bold text-violet-600 dark:text-violet-400">
+                  Acelera tu Crecimiento
+                </span>
+              </div>
+              
+              <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                50+ Plantillas para tu Bio y Redes Sociales
+              </h3>
+              
+              <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base max-w-3xl leading-relaxed">
+                ¿Acabas de copiar tus textos estéticos? Llévalos al siguiente nivel visual. Consigue nuestro pack exclusivo de <strong className="text-violet-700 dark:text-violet-300 font-bold">50+ plantillas listas para usar en Canva</strong>, diseñadas profesionalmente para disparar tu engagement y embellecer tu feed.
+              </p>
+              
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-bold text-slate-500 dark:text-slate-400 pt-1">
+                <span className="flex items-center gap-1.5">
+                  <Check className="text-green-500" size={14} strokeWidth={3} /> Edición Instantánea en Canva
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Check className="text-green-500" size={14} strokeWidth={3} /> Formatos Estéticos Listos para Bio
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Check className="text-green-500" size={14} strokeWidth={3} /> Optimizado para Instagram y TikTok
+                </span>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 lg:min-w-[240px] p-5 rounded-2xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-100 dark:border-slate-700/50">
+              <div className="text-center sm:text-left lg:text-center space-y-0.5">
+                <span className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Precio Especial</span>
+                <div className="flex items-center justify-center sm:justify-start lg:justify-center gap-1.5">
+                  <span className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white">$1.99</span>
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 line-through">$9.99</span>
+                  <span className="text-xs font-extrabold text-green-600 dark:text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded">-80%</span>
+                </div>
+              </div>
+              
+              <a 
+                href="https://littledreamerpress.gumroad.com/l/jzcusr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white font-black text-sm rounded-xl transition-all shadow-md shadow-violet-500/10 hover:shadow-lg hover:shadow-violet-500/20 active:scale-[0.98]"
+              >
+                Obtener Plantillas <ExternalLink size={14} />
+              </a>
+            </div>
+          </div>
+        </div>
+
         <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
 
         <div className="min-h-[600px]">
