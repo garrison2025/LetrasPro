@@ -26,10 +26,11 @@ const FontCard: React.FC<FontCardProps> = ({
   onCopy 
 }) => {
   const [justCopied, setJustCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleCopy = (e: React.MouseEvent) => {
+  const handleCopy = async (e: React.MouseEvent | React.KeyboardEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
 
     // Haptic Feedback for Mobile
@@ -37,11 +38,15 @@ const FontCard: React.FC<FontCardProps> = ({
       navigator.vibrate(20);
     }
 
-    navigator.clipboard.writeText(rawText).then(() => {
+    try {
+      await navigator.clipboard.writeText(rawText);
+      setCopyError(false);
       setJustCopied(true);
       onCopy(); 
       setTimeout(() => setJustCopied(false), 800); 
-    });
+    } catch {
+      setCopyError(true);
+    }
   };
 
   const handleDownloadImage = async (e: React.MouseEvent) => {
@@ -173,6 +178,12 @@ const FontCard: React.FC<FontCardProps> = ({
             : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1'
       }`}
       onClick={handleCopy}
+      onKeyDown={(e) => {
+        if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          void handleCopy(e);
+        }
+      }}
       role="button"
       tabIndex={0}
       aria-label={`Copiar estilo de letra ${font.name}`}
@@ -254,6 +265,7 @@ const FontCard: React.FC<FontCardProps> = ({
             <span key={t} className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
           ))}
         </div>
+        {copyError && <p role="alert" className="mt-3 text-sm text-red-600 dark:text-red-400">No se pudo copiar. Selecciona el texto y cópialo manualmente.</p>}
       </div>
     </article>
   );

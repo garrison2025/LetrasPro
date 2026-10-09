@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --test scripts/test-fonts.mjs",
+    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs",
     "build": "vite build && node scripts/generate-sitemap.js dist",
     "preview": "vite preview",
     "sitemap": "node scripts/generate-sitemap.js public"

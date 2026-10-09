@@ -12,6 +12,7 @@ import Toast from '../components/Toast';
 import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles, ExternalLink, ArrowRight } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useDynamicDate } from '../hooks/useDynamicDate';
+import { readStorage, readStoredArray, writeStorage } from '../services/storage';
 
 interface GeneratorPageProps {
   config: PageConfig;
@@ -28,9 +29,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { month, year, fullDate } = useDynamicDate(); // Dynamic Date Hook
   
-  const [inputText, setInputText] = useState(() => {
-    try { return localStorage.getItem('let_pro_input') || ''; } catch (e) { return ''; }
-  });
+  const [inputText, setInputText] = useState(() => readStorage('let_pro_input') || '');
   const [textCase, setTextCase] = useState<TextCase>('original');
   
   // UX: Initialize search query from URL if present (SEO friendly search results)
@@ -45,17 +44,16 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [hasRated, setHasRated] = useState(false);
 
   const [favorites, setFavorites] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('let_pro_favs');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) { return []; }
+    return readStoredArray('let_pro_favs', (value): value is string => typeof value === 'string');
   });
 
   const [history, setHistory] = useState<{fontName: string, text: string, timestamp: number}[]>(() => {
-    try {
-      const saved = localStorage.getItem('let_pro_history');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) { return []; }
+    return readStoredArray('let_pro_history', (value): value is {fontName: string, text: string, timestamp: number} => {
+      if (typeof value !== 'object' || value === null) return false;
+      const item = value as Record<string, unknown>;
+      return typeof item.fontName === 'string' && typeof item.text === 'string'
+        && typeof item.timestamp === 'number' && Number.isFinite(item.timestamp);
+    }).slice(0, 10);
   });
 
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -186,9 +184,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
     window.scrollTo(0, 0);
-    const storedRating = localStorage.getItem(`rating_${config.path}`);
-    if (storedRating) {
-      setUserRating(parseInt(storedRating));
+    const storedRating = Number(readStorage(`rating_${config.path}`));
+    if (Number.isInteger(storedRating) && storedRating >= 1 && storedRating <= 5) {
+      setUserRating(storedRating);
       setHasRated(true);
     } else {
       setUserRating(0);
@@ -206,10 +204,16 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   }, [searchQuery, setSearchParams]);
 
   useEffect(() => {
-    localStorage.setItem('let_pro_input', inputText);
-    localStorage.setItem('let_pro_favs', JSON.stringify(favorites));
-    localStorage.setItem('let_pro_history', JSON.stringify(history));
-  }, [inputText, favorites, history]);
+    writeStorage('let_pro_input', inputText);
+  }, [inputText]);
+
+  useEffect(() => {
+    writeStorage('let_pro_favs', JSON.stringify(favorites));
+  }, [favorites]);
+
+  useEffect(() => {
+    writeStorage('let_pro_history', JSON.stringify(history));
+  }, [history]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -227,7 +231,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const handleRate = (stars: number) => {
     setUserRating(stars);
     setHasRated(true);
-    localStorage.setItem(`rating_${config.path}`, String(stars));
+    writeStorage(`rating_${config.path}`, String(stars));
   };
 
   const toggleFavorite = (fontId: string) => {

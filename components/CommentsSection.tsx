@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, ThumbsUp, Send, User } from 'lucide-react';
 import { STATIC_COMMENTS, Comment } from '../data/staticComments';
+import { readStoredArray, writeStorage } from '../services/storage';
 
 const CommentsSection: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>(STATIC_COMMENTS);
@@ -9,10 +10,13 @@ const CommentsSection: React.FC = () => {
 
   // Load local user comments to merge with static ones
   useEffect(() => {
-    const saved = localStorage.getItem('let_pro_user_comments');
-    if (saved) {
-      setComments([...JSON.parse(saved), ...STATIC_COMMENTS]);
-    }
+    const saved = readStoredArray('let_pro_user_comments', (value): value is Comment => {
+      if (typeof value !== 'object' || value === null) return false;
+      const comment = value as Record<string, unknown>;
+      return ['id', 'author', 'avatarColor', 'date', 'content'].every(key => typeof comment[key] === 'string')
+        && typeof comment.likes === 'number' && Number.isFinite(comment.likes) && comment.likes >= 0;
+    });
+    setComments([...saved, ...STATIC_COMMENTS]);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,7 +37,7 @@ const CommentsSection: React.FC = () => {
     
     // Save only user comments locally to persist across reloads for THIS user
     const userComments = updated.filter(c => c.id.startsWith('u-'));
-    localStorage.setItem('let_pro_user_comments', JSON.stringify(userComments));
+    writeStorage('let_pro_user_comments', JSON.stringify(userComments));
     
     setNewComment('');
   };
@@ -96,9 +100,9 @@ const CommentsSection: React.FC = () => {
               </div>
               <div className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed font-medium bg-slate-50 dark:bg-slate-900/50 p-4 rounded-r-2xl rounded-bl-2xl">
                 {/* Render with limited markdown support for bolding keywords */}
-                <p dangerouslySetInnerHTML={{ 
-                  __html: comment.content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary-600 dark:text-primary-400">$1</strong>') 
-                }} />
+                <p>{comment.content.split(/\*\*(.*?)\*\*/g).map((part, index) => index % 2 === 1
+                  ? <strong key={index} className="text-primary-600 dark:text-primary-400">{part}</strong>
+                  : part)}</p>
               </div>
               <div className="flex items-center gap-4 mt-2 ml-2">
                 <button className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-primary-600 transition-colors group">
