@@ -1,7 +1,7 @@
 
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider, HelmetServerState } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PageLoader from './components/PageLoader';
@@ -24,11 +24,12 @@ const FlipTextPage = lazy(() => import('./pages/FlipTextPage'));
 const BigTextPage = lazy(() => import('./pages/BigTextPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-function App() {
+function App({ isStatic = false, helmetContext }: { isStatic?: boolean; helmetContext?: { helmet?: HelmetServerState } }) {
+  const AppRouter = isStatic ? React.Fragment : Router;
   return (
-    <HelmetProvider>
+    <HelmetProvider context={helmetContext}>
       <ThemeProvider>
-        <Router>
+        <AppRouter>
           <ErrorBoundary>
             <div className="flex flex-col min-h-screen font-sans relative dark:bg-slate-900 transition-colors duration-300">
               {/* Animated Background Elements */}
@@ -86,7 +87,7 @@ function App() {
               <Footer />
             </div>
           </ErrorBoundary>
-        </Router>
+        </AppRouter>
       </ThemeProvider>
     </HelmetProvider>
   );

@@ -4,15 +4,32 @@ import test from 'node:test';
 import ts from 'typescript';
 
 const source = fs.readFileSync(new URL('../services/fontMaps.ts', import.meta.url), 'utf8');
-const { outputText } = ts.transpileModule(source, {
+const textModule = ts.transpileModule(fs.readFileSync(new URL('../services/text.ts', import.meta.url), 'utf8'), {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext }
 });
-const { FONTS, convertText } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
+const textURL = `data:text/javascript;base64,${Buffer.from(textModule.outputText).toString('base64')}`;
+let { outputText } = ts.transpileModule(source, {
+  compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext }
+});
+outputText = outputText.replace(/from ['"]\.\/text['"]/g, `from '${textURL}'`);
+const { FONTS, convertText, getDisplaySegments } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
 const font = name => {
   const result = FONTS.find(item => item.name === name);
   assert.ok(result, `Missing font: ${name}`);
   return result;
 };
+
+test('display segments preserve emoji, mark accents and keep long styled text in a single segment', () => {
+  const map = font('Cursive Bold').map;
+  const output = convertText('niño 👨‍👩‍👧‍👦', map);
+  const segments = getDisplaySegments(output, map);
+  assert.equal(segments.map(segment => segment.content).join(''), output);
+  assert.ok(segments.some(segment => segment.isCombined));
+  assert.ok(segments.some(segment => segment.content.includes('👨‍👩‍👧‍👦')));
+  assert.equal(getDisplaySegments(convertText('a'.repeat(5000), map), map).length, 1);
+  assert.deepEqual(getDisplaySegments('', map), []);
+  assert.ok(getDisplaySegments('漢', map)[0].isFallback);
+});
 
 test('Gothic keeps every letter and digit in its corresponding position', () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

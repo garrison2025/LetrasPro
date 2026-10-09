@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async';
 import { Copy, Zap, RefreshCw, AlertTriangle } from 'lucide-react';
 import { generateZalgo } from '../services/zalgo';
 import Toast from '../components/Toast';
+import { MAX_INPUT_LENGTH } from '../services/text';
+import { useClipboard } from '../hooks/useClipboard';
 
 const GlitchPage: React.FC = () => {
   const [input, setInput] = useState('');
@@ -10,7 +12,7 @@ const GlitchPage: React.FC = () => {
   const [midLevel, setMidLevel] = useState(5);
   const [downLevel, setDownLevel] = useState(10);
   const [result, setResult] = useState('');
-  const [showToast, setShowToast] = useState(false);
+  const { copy, toastProps } = useClipboard("¡Texto glitch copiado!");
 
   useEffect(() => {
     if (!input) {
@@ -23,8 +25,7 @@ const GlitchPage: React.FC = () => {
 
   const copyToClipboard = () => {
     if (!result) return;
-    navigator.clipboard.writeText(result);
-    setShowToast(true);
+    void copy(result);
   };
 
   return (
@@ -53,10 +54,10 @@ const GlitchPage: React.FC = () => {
           {/* Controls */}
           <div className="md:col-span-5 space-y-8 bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
             <div>
-               <label className="block text-sm font-bold text-slate-400 mb-2">Escribe aquí</label>
+               <label htmlFor="GlitchPage-input" className="block text-sm font-bold text-slate-400 mb-2">Escribe aquí</label>
                <textarea 
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  id="GlitchPage-input" aria-label="Texto para efecto glitch" maxLength={MAX_INPUT_LENGTH} value={input}
+                  onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
                   placeholder="He comes..."
                   rows={3}
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all placeholder:text-slate-600"
@@ -70,7 +71,7 @@ const GlitchPage: React.FC = () => {
                    <span className="text-xs font-mono text-red-400">{upLevel}%</span>
                  </div>
                  <input 
-                   type="range" min="0" max="60" value={upLevel} 
+                   type="range" min="0" max="60" aria-label="Caos superior" value={upLevel}
                    onChange={(e) => setUpLevel(parseInt(e.target.value))}
                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-red-500"
                  />
@@ -82,7 +83,7 @@ const GlitchPage: React.FC = () => {
                    <span className="text-xs font-mono text-red-400">{midLevel}%</span>
                  </div>
                  <input 
-                   type="range" min="0" max="20" value={midLevel} 
+                   type="range" min="0" max="20" aria-label="Caos medio" value={midLevel}
                    onChange={(e) => setMidLevel(parseInt(e.target.value))}
                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-red-500"
                  />
@@ -94,7 +95,7 @@ const GlitchPage: React.FC = () => {
                    <span className="text-xs font-mono text-red-400">{downLevel}%</span>
                  </div>
                  <input 
-                   type="range" min="0" max="60" value={downLevel} 
+                   type="range" min="0" max="60" aria-label="Caos inferior" value={downLevel}
                    onChange={(e) => setDownLevel(parseInt(e.target.value))}
                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-red-500"
                  />
@@ -145,7 +146,7 @@ const GlitchPage: React.FC = () => {
            </p>
         </div>
       </div>
-      <Toast message="¡Texto copiado!" isVisible={showToast} onClose={() => setShowToast(false)} />
+      <Toast {...toastProps} />
     </div>
   );
 };

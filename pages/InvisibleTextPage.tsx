@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Copy, EyeOff, Info } from 'lucide-react';
 import Toast from '../components/Toast';
+import { useClipboard } from '../hooks/useClipboard';
 
 const InvisibleTextPage: React.FC = () => {
-  const [showToast, setShowToast] = useState(false);
+  const { copy, toastProps } = useClipboard("¡Copiado al portapapeles!");
 
   // U+3164 is the Hangul Filler, most popular for games
   // U+200B is Zero Width Space
   // U+2800 is Braille Pattern Blank (works in some games)
 
   const handleCopy = (char: string) => {
-    navigator.clipboard.writeText(char);
-    setShowToast(true);
+    void copy(char);
   };
 
   return (
@@ -73,7 +73,7 @@ const InvisibleTextPage: React.FC = () => {
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{item.desc}</p>
                 </div>
                 <button 
-                  onClick={() => handleCopy(item.char)}
+                  aria-label={`Copiar ${item.label}`} onClick={() => handleCopy(item.char)}
                   className="p-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-primary-100 hover:text-primary-600 dark:hover:bg-primary-900 dark:hover:text-primary-300 rounded-xl transition-colors"
                 >
                   <Copy size={20} />
@@ -91,7 +91,7 @@ const InvisibleTextPage: React.FC = () => {
            </div>
         </div>
       </div>
-      <Toast message="¡Copiado al portapapeles!" isVisible={showToast} onClose={() => setShowToast(false)} />
+      <Toast {...toastProps} />
     </div>
   );
 };

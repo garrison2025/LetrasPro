@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
+import { copyText } from '../services/clipboard';
 
 export type ViewMode = 'list' | 'instagram' | 'whatsapp';
 
@@ -12,7 +13,8 @@ interface FontCardProps {
   isFavorite: boolean;
   viewMode: ViewMode;
   onToggleFavorite: () => void;
-  onCopy: () => void;
+  getCurrentText: () => string;
+  onCopy: (text: string) => void;
 }
 
 const FontCard: React.FC<FontCardProps> = ({ 
@@ -23,11 +25,13 @@ const FontCard: React.FC<FontCardProps> = ({
   isFavorite, 
   viewMode,
   onToggleFavorite, 
-  onCopy 
+  onCopy,
+  getCurrentText
 }) => {
   const [justCopied, setJustCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = async (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -39,10 +43,11 @@ const FontCard: React.FC<FontCardProps> = ({
     }
 
     try {
-      await navigator.clipboard.writeText(rawText);
+      const text = getCurrentText();
+      if (!await copyText(text)) throw new Error('Clipboard unavailable');
       setCopyError(false);
       setJustCopied(true);
-      onCopy(); 
+      onCopy(text);
       setTimeout(() => setJustCopied(false), 800); 
     } catch {
       setCopyError(true);
@@ -52,20 +57,26 @@ const FontCard: React.FC<FontCardProps> = ({
   const handleDownloadImage = async (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsGeneratingImg(true);
+    setImageError(false);
     
     try {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+      if (!ctx) throw new Error('Canvas unavailable');
 
-      const lines = rawText.split('\n');
+      const lines = getCurrentText().split('\n');
       const fontSize = 54;
       ctx.font = `900 ${fontSize}px sans-serif`;
       
       const maxLineWidth = Math.max(...lines.map(l => ctx.measureText(l).width));
       
-      canvas.width = maxLineWidth + 160;
-      canvas.height = (lines.length * (fontSize * 1.6)) + 120;
+      const width = Math.max(480, Math.ceil(maxLineWidth + 160));
+      const height = Math.ceil((lines.length * (fontSize * 1.6)) + 120);
+      if (width > 4096 || height > 4096 || width * height > 8000000) {
+        throw new Error('Image too large');
+      }
+      canvas.width = width;
+      canvas.height = height;
 
       // Fondo Gradiente
       const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
@@ -87,14 +98,15 @@ const FontCard: React.FC<FontCardProps> = ({
       // Branding
       ctx.fillStyle = '#8b5cf6';
       ctx.font = 'bold 20px sans-serif';
-      ctx.fillText('LetrasPro.org', canvas.width / 2, canvas.height - 40);
+      ctx.fillText('conversordeletrasbonitas.org', canvas.width / 2, canvas.height - 40);
 
       const link = document.createElement('a');
       link.download = `letras-pro-${font.id}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
-      console.error('Error al generar imagen:', err);
+      console.warn('LetrasPro: image export unavailable');
+      setImageError(true);
     } finally {
       setIsGeneratingImg(false);
     }
@@ -105,12 +117,13 @@ const FontCard: React.FC<FontCardProps> = ({
       displaySegments.map((seg, i) => (
         <span 
           key={i} 
-          className={`${seg.isFallback ? 'fallback-char opacity-40' : ''} ${seg.isCombined ? 'text-primary-600 dark:text-primary-400 font-black' : ''} relative group/seg`}
+          title={seg.isFallback ? 'Carácter conservado sin transformar' : undefined}
+          className={`${seg.isFallback ? 'fallback-char' : ''} ${seg.isCombined ? 'text-primary-600 dark:text-primary-400 font-black' : ''} relative group/seg`}
         >
           {seg.content}
           {seg.isCombined && (
             <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] px-2 py-1.5 rounded-xl opacity-0 group-hover/seg:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-2xl pointer-events-none font-bold">
-              Modo Español Smart ✨
+              Combinación Unicode con acento
             </span>
           )}
         </span>
@@ -201,16 +214,16 @@ const FontCard: React.FC<FontCardProps> = ({
                {font.name}
              </span>
              {font.compatibility === 'high' ? (
-               <div className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-full text-[9px] font-black uppercase" title="Alta Compatibilidad">
-                 <ShieldCheck size={12} /> Safe
+               <div className="flex items-center gap-1 px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-full text-[9px] font-black uppercase" title="Orientativo: el aspecto varía según la aplicación y el dispositivo.">
+                 <ShieldCheck size={12} /> Unicode común
                </div>
              ) : font.compatibility === 'medium' ? (
-               <div className="flex items-center gap-1 px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 rounded-full text-[9px] font-black uppercase" title="Compatibilidad Media">
-                 <AlertCircle size={12} /> Mid
+               <div className="flex items-center gap-1 px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 rounded-full text-[9px] font-black uppercase" title="Orientativo: el aspecto varía según la aplicación y el dispositivo.">
+                 <AlertCircle size={12} /> Unicode especial
                </div>
              ) : (
-               <div className="flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-full text-[9px] font-black uppercase" title="Baja Compatibilidad">
-                 <AlertTriangle size={12} /> Beta
+               <div className="flex items-center gap-1 px-2 py-1 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-full text-[9px] font-black uppercase" title="Orientativo: el aspecto varía según la aplicación y el dispositivo.">
+                 <AlertTriangle size={12} /> Experimental
                </div>
              )}
            </div>
@@ -243,6 +256,7 @@ const FontCard: React.FC<FontCardProps> = ({
            </div>
         </div>
 
+        {imageError && <p role="alert" className="text-sm text-red-600 dark:text-red-400">No se pudo crear la imagen. Prueba con un texto más corto.</p>}
         <div className="min-h-[4rem] flex items-center">
            <div className="w-full">
              {viewMode === 'list' && (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { History, Copy, X } from 'lucide-react';
-import { FontStyle } from '../types';
+import { useClipboard } from '../hooks/useClipboard';
+import Toast from './Toast';
 
 interface HistoryItem {
   fontName: string;
@@ -11,10 +12,10 @@ interface HistoryItem {
 interface HistoryBarProps {
   history: HistoryItem[];
   onClear: () => void;
-  onSelect: (text: string) => void;
 }
 
-const HistoryBar: React.FC<HistoryBarProps> = ({ history, onClear, onSelect }) => {
+const HistoryBar: React.FC<HistoryBarProps> = ({ history, onClear }) => {
+  const { copy, toastProps } = useClipboard('¡Texto copiado al portapapeles!');
   if (history.length === 0) return null;
 
   return (
@@ -36,13 +37,13 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ history, onClear, onSelect }) =
         {history.map((item, idx) => (
           <button
             key={`${item.timestamp}-${idx}`}
-            onClick={() => onSelect(item.text)}
-            className="flex-shrink-0 flex flex-col items-start bg-white border border-slate-200 rounded-xl p-3 min-w-[160px] max-w-[200px] hover:border-primary-300 hover:shadow-md transition-all group text-left"
+            onClick={() => void copy(item.text)}
+            className="flex-shrink-0 flex flex-col items-start bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 min-w-[160px] max-w-[200px] hover:border-primary-300 hover:shadow-md transition-all group text-left"
           >
             <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded mb-2 group-hover:bg-primary-50 group-hover:text-primary-600 transition-colors">
               {item.fontName}
             </span>
-            <span className="text-sm text-slate-800 font-medium truncate w-full mb-1">
+            <span className="text-sm text-slate-800 dark:text-slate-200 font-medium truncate w-full mb-1">
               {item.text}
             </span>
             <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-auto pt-2 w-full border-t border-slate-50">
@@ -51,6 +52,7 @@ const HistoryBar: React.FC<HistoryBarProps> = ({ history, onClear, onSelect }) =
           </button>
         ))}
       </div>
+      <Toast {...toastProps} />
     </div>
   );
 };

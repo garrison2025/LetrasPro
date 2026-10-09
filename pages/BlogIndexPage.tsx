@@ -67,7 +67,7 @@ const BlogIndexPage: React.FC = () => {
                 <div className="flex items-center gap-4 text-xs text-slate-400 font-medium">
                   <div className="flex items-center gap-1.5">
                     <Calendar size={14} />
-                    {new Date(post.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    {new Date(post.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
                   </div>
                 </div>
                 

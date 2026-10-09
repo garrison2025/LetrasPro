@@ -14,6 +14,9 @@ const updateSW = registerSW({
   onOfflineReady() {
     console.log('App lista para trabajar offline.');
   },
+  onRegisterError() {
+    console.warn('LetrasPro: offline cache unavailable');
+  },
 });
 
 const rootElement = document.getElementById('root');
@@ -21,9 +24,16 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
+window.addEventListener('error', () => console.warn('LetrasPro: browser error'));
+window.addEventListener('unhandledrejection', () => console.warn('LetrasPro: unhandled operation'));
+
+const app = (
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
+if (rootElement.dataset.prerendered) {
+  ReactDOM.hydrateRoot(rootElement, app);
+} else {
+  ReactDOM.createRoot(rootElement).render(app);
+}

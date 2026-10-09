@@ -1,3 +1,5 @@
+import { splitCharacters } from './text';
+
 // Zalgo / Glitch Text Generator Logic
 
 const ZALGO_UP = [
@@ -47,7 +49,7 @@ export const generateZalgo = (text: string, upLevel: number, midLevel: number, d
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  for (const char of text) {
+  for (const char of splitCharacters(text)) {
     result += char;
 
     if (upLevel > 0) {

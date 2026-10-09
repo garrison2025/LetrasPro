@@ -3,18 +3,18 @@ import { Helmet } from 'react-helmet-async';
 import { Copy, Type, Trash2 } from 'lucide-react';
 import { generateBigText } from '../services/bigFonts';
 import Toast from '../components/Toast';
+import { useClipboard } from '../hooks/useClipboard';
 
 const BigTextPage: React.FC = () => {
   const [text, setText] = useState('');
-  const [showToast, setShowToast] = useState(false);
+  const { copy, toastProps } = useClipboard("¡Arte ASCII copiado!");
 
   // Simple ASCII generation for now, logic inside the page or simple service
   const result = generateBigText(text);
 
   const copyToClipboard = () => {
     if (!result) return;
-    navigator.clipboard.writeText(result);
-    setShowToast(true);
+    void copy(result);
   };
 
   return (
@@ -40,19 +40,19 @@ const BigTextPage: React.FC = () => {
 
         <div className="space-y-6">
           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-             <label className="block text-sm font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Tu Texto</label>
+             <label htmlFor="big-text-input" className="block text-sm font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Tu Texto</label>
              <div className="flex gap-2">
                <input 
                  type="text" 
-                 value={text}
+                 id="big-text-input" value={text}
                  onChange={(e) => setText(e.target.value)}
                  placeholder="HOLA"
                  className="flex-grow px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-green-500 outline-none"
                  maxLength={15}
                />
-               <button onClick={() => setText('')} className="p-3 text-slate-400 hover:text-red-500 bg-slate-100 dark:bg-slate-700 rounded-xl transition-colors"><Trash2 size={20} /></button>
+               <button aria-label="Borrar texto" onClick={() => setText('')} className="p-3 text-slate-400 hover:text-red-500 bg-slate-100 dark:bg-slate-700 rounded-xl transition-colors"><Trash2 size={20} /></button>
              </div>
-             <p className="text-xs text-slate-400 mt-2 text-right">Máximo 15 caracteres para evitar rupturas de línea</p>
+             <p className="text-xs text-slate-400 mt-2 text-right">Máximo 15 caracteres. Admite letras, números y acentos; otros símbolos se conservan sin ampliar.</p>
           </div>
 
           <div className="bg-slate-900 rounded-2xl p-6 overflow-x-auto border border-slate-800 shadow-2xl relative group min-h-[200px] flex items-center justify-center">
@@ -68,7 +68,7 @@ const BigTextPage: React.FC = () => {
                <button 
                   onClick={copyToClipboard}
                   className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg backdrop-blur-sm transition-colors"
-                  title="Copiar"
+                  title="Copiar" aria-label="Copiar arte ASCII"
                >
                  <Copy size={20} />
                </button>
@@ -77,7 +77,7 @@ const BigTextPage: React.FC = () => {
         </div>
 
       </div>
-      <Toast message="¡Arte ASCII copiado!" isVisible={showToast} onClose={() => setShowToast(false)} />
+      <Toast {...toastProps} />
     </div>
   );
 };

@@ -20,7 +20,7 @@ const moduleURL = (path, imports = {}) => {
 const storageURL = moduleURL('../services/storage.ts');
 const { readStorage, writeStorage, readStoredArray } = await import(storageURL);
 const commentsURL = moduleURL('../data/staticComments.ts');
-const { STATIC_COMMENTS } = await import(commentsURL);
+const { USAGE_TIPS } = await import(commentsURL);
 const { default: CommentsSection } = await import(moduleURL('../components/CommentsSection.tsx', {
   '../services/storage': storageURL,
   '../data/staticComments': commentsURL
@@ -76,16 +76,14 @@ test('mixed saved arrays retain valid entries and reject invalid entries', () =>
 test('comment rendering preserves the existing keyword text and bold formatting', () => {
   const html = renderToStaticMarkup(React.createElement(CommentsSection));
   assert.ok(html.includes('<strong class="text-primary-600 dark:text-primary-400">conversor de letras góticas</strong>'));
-  assert.ok(html.includes('Comunidad'));
+  assert.ok(html.includes('Consejos de uso'));
+  assert.ok(html.includes('No se publican'));
 });
 
 test('comment HTML, event handlers and scripts render as inert text, including inside bold markup', () => {
-  const original = [...STATIC_COMMENTS];
+  const original = [...USAGE_TIPS];
   try {
-    STATIC_COMMENTS.splice(0, STATIC_COMMENTS.length, {
-      id: 'u-test', author: '<script>author</script>', avatarColor: 'bg-primary-600', date: 'Ahora mismo', likes: 0,
-      content: '<img src=x onerror="alert(1)"> **<svg onload="alert(2)">** <script>alert(3)</script> & ñ ü'
-    });
+    USAGE_TIPS.splice(0, USAGE_TIPS.length, '<img src=x onerror="alert(1)"> **<svg onload="alert(2)">** <script>alert(3)</script> & ñ ü');
     const html = renderToStaticMarkup(React.createElement(CommentsSection));
     assert.ok(!html.includes('<img src=x'));
     assert.ok(!html.includes('<script>'));
@@ -94,6 +92,6 @@ test('comment HTML, event handlers and scripts render as inert text, including i
     assert.ok(html.includes('<strong class="text-primary-600 dark:text-primary-400">&lt;svg onload=&quot;alert(2)&quot;&gt;</strong>'));
     assert.ok(html.includes('&amp; ñ ü'));
   } finally {
-    STATIC_COMMENTS.splice(0, STATIC_COMMENTS.length, ...original);
+    USAGE_TIPS.splice(0, USAGE_TIPS.length, ...original);
   }
 });

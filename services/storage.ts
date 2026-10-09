@@ -6,11 +6,13 @@ export function readStorage(key: string): string | null {
   }
 }
 
-export function writeStorage(key: string, value: string): void {
+export function writeStorage(key: string, value: string): boolean {
   try {
     localStorage.setItem(key, value);
+    return true;
   } catch {
     // Storage may be disabled or full; the current session remains usable.
+    return false;
   }
 }
 

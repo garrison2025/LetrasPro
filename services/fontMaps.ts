@@ -1,5 +1,6 @@
 
 import { FontStyle, TextSegment } from '../types';
+import { splitCharacters } from './text';
 
 const lower = 'abcdefghijklmnopqrstuvwxyz';
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -612,5 +613,15 @@ export const convertText = (text: string, map: Record<string, string>, isVaporwa
 };
 
 export const getDisplaySegments = (text: string, map: Record<string, string>): TextSegment[] => {
-  return [{ content: text, isFallback: false }];
+  const mapped = new Set(Object.values(map));
+  const segments: TextSegment[] = [];
+  for (const content of splitCharacters(text)) {
+    const isCombined = /\p{Mark}/u.test(content);
+    const isFallback = /[\p{L}\p{N}]/u.test(content) && !mapped.has(content)
+      && !mapped.has(content.replace(/\p{Mark}/gu, ''));
+    const previous = segments[segments.length - 1];
+    if (previous && previous.isCombined === isCombined && previous.isFallback === isFallback) previous.content += content;
+    else segments.push({ content, isCombined, isFallback });
+  }
+  return segments;
 };

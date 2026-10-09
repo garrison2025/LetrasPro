@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getPostBySlug } from '../data/blogPosts';
+import NotFoundPage from './NotFoundPage';
+import Toast from '../components/Toast';
+import { useClipboard } from '../hooks/useClipboard';
 import { Calendar, User, ChevronLeft, Tag, Share2, Home } from 'lucide-react';
 
 const BlogPostPage: React.FC = () => {
+  const { copy, toastProps } = useClipboard('¡Enlace copiado!');
+  const [shareError, setShareError] = useState(false);
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
 
@@ -13,7 +18,7 @@ const BlogPostPage: React.FC = () => {
   }, [slug]);
 
   if (!post) {
-    return <Navigate to="/blog" replace />;
+    return <NotFoundPage />;
   }
 
   const canonicalUrl = `https://conversordeletrasbonitas.org/blog/${post.slug}`;
@@ -72,13 +77,13 @@ const BlogPostPage: React.FC = () => {
     // Define widths for srcset
     const widths = [640, 768, 1024, 1280];
     
-    const srcset = widths
+    const srcSet = widths
       .map(w => `${baseUrl}${baseParams}&w=${w} ${w}w`)
       .join(', ');
 
     return {
       src: `${baseUrl}${baseParams}&w=1280`,
-      srcset,
+      srcSet,
       sizes: "(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 800px" // Adjusted sizes for container
     };
   };
@@ -106,7 +111,7 @@ const BlogPostPage: React.FC = () => {
       <div className="max-w-3xl mx-auto">
         {/* Breadcrumb / Back Navigation - Improved Contrast */}
         <nav className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 mb-8" aria-label="Breadcrumb">
-           <Link to="/" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"><Home size={16} /></Link>
+           <Link to="/" aria-label="Inicio" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors"><Home size={16} /></Link>
            <span className="text-slate-400 dark:text-slate-600">/</span>
            <Link to="/blog" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-bold">Blog</Link>
            <span className="text-slate-400 dark:text-slate-600">/</span>
@@ -142,7 +147,7 @@ const BlogPostPage: React.FC = () => {
             <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-xl">
               <Calendar size={18} className="text-primary-500" />
               <time dateTime={post.date} className="font-semibold text-slate-700 dark:text-slate-300">
-                {new Date(post.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+                {new Date(post.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
               </time>
             </div>
           </div>
@@ -218,16 +223,20 @@ const BlogPostPage: React.FC = () => {
                     Ir al Generador
                   </Link>
                   <button 
-                    onClick={() => {
+                    onClick={async () => {
                       if (navigator.share) {
-                        navigator.share({
+                        await navigator.share({
                           title: post.title,
                           text: post.excerpt,
                           url: window.location.href,
+                        }).catch(error => {
+                          if (error.name !== 'AbortError') {
+                            console.warn('LetrasPro: share unavailable');
+                            setShareError(true);
+                          }
                         });
                       } else {
-                        navigator.clipboard.writeText(window.location.href);
-                        alert('Enlace copiado al portapapeles');
+                        await copy(window.location.href);
                       }
                     }}
                     className="inline-flex items-center justify-center bg-transparent border border-white/30 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-white/10 transition-colors"
@@ -239,6 +248,8 @@ const BlogPostPage: React.FC = () => {
            </div>
         </div>
       </div>
+      <Toast {...toastProps} />
+      <Toast message="No se pudo compartir. Copia el enlace desde la barra de direcciones." isVisible={shareError} variant="error" onClose={() => setShareError(false)} />
     </article>
   );
 };
