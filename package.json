@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs scripts/test-tools.mjs",
+    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs scripts/test-tools.mjs scripts/test-diagnostics.mjs",
     "build": "vite build && node scripts/generate-sitemap.js dist && vite build --ssr entry-server.tsx --outDir .ssr && node scripts/prerender.mjs && node scripts/finalize-build.mjs",
     "preview": "node scripts/preview-pages.mjs",
     "sitemap": "node scripts/generate-sitemap.js public",
     "typecheck": "tsc --noEmit",
-    "check:pages": "node scripts/check-pages.mjs"
+    "check:pages": "node scripts/check-pages.mjs",
+    "check:http": "node scripts/check-http.mjs --local",
+    "check:deployment": "node scripts/check-http.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.0",
@@ -38,5 +40,8 @@
   },
   "engines": {
     "node": ">=24 <25"
+  },
+  "overrides": {
+    "postcss-selector-parser": "7.1.6"
   }
 }

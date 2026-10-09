@@ -1,5 +1,6 @@
 import React, { ErrorInfo, ReactNode } from 'react';
 import { RefreshCcw, AlertTriangle } from 'lucide-react';
+import { reportDiagnostic } from '../services/diagnostics';
 
 interface Props {
   children?: ReactNode;
@@ -21,7 +22,7 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('LetrasPro: application rendering failed');
+    reportDiagnostic('render');
   }
 
   private handleReload = () => {

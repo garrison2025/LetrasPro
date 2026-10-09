@@ -74,6 +74,7 @@ public/*
 !public/logo.svg
 !public/og-image.png
 !public/_headers
+!public/_routes.json
 
 # vuepress build output
 .vuepress/dist
