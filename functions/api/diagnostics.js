@@ -28,6 +28,16 @@ export async function onRequest({ request, env }) {
     if (!event || typeof event !== 'object' || Object.keys(event).length !== 1 || !CODES.has(event.code)) return new Response(null, { status: 400, headers });
     // Log only a validated fixed category; never echo or log a rejected payload.
     console.warn(JSON.stringify({ event: 'letraspro_client_error', code: event.code }));
+    try {
+      env.DIAGNOSTICS_STATS?.writeDataPoint({
+        indexes: [event.code],
+        blobs: [event.code, ['conversordeletrasbonitas.org', 'www.conversordeletrasbonitas.org', 'letraspro.pages.dev'].includes(new URL(request.url).hostname) ? 'production' : 'preview'],
+        doubles: [1],
+      });
+    } catch {
+      // Statistics must never turn an accepted diagnostic into an application error.
+      console.warn('LetrasPro: diagnostic statistics unavailable');
+    }
     return new Response(null, { status: 204, headers });
   } catch {
     return new Response(null, { status: 400, headers });

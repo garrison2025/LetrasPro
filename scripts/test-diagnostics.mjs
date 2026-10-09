@@ -52,6 +52,23 @@ test('oversized bodies are bounded even without a content-length header', async 
   assert.equal((await send('ñ'.repeat(65))).status, 413);
 });
 
+test('persistent statistics contain only a fixed category, environment and count', async () => {
+  const points = [];
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    const env = { DIAGNOSTICS_ENABLED: 'true', DIAGNOSTICS_STATS: { writeDataPoint: value => points.push(value) } };
+    assert.equal((await send('{"code":"render"}', {}, env)).status, 204);
+    assert.deepEqual(points, [{ indexes: ['render'], blobs: ['render', 'production'], doubles: [1] }]);
+    assert.equal((await send('{"code":"render","text":"secret"}', {}, env)).status, 400);
+    assert.equal(points.length, 1);
+    env.DIAGNOSTICS_STATS.writeDataPoint = () => { throw new Error('Storage unavailable'); };
+    assert.equal((await send('{"code":"browser"}', {}, env)).status, 204);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
 test('client diagnostics are opt-in, deduplicated and ignore delivery failures', async () => {
   const source = ts.transpileModule(fs.readFileSync(new URL('../services/diagnostics.ts', import.meta.url), 'utf8'), {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
