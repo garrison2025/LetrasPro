@@ -73,6 +73,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debouncedText = useDebounce(inputText, 300);
+  const characterCount = useMemo(() => splitCharacters(inputText).length, [inputText]);
 
   // SEO & Meta Tag Logic
   const baseUrl = 'https://conversordeletrasbonitas.org';
@@ -290,7 +291,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     });
   }, [config.filter, favorites, searchQuery, activeTone]);
 
-  const visibleFonts = filteredFonts.slice(0, visibleCount);
+  const visibleFonts = useMemo(() => filteredFonts.slice(0, visibleCount), [filteredFonts, visibleCount]);
+  const previewText = useMemo(() => transformText(debouncedText || 'Vista Previa', textCase), [debouncedText, textCase]);
+  const fontPreviews = useMemo(() => visibleFonts.map(font => {
+    const mappedText = convertText(previewText, font.map, font.category === 'vaporwave');
+    const rawText = applyDecoration(mappedText, activeDecorator);
+    return { font, rawText, segments: getDisplaySegments(rawText, font.map) };
+  }), [visibleFonts, previewText, activeDecorator]);
   const hasMore = visibleCount < filteredFonts.length;
 
   const getIcon = (iconName: string) => {
@@ -478,8 +485,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                      <Instagram size={12} /> Caracteres
                    </div>
                    <div className="flex items-baseline gap-1" title="Caracteres visibles. Verifica el límite final en Instagram; algunos estilos ocupan más unidades.">
-                     <span className={`text-xl md:text-2xl font-black ${splitCharacters(inputText).length > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
-                       {splitCharacters(inputText).length}
+                     <span className={`text-xl md:text-2xl font-black ${characterCount > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
+                       {characterCount}
                      </span>
                      {/* INCREASED CONTRAST: text-slate-500 instead of 300 */}
                      <span className="text-slate-500 dark:text-slate-500 font-bold text-xs md:text-sm">/ {INSTAGRAM_BIO_LIMIT}</span>
@@ -536,19 +543,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           <h2 className="sr-only">Resultados de estilos</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {visibleFonts.map((font) => {
-              const baseText = debouncedText || 'Vista Previa';
-              const transformed = transformText(baseText, textCase);
-              const mappedText = convertText(transformed, font.map, font.category === 'vaporwave');
-              const finalRawText = applyDecoration(mappedText, activeDecorator);
-              const segments = getDisplaySegments(finalRawText, font.map);
-              
+            {fontPreviews.map(({ font, rawText, segments }) => {
               return (
                 <FontCard
                   key={font.id}
                   font={font}
-                  rawText={finalRawText}
-                  originalText={transformed} // Pass readable text for accessibility
+                  rawText={rawText}
+                  originalText={previewText} // Pass readable text for accessibility
                   displaySegments={segments}
                   isFavorite={favorites.includes(font.id)}
                   viewMode={viewMode}

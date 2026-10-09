@@ -4,6 +4,17 @@ import { workboxOptions } from '../.ssr/entry-server.js';
 
 const result = await generateSW({ ...workboxOptions, swDest: 'dist/sw.js' });
 if (result.warnings.length) throw new Error(result.warnings.join('\n'));
-// Install the application's cache first. An unavailable ad worker must not abort it.
-fs.appendFileSync('dist/sw.js', `\nself.options = { domain: "5gvci.com", zoneId: 11735579 };\nself.lary = "";\ntry { importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw'); } catch { console.warn('LetrasPro: ad worker unavailable'); }\n`);
+// The application owns activation; the ad worker otherwise skips the update prompt.
+fs.appendFileSync('dist/sw.js', `
+const activateApplicationUpdate = self.skipWaiting.bind(self);
+self.skipWaiting = () => Promise.resolve();
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    event.waitUntil(activateApplicationUpdate());
+  }
+});
+self.options = { domain: "5gvci.com", zoneId: 11735579 };
+self.lary = "";
+try { importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw'); } catch { console.warn('LetrasPro: ad worker unavailable'); }
+`);
 console.log(`Cached ${result.count} final assets, including prerendered pages.`);
