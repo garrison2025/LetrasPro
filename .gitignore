@@ -70,7 +70,9 @@ dist/
 
 # Gatsby files
 .cache/
-public/
+public/*
+!public/logo.svg
+!public/og-image.png
 
 # vuepress build output
 .vuepress/dist
