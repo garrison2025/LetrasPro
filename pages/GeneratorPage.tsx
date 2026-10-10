@@ -6,6 +6,8 @@ import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import { applyDecoration } from '../services/decorators';
 import { BIO_TEMPLATES } from '../data/bioTemplates';
 import { USAGE_GUIDES } from '../data/usageGuides';
+import { GENERATOR_ANSWERS } from '../data/generatorAnswers';
+import { ORGANIZATION_ID, WEBSITE_ID } from '../data/siteIdentity';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import CommentsSection from '../components/CommentsSection';
@@ -82,6 +84,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const baseUrl = 'https://conversordeletrasbonitas.org';
   const canonicalUrl = config.path === '/' ? `${baseUrl}/` : `${baseUrl}${config.path}`;
   const ogImage = `${baseUrl}/og-image.png`;
+  const usageGuide = USAGE_GUIDES[config.path];
+  const answer = GENERATOR_ANSWERS[config.path];
+  const exampleFont = useMemo(() => FONTS.find(font => config.filter(font)
+    && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
   // Keep the homepage title concise; preserve other pages' date formatting.
   const dynamicTitle = useMemo(() => {
@@ -98,32 +104,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const dynamicDescription = config.description.replace('2025', year);
 
 
-  // Describe the real site search. Google no longer displays the sitelinks search box.
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Conversor de Letras Pro",
-    "url": baseUrl,
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${baseUrl}/?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
-  };
-
   // WebApplication Structured Data (JSON-LD)
   const webAppSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": config.title,
+    "@id": `${canonicalUrl}#application`,
+    "name": config.heading,
     "url": canonicalUrl,
     "description": dynamicDescription,
+    "inLanguage": "es",
+    "publisher": { "@id": ORGANIZATION_ID },
+    "mainEntityOfPage": { "@id": `${canonicalUrl}#webpage` },
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
-    "dateModified": fullDate, // Freshness Signal
+    "dateModified": fullDate,
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -377,8 +371,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         {/* JSON-LD Schemas */}
         <script type="application/ld+json">
           {JSON.stringify([
-            // Keep site-level search metadata on the homepage only.
-            config.path === '/' ? websiteSchema : null, 
+            {
+              '@context': 'https://schema.org', '@type': 'WebPage',
+              '@id': `${canonicalUrl}#webpage`, url: canonicalUrl,
+              name: dynamicTitle, description: dynamicDescription, inLanguage: 'es',
+              isPartOf: { '@id': WEBSITE_ID }, publisher: { '@id': ORGANIZATION_ID },
+              mainEntity: { '@id': `${canonicalUrl}#application` },
+            },
             webAppSchema, 
             breadcrumbSchema, 
             faqSchema, 
@@ -636,10 +635,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             </div>
           </section>
 
-          {USAGE_GUIDES[config.path] && <section className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-6 md:p-8">
+          {usageGuide && <section id="ejemplo-conversion" className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-6 md:p-8">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Ejemplos y límites de uso</h2>
-            <p className="text-slate-700 dark:text-slate-200 mb-3">Ejemplo para probar: <span className="font-bold">{USAGE_GUIDES[config.path].example}</span></p>
-            <p className="text-slate-600 dark:text-slate-300">{USAGE_GUIDES[config.path].guidance}</p>
+            {answer && <>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{answer.question}</h3>
+              <p className="text-slate-700 dark:text-slate-200 mb-4">{answer.answer}</p>
+            </>}
+            <p className="text-slate-700 dark:text-slate-200 mb-3">Ejemplo para probar: <span className="font-bold">{usageGuide.example}</span></p>
+            {exampleFont && <dl className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 mb-4">
+              <dt className="text-sm font-semibold text-slate-600 dark:text-slate-300">Resultado con {exampleFont.name}</dt>
+              <dd data-conversion-example className="text-lg text-slate-900 dark:text-white break-words mt-2">{convertText(usageGuide.example, exampleFont.map, exampleFont.category === 'vaporwave')}</dd>
+            </dl>}
+            <p className="text-slate-600 dark:text-slate-300">{usageGuide.guidance}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">Base técnica: Unicode identifica caracteres; las fuentes determinan su representación visual. Consulta la <a href="https://www.unicode.org/faq/font_keyboard.html" className="underline text-primary-700 dark:text-primary-300">explicación del Consorcio Unicode sobre caracteres y fuentes</a>. El ejemplo anterior se calcula con este conversor; la recomendación de uso es de <Link to="/sobre-nosotros#equipo-editorial" className="underline text-primary-700 dark:text-primary-300">Equipo LetrasPro</Link>.</p>
           </section>}
 
           {/* Local notes and practical usage tips */}

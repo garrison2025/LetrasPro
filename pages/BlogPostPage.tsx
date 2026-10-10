@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getPostBySlug } from '../data/blogPosts';
+import { EDITORIAL_ID, ORGANIZATION_ID, WEBSITE_ID } from '../data/siteIdentity';
 import NotFoundPage from './NotFoundPage';
 import Toast from '../components/Toast';
 import { useClipboard } from '../hooks/useClipboard';
@@ -24,18 +25,30 @@ if (!post) {
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
+      "@id": `${canonicalUrl}#article`,
       "headline": post.title,
       "description": post.excerpt,
       "image": post.imageUrl ? [post.imageUrl] : [],
       "author": {
         "@type": "Organization",
+        "@id": EDITORIAL_ID,
+        "url": EDITORIAL_ID,
         "name": post.author
       },
       "datePublished": post.date,
+      // Matches the editorial review date already displayed below the header.
+      "dateModified": "2026-10-10",
+      "inLanguage": "es",
+      "publisher": { "@id": ORGANIZATION_ID },
       "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": canonicalUrl
+        "@id": `${canonicalUrl}#webpage`
       }
+    },
+    {
+      '@context': 'https://schema.org', '@type': 'WebPage',
+      '@id': `${canonicalUrl}#webpage`, url: canonicalUrl, name: post.title,
+      inLanguage: 'es', isPartOf: { '@id': WEBSITE_ID },
+      publisher: { '@id': ORGANIZATION_ID }, mainEntity: { '@id': `${canonicalUrl}#article` },
     },
     {
       "@context": "https://schema.org",
@@ -139,7 +152,7 @@ if (!post) {
                 <User size={20} />
               </div>
               <div className="text-left">
-                <span className="block font-bold text-slate-900 dark:text-white text-base">{post.author}</span>
+                <Link to="/sobre-nosotros#equipo-editorial" rel="author" className="block font-bold text-slate-900 dark:text-white text-base underline decoration-slate-300 underline-offset-4">{post.author}</Link>
                 <span className="text-xs text-slate-500 dark:text-slate-500 uppercase tracking-wider font-bold">Equipo Editorial</span>
               </div>
             </div>

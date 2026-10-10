@@ -1,5 +1,6 @@
 import React, { Children, isValidElement, ReactElement, ReactNode } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { ORGANIZATION_ID, WEBSITE_ID } from '../data/siteIdentity';
 
 // Reuse the page's own metadata for both prerendered HTML and client navigation.
 export function PageMetadata({ children }: { children: ReactNode }) {
@@ -9,6 +10,17 @@ export function PageMetadata({ children }: { children: ReactNode }) {
   const canonical = elements.find(element => element.type === 'link' && element.props.rel === 'canonical')?.props.href;
   return <Helmet>
     {children}
+    {canonical && <script type="application/ld+json">{JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': canonical.endsWith('/sobre-nosotros') ? 'AboutPage' : canonical.endsWith('/contacto') ? 'ContactPage' : 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: title,
+      description,
+      inLanguage: 'es',
+      isPartOf: { '@id': WEBSITE_ID },
+      publisher: { '@id': ORGANIZATION_ID },
+    })}</script>}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

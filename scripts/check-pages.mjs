@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 const titles = new Set();
+const crawlLinks = new Map();
 for (const url of urls) {
   const route = new URL(url).pathname;
   const html = fs.readFileSync(path.join('dist', route === '/' ? 'index.html' : `${route}.html`), 'utf8');
@@ -19,14 +20,68 @@ for (const url of urls) {
   assert.ok(html.includes('data-prerendered="true"'), `Initial content: ${route}`);
   assert.ok(!html.includes('aggregateRating'), `No simulated rating: ${route}`);
   assert.ok(!html.includes('basado en 2450'), `No simulated votes: ${route}`);
-  for (const script of html.matchAll(/<script[^>]+type="application\/ld\+json"[^>]*>([^]*?)<\/script>/g)) JSON.parse(script[1]);
+  const entities = [];
+  const references = [];
+  const inspectSchema = value => {
+    if (!value || typeof value !== 'object') return;
+    if (Array.isArray(value)) return value.forEach(inspectSchema);
+    if (value['@id']) {
+      if (value['@type']) entities.push(value);
+      else references.push(value['@id']);
+    }
+    Object.values(value).forEach(inspectSchema);
+  };
+  for (const script of html.matchAll(/<script[^>]+type="application\/ld\+json"[^>]*>([^]*?)<\/script>/g)) inspectSchema(JSON.parse(script[1]));
+  const siteUrl = 'https://conversordeletrasbonitas.org';
+  const website = entities.filter(entity => entity['@type'] === 'WebSite');
+  assert.equal(website.length, 1, `Single website identity: ${route}`);
+  assert.equal(website[0]['@id'], `${siteUrl}/#website`);
+  assert.equal(website[0].inLanguage, 'es');
+  assert.equal(website[0].publisher['@id'], `${siteUrl}/#organization`);
+  const organization = entities.find(entity => entity['@id'] === `${siteUrl}/#organization`);
+  assert.equal(organization?.name, 'LetrasPro', `Publisher: ${route}`);
+  assert.ok(fs.existsSync(path.join('dist', new URL(organization.logo.url).pathname)), `Publisher logo: ${route}`);
+  const webpage = entities.find(entity => entity['@id'] === `${canonical[1]}#webpage`);
+  assert.equal(webpage?.url, canonical[1], `Page identity matches canonical: ${route}`);
+  assert.equal(webpage.inLanguage, 'es');
+  assert.equal(webpage.isPartOf['@id'], website[0]['@id']);
+  for (const reference of references) assert.ok(entities.some(entity => entity['@id'] === reference), `Resolved schema reference ${reference}: ${route}`);
+  const application = entities.find(entity => entity['@type'] === 'WebApplication');
+  if (application) {
+    assert.equal(application.publisher['@id'], organization['@id']);
+    assert.equal(webpage.mainEntity['@id'], application['@id']);
+    assert.match(html, /id="ejemplo-conversion"/, `Visible usage explanation: ${route}`);
+    assert.match(html, /data-conversion-example[^>]*>[^<]+<\/dd>/, `Real initial-HTML conversion: ${route}`);
+    assert.ok(html.includes('href="https://www.unicode.org/faq/font_keyboard.html"'), `Primary technical source: ${route}`);
+    assert.ok(html.includes('href="/sobre-nosotros#equipo-editorial"'), `Editorial attribution: ${route}`);
+  }
+  const article = entities.find(entity => entity['@type'] === 'BlogPosting');
+  if (article) {
+    assert.equal(article.author['@id'], `${siteUrl}/sobre-nosotros#equipo-editorial`);
+    assert.equal(article.publisher['@id'], organization['@id']);
+    assert.equal(webpage.mainEntity['@id'], article['@id']);
+    assert.equal(article.dateModified, '2026-10-10');
+    assert.ok(html.includes('Revisión editorial: 10 de octubre de 2026'), `Visible review date: ${route}`);
+    assert.ok([...html.matchAll(/<a\s[^>]*>/g)].some(([anchor]) => anchor.includes('href="/sobre-nosotros#equipo-editorial"') && anchor.includes('rel="author"')), `Visible author link: ${route}`);
+  }
   for (const link of html.matchAll(/href="(\/[^"?#]*)/g)) {
     const target = link[1];
     if (target.startsWith('//')) continue;
     assert.ok(fs.existsSync(path.join('dist', target)) || fs.existsSync(path.join('dist', `${target}.html`)), `Local link ${target} from ${route}`);
   }
+  crawlLinks.set(route, [...html.matchAll(/<a[^>]+href="(\/[^"?#]*)/g)].map(match => match[1]));
 }
 assert.equal(urls.length, 29);
+const reached = new Set();
+const pending = ['/'];
+while (pending.length) {
+  const route = pending.pop();
+  if (reached.has(route)) continue;
+  reached.add(route);
+  pending.push(...(crawlLinks.get(route) || []).filter(target => crawlLinks.has(target)));
+}
+for (const route of crawlLinks.keys()) assert.ok(reached.has(route), `Reachable from homepage: ${route}`);
+assert.ok(fs.readFileSync('dist/sobre-nosotros.html', 'utf8').includes('id="equipo-editorial"'), 'Author destination exists');
 const notFound = fs.readFileSync('dist/404.html','utf8');
 assert.match(notFound, /name="robots"[^>]+content="noindex, follow"/);
 assert.ok(!notFound.includes('rel="canonical"'));
