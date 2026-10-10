@@ -2,7 +2,7 @@ import type { GenerateSWOptions } from 'workbox-build';
 
 export const workboxOptions: Omit<GenerateSWOptions, 'swDest'> = {
   globDirectory: 'dist',
-  globPatterns: ['**/*.{js,css,html,png,svg}'],
+  globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
   globIgnores: ['sw.js', 'workbox-*.js'],
   cleanupOutdatedCaches: true,
   clientsClaim: true,
