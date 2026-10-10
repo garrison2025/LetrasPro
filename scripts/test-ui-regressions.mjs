@@ -178,18 +178,141 @@ test('storage failures stay usable without falsely claiming a rating was saved',
   } finally { await act(async () => renderer.unmount()); globalThis.localStorage = original; }
 });
 
-test('personal notes can be removed and persistence failures are reported', async () => {
+const storedNote = (number, content = `Note ${number}`) => ({ id: `u-${number}`, author: 'Ana', content, date: '10/10/2026', avatarColor: 'bg-primary-600', likes: 0 });
+function noteStorage(notes = []) {
+  const values = new Map([['let_pro_user_comments', JSON.stringify(notes)]]);
+  return {
+    values,
+    get length() { return values.size; },
+    key: index => [...values.keys()][index] ?? null,
+    getItem: key => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, value),
+  };
+}
+async function saveNote(renderer, content) {
+  await act(async () => renderer.root.findByProps({ id: 'note-text' }).props.onChange({ target: { value: content } }));
+  await act(async () => renderer.root.findByType('form').props.onSubmit({ preventDefault() {} }));
+}
+
+test('full notes retain all old records and the draft; explicit deletion frees room', async () => {
   const original = globalThis.localStorage;
-  globalThis.localStorage = { getItem: () => null, setItem() {} };
+  const storage = noteStorage(Array.from({ length: 8 }, (_, index) => storedNote(index + 1)));
+  globalThis.localStorage = storage;
+  const legacy = storage.getItem('let_pro_user_comments');
   const renderer = await mount(React.createElement(CommentsSection));
   try {
-    await act(async () => renderer.root.findByProps({ id: 'note-text' }).props.onChange({ target: { value: 'Mi nota' } }));
-    await act(async () => renderer.root.findByType('form').props.onSubmit({ preventDefault() {} }));
+    await saveNote(renderer, 'New draft');
+    assert.equal(renderer.root.findAllByType('article').length, 8);
+    assert.equal(renderer.root.findByProps({ id: 'note-text' }).props.value, 'New draft');
+    assert.ok(JSON.stringify(renderer.toJSON()).includes('Elimina una antes'));
+    assert.equal(storage.values.size, 1);
+    await act(async () => renderer.root.findAllByType('article').find(node => node.findAllByType('p').some(paragraph => paragraph.children.includes('Note 1'))).findByType('button').props.onClick());
+    assert.equal(renderer.root.findAllByType('article').length, 7);
+    await saveNote(renderer, 'New draft');
+    assert.equal(renderer.root.findAllByType('article').length, 8);
+    assert.equal(renderer.root.findByProps({ id: 'note-text' }).props.value, '');
+    assert.equal(storage.getItem('let_pro_user_comments'), legacy, 'Legacy records are never rewritten');
+    assert.equal(storage.getItem('let_pro_note_u-1'), 'null');
+  } finally { await act(async () => renderer.unmount()); globalThis.localStorage = original; }
+});
+
+test('independent note views preserve other saves and never resurrect deleted records', async () => {
+  const original = globalThis.localStorage;
+  const originalNow = Date.now;
+  Date.now = () => 123456789;
+  const storage = noteStorage(); globalThis.localStorage = storage;
+  const first = await mount(React.createElement(CommentsSection));
+  const second = await mount(React.createElement(CommentsSection));
+  try {
+    await saveNote(first, 'From A');
+    await saveNote(second, 'From B');
+    assert.equal(second.root.findAllByType('article').length, 2);
+    await act(async () => button(first, 'Eliminar nota').props.onClick());
+    await saveNote(second, 'From C');
+    const visible = JSON.stringify(second.toJSON());
+    assert.ok(!visible.includes('From A')); assert.ok(visible.includes('From B')); assert.ok(visible.includes('From C'));
+    const saved = [...storage.values.entries()].filter(([key, value]) => key.startsWith('let_pro_note_') && value !== 'null');
+    assert.equal(saved.length, 2);
+    const restored = await mount(React.createElement(CommentsSection));
+    try { assert.equal(restored.root.findAllByType('article').length, 2); } finally { await act(async () => restored.unmount()); }
+  } finally {
+    await act(async () => { first.unmount(); second.unmount(); });
+    globalThis.localStorage = original; Date.now = originalNow;
+  }
+});
+
+test('note storage events refresh other pages without replacing their unsaved draft', async () => {
+  const original = globalThis.localStorage;
+  const originalAdd = window.addEventListener; const originalRemove = window.removeEventListener;
+  const listeners = new Set();
+  window.addEventListener = (type, listener) => { if (type === 'storage') listeners.add(listener); };
+  window.removeEventListener = (type, listener) => { if (type === 'storage') listeners.delete(listener); };
+  const storage = noteStorage(); globalThis.localStorage = storage;
+  const renderer = await mount(React.createElement(CommentsSection));
+  try {
+    await act(async () => renderer.root.findByProps({ id: 'note-text' }).props.onChange({ target: { value: 'Unsent draft' } }));
+    const key = 'let_pro_note_u-42'; storage.setItem(key, JSON.stringify(storedNote(42)));
+    await act(async () => { for (const listener of listeners) listener({ key }); });
     assert.equal(renderer.root.findAllByType('article').length, 1);
-    globalThis.localStorage.setItem = () => { throw new Error('Full'); };
-    await act(async () => button(renderer, 'Eliminar nota').props.onClick());
+    assert.equal(renderer.root.findByProps({ id: 'note-text' }).props.value, 'Unsent draft');
+    storage.setItem(key, 'null');
+    await act(async () => { for (const listener of listeners) listener({ key }); });
     assert.equal(renderer.root.findAllByType('article').length, 0);
-    assert.ok(JSON.stringify(renderer.toJSON()).includes('puede reaparecer'));
+  } finally {
+    await act(async () => renderer.unmount()); assert.equal(listeners.size, 0);
+    globalThis.localStorage = original; window.addEventListener = originalAdd; window.removeEventListener = originalRemove;
+  }
+});
+
+test('failed note writes retain the draft and failed deletions retain the saved record', async () => {
+  const original = globalThis.localStorage;
+  globalThis.localStorage = noteStorage([storedNote(1)]);
+  const renderer = await mount(React.createElement(CommentsSection));
+  try {
+    globalThis.localStorage.setItem = () => { throw new Error('Full'); };
+    await saveNote(renderer, 'Keep this draft');
+    assert.equal(renderer.root.findByProps({ id: 'note-text' }).props.value, 'Keep this draft');
+    assert.equal(renderer.root.findAllByType('article').length, 1);
+    await act(async () => button(renderer, 'Eliminar nota').props.onClick());
+    assert.equal(renderer.root.findAllByType('article').length, 1);
+    assert.ok(JSON.stringify(renderer.toJSON()).includes('Sigue guardada'));
+    Object.defineProperty(globalThis, 'localStorage', { configurable: true, get: () => { throw new Error('Blocked'); } });
+    await saveNote(renderer, 'Still here');
+    assert.equal(renderer.root.findByProps({ id: 'note-text' }).props.value, 'Still here');
+    assert.equal(renderer.root.findAllByType('article').length, 1);
+  } finally { await act(async () => renderer.unmount()); Object.defineProperty(globalThis, 'localStorage', { configurable: true, writable: true, value: original }); }
+});
+
+test('damaged individual note records do not hide valid legacy or new notes', async () => {
+  const original = globalThis.localStorage;
+  const storage = noteStorage([storedNote(1)]); globalThis.localStorage = storage;
+  storage.setItem('let_pro_note_u-2', '{broken');
+  storage.setItem('let_pro_note_u-3', JSON.stringify(storedNote(4)));
+  storage.setItem('let_pro_note_u-5', JSON.stringify(storedNote(5)));
+  const renderer = await mount(React.createElement(CommentsSection));
+  try {
+    assert.equal(renderer.root.findAllByType('article').length, 2);
+    await saveNote(renderer, 'Another');
+    assert.equal(renderer.root.findAllByType('article').length, 3);
+  } finally { await act(async () => renderer.unmount()); globalThis.localStorage = original; }
+});
+
+test('overlapping saves near capacity preserve both records rather than trimming one', async () => {
+  const original = globalThis.localStorage;
+  const storage = noteStorage(Array.from({ length: 7 }, (_, index) => storedNote(index + 1)));
+  const write = storage.setItem;
+  storage.setItem = (key, value) => {
+    write('let_pro_note_u-999', JSON.stringify(storedNote(999, 'Concurrent note')));
+    write(key, value);
+  };
+  globalThis.localStorage = storage;
+  const renderer = await mount(React.createElement(CommentsSection));
+  try {
+    await saveNote(renderer, 'Other concurrent note');
+    assert.equal(renderer.root.findAllByType('article').length, 9);
+    await saveNote(renderer, 'Retained draft');
+    assert.equal(renderer.root.findAllByType('article').length, 9);
+    assert.equal(renderer.root.findByProps({ id: 'note-text' }).props.value, 'Retained draft');
   } finally { await act(async () => renderer.unmount()); globalThis.localStorage = original; }
 });
 
