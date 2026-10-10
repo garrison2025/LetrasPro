@@ -229,7 +229,7 @@ const FontCard: React.FC<FontCardProps> = ({
              </button>
              <button
                 className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm ${
-                  isFavorite ? 'text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
+                  isFavorite ? 'text-yellow-700 bg-yellow-50 dark:text-yellow-400 dark:bg-yellow-900/20' : 'text-slate-600 dark:text-slate-300 hover:text-yellow-700 dark:hover:text-yellow-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
                 onClick={(e) => { e.stopPropagation(); onToggleFavorite(font.id); }}
                 aria-pressed={isFavorite}
@@ -239,7 +239,7 @@ const FontCard: React.FC<FontCardProps> = ({
              </button>
              <button type="button" onClick={event => { event.stopPropagation(); void handleCopy(); }}
                aria-label={`Copiar estilo de letra ${font.name}`}
-               className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 dark:bg-green-900/30 scale-125 shadow-xl' : 'text-slate-300'}`}
+               className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-700 bg-green-50 dark:text-green-400 dark:bg-green-900/30 scale-125 shadow-xl' : 'text-slate-600 dark:text-slate-300'}`}
              >
                {justCopied ? <Check size={18} strokeWidth={4} /> : <Copy size={18} />}
              </button>
