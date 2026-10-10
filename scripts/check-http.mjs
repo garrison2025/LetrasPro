@@ -27,7 +27,7 @@ try {
   const results = [];
   const check = async (route, expectedStatus, expectedHTML) => {
     try {
-      const response = await fetch(new URL(route, base), { signal: AbortSignal.timeout(15000), redirect: 'follow' });
+      const response = await fetch(new URL(route, base), { signal: AbortSignal.timeout(15000), redirect: 'manual' });
       assert.equal(new URL(response.url).origin, base.origin, 'Unexpected redirect to another site');
       assert.equal(response.status, expectedStatus, 'HTTP status');
       const html = await response.text();
@@ -48,7 +48,7 @@ try {
   };
   for (const url of urls) {
     const route = new URL(url).pathname;
-    await check(route, 200, fs.readFileSync(`dist${route}${route.endsWith('/') ? '' : '/'}index.html`, 'utf8'));
+    await check(route, 200, fs.readFileSync(route === '/' ? 'dist/index.html' : `dist${route}.html`, 'utf8'));
   }
   for (const route of ['/__letraspro_missing_page__', '/blog/__letraspro_missing_article__', '/assets/__letraspro_missing_asset__.js']) await check(route, 404);
   console.log(JSON.stringify({ origin: base.origin, checks: results }, null, 2));

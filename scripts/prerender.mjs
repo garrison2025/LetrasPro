@@ -23,7 +23,7 @@ for (const route of [...routes, '/404']) {
   }
   if (!page.includes('name="twitter:card"')) extras.push('<meta data-rh="true" name="twitter:card" content="summary_large_image"/>');
   page = page.replace('</head>', `${extras.join('\n')}\n</head>`);
-  const target = route === '/404' ? path.join(dist, '404.html') : path.join(dist, route, 'index.html');
+  const target = route === '/' ? path.join(dist, 'index.html') : path.join(dist, `${route}.html`);
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, page);
 }
