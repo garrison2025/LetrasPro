@@ -62,7 +62,9 @@ const generateFiles = () => {
     fs.mkdirSync(targetPath, { recursive: true });
   }
 
-  const currentDate = new Date().toISOString();
+  const dates = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../data/contentDates.json'), 'utf8'));
+  const updatedAt = route => STATIC_PATHS.indexOf(route) <= 12 ? dates.generatorUpdated
+    : STATIC_PATHS.indexOf(route) <= 17 ? dates.toolsUpdated : dates.otherUpdated;
   const blogSlugs = getBlogSlugs();
 
   // 2. Generate Sitemap
@@ -73,7 +75,7 @@ const generateFiles = () => {
     sitemap += `
   <url>
     <loc>${BASE_URL}${route === '/' ? '' : route}</loc>
-    <lastmod>${currentDate}</lastmod>
+    <lastmod>${updatedAt(route)}</lastmod>
     <changefreq>${route === '/' ? 'daily' : 'weekly'}</changefreq>
     <priority>${route === '/' ? '1.0' : '0.8'}</priority>
   </url>`;
@@ -83,7 +85,7 @@ const generateFiles = () => {
     sitemap += `
   <url>
     <loc>${BASE_URL}/blog/${slug}</loc>
-    <lastmod>${currentDate}</lastmod>
+    <lastmod>${dates.otherUpdated}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`;

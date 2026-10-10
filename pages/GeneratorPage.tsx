@@ -12,6 +12,8 @@ import Toast from '../components/Toast';
 import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles, ExternalLink, ArrowRight } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useDynamicDate } from '../hooks/useDynamicDate';
+import { MAX_INPUT_LENGTH, splitCharacters } from '../services/text';
+import { readStorage, readStoredArray, writeStorage } from '../services/storage';
 
 interface GeneratorPageProps {
   config: PageConfig;
@@ -28,13 +30,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { month, year, fullDate } = useDynamicDate(); // Dynamic Date Hook
   
-  const [inputText, setInputText] = useState(() => {
-    try { return localStorage.getItem('let_pro_input') || ''; } catch (e) { return ''; }
-  });
+  const [inputText, setInputText] = useState('');
   const [textCase, setTextCase] = useState<TextCase>('original');
   
   // UX: Initialize search query from URL if present (SEO friendly search results)
-  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('q') || '');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const [activeTone, setActiveTone] = useState('Todos');
   const [showBioTemplates, setShowBioTemplates] = useState(false);
@@ -44,19 +44,23 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [userRating, setUserRating] = useState<number>(0);
   const [hasRated, setHasRated] = useState(false);
 
-  const [favorites, setFavorites] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('let_pro_favs');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) { return []; }
-  });
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [history, setHistory] = useState<{fontName: string, text: string, timestamp: number}[]>([]);
+  const [browserReady, setBrowserReady] = useState(false);
 
-  const [history, setHistory] = useState<{fontName: string, text: string, timestamp: number}[]>(() => {
-    try {
-      const saved = localStorage.getItem('let_pro_history');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) { return []; }
-  });
+  useEffect(() => {
+    setInputText((readStorage('let_pro_input') || '').slice(0, MAX_INPUT_LENGTH));
+    setSearchQuery((searchParams.get('q') || '').slice(0, 100));
+    setFavorites(readStoredArray('let_pro_favs', (value): value is string => typeof value === 'string')
+      .filter(id => FONTS.some(font => font.id === id)).slice(0, FONTS.length));
+    setHistory(readStoredArray('let_pro_history', (value): value is {fontName: string, text: string, timestamp: number} => {
+      if (typeof value !== 'object' || value === null) return false;
+      const item = value as Record<string, unknown>;
+      return typeof item.fontName === 'string' && typeof item.text === 'string' && item.text.length <= MAX_INPUT_LENGTH * 30
+        && typeof item.timestamp === 'number' && Number.isFinite(item.timestamp);
+    }).slice(0, 10));
+    setBrowserReady(true);
+  }, []);
 
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [activeDecorator, setActiveDecorator] = useState<string>('none');
@@ -69,6 +73,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const debouncedText = useDebounce(inputText, 300);
+  const characterCount = useMemo(() => splitCharacters(inputText).length, [inputText]);
 
   // SEO & Meta Tag Logic
   const baseUrl = 'https://conversordeletrasbonitas.org';
@@ -88,9 +93,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   const dynamicDescription = config.description.replace('2025', year);
 
-  // Aggregate Rating Data (Simulated for Schema)
-  const ratingValue = 4.8;
-  const ratingCount = 2450; 
 
   // SEO: WebSite Schema with Sitelinks Search Box
   // This allows Google to show a search box for your site in SERPs
@@ -125,14 +127,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       "priceCurrency": "USD"
     },
     "featureList": config.whyFeatures.map(f => f.title).join(', '),
-    "screenshot": ogImage,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": String(ratingValue),
-      "ratingCount": String(ratingCount),
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    "screenshot": ogImage
   };
 
   // Breadcrumb Structured Data (JSON-LD)
@@ -186,9 +181,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
     window.scrollTo(0, 0);
-    const storedRating = localStorage.getItem(`rating_${config.path}`);
-    if (storedRating) {
-      setUserRating(parseInt(storedRating));
+    const storedRating = Number(readStorage(`rating_${config.path}`));
+    if (Number.isInteger(storedRating) && storedRating >= 1 && storedRating <= 5) {
+      setUserRating(storedRating);
       setHasRated(true);
     } else {
       setUserRating(0);
@@ -196,20 +191,28 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   }, [config.path, location.pathname]);
 
-  // Sync Search Query with URL for shareability
+  // Keep unrelated query parameters, including campaign attribution.
   useEffect(() => {
-    if (searchQuery) {
-      setSearchParams({ q: searchQuery }, { replace: true });
-    } else {
-      setSearchParams({}, { replace: true });
-    }
-  }, [searchQuery, setSearchParams]);
+    if (!browserReady || (searchParams.get('q') || '') === searchQuery) return;
+    const next = new URLSearchParams(searchParams);
+    if (searchQuery) next.set('q', searchQuery); else next.delete('q');
+    setSearchParams(next, { replace: true });
+  }, [browserReady, searchQuery, searchParams, setSearchParams]);
 
   useEffect(() => {
-    localStorage.setItem('let_pro_input', inputText);
-    localStorage.setItem('let_pro_favs', JSON.stringify(favorites));
-    localStorage.setItem('let_pro_history', JSON.stringify(history));
-  }, [inputText, favorites, history]);
+    if (!browserReady) return;
+    writeStorage('let_pro_input', inputText);
+  }, [browserReady, inputText]);
+
+  useEffect(() => {
+    if (!browserReady) return;
+    writeStorage('let_pro_favs', JSON.stringify(favorites));
+  }, [browserReady, favorites]);
+
+  useEffect(() => {
+    if (!browserReady) return;
+    writeStorage('let_pro_history', JSON.stringify(history));
+  }, [browserReady, history]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -227,7 +230,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const handleRate = (stars: number) => {
     setUserRating(stars);
     setHasRated(true);
-    localStorage.setItem(`rating_${config.path}`, String(stars));
+    writeStorage(`rating_${config.path}`, String(stars));
   };
 
   const toggleFavorite = (fontId: string) => {
@@ -243,7 +246,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     const start = textareaRef.current?.selectionStart || 0;
     const end = textareaRef.current?.selectionEnd || 0;
     const newText = inputText.substring(0, start) + symbol + inputText.substring(end);
-    setInputText(newText);
+    setInputText(newText.slice(0, MAX_INPUT_LENGTH));
     setTimeout(() => {
       textareaRef.current?.focus();
       textareaRef.current?.setSelectionRange(start + symbol.length, start + symbol.length);
@@ -253,7 +256,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const applyBioTemplate = (layout: string) => {
     const text = inputText || 'Tu Nombre';
     const filled = layout.replace('{text}', text);
-    setInputText(filled);
+    setInputText(filled.slice(0, MAX_INPUT_LENGTH));
     setShowBioTemplates(false);
   };
 
@@ -262,7 +265,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     switch (mode) {
       case 'upper': return text.toUpperCase();
       case 'lower': return text.toLowerCase();
-      case 'title': return text.replace(/\b\w/g, c => c.toUpperCase());
+      case 'title': return text.replace(/(^|[^\p{L}\p{M}])(\p{L})/gu, (_, prefix, letter) => prefix + letter.toUpperCase());
       default: return text;
     }
   };
@@ -288,7 +291,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     });
   }, [config.filter, favorites, searchQuery, activeTone]);
 
-  const visibleFonts = filteredFonts.slice(0, visibleCount);
+  const visibleFonts = useMemo(() => filteredFonts.slice(0, visibleCount), [filteredFonts, visibleCount]);
+  const previewText = useMemo(() => transformText(debouncedText || 'Vista Previa', textCase), [debouncedText, textCase]);
+  const fontPreviews = useMemo(() => visibleFonts.map(font => {
+    const mappedText = convertText(previewText, font.map, font.category === 'vaporwave');
+    const rawText = applyDecoration(mappedText, activeDecorator);
+    return { font, rawText, segments: getDisplaySegments(rawText, font.map) };
+  }), [visibleFonts, previewText, activeDecorator]);
   const hasMore = visibleCount < filteredFonts.length;
 
   const getIcon = (iconName: string) => {
@@ -360,8 +369,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <div className="max-w-6xl mx-auto px-4 py-2 flex gap-2 items-center">
           <input 
             type="text" 
+            aria-label="Texto para convertir (barra fija)"
+            maxLength={MAX_INPUT_LENGTH}
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => setInputText(e.target.value.slice(0, MAX_INPUT_LENGTH))}
             placeholder="Escribe aquí..."
             className="flex-grow bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-primary-500 outline-none shadow-inner text-base"
           />
@@ -421,6 +432,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block"></div>
                 <button 
                   onClick={() => setShowBioTemplates(!showBioTemplates)}
+                  aria-label="Plantillas"
+                  aria-expanded={showBioTemplates}
                   className="flex items-center gap-2 px-4 py-2 md:py-1.5 bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-300 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter hover:bg-primary-100 transition-colors"
                 >
                   <Wand2 size={14} /> <span className="hidden sm:inline">Plantillas</span>
@@ -444,7 +457,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             )}
 
             <textarea
-              ref={textareaRef}
+              ref={textareaRef} aria-label="Texto para convertir" maxLength={MAX_INPUT_LENGTH}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Escribe aquí..."
@@ -454,13 +467,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                 {QUICK_SYMBOLS.slice(0, window.innerWidth < 640 ? 7 : undefined).map(s => (
+                 {QUICK_SYMBOLS.map((s, index) => (
                    <button 
                     key={s} 
                     onClick={() => insertSymbol(s)} 
                     aria-label={`Insertar símbolo ${s}`}
                     // INCREASED CONTRAST: text-slate-600 instead of default/500
-                    className="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 text-slate-600 dark:text-slate-400 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100"
+                    className={`${index >= 7 ? 'hidden sm:flex' : 'flex'} w-9 h-9 md:w-10 md:h-10 items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 text-slate-600 dark:text-slate-400 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100`}
                    >
                      {s}
                    </button>
@@ -469,11 +482,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-6">
                  <div className="flex flex-col items-start sm:items-end">
                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
-                     <Instagram size={12} /> Bio
+                     <Instagram size={12} /> Caracteres
                    </div>
-                   <div className="flex items-baseline gap-1">
-                     <span className={`text-xl md:text-2xl font-black ${inputText.length > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
-                       {inputText.length}
+                   <div className="flex items-baseline gap-1" title="Caracteres visibles. Verifica el límite final en Instagram; algunos estilos ocupan más unidades.">
+                     <span className={`text-xl md:text-2xl font-black ${characterCount > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
+                       {characterCount}
                      </span>
                      {/* INCREASED CONTRAST: text-slate-500 instead of 300 */}
                      <span className="text-slate-500 dark:text-slate-500 font-bold text-xs md:text-sm">/ {INSTAGRAM_BIO_LIMIT}</span>
@@ -494,7 +507,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" size={16} />
                 <input 
                   type="text" 
-                  placeholder="Buscar estilo..." 
+                  placeholder="Buscar estilo..." aria-label="Buscar estilo" maxLength={100}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white placeholder:text-slate-400"
@@ -523,31 +536,26 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           </div>
         </div>
 
-        <HistoryBar history={history} onClear={() => setHistory([])} onSelect={setInputText} />
+        <HistoryBar history={history} onClear={() => setHistory([])} />
 
         <div className="min-h-[600px]">
           {/* ACCESSIBILITY FIX: Hidden H2 to fix heading hierarchy structure (H1 -> H2 -> H3) */}
           <h2 className="sr-only">Resultados de estilos</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {visibleFonts.map((font) => {
-              const baseText = debouncedText || 'Vista Previa';
-              const transformed = transformText(baseText, textCase);
-              const mappedText = convertText(transformed, font.map, font.category === 'vaporwave');
-              const finalRawText = applyDecoration(mappedText, activeDecorator);
-              const segments = getDisplaySegments(finalRawText, {});
-              
+            {fontPreviews.map(({ font, rawText, segments }) => {
               return (
                 <FontCard
                   key={font.id}
                   font={font}
-                  rawText={finalRawText}
-                  originalText={transformed} // Pass readable text for accessibility
+                  rawText={rawText}
+                  originalText={previewText} // Pass readable text for accessibility
                   displaySegments={segments}
                   isFavorite={favorites.includes(font.id)}
                   viewMode={viewMode}
                   onToggleFavorite={() => toggleFavorite(font.id)}
-                  onCopy={() => addToHistory(font.name, finalRawText)}
+                  getCurrentText={() => applyDecoration(convertText(transformText(inputText || 'Vista Previa', textCase), font.map, font.category === 'vaporwave'), activeDecorator)}
+                  onCopy={(text) => addToHistory(font.name, text)}
                 />
               );
             })}
@@ -672,10 +680,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             </div>
           </section>
 
-          {/* Interactive Rating Component (Validation for Schema) */}
+          {/* Personal rating saved locally */}
           <section className="max-w-xl mx-auto bg-white dark:bg-slate-800 rounded-3xl p-8 text-center border border-slate-100 dark:border-slate-700 shadow-lg">
              <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">¿Te ha sido útil?</h3>
-             <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 font-medium">Valora esta herramienta para ayudarnos a mejorar.</p>
+             <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 font-medium">Tu valoración se guarda solo en este navegador; no se envía ni se suma a votos públicos.</p>
              
              <div className="flex justify-center gap-2 mb-4">
                {[1, 2, 3, 4, 5].map((star) => (
@@ -701,11 +709,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
              
              {hasRated ? (
                <div className="animate-fade-in text-green-600 dark:text-green-400 font-bold text-sm bg-green-50 dark:bg-green-900/20 py-2 px-4 rounded-full inline-block">
-                 ¡Gracias por tu valoración!
+                 Tu valoración personal está guardada en este navegador.
                </div>
              ) : (
                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
-                 {ratingValue} / 5 basado en {ratingCount} votos
+                 Sin valoración personal
                </p>
              )}
           </section>

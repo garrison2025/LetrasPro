@@ -24,7 +24,7 @@ const PrivacyPage: React.FC = () => {
             <span className="font-bold uppercase tracking-wider text-sm">Legal</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Política de Privacidad</h1>
-          <p className="text-slate-500">Última actualización: <strong>16 de diciembre</strong></p>
+          <p className="text-slate-500">Última actualización: <strong>10 de octubre de 2026</strong></p>
         </div>
 
         <div className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-800 prose-a:text-primary-600">
@@ -44,6 +44,9 @@ const PrivacyPage: React.FC = () => {
           <h3>2. Archivos de registro (Log Files)</h3>
           <p>
             ConversorDeLetrasBonitas.org sigue un procedimiento estándar de uso de archivos de registro. Estos archivos registran a los visitantes cuando visitan sitios web. La información recopilada incluye direcciones de protocolo de Internet (IP), tipo de navegador, proveedor de servicios de Internet (ISP), fecha y hora, páginas de referencia/salida y posiblemente el número de clics. Estos no están vinculados a ninguna información que sea personalmente identificable.
+          </p>
+          <p>
+            Cuando el diagnóstico técnico está activado, enviamos a Cloudflare únicamente una categoría fija de fallo (visualización, navegador, operación, funcionamiento sin conexión o actualización) para contar errores. Este envío no incluye el texto del conversor, direcciones de páginas, parámetros de búsqueda, mensajes de error, identificadores de usuario ni cookies. Las estadísticas distinguen el sitio público de las pruebas y se conservan durante tres meses en Cloudflare Analytics Engine. Cloudflare procesa por separado los datos de conexión necesarios para prestar su servicio. Un fallo en el envío del diagnóstico no impide utilizar la herramienta.
           </p>
 
           <h3>3. Cookies y Web Beacons</h3>

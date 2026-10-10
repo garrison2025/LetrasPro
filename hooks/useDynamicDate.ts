@@ -1,25 +1,12 @@
+import contentDates from '../data/contentDates.json';
 
-import { useState, useEffect } from 'react';
-
+// Change this date only when the generator content or functionality changes.
 export const useDynamicDate = () => {
-  const [dateInfo, setDateInfo] = useState({
-    month: '',
-    year: '',
-    fullDate: new Date().toISOString()
-  });
-
-  useEffect(() => {
-    const date = new Date();
-    // Capitalize month name (e.g., "diciembre" -> "Diciembre")
-    const monthName = date.toLocaleString('es-ES', { month: 'long' });
-    const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-    
-    setDateInfo({
-      month: capitalizedMonth,
-      year: date.getFullYear().toString(),
-      fullDate: date.toISOString()
-    });
-  }, []);
-
-  return dateInfo;
+  const date = new Date(contentDates.generatorUpdated);
+  const month = date.toLocaleString('es-ES', { month: 'long', timeZone: 'UTC' });
+  return {
+    month: month.charAt(0).toUpperCase() + month.slice(1),
+    year: date.getUTCFullYear().toString(),
+    fullDate: contentDates.generatorUpdated
+  };
 };

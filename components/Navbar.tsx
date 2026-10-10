@@ -97,6 +97,13 @@ const Navbar: React.FC = () => {
           : 'bg-transparent border-b border-transparent'
       }`}
       ref={dropdownRef}
+      onKeyDown={event => {
+        if (event.key === 'Escape') {
+          dropdownRef.current?.querySelector<HTMLButtonElement>('button[aria-expanded="true"]')?.focus();
+          setActiveDropdown(null);
+          setIsOpen(false);
+        }
+      }}
       aria-label="Navegación principal"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

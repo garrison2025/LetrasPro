@@ -3,18 +3,19 @@ import { Helmet } from 'react-helmet-async';
 import { Copy, RefreshCcw, ArrowRightLeft, ArrowDownUp, Trash2 } from 'lucide-react';
 import { flipText } from '../services/flipMaps';
 import Toast from '../components/Toast';
+import { MAX_INPUT_LENGTH } from '../services/text';
+import { useClipboard } from '../hooks/useClipboard';
 
 const FlipTextPage: React.FC = () => {
   const [text, setText] = useState('');
   const [mode, setMode] = useState<'upside-down' | 'reverse'>('upside-down');
-  const [showToast, setShowToast] = useState(false);
+  const { copy, toastProps } = useClipboard("¡Texto volteado copiado!");
 
   const result = flipText(text, mode);
 
   const copyToClipboard = () => {
     if (!result) return;
-    navigator.clipboard.writeText(result);
-    setShowToast(true);
+    void copy(result);
   };
 
   return (
@@ -60,12 +61,12 @@ const FlipTextPage: React.FC = () => {
               <div className="flex justify-between items-center mb-4">
                  <span className="text-sm font-bold text-slate-400 uppercase">Escribe aquí</span>
                  {text && (
-                   <button onClick={() => setText('')} className="text-slate-400 hover:text-red-500"><Trash2 size={16} /></button>
+                   <button aria-label="Borrar texto" onClick={() => setText('')} className="text-slate-400 hover:text-red-500"><Trash2 size={16} /></button>
                  )}
               </div>
               <textarea 
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                id="FlipTextPage-input" aria-label="Texto a invertir" maxLength={MAX_INPUT_LENGTH} value={text}
+                onChange={(e) => setText(e.target.value.slice(0, MAX_INPUT_LENGTH))}
                 className="flex-grow w-full resize-none outline-none text-lg text-slate-800 dark:text-white bg-transparent placeholder:text-slate-300 dark:placeholder:text-slate-600"
                 placeholder="Escribe algo aquí..."
               />
@@ -77,7 +78,7 @@ const FlipTextPage: React.FC = () => {
                  <span className="text-sm font-bold text-primary-600 dark:text-primary-400 uppercase">Resultado</span>
               </div>
               <textarea 
-                readOnly
+                readOnly aria-label="Texto convertido"
                 value={result}
                 className="flex-grow w-full resize-none outline-none text-lg font-medium text-slate-800 dark:text-white bg-transparent"
                 placeholder="¡oןoɥ"
@@ -92,7 +93,7 @@ const FlipTextPage: React.FC = () => {
            </div>
         </div>
       </div>
-      <Toast message="¡Texto volteado copiado!" isVisible={showToast} onClose={() => setShowToast(false)} />
+      <Toast {...toastProps} />
     </div>
   );
 };

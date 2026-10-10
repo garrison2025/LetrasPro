@@ -1,3 +1,5 @@
+import { splitCharacters } from './text';
+
 // Simplified mapping for "Big Text" (ASCII Art)
 // Ideally this would be loaded from a larger JSON or external service to reduce bundle size, 
 // but for this scale, hardcoding a few alphabets works.
@@ -18,9 +20,9 @@ const BLOCK_FONT: Record<string, string[]> = {
   'M': ["___  ___", "|  \\/  |", "| .  . |", "| |\\/| |", "| |  | |", "\\_|  |_/"],
   'N': [" _   _ ", "| \\ | |", "|  \\| |", "| . ` |", "| |\\  |", "\\_| \\_/"],
   'O': [" _____ ", "|  _  |", "| | | |", "| | | |", "\\ \\_/ /", " \\___/ "],
-  'P': [" _____ ", "|  __ \\", "| |  \\/", "| | __ ", "| |   ", "\\_|   "],
+  'P': [" _____ ", "| ___ \\", "| |_/ /", "|  __/ ", "| |    ", "\\_|    "],
   'Q': [" _____ ", "|  _  |", "| | | |", "| | | |", "\\ \\/' /", " \\_/\\_\\"],
-  'R': [" _____ ", "|  __ \\", "| |  \\/", "| | __ ", "| |_\\ \\", " \\____/"],
+  'R': [" _____ ", "| ___ \\", "| |_/ /", "|    / ", "| |\\ \\ ", "\\_| \\_/"],
   'S': [" _____ ", "/  ___|", "\\ `--. ", " `--. \\", "/\\__/ /", "\\____/ "],
   'T': [" _____ ", "|_   _|", "  | |  ", "  | |  ", "  | |  ", "  \\_/  "],
   'U': [" _   _ ", "| | | |", "| | | |", "| | | |", "| |_| |", " \\___/ "],
@@ -29,22 +31,33 @@ const BLOCK_FONT: Record<string, string[]> = {
   'X': ["__   __", "\\ \\ / /", " \\ V / ", " /   \\ ", "/ /^\\ \\", "\\/   \\/"],
   'Y': ["__   __", "\\ \\ / /", " \\ V / ", "  | |  ", "  | |  ", "  \\_/  "],
   'Z': [" ______", "|___  /", "   / / ", "  / /  ", "./ /___", "\\_____/"],
+  '0': ["  ___  ", " / _ \\ ", "| | | |", "| | | |", "| |_| |", " \\___/ "],
+  '1': ["  __   ", " /  |  ", "  | |  ", "  | |  ", " _| |_ ", "|_____|"],
+  '2': [" _____ ", "|___  |", "    / /", "   / / ", "  / /_ ", " /____|"],
+  '3': [" _____ ", "|___ / ", "  |_ \\ ", "    ) |", " /\\_/ /", " \\___/ "],
+  '4': [" _  _  ", "| || | ", "| || |_", "|__   _|", "   | | ", "   |_| "],
+  '5': [" _____ ", "|  ___|", "| |__  ", "|___ \\ ", " ___) |", "|____/ "],
+  '6': ["  ____ ", " / ___|", "| |___ ", "|  _  \\", "| |_| |", " \\___/ "],
+  '7': [" _____ ", "|___  |", "   / / ", "  / /  ", " / /   ", "/_/    "],
+  '8': ["  ___  ", " / _ \\ ", " \\___/ ", " / _ \\ ", "| |_| |", " \\___/ "],
+  '9': ["  ___  ", " / _ \\ ", "| |_| |", " \\__  |", "    | |", "  \\___/"],
   ' ': ["   ", "   ", "   ", "   ", "   ", "   "]
 };
 
 export const generateBigText = (text: string): string => {
-  const upperText = text.toUpperCase();
-  const chars = upperText.split('');
-  
-  // Height of the font is 6 lines
-  let result = ["", "", "", "", "", ""];
-  
+  if (!text) return '';
+  const chars = splitCharacters(text.toUpperCase());
+  const accented = chars.some(char => /^[ÁÉÍÓÚÜÑ]$/.test(char));
+  const result = Array.from({ length: accented ? 7 : 6 }, () => '');
   for (const char of chars) {
-    const letters = BLOCK_FONT[char] || BLOCK_FONT[' '];
-    for (let i = 0; i < 6; i++) {
-      result[i] += (letters[i] || "       ") + " "; // Add spacing
+    const base = /^[ÁÉÍÓÚÜÑ]$/.test(char) ? char.normalize('NFD')[0] : char;
+    const letters = BLOCK_FONT[base] || ['   ', '   ', char, '   ', '   ', '   '];
+    const width = Math.max(...letters.map(line => line.length));
+    if (accented) {
+      const mark = char === 'Ñ' ? '~~~' : char === 'Ü' ? '. .' : /^[ÁÉÍÓÚ]$/.test(char) ? '/' : '';
+      result[0] += mark.padStart(Math.floor((width + mark.length) / 2)).padEnd(width) + ' ';
     }
+    for (let i = 0; i < 6; i++) result[i + (accented ? 1 : 0)] += letters[i].padEnd(width) + ' ';
   }
-  
   return result.join('\n');
 };

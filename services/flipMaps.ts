@@ -1,3 +1,5 @@
+import { splitCharacters } from './text';
+
 const FLIP_MAP: Record<string, string> = {
   'a': 'ɐ', 'b': 'q', 'c': 'ɔ', 'd': 'p', 'e': 'ǝ', 'f': 'ɟ', 'g': 'ƃ', 'h': 'ɥ', 'i': 'ᴉ', 
   'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u', 'o': 'o', 'p': 'd', 'q': 'b', 'r': 'ɹ', 
@@ -12,10 +14,10 @@ const FLIP_MAP: Record<string, string> = {
 
 export const flipText = (text: string, mode: 'upside-down' | 'mirror' | 'reverse'): string => {
   if (mode === 'reverse') {
-    return text.split('').reverse().join('');
+    return splitCharacters(text).reverse().join('');
   }
 
-  const chars = text.split('');
+  const chars = splitCharacters(text);
   
   if (mode === 'upside-down') {
     // Flip characters and reverse order
