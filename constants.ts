@@ -11,7 +11,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     filter: (f) => f.pages.includes('home'),
     whyFeatures: [
       { title: 'Letras Chidas y Bonitas', description: 'La base de datos más grande de fuentes estéticas, cursivas y símbolos para destacar en LATAM.', icon: 'star' },
-      { title: 'Optimizado para Nicks', description: 'Nuestras letras funcionan perfecto en Free Fire, PUBG, Fortnite y perfiles de Instagram.', icon: 'zap' },
+      { title: 'Optimizado para Nicks', description: 'Prueba nuestras letras en Free Fire, PUBG, Fortnite y perfiles de Instagram; la compatibilidad puede variar.', icon: 'zap' },
       { title: 'Conversor 100% Gratuito', description: 'Sin registros. Copia y pega letras perronas para tus estados y biografías al instante.', icon: 'check' }
     ],
     howToSteps: [
@@ -50,7 +50,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'Pega el texto en el campo de Nombre o Biografía y guarda.'
     ],
     faqs: [
-      { question: '¿Me pueden banear de Instagram por usar esto?', answer: 'No, Instagram permite caracteres Unicode en la biografía y comentarios sin problemas.' },
+      { question: '¿Me pueden banear de Instagram por usar esto?', answer: 'El conversor genera caracteres Unicode, pero no controla la moderación de Instagram. Respeta sus reglas y prueba una muestra antes de guardar la biografía o publicar comentarios.' },
       { question: '¿Cómo poner negritas en Instagram?', answer: 'Usa nuestro estilo "Sans Bold" o "Serif Bold", cópialo y pégalo en tu descripción.' }
     ],
     recommendations: [
@@ -106,7 +106,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'Pégalo directamente en tu chat de WhatsApp o Estado.'
     ],
     faqs: [
-      { question: '¿El destinatario necesita instalar algo?', answer: 'No, ellos verán la fuente tal cual la envías porque son caracteres universales.' },
+      { question: '¿El destinatario necesita instalar algo?', answer: 'No necesita instalar una fuente adicional. El aspecto de los caracteres Unicode puede variar según su teléfono y aplicación; algunos símbolos pueden no mostrarse.' },
       { question: '¿Cómo escribir en azul en WhatsApp?', answer: 'Busca el estilo "Letras Azules" (Regional) en nuestro generador.' }
     ],
     recommendations: [
@@ -330,7 +330,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'Publica en tu muro o grupo y observa cómo suben las interacciones.'
     ],
     faqs: [
-      { question: '¿Me pueden banear por usar esto?', answer: 'No, son caracteres Unicode legítimos, no es un hack.' },
+      { question: '¿Me pueden banear por usar esto?', answer: 'El conversor genera caracteres Unicode y no modifica el juego. No podemos garantizar su aceptación ni las decisiones de moderación; respeta las reglas de Free Fire y comprueba el nombre antes de guardarlo.' },
       { question: '¿Se ve en celulares?', answer: 'Sí, el texto es visible en la app móvil, Lite y escritorio.' }
     ],
     recommendations: [
