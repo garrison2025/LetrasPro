@@ -39,6 +39,7 @@ const Navbar: React.FC = () => {
   }, [location]);
 
   const generators = NAVIGATION_LINKS.filter(l => l.group === 'generators');
+  const platforms = NAVIGATION_LINKS.filter(l => l.group === 'platforms');
   const tools = NAVIGATION_LINKS.filter(l => l.group === 'tools');
 
   const renderDropdown = (title: string, items: NavLink[], id: string, icon: React.ReactNode) => {
@@ -136,6 +137,7 @@ const Navbar: React.FC = () => {
             </RouterNavLink>
 
             {renderDropdown('Generadores', generators, 'generators', <Zap size={16} />)}
+            {renderDropdown('Plataformas', platforms, 'platforms', <Sparkles size={16} />)}
             {renderDropdown('Herramientas', tools, 'tools', <PenTool size={16} />)}
 
             <RouterNavLink
@@ -196,6 +198,29 @@ const Navbar: React.FC = () => {
               <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores</h3>
               <div className="grid grid-cols-1 gap-1">
                 {generators.map((link) => (
+                  <RouterNavLink
+                    key={link.path}
+                    to={link.path}
+                    onClick={() => setIsOpen(false)}
+                    className={({ isActive }) =>
+                      `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                        isActive
+                          ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-300'
+                          : 'text-slate-700 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                      }`
+                    }
+                  >
+                    {link.label}
+                    {location.pathname === link.path && <ChevronRight size={16} />}
+                  </RouterNavLink>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Plataformas</h3>
+              <div className="grid grid-cols-1 gap-1">
+                {platforms.map((link) => (
                   <RouterNavLink
                     key={link.path}
                     to={link.path}

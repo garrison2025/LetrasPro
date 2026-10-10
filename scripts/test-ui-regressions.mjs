@@ -34,6 +34,7 @@ const { default: RepeaterPage } = await load('pages/RepeaterPage.tsx');
 const { default: CommentsSection } = await load('components/CommentsSection.tsx');
 const { default: FontCard } = await load('components/FontCard.tsx');
 const { default: RouteNavigation } = await load('components/RouteNavigation.tsx');
+const { default: Navbar } = await load('components/Navbar.tsx');
 const { ThemeProvider, useTheme } = await load('context/ThemeContext.tsx');
 const { PAGE_CONFIGS } = await load('constants.ts');
 const { FONTS } = await load('services/fontMaps.ts');
@@ -54,6 +55,42 @@ async function mount(component, options = {}) {
 const button = (renderer, label) => renderer.root.findAllByType('button').find(node => node.children.includes(label));
 globalThis.window = { scrollTo() {}, addEventListener() {}, removeEventListener() {}, matchMedia: () => ({ matches: false }) };
 globalThis.localStorage = { getItem: () => null, setItem() {} };
+
+test('desktop and mobile navigation expose every generator and tool, and close on navigation', async () => {
+  const previousDocument = globalThis.document;
+  const previousWindowDocument = window.document;
+  globalThis.document = { addEventListener() {}, removeEventListener() {}, querySelector: () => null, documentElement: { classList: { add() {}, remove() {} } } };
+  window.document = globalThis.document;
+  let go;
+  function HeaderRoute() {
+    go = useNavigate();
+    return React.createElement(Navbar);
+  }
+  let renderer;
+  const control = label => renderer.root.findAllByType('button').find(node => node.props['aria-label'] === label);
+  const links = () => renderer.root.findAllByType('a').map(node => node.props.href);
+  try {
+    renderer = await mount(React.createElement(MemoryRouter, null,
+      React.createElement(ThemeProvider, null, React.createElement(HeaderRoute))));
+    const desktopLinks = new Set(links());
+    for (const group of ['Generadores', 'Plataformas', 'Herramientas']) {
+      await act(async () => control(`Abrir menú de ${group}`).props.onClick());
+      links().forEach(href => desktopLinks.add(href));
+    }
+    const required = [...Object.values(PAGE_CONFIGS).map(config => config.path),
+      '/repetidor-de-texto', '/texto-invisible', '/texto-glitch', '/texto-al-reves', '/letras-grandes'];
+    for (const route of required) assert.ok(desktopLinks.has(route), `Desktop entry: ${route}`);
+    await act(async () => control('Abrir menú de navegación').props.onClick());
+    for (const route of required) assert.ok(links().includes(route), `Mobile entry: ${route}`);
+    await act(async () => go('/letras-para-tiktok'));
+    assert.equal(control('Abrir menú de navegación').props['aria-expanded'], false);
+    assert.ok(renderer.root.findAllByType('button').filter(node => node.props['aria-haspopup']).every(node => node.props['aria-expanded'] === false));
+  } finally {
+    if (renderer) await act(async () => renderer.unmount());
+    globalThis.document = previousDocument;
+    if (previousWindowDocument) window.document = previousWindowDocument; else delete window.document;
+  }
+});
 
 test('PNG export uses current text and rejects oversized images without triggering a download', async () => {
   const previousDocument = globalThis.document;
