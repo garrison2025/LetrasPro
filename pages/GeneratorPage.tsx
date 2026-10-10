@@ -80,8 +80,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const canonicalUrl = config.path === '/' ? `${baseUrl}/` : `${baseUrl}${config.path}`;
   const ogImage = `${baseUrl}/og-image.png`;
 
-  // Dynamic Title Logic (CTR Booster)
+  // Keep the homepage title concise; preserve other pages' date formatting.
   const dynamicTitle = useMemo(() => {
+    if (config.path === '/') return config.title;
     let t = config.title;
     if (t.includes('2025')) {
       t = t.replace('2025', `${month} ${year}`);
@@ -89,7 +90,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       t = `${t} (${month} ${year})`;
     }
     return t;
-  }, [config.title, month, year]);
+  }, [config.path, config.title, month, year]);
 
   const dynamicDescription = config.description.replace('2025', year);
 

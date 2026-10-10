@@ -4,7 +4,7 @@ import { PageConfig, NavLink } from './types';
 export const PAGE_CONFIGS: Record<string, PageConfig> = {
   home: {
     path: '/',
-    title: 'Conversor de Letras Bonitas y Chidas - Copiar y Pegar 2025',
+    title: 'Conversor de Letras Bonitas y Chidas - Copiar y Pegar',
     heading: 'Conversor de Letras Bonitas',
     description: 'El mejor conversor de letras bonitas y chidas para Instagram, TikTok, Free Fire y WhatsApp. Transforma tu texto en fuentes perronas y estéticas.',
     content: 'Si buscas destacar en redes sociales, nuestro conversor de letras bonitas (y chidas) es la herramienta definitiva. A diferencia de otros sitios, este generador de fuentes utiliza Unicode para transformar tu nick o biografía en más de 140 estilos únicos. Ya sea que busques letras para Instagram, nicks para Free Fire o estados de WhatsApp, aquí encontrarás tipografías legibles y estéticas. Deja de usar fuentes aburridas; usa nuestro conversor para crear letras perronas y viralizar tu contenido.',
