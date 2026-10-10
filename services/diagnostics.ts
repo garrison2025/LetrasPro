@@ -1,5 +1,17 @@
-type DiagnosticCode = 'render' | 'browser' | 'operation' | 'offline' | 'update';
+type DiagnosticCode = 'render' | 'browser' | 'operation' | 'offline' | 'update'
+  | 'browser_app' | 'browser_external' | 'browser_unknown' | 'hydration';
 const sent = new Set<DiagnosticCode>();
+
+export function reportBrowserError(event: Pick<ErrorEvent, 'filename'>): void {
+  let code: DiagnosticCode = 'browser_unknown';
+  try {
+    const source = new URL(event.filename);
+    if (source.protocol === 'https:' || source.protocol === 'http:') {
+      code = source.origin === window.location.origin ? 'browser_app' : 'browser_external';
+    }
+  } catch { /* Cross-origin errors may hide their source. Keep them unknown. */ }
+  reportDiagnostic(code);
+}
 
 // Enable only after the Pages endpoint and log retention are configured.
 export function reportDiagnostic(code: DiagnosticCode): void {
