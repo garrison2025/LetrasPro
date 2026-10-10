@@ -52,7 +52,7 @@ export interface PageConfig {
 export interface NavLink {
   label: string;
   path: string;
-  group?: 'generators' | 'tools';
+  group?: 'generators' | 'platforms' | 'tools';
 }
 
 export interface TextSegment {
