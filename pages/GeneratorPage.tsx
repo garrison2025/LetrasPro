@@ -224,6 +224,21 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   }, [browserReady, history]);
 
   useEffect(() => {
+    if (typeof IntersectionObserver === 'function' && inputContainerRef.current) {
+      let observer: IntersectionObserver;
+      const observeInput = () => {
+        observer?.disconnect();
+        const threshold = window.innerWidth < 1024 ? 64 : 80;
+        observer = new IntersectionObserver(([entry]) => {
+          if (entry) setIsStickyVisible(entry.boundingClientRect.bottom <= threshold);
+        }, { rootMargin: `-${threshold}px 0px 0px 0px` });
+        observer.observe(inputContainerRef.current!);
+        setIsStickyVisible(inputContainerRef.current!.getBoundingClientRect().bottom <= threshold);
+      };
+      observeInput();
+      window.addEventListener('resize', observeInput);
+      return () => { observer.disconnect(); window.removeEventListener('resize', observeInput); };
+    }
     const handleScroll = () => {
       if (inputContainerRef.current) {
         const rect = inputContainerRef.current.getBoundingClientRect();

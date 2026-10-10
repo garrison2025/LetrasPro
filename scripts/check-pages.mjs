@@ -6,6 +6,15 @@ const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 const titles = new Set();
 const crawlLinks = new Map();
+const manifest = JSON.parse(fs.readFileSync('dist/.vite/manifest.json', 'utf8'));
+const fontCSS = fs.readFileSync('fonts.css', 'utf8');
+const fontFaces = [...fontCSS.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(match => match[1]);
+assert.equal(fontFaces.length, 34, 'Preserve all original Google Fonts subsets and weights');
+for (const face of fontFaces) {
+  assert.match(face, /font-display: swap/);
+  assert.match(face, /src: url\(https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2\)/);
+  assert.match(face, /unicode-range:/);
+}
 for (const url of urls) {
   const route = new URL(url).pathname;
   const html = fs.readFileSync(path.join('dist', route === '/' ? 'index.html' : `${route}.html`), 'utf8');
@@ -18,6 +27,12 @@ for (const url of urls) {
   assert.match(html, /name="description"[^>]+content="[^\"]+"/, `Description: ${route}`);
   assert.ok(html.includes('property="og:image"'), `Share image: ${route}`);
   assert.ok(html.includes('data-prerendered="true"'), `Initial content: ${route}`);
+  assert.ok(!html.includes('fonts.googleapis.com'), `No render-blocking font stylesheet: ${route}`);
+  const preloads = [...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="([^"]+)"/g)].map(match => match[1]);
+  const routeChunks = preloads.filter(file => Object.entries(manifest).some(([key, entry]) => key.startsWith('pages/') && `/${entry.file}` === file));
+  assert.equal(routeChunks.length, 1, `Preload only the current page module: ${route}`);
+  const pageName = applicationPageName(route);
+  assert.equal(routeChunks[0], `/${manifest[`pages/${pageName}.tsx`].file}`, `Correct page module: ${route}`);
   assert.ok(!html.includes('aggregateRating'), `No simulated rating: ${route}`);
   assert.ok(!html.includes('basado en 2450'), `No simulated votes: ${route}`);
   const entities = [];
@@ -96,3 +111,14 @@ assert.ok(sw.indexOf('precacheAndRoute') < sw.indexOf('self.options ='));
 assert.match(JSON.parse(fs.readFileSync('dist/app-version.json', 'utf8')).release, /^(?:[a-f0-9]{12}|quality-20261010)$/);
 assert.match(fs.readFileSync('dist/_headers', 'utf8'), /\/app-version\.json\s+Cache-Control: no-store/);
 console.log('Verified all 29 pages, metadata, internal links, structured data, assets and 404.');
+
+function applicationPageName(route) {
+  if (route.startsWith('/blog/')) return 'BlogPostPage';
+  return {
+    '/repetidor-de-texto': 'RepeaterPage', '/texto-glitch': 'GlitchPage',
+    '/texto-invisible': 'InvisibleTextPage', '/texto-al-reves': 'FlipTextPage',
+    '/letras-grandes': 'BigTextPage', '/blog': 'BlogIndexPage',
+    '/sobre-nosotros': 'AboutPage', '/contacto': 'ContactPage',
+    '/politica-de-privacidad': 'PrivacyPage', '/terminos-y-condiciones': 'TermsPage',
+  }[route] || 'GeneratorPage';
+}
