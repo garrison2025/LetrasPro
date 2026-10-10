@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs scripts/test-tools.mjs scripts/test-diagnostics.mjs scripts/test-update-notice.mjs scripts/test-worker-activation.mjs",
+    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs scripts/test-tools.mjs scripts/test-diagnostics.mjs scripts/test-update-notice.mjs scripts/test-worker-activation.mjs scripts/test-generator-performance.mjs",
     "build": "vite build && node scripts/generate-sitemap.js dist && vite build --ssr entry-server.tsx --outDir .ssr && node scripts/prerender.mjs && node scripts/finalize-build.mjs",
     "preview": "node scripts/preview-pages.mjs",
     "sitemap": "node scripts/generate-sitemap.js public",

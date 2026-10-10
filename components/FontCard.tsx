@@ -12,9 +12,9 @@ interface FontCardProps {
   displaySegments: TextSegment[];
   isFavorite: boolean;
   viewMode: ViewMode;
-  onToggleFavorite: () => void;
-  getCurrentText: () => string;
-  onCopy: (text: string) => void;
+  onToggleFavorite: (fontId: string) => void;
+  getCurrentText: (font: FontStyle) => string;
+  onCopy: (fontName: string, text: string) => void;
 }
 
 const FontCard: React.FC<FontCardProps> = ({ 
@@ -43,11 +43,11 @@ const FontCard: React.FC<FontCardProps> = ({
     }
 
     try {
-      const text = getCurrentText();
+      const text = getCurrentText(font);
       if (!await copyText(text)) throw new Error('Clipboard unavailable');
       setCopyError(false);
       setJustCopied(true);
-      onCopy(text);
+      onCopy(font.name, text);
       setTimeout(() => setJustCopied(false), 800); 
     } catch {
       setCopyError(true);
@@ -64,7 +64,7 @@ const FontCard: React.FC<FontCardProps> = ({
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas unavailable');
 
-      const lines = getCurrentText().split('\n');
+      const lines = getCurrentText(font).split('\n');
       const fontSize = 54;
       ctx.font = `900 ${fontSize}px sans-serif`;
       
@@ -242,7 +242,7 @@ const FontCard: React.FC<FontCardProps> = ({
                 className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm ${
                   isFavorite ? 'text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
                 }`}
-                onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+                onClick={(e) => { e.stopPropagation(); onToggleFavorite(font.id); }}
                 aria-label={isFavorite ? `Quitar ${font.name} de favoritos` : `Añadir ${font.name} a favoritos`}
              >
                 <Star size={18} fill={isFavorite ? "currentColor" : "none"} />

@@ -1,4 +1,4 @@
-const CODES = new Set(['render', 'browser', 'operation', 'offline', 'update']);
+const CODES = new Set(['render', 'browser', 'operation', 'offline', 'update', 'browser_app', 'browser_external', 'browser_unknown', 'hydration']);
 const headers = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'X-Content-Type-Options': 'nosniff' };
 
 export async function onRequest({ request, env }) {

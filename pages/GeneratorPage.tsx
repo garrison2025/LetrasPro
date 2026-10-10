@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useLocation, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { PageConfig, TextCase } from '../types';
+import { PageConfig, TextCase, FontStyle } from '../types';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
 import { DECORATORS, applyDecoration } from '../services/decorators';
 import { BIO_TEMPLATES } from '../data/bioTemplates';
@@ -233,14 +233,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     writeStorage(`rating_${config.path}`, String(stars));
   };
 
-  const toggleFavorite = (fontId: string) => {
+  const toggleFavorite = useCallback((fontId: string) => {
     setFavorites(prev => prev.includes(fontId) ? prev.filter(id => id !== fontId) : [...prev, fontId]);
-  };
+  }, []);
 
-  const addToHistory = (fontName: string, text: string) => {
+  const addToHistory = useCallback((fontName: string, text: string) => {
     setHistory(prev => [{ fontName, text, timestamp: Date.now() }, ...prev.filter(item => item.text !== text)].slice(0, 10));
     setShowToast(true);
-  };
+  }, []);
 
   const insertSymbol = (symbol: string) => {
     const start = textareaRef.current?.selectionStart || 0;
@@ -269,6 +269,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       default: return text;
     }
   };
+
+  // Read the committed input on click, even while the preview is still debouncing.
+  const getCurrentText = useCallback((font: FontStyle) => applyDecoration(
+    convertText(transformText(textareaRef.current?.value || 'Vista Previa', textCase), font.map, font.category === 'vaporwave'),
+    activeDecorator
+  ), [textCase, activeDecorator]);
 
   const filteredFonts = useMemo(() => {
     let result = FONTS.filter(config.filter);
@@ -553,9 +559,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   displaySegments={segments}
                   isFavorite={favorites.includes(font.id)}
                   viewMode={viewMode}
-                  onToggleFavorite={() => toggleFavorite(font.id)}
-                  getCurrentText={() => applyDecoration(convertText(transformText(inputText || 'Vista Previa', textCase), font.map, font.category === 'vaporwave'), activeDecorator)}
-                  onCopy={(text) => addToHistory(font.name, text)}
+                  onToggleFavorite={toggleFavorite}
+                  getCurrentText={getCurrentText}
+                  onCopy={addToHistory}
                 />
               );
             })}

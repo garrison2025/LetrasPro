@@ -24,7 +24,7 @@ test('only fixed diagnostic categories are logged, with no input or URL', async 
   const originalWarn = console.warn;
   console.warn = value => logged.push(value);
   try {
-    for (const code of ['render', 'browser', 'operation', 'offline', 'update']) {
+    for (const code of ['render', 'browser', 'operation', 'offline', 'update', 'browser_app', 'browser_external', 'browser_unknown', 'hydration']) {
       const response = await send(JSON.stringify({ code }));
       assert.equal(response.status, 204);
       assert.equal(response.headers.get('Cache-Control'), 'no-store');
@@ -33,9 +33,39 @@ test('only fixed diagnostic categories are logged, with no input or URL', async 
     for (const payload of ['null', '[]', '{}', '{broken', '{"code":"private text"}', '{"code":"render","text":"secret"}', '{"code":"render","url":"/?text=secret"}']) {
       assert.equal((await send(payload)).status, 400);
     }
-    assert.equal(logged.length, 5);
+    assert.equal(logged.length, 9);
   } finally {
     console.warn = originalWarn;
+  }
+});
+
+test('browser source is reduced locally to fixed categories without transmitting URLs or error text', async () => {
+  const source = ts.transpileModule(fs.readFileSync(new URL('../services/diagnostics.ts', import.meta.url), 'utf8'), {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
+  }).outputText.replaceAll('import.meta.env.VITE_DIAGNOSTICS_ENABLED', '"true"');
+  const client = await import(`data:text/javascript;base64,${Buffer.from(source + '\n// source classification test').toString('base64')}`);
+  const originalFetch = globalThis.fetch;
+  const originalWarn = console.warn;
+  const originalWindow = globalThis.window;
+  const calls = [];
+  globalThis.window = { location: { origin: 'https://conversordeletrasbonitas.org' } };
+  globalThis.fetch = async (url, options) => { calls.push({ url, options }); return new Response(null, { status: 204 }); };
+  console.warn = () => {};
+  try {
+    for (const filename of ['', 'not a URL', 'data:text/javascript,secret', 'https://conversordeletrasbonitas.org/assets/app.js?private=secret', 'https://ads.example/script.js?private=secret']) {
+      client.reportBrowserError({ filename, message: 'private input' });
+    }
+    await Promise.resolve();
+    assert.deepEqual(calls.map(call => JSON.parse(call.options.body)), [
+      { code: 'browser_unknown' }, { code: 'browser_app' }, { code: 'browser_external' },
+    ]);
+    assert.ok(calls.every(call => call.url === '/api/diagnostics' && call.options.credentials === 'omit'));
+    assert.ok(!JSON.stringify(calls).includes('secret'));
+    assert.ok(!JSON.stringify(calls).includes('private input'));
+  } finally {
+    globalThis.fetch = originalFetch;
+    console.warn = originalWarn;
+    if (originalWindow === undefined) delete globalThis.window; else globalThis.window = originalWindow;
   }
 });
 
