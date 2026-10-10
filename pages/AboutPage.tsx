@@ -1,6 +1,7 @@
 import React from 'react';
 import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Users, Target } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const AboutPage: React.FC = () => {
 const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
@@ -59,6 +60,12 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
           <p>
             Nos comprometemos a mantener esta herramienta <strong>100% gratuita</strong> y accesible para todos, sin registros molestos ni descargas de software sospechoso.
           </p>
+          <section id="equipo-editorial" className="scroll-mt-24">
+            <h2>Equipo LetrasPro: cómo preparamos las guías</h2>
+            <p>LetrasPro es el nombre de este proyecto, publicado en ConversorDeLetrasBonitas.org. Las guías del blog se firman como Equipo LetrasPro. Puedes consultar este criterio editorial y enviarnos correcciones desde la <Link to="/contacto">página de contacto</Link>.</p>
+            <p>Los ejemplos de los generadores se calculan con la misma conversión que utiliza la herramienta. Separamos esos resultados de las recomendaciones de uso y de las explicaciones técnicas de terceros. Para la relación entre caracteres y fuentes, nuestra referencia es la <a href="https://www.unicode.org/faq/font_keyboard.html">documentación del Consorcio Unicode</a>.</p>
+            <p>Antes de publicar cambios comprobamos las conversiones, los casos con tildes y emoji, las páginas generadas y los metadatos. Las recomendaciones por plataforma son orientativas: no tenemos una integración que valide nombres o garantice su aceptación en Instagram, TikTok, Facebook, WhatsApp, Discord, Amino o Free Fire.</p>
+          </section>
         </div>
       </div>
     </div>

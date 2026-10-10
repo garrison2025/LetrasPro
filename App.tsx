@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import PageLoader from './components/PageLoader';
 import ErrorBoundary from './components/ErrorBoundary';
 import RouteNavigation from './components/RouteNavigation';
+import SiteIdentity from './components/SiteIdentity';
 import { PAGE_CONFIGS } from './constants';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -31,6 +32,7 @@ function App({ isStatic = false, helmetContext }: { isStatic?: boolean; helmetCo
     <HelmetProvider context={helmetContext}>
       <ThemeProvider>
         <AppRouter>
+          <SiteIdentity />
           <ErrorBoundary>
             <div className="flex flex-col min-h-screen font-sans relative dark:bg-slate-900 transition-colors duration-300">
               {/* Animated Background Elements */}
