@@ -43,11 +43,19 @@ test('Lovely keeps uppercase letters and digits aligned', () => {
 
 test('cursive and bubble mappings do not substitute different letters', () => {
   assert.equal(convertText('q', font('Cursive Bold').map), '𝓺');
-  assert.equal(convertText('dD', font('Bubble Dark').map), '𝑫𝑫');
+  assert.equal(convertText('dD', font('Bubble Dark').map), '🅓🅓');
 });
 
 test('parenthesized digits retain their numeric values', () => {
   assert.equal(convertText('0123456789', font('Amino [Brackets]').map), '0⑴⑵⑶⑷⑸⑹⑺⑻⑼');
+});
+
+test('basic Unicode styles retain consistent lowercase, uppercase and numeric families', () => {
+  assert.equal(convertText('ixAz09', font('Sans Bold').map), '𝗶𝘅𝗔𝘇𝟬𝟵');
+  assert.equal(convertText('chAZ', font('Sans Italic').map), '𝘤𝘩𝘈𝘡');
+  assert.equal(convertText('hAz', font('Serif Italic').map), 'ℎ𝐴𝑧');
+  assert.equal(convertText('ABZ09', font('Typewriter').map), '𝙰𝙱𝚉𝟶𝟿');
+  assert.equal(convertText('QRT', font('Double Struck').map), 'ℚℝ𝕋');
 });
 
 test('normal text preserves Spanish accents, punctuation and digits', () => {

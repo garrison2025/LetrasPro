@@ -4,6 +4,7 @@ import App from './App';
 import './index.css';
 import UpdateNotice from './components/UpdateNotice';
 import { reportDiagnostic, reportBrowserError } from './services/diagnostics';
+import { startPerformanceDiagnostics } from './services/performance';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -12,6 +13,7 @@ if (!rootElement) {
 
 window.addEventListener('error', reportBrowserError);
 window.addEventListener('unhandledrejection', () => reportDiagnostic('operation'));
+startPerformanceDiagnostics();
 
 const app = (
   <>

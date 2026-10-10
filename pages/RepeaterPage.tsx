@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Copy, Repeat, Trash2, Check, ArrowRight } from 'lucide-react';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
+import { Copy, Repeat, Trash2 } from 'lucide-react';
 import Toast from '../components/Toast';
 import { repeatText } from '../services/repeater';
-import { MAX_INPUT_LENGTH } from '../services/text';
+import { truncateText } from '../services/text';
 import { useClipboard } from '../hooks/useClipboard';
 
 const RepeaterPage: React.FC = () => {
@@ -12,6 +12,9 @@ const RepeaterPage: React.FC = () => {
   const [separator, setSeparator] = useState('newline');
   const [customSeparator, setCustomSeparator] = useState(' ');
   const [result, setResult] = useState('');
+  const [generatedFrom, setGeneratedFrom] = useState('');
+  const settings = JSON.stringify([text, count, separator, customSeparator]);
+  const resultIsStale = Boolean(result) && generatedFrom !== settings;
   const [generationError, setGenerationError] = useState('');
   const { copy, toastProps } = useClipboard("¡Texto copiado al portapapeles!");
 
@@ -31,6 +34,7 @@ const RepeaterPage: React.FC = () => {
     try {
       setResult(repeatText(text, count, sep));
       setGenerationError('');
+      setGeneratedFrom(settings);
     } catch (error) {
       setResult('');
       setGenerationError(error instanceof Error ? error.message : 'No se pudo generar el texto.');
@@ -38,7 +42,7 @@ const RepeaterPage: React.FC = () => {
   };
 
   const copyToClipboard = () => {
-    if (!result) return;
+    if (!result || resultIsStale) return;
     void copy(result);
   };
 
@@ -71,8 +75,8 @@ const RepeaterPage: React.FC = () => {
                 <label htmlFor="repeat-text" className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Texto a repetir</label>
                 <input 
                   type="text" 
-                  id="repeat-text" maxLength={MAX_INPUT_LENGTH} value={text}
-                  onChange={(e) => setText(e.target.value)}
+                  id="repeat-text"  value={text}
+                  onChange={(e) => setText(truncateText(e.target.value))}
                   placeholder="Ej: Te quiero ❤️"
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                 />
@@ -94,25 +98,25 @@ const RepeaterPage: React.FC = () => {
                 <span className="block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Separador</span>
                 <div className="grid grid-cols-2 gap-3">
                   <button 
-                    onClick={() => setSeparator('newline')}
+                    onClick={() => setSeparator('newline')} aria-pressed={separator === 'newline'}
                     className={`px-3 py-2 rounded-lg text-sm font-medium border ${separator === 'newline' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-800'}`}
                   >
                     Nueva Línea
                   </button>
                   <button 
-                    onClick={() => setSeparator('space')}
+                    onClick={() => setSeparator('space')} aria-pressed={separator === 'space'}
                     className={`px-3 py-2 rounded-lg text-sm font-medium border ${separator === 'space' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-800'}`}
                   >
                     Espacio
                   </button>
                   <button 
-                    onClick={() => setSeparator('period')}
+                    onClick={() => setSeparator('period')} aria-pressed={separator === 'period'}
                     className={`px-3 py-2 rounded-lg text-sm font-medium border ${separator === 'period' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-800'}`}
                   >
                     Punto
                   </button>
                   <button 
-                    onClick={() => setSeparator('custom')}
+                    onClick={() => setSeparator('custom')} aria-pressed={separator === 'custom'}
                     className={`px-3 py-2 rounded-lg text-sm font-medium border ${separator === 'custom' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-800'}`}
                   >
                     Otro...
@@ -151,6 +155,7 @@ const RepeaterPage: React.FC = () => {
                      </span>
                    )}
                 </div>
+                {resultIsStale && <p role="status" className="px-6 pt-4 text-sm text-amber-700 dark:text-amber-300">Has cambiado la entrada. Genera de nuevo antes de copiar.</p>}
                 <textarea 
                   readOnly aria-label="Resultado del texto repetido"
                   value={result}
@@ -160,7 +165,7 @@ const RepeaterPage: React.FC = () => {
                 <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 flex gap-3">
                   <button 
                     onClick={copyToClipboard}
-                    disabled={!result}
+                    disabled={!result || resultIsStale}
                     className="flex-1 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
                   >
                     <Copy size={18} /> Copiar

@@ -40,7 +40,7 @@ class ErrorBoundary extends React.Component<Props, State> {
             Algo salió mal
           </h1>
           <p className="text-slate-600 dark:text-slate-400 max-w-md mb-8">
-            Ha ocurrido un error inesperado en la aplicación. No te preocupes, tus datos no se han perdido.
+            Ha ocurrido un error inesperado en la aplicación. El contenido que no se haya guardado en este navegador puede perderse al recargar.
           </p>
           <button
             onClick={this.handleReload}

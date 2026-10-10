@@ -40,6 +40,12 @@ const CommentsSection: React.FC = () => {
     setNewComment('');
   };
 
+  const deleteNote = (id: string) => {
+    const updated = comments.filter(comment => comment.id !== id);
+    setComments(updated);
+    setNotice(writeStorage('let_pro_user_comments', JSON.stringify(updated)) ? 'Nota eliminada de este navegador.' : 'No se pudo guardar la eliminación. La nota puede reaparecer al recargar.');
+  };
+
   return (
     <section className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-[2.5rem] p-6 sm:p-10 border border-slate-100 dark:border-slate-700 shadow-sm mt-12 mb-12">
       <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-6">Consejos de uso</h2>
@@ -64,6 +70,7 @@ const CommentsSection: React.FC = () => {
           <article key={comment.id} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 text-sm text-slate-600 dark:text-slate-300">
             <p className="font-bold mb-2">{comment.author} · {comment.date}</p>
             <FormattedText text={comment.content} />
+            <button type="button" onClick={() => deleteNote(comment.id)} aria-label={`Eliminar nota de ${comment.author}`} className="mt-3 text-red-600 dark:text-red-400 underline">Eliminar nota</button>
           </article>
         ))}
       </div>

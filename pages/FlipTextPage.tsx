@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Copy, RefreshCcw, ArrowRightLeft, ArrowDownUp, Trash2 } from 'lucide-react';
 import { flipText } from '../services/flipMaps';
 import Toast from '../components/Toast';
-import { MAX_INPUT_LENGTH } from '../services/text';
+import { truncateText } from '../services/text';
 import { useClipboard } from '../hooks/useClipboard';
 
 const FlipTextPage: React.FC = () => {
@@ -42,13 +42,13 @@ const FlipTextPage: React.FC = () => {
         {/* Controls */}
         <div className="flex justify-center gap-4 mb-8">
            <button 
-             onClick={() => setMode('upside-down')}
+             onClick={() => setMode('upside-down')} aria-pressed={mode === 'upside-down'}
              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${mode === 'upside-down' ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}`}
            >
              <ArrowDownUp size={18} /> Boca Abajo
            </button>
            <button 
-             onClick={() => setMode('reverse')}
+             onClick={() => setMode('reverse')} aria-pressed={mode === 'reverse'}
              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${mode === 'reverse' ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-white text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'}`}
            >
              <ArrowRightLeft size={18} /> Espejo / Invertir
@@ -65,8 +65,8 @@ const FlipTextPage: React.FC = () => {
                  )}
               </div>
               <textarea 
-                id="FlipTextPage-input" aria-label="Texto a invertir" maxLength={MAX_INPUT_LENGTH} value={text}
-                onChange={(e) => setText(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+                id="FlipTextPage-input" aria-label="Texto a invertir"  value={text}
+                onChange={(e) => setText(truncateText(e.target.value))}
                 className="flex-grow w-full resize-none outline-none text-lg text-slate-800 dark:text-white bg-transparent placeholder:text-slate-300 dark:placeholder:text-slate-600"
                 placeholder="Escribe algo aquí..."
               />

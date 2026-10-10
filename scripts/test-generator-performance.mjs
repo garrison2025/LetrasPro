@@ -58,7 +58,7 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
       });
     });
     const beforeTyping = globalThis.fontCardRenders;
-    assert.equal(renderer.root.findAll(node => node.props.role === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 24);
+    assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 24);
     assert.ok(beforeTyping >= 24);
     const input = renderer.root.findByProps({ 'aria-label': 'Texto para convertir' });
     const latest = 'Último ñ 👨‍👩‍👧‍👦🇪🇸';
@@ -69,11 +69,11 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
     assert.equal(globalThis.fontCardRenders, beforeTyping, 'No card rerender on each keystroke before debounce');
     const clickCopy = async () => {
       const card = renderer.root.findByProps({ 'aria-label': 'Copiar estilo de letra Normal Sans' });
-      await act(async () => { await card.props.onClick({ target: { closest: () => null } }); });
+      await act(async () => { await card.props.onClick({ stopPropagation() {} }); });
     };
     await clickCopy();
     assert.equal(copied.at(-1).normalize('NFC'), latest, 'Copy uses the current input before the preview catches up');
-    await act(async () => { renderer.root.findByProps({ 'aria-label': 'Convertir a upper' }).props.onClick(); });
+    await act(async () => { renderer.root.findByProps({ 'aria-label': 'Convertir a mayúsculas' }).props.onClick(); });
     await clickCopy();
     assert.equal(copied.at(-1).normalize('NFC'), latest.toUpperCase());
     await act(async () => { await new Promise(resolve => setTimeout(resolve, 330)); });

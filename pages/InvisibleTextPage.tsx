@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Copy, EyeOff, Info } from 'lucide-react';
 import Toast from '../components/Toast';
 import { useClipboard } from '../hooks/useClipboard';
 
 const InvisibleTextPage: React.FC = () => {
+  const [manualCharacter, setManualCharacter] = useState<string | null>(null);
   const { copy, toastProps } = useClipboard("¡Copiado al portapapeles!");
 
   // U+3164 is the Hangul Filler, most popular for games
@@ -12,6 +13,7 @@ const InvisibleTextPage: React.FC = () => {
   // U+2800 is Braille Pattern Blank (works in some games)
 
   const handleCopy = (char: string) => {
+    setManualCharacter(char);
     void copy(char);
   };
 
@@ -83,6 +85,10 @@ const InvisibleTextPage: React.FC = () => {
           </div>
         </div>
 
+        {manualCharacter !== null && <div className="mt-8 text-sm text-slate-700 dark:text-slate-200">
+          <label htmlFor="manual-invisible">Si no se copia automáticamente, selecciona este campo y usa Copiar en tu dispositivo:</label>
+          <input id="manual-invisible" aria-label="Carácter invisible para copiar manualmente" readOnly value={manualCharacter} onFocus={event => event.target.select()} className="block mt-2 p-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800" />
+        </div>}
         <div className="mt-16 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 p-6 rounded-2xl flex gap-4">
            <Info className="flex-shrink-0 text-blue-600 dark:text-blue-400" />
            <div className="text-sm text-blue-800 dark:text-blue-200">

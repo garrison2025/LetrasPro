@@ -3,8 +3,9 @@ import { useLocation, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PageConfig, TextCase, FontStyle } from '../types';
 import { FONTS, convertText, getDisplaySegments } from '../services/fontMaps';
-import { DECORATORS, applyDecoration } from '../services/decorators';
+import { applyDecoration } from '../services/decorators';
 import { BIO_TEMPLATES } from '../data/bioTemplates';
+import { USAGE_GUIDES } from '../data/usageGuides';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import CommentsSection from '../components/CommentsSection';
@@ -12,7 +13,8 @@ import Toast from '../components/Toast';
 import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles, ExternalLink, ArrowRight } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useDynamicDate } from '../hooks/useDynamicDate';
-import { MAX_INPUT_LENGTH, splitCharacters } from '../services/text';
+import { MAX_INPUT_LENGTH, splitCharacters, truncateText } from '../services/text';
+import { TONES, matchesTone } from '../services/fontFilters';
 import { readStorage, readStoredArray, writeStorage } from '../services/storage';
 
 interface GeneratorPageProps {
@@ -23,7 +25,6 @@ const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
 
 const QUICK_SYMBOLS = ['★', '✨', '⚡', '꧁', '꧂', '❤', '☠', '⚔', '✿', '❣', 'ღ', '♕', '➳', '➤', '•', '░', '【', '】'];
-const TONES = ['Todos', 'Elegante', 'Gaming', 'Cute', 'Urbano', 'Aesthetic', 'Profesional', 'Tatuajes'];
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const location = useLocation();
@@ -38,19 +39,21 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   
   const [activeTone, setActiveTone] = useState('Todos');
   const [showBioTemplates, setShowBioTemplates] = useState(false);
+  const [showAllSymbols, setShowAllSymbols] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   
   // Rating State
   const [userRating, setUserRating] = useState<number>(0);
   const [hasRated, setHasRated] = useState(false);
+  const [ratingSaved, setRatingSaved] = useState(true);
+  const [storageFailures, setStorageFailures] = useState<Record<string, boolean>>({});
 
   const [favorites, setFavorites] = useState<string[]>([]);
   const [history, setHistory] = useState<{fontName: string, text: string, timestamp: number}[]>([]);
   const [browserReady, setBrowserReady] = useState(false);
 
   useEffect(() => {
-    setInputText((readStorage('let_pro_input') || '').slice(0, MAX_INPUT_LENGTH));
-    setSearchQuery((searchParams.get('q') || '').slice(0, 100));
+    setInputText(truncateText(readStorage('let_pro_input') || ''));
     setFavorites(readStoredArray('let_pro_favs', (value): value is string => typeof value === 'string')
       .filter(id => FONTS.some(font => font.id === id)).slice(0, FONTS.length));
     setHistory(readStoredArray('let_pro_history', (value): value is {fontName: string, text: string, timestamp: number} => {
@@ -63,7 +66,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   }, []);
 
   const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [activeDecorator, setActiveDecorator] = useState<string>('none');
+  const activeDecorator = 'none';
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [showToast, setShowToast] = useState(false);
   
@@ -95,8 +98,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const dynamicDescription = config.description.replace('2025', year);
 
 
-  // SEO: WebSite Schema with Sitelinks Search Box
-  // This allows Google to show a search box for your site in SERPs
+  // Describe the real site search. Google no longer displays the sitelinks search box.
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -181,7 +183,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
-    window.scrollTo(0, 0);
+    setActiveTone('Todos');
+    setRatingSaved(true);
     const storedRating = Number(readStorage(`rating_${config.path}`));
     if (Number.isInteger(storedRating) && storedRating >= 1 && storedRating <= 5) {
       setUserRating(storedRating);
@@ -192,27 +195,38 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
   }, [config.path, location.pathname]);
 
-  // Keep unrelated query parameters, including campaign attribution.
+  // The URL is the source of search state, including back/forward navigation.
   useEffect(() => {
-    if (!browserReady || (searchParams.get('q') || '') === searchQuery) return;
+    setSearchQuery(truncateText(searchParams.get('q') || '', 100));
+    setVisibleCount(ITEMS_PER_PAGE);
+  }, [searchParams]);
+
+  const updateSearchQuery = (value: string) => {
+    const query = truncateText(value, 100);
+    setSearchQuery(query);
+    setVisibleCount(ITEMS_PER_PAGE);
     const next = new URLSearchParams(searchParams);
-    if (searchQuery) next.set('q', searchQuery); else next.delete('q');
+    if (query) next.set('q', query); else next.delete('q');
     setSearchParams(next, { replace: true });
-  }, [browserReady, searchQuery, searchParams, setSearchParams]);
+  };
+
+  const recordStorage = (key: string, saved: boolean) => {
+    setStorageFailures(previous => previous[key] === !saved ? previous : { ...previous, [key]: !saved });
+  };
 
   useEffect(() => {
     if (!browserReady) return;
-    writeStorage('let_pro_input', inputText);
+    recordStorage('input', writeStorage('let_pro_input', inputText));
   }, [browserReady, inputText]);
 
   useEffect(() => {
     if (!browserReady) return;
-    writeStorage('let_pro_favs', JSON.stringify(favorites));
+    recordStorage('favorites', writeStorage('let_pro_favs', JSON.stringify(favorites)));
   }, [browserReady, favorites]);
 
   useEffect(() => {
     if (!browserReady) return;
-    writeStorage('let_pro_history', JSON.stringify(history));
+    recordStorage('history', writeStorage('let_pro_history', JSON.stringify(history)));
   }, [browserReady, history]);
 
   useEffect(() => {
@@ -224,14 +238,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       }
     };
     
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleRate = (stars: number) => {
     setUserRating(stars);
     setHasRated(true);
-    writeStorage(`rating_${config.path}`, String(stars));
+    setRatingSaved(writeStorage(`rating_${config.path}`, String(stars)));
   };
 
   const toggleFavorite = useCallback((fontId: string) => {
@@ -247,7 +261,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     const start = textareaRef.current?.selectionStart || 0;
     const end = textareaRef.current?.selectionEnd || 0;
     const newText = inputText.substring(0, start) + symbol + inputText.substring(end);
-    setInputText(newText.slice(0, MAX_INPUT_LENGTH));
+    setInputText(truncateText(newText));
     setTimeout(() => {
       textareaRef.current?.focus();
       textareaRef.current?.setSelectionRange(start + symbol.length, start + symbol.length);
@@ -257,7 +271,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const applyBioTemplate = (layout: string) => {
     const text = inputText || 'Tu Nombre';
     const filled = layout.replace('{text}', text);
-    setInputText(filled.slice(0, MAX_INPUT_LENGTH));
+    setInputText(truncateText(filled));
     setShowBioTemplates(false);
   };
 
@@ -286,7 +300,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     }
     
     if (activeTone !== 'Todos') {
-      result = result.filter(f => f.tags?.includes(activeTone));
+      result = result.filter(f => matchesTone(f, activeTone));
     }
 
     return result.sort((a, b) => {
@@ -297,6 +311,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       return 0;
     });
   }, [config.filter, favorites, searchQuery, activeTone]);
+
+  const availableTones = useMemo(() => TONES.filter(tone => FONTS.some(font => config.filter(font) && matchesTone(font, tone))), [config.filter]);
 
   const visibleFonts = useMemo(() => filteredFonts.slice(0, visibleCount), [filteredFonts, visibleCount]);
   const previewText = useMemo(() => transformText(debouncedText || 'Vista Previa', textCase), [debouncedText, textCase]);
@@ -361,7 +377,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         {/* JSON-LD Schemas */}
         <script type="application/ld+json">
           {JSON.stringify([
-            // Add WebSite schema only for home page, or always if you want site-wide search box
+            // Keep site-level search metadata on the homepage only.
             config.path === '/' ? websiteSchema : null, 
             webAppSchema, 
             breadcrumbSchema, 
@@ -372,14 +388,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       </Helmet>
       
       {/* Sticky Input Header */}
-      <div className={`fixed top-[64px] lg:top-[80px] left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-lg transition-all duration-300 transform ${isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
+      <div hidden={!isStickyVisible} className={`fixed top-[64px] lg:top-[80px] left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-lg transition-all duration-300 transform ${isStickyVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'}`}>
         <div className="max-w-6xl mx-auto px-4 py-2 flex gap-2 items-center">
           <input 
             type="text" 
             aria-label="Texto para convertir (barra fija)"
-            maxLength={MAX_INPUT_LENGTH}
+
             value={inputText}
-            onChange={(e) => setInputText(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+            onChange={(e) => setInputText(truncateText(e.target.value))}
             placeholder="Escribe aquí..."
             className="flex-grow bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-primary-500 outline-none shadow-inner text-base"
           />
@@ -430,7 +446,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                       key={mode}
                       onClick={() => setTextCase(textCase === mode ? 'original' : mode)}
                       className={`flex-1 sm:flex-none px-3 py-2 md:py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800'}`}
-                      aria-label={`Convertir a ${mode}`}
+                      aria-label={`Convertir a ${mode === 'upper' ? 'mayúsculas' : mode === 'lower' ? 'minúsculas' : 'iniciales mayúsculas'}`}
+                      aria-pressed={textCase === mode}
                     >
                       {mode === 'upper' ? 'AB' : mode === 'lower' ? 'ab' : 'Ab'}
                     </button>
@@ -464,9 +481,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             )}
 
             <textarea
-              ref={textareaRef} aria-label="Texto para convertir" maxLength={MAX_INPUT_LENGTH}
+              ref={textareaRef} aria-label="Texto para convertir"
               value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
+              onChange={(e) => setInputText(truncateText(e.target.value))}
               placeholder="Escribe aquí..."
               // INCREASED CONTRAST FOR PLACEHOLDER: text-slate-400 instead of 300
               className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-400 dark:placeholder:text-slate-600 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
@@ -480,25 +497,27 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     onClick={() => insertSymbol(s)} 
                     aria-label={`Insertar símbolo ${s}`}
                     // INCREASED CONTRAST: text-slate-600 instead of default/500
-                    className={`${index >= 7 ? 'hidden sm:flex' : 'flex'} w-9 h-9 md:w-10 md:h-10 items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 text-slate-600 dark:text-slate-400 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100`}
+                    className={`${index >= 7 && !showAllSymbols ? 'hidden sm:flex' : 'flex'} w-9 h-9 md:w-10 md:h-10 items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl md:rounded-2xl hover:bg-primary-50 dark:hover:bg-primary-900/30 text-slate-600 dark:text-slate-400 hover:text-primary-600 transition-all text-sm md:text-base font-bold border border-transparent hover:border-primary-100`}
                    >
                      {s}
                    </button>
                  ))}
+                 <button type="button" aria-expanded={showAllSymbols} onClick={() => setShowAllSymbols(value => !value)} className="sm:hidden px-3 py-2 rounded-xl text-sm font-bold text-primary-600 dark:text-primary-300">{showAllSymbols ? 'Menos símbolos' : 'Más símbolos'}</button>
                </div>
                <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-6">
                  <div className="flex flex-col items-start sm:items-end">
                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
-                     <Instagram size={12} /> Caracteres
+                     <Type size={12} /> Caracteres visibles
                    </div>
-                   <div className="flex items-baseline gap-1" title="Caracteres visibles. Verifica el límite final en Instagram; algunos estilos ocupan más unidades.">
-                     <span className={`text-xl md:text-2xl font-black ${characterCount > INSTAGRAM_BIO_LIMIT ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
+                   <div className="flex items-baseline gap-1" title="El límite de entrada es de 5000 unidades; un emoji puede ocupar varias. Comprueba el resultado en la aplicación de destino.">
+                     <span className={`text-xl md:text-2xl font-black ${inputText.length >= MAX_INPUT_LENGTH ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
                        {characterCount}
                      </span>
                      {/* INCREASED CONTRAST: text-slate-500 instead of 300 */}
-                     <span className="text-slate-500 dark:text-slate-500 font-bold text-xs md:text-sm">/ {INSTAGRAM_BIO_LIMIT}</span>
+                     <span className="text-slate-500 dark:text-slate-400 font-bold text-xs">{inputText.length} / {MAX_INPUT_LENGTH} unidades</span>
                    </div>
                  </div>
+                 {config.path === '/letras-para-instagram' && <p className="text-xs text-slate-500 dark:text-slate-400">Referencia para la biografía: {INSTAGRAM_BIO_LIMIT}. Verifica el texto final en Instagram.</p>}
                  {inputText && (
                    <button onClick={() => setInputText('')} aria-label="Borrar texto" className="p-3 md:p-4 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-2xl md:rounded-3xl hover:bg-red-100 transition-all active:scale-90">
                      <Trash2 size={20} />
@@ -516,7 +535,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   type="text" 
                   placeholder="Buscar estilo..." aria-label="Buscar estilo" maxLength={100}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => updateSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white placeholder:text-slate-400"
                 />
              </div>
@@ -525,8 +544,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 {TONES.map(t => (
                   <button
                     key={t}
-                    onClick={() => setActiveTone(t)}
-                    className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
+                    onClick={() => { setActiveTone(t); setVisibleCount(ITEMS_PER_PAGE); }}
+                    aria-pressed={activeTone === t}
+                    disabled={!availableTones.includes(t)}
+                    className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
                   >
                     {t}
                   </button>
@@ -535,20 +556,33 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
              <div className="flex items-center gap-2 justify-end">
                 <div className="flex bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                   <button onClick={() => setViewMode('list')} aria-label="Vista de Lista" className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><LayoutList size={18}/></button>
-                   <button onClick={() => setViewMode('instagram')} aria-label="Vista Previa Instagram" className={`p-2 rounded-lg transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><Instagram size={18}/></button>
-                   <button onClick={() => setViewMode('whatsapp')} aria-label="Vista Previa WhatsApp" className={`p-2 rounded-lg transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><MessageCircle size={18}/></button>
+                   <button onClick={() => setViewMode('list')} aria-pressed={viewMode === 'list'} aria-label="Vista de Lista" className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><LayoutList size={18}/></button>
+                   <button onClick={() => setViewMode('instagram')} aria-pressed={viewMode === 'instagram'} aria-label="Vista Previa Instagram" className={`p-2 rounded-lg transition-all ${viewMode === 'instagram' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><Instagram size={18}/></button>
+                   <button onClick={() => setViewMode('whatsapp')} aria-pressed={viewMode === 'whatsapp'} aria-label="Vista Previa WhatsApp" className={`p-2 rounded-lg transition-all ${viewMode === 'whatsapp' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><MessageCircle size={18}/></button>
                 </div>
              </div>
           </div>
         </div>
 
+        {Object.values(storageFailures).some(Boolean) && <p role="status" className="mb-4 text-sm text-amber-700 dark:text-amber-300">No se pudieron guardar algunos cambios. Están disponibles solo durante esta sesión.</p>}
+        <details className="mb-6 text-sm text-slate-600 dark:text-slate-300">
+          <summary className="cursor-pointer font-bold">Datos guardados en este navegador</summary>
+          <p className="my-3">El texto, los favoritos y el historial se guardan en este dispositivo si el navegador lo permite. No se envían al sitio.</p>
+          <button type="button" onClick={() => setInputText('')} className="mr-4 underline">Borrar texto guardado</button>
+          <button type="button" onClick={() => setFavorites([])} className="mr-4 underline">Borrar favoritos</button>
+          <button type="button" onClick={() => { setHasRated(false); setUserRating(0); setRatingSaved(writeStorage(`rating_${config.path}`, '')); }} className="underline">Borrar valoración de esta página</button>
+        </details>
         <HistoryBar history={history} onClear={() => setHistory([])} />
 
         <div className="min-h-[600px]">
           {/* ACCESSIBILITY FIX: Hidden H2 to fix heading hierarchy structure (H1 -> H2 -> H3) */}
           <h2 className="sr-only">Resultados de estilos</h2>
           
+          <p role="status" className="text-sm text-slate-500 dark:text-slate-400 mb-4">{filteredFonts.length} estilos encontrados</p>
+          {filteredFonts.length === 0 && <div className="text-center py-12 rounded-3xl bg-white dark:bg-slate-800">
+            <p className="text-slate-700 dark:text-slate-200 mb-4">No hay estilos que coincidan con esta búsqueda y filtro.</p>
+            <button type="button" onClick={() => { updateSearchQuery(''); setActiveTone('Todos'); }} className="px-5 py-3 rounded-xl bg-primary-600 text-white font-bold">Restablecer filtros</button>
+          </div>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {fontPreviews.map(({ font, rawText, segments }) => {
               return (
@@ -602,7 +636,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             </div>
           </section>
 
-          {/* New UGC Section: Community Comments */}
+          {USAGE_GUIDES[config.path] && <section className="rounded-3xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 p-6 md:p-8">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Ejemplos y límites de uso</h2>
+            <p className="text-slate-700 dark:text-slate-200 mb-3">Ejemplo para probar: <span className="font-bold">{USAGE_GUIDES[config.path].example}</span></p>
+            <p className="text-slate-600 dark:text-slate-300">{USAGE_GUIDES[config.path].guidance}</p>
+          </section>}
+
+          {/* Local notes and practical usage tips */}
           <CommentsSection />
 
           {/* Related Tools (Internal Linking Mesh) */}
@@ -701,6 +741,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                    onMouseLeave={() => !hasRated && setUserRating(0)}
                    className="transition-transform hover:scale-110 focus:outline-none"
                    aria-label={`Calificar con ${star} estrellas`}
+                   aria-pressed={hasRated && star === userRating}
                  >
                    <Star 
                      size={32} 
@@ -716,7 +757,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
              
              {hasRated ? (
                <div className="animate-fade-in text-green-600 dark:text-green-400 font-bold text-sm bg-green-50 dark:bg-green-900/20 py-2 px-4 rounded-full inline-block">
-                 Tu valoración personal está guardada en este navegador.
+                 {ratingSaved ? 'Tu valoración personal está guardada en este navegador.' : 'Tu valoración está disponible solo en esta sesión; no se pudo guardar.'}
                </div>
              ) : (
                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">

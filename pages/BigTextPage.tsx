@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Copy, Type, Trash2 } from 'lucide-react';
 import { generateBigText } from '../services/bigFonts';
+import { truncateText } from '../services/text';
 import Toast from '../components/Toast';
 import { useClipboard } from '../hooks/useClipboard';
 
@@ -45,7 +46,7 @@ const BigTextPage: React.FC = () => {
                <input 
                  type="text" 
                  id="big-text-input" value={text}
-                 onChange={(e) => setText(e.target.value)}
+                 onChange={(e) => setText(truncateText(e.target.value))}
                  placeholder="HOLA"
                  className="flex-grow px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-green-500 outline-none"
                  maxLength={15}

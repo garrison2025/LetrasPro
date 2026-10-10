@@ -4,6 +4,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { workboxOptions } from './pwa.config';
 
 export default defineConfig(({ isSsrBuild }) => ({
+  define: {
+    'import.meta.env.VITE_APP_RELEASE': JSON.stringify(process.env.CF_PAGES_COMMIT_SHA?.slice(0, 12) || 'quality-20261010'),
+  },
   plugins: [
     react(),
     ...(!isSsrBuild ? [VitePWA({
@@ -12,6 +15,9 @@ export default defineConfig(({ isSsrBuild }) => ({
       manifest: {
         name: 'Conversor de Letras Pro',
         short_name: 'LetrasPro',
+        lang: 'es',
+        start_url: '/',
+        scope: '/',
         description: 'Generador de fuentes y letras bonitas para Instagram y redes sociales.',
         theme_color: '#7c3aed',
         background_color: '#ffffff',
@@ -49,8 +55,7 @@ export default defineConfig(({ isSsrBuild }) => ({
       output: {
         manualChunks: isSsrBuild ? undefined : {
           'react-vendor': ['react', 'react-dom', 'react-router-dom', 'react-helmet-async'],
-          'ui-vendor': ['lucide-react'],
-          'utils-vendor': ['clsx', 'tailwind-merge']
+          'ui-vendor': ['lucide-react']
         }
       }
     }

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
 import { copyText } from '../services/clipboard';
@@ -32,10 +32,8 @@ const FontCard: React.FC<FontCardProps> = ({
   const [copyError, setCopyError] = useState(false);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleCopy = async (e: React.MouseEvent | React.KeyboardEvent) => {
-    if ((e.target as HTMLElement).closest('button')) return;
+  const handleCopy = async () => {
 
     // Haptic Feedback for Mobile
     if (navigator.vibrate) {
@@ -190,16 +188,7 @@ const FontCard: React.FC<FontCardProps> = ({
             ? 'border-primary-200 dark:border-primary-700 shadow-xl ring-2 ring-primary-100 dark:ring-primary-900/20' 
             : 'border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1'
       }`}
-      onClick={handleCopy}
-      onKeyDown={(e) => {
-        if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
-          e.preventDefault();
-          void handleCopy(e);
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-label={`Copiar estilo de letra ${font.name}`}
+      onClick={event => { if (!(event.target as HTMLElement).closest('button')) void handleCopy(); }}
     >
       {/* Visual Feedback Overlay */}
       <div className={`absolute inset-0 bg-green-400/10 transition-opacity duration-300 pointer-events-none ${justCopied ? 'opacity-100' : 'opacity-0'}`}></div>
@@ -243,16 +232,17 @@ const FontCard: React.FC<FontCardProps> = ({
                   isFavorite ? 'text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'text-slate-300 hover:text-yellow-400 hover:bg-slate-50'
                 }`}
                 onClick={(e) => { e.stopPropagation(); onToggleFavorite(font.id); }}
+                aria-pressed={isFavorite}
                 aria-label={isFavorite ? `Quitar ${font.name} de favoritos` : `Añadir ${font.name} a favoritos`}
              >
                 <Star size={18} fill={isFavorite ? "currentColor" : "none"} />
              </button>
-             <div 
+             <button type="button" onClick={event => { event.stopPropagation(); void handleCopy(); }}
+               aria-label={`Copiar estilo de letra ${font.name}`}
                className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-500 bg-green-50 dark:bg-green-900/30 scale-125 shadow-xl' : 'text-slate-300'}`}
-               aria-hidden="true"
              >
                {justCopied ? <Check size={18} strokeWidth={4} /> : <Copy size={18} />}
-             </div>
+             </button>
            </div>
         </div>
 
