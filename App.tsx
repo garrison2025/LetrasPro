@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PageLoader from './components/PageLoader';
 import ErrorBoundary from './components/ErrorBoundary';
+import RouteNavigation from './components/RouteNavigation';
 import { PAGE_CONFIGS } from './constants';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -39,9 +40,11 @@ function App({ isStatic = false, helmetContext }: { isStatic?: boolean; helmetCo
                 <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-200/40 dark:bg-pink-900/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
               </div>
 
+              <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:text-slate-900 focus:p-3 focus:rounded-xl">Saltar al contenido</a>
+              <RouteNavigation />
               <Navbar />
               
-              <main className="flex-grow z-10">
+              <main id="main-content" tabIndex={-1} className="flex-grow z-10">
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Generator Pages */}

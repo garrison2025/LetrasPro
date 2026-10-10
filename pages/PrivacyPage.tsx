@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from 'react';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Lock } from 'lucide-react';
 
 const PrivacyPage: React.FC = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const canonicalUrl = "https://conversordeletrasbonitas.org/politica-de-privacidad";
+const canonicalUrl = "https://conversordeletrasbonitas.org/politica-de-privacidad";
 
   return (
     <div className="pt-16 pb-20 px-4 sm:px-6 lg:px-8">
@@ -17,17 +13,17 @@ const PrivacyPage: React.FC = () => {
         <link rel="canonical" href={canonicalUrl} />
       </Helmet>
 
-      <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm">
-        <div className="border-b border-slate-100 pb-8 mb-8">
+      <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm dark:bg-slate-800 dark:border-slate-700">
+        <div className="border-b border-slate-100 pb-8 mb-8 dark:border-slate-700">
           <div className="flex items-center gap-3 mb-4 text-primary-600">
             <Lock size={24} />
             <span className="font-bold uppercase tracking-wider text-sm">Legal</span>
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Política de Privacidad</h1>
-          <p className="text-slate-500">Última actualización: <strong>10 de octubre de 2026</strong></p>
+          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 dark:text-white">Política de Privacidad</h1>
+          <p className="text-slate-500 dark:text-slate-400">Última actualización: <strong>10 de octubre de 2026</strong></p>
         </div>
 
-        <div className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-800 prose-a:text-primary-600">
+        <div className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-800 prose-a:text-primary-600 dark:prose-invert dark:prose-headings:text-white">
           <p>
             En <strong>ConversorDeLetrasBonitas.org</strong>, accesible desde https://conversordeletrasbonitas.org, una de nuestras principales prioridades es la privacidad de nuestros visitantes. Este documento de Política de Privacidad contiene tipos de información que se recopila y registra y cómo la utilizamos.
           </p>
@@ -37,7 +33,7 @@ const PrivacyPage: React.FC = () => {
             ConversorDeLetrasBonitas.org es una herramienta del lado del cliente. Esto significa que:
           </p>
           <ul>
-            <li><strong>No almacenamos el texto que escribes:</strong> Todo el proceso de conversión de fuentes ocurre en tu propio navegador (Chrome, Safari, Firefox, etc.) utilizando JavaScript. El texto que introduces en el generador nunca se envía a nuestros servidores.</li>
+            <li><strong>No enviamos el texto que escribes a nuestros servidores:</strong> Todo el proceso de conversión de fuentes ocurre en tu propio navegador (Chrome, Safari, Firefox, etc.) utilizando JavaScript. El generador conserva una copia en el almacenamiento local de este navegador, junto con favoritos, historial, notas, valoraciones y tema, si el navegador lo permite. Puedes borrar el texto, favoritos y valoración en «Datos guardados en este navegador», el historial con «Borrar todo» y cada nota con «Eliminar nota». Para eliminar todos los datos y cachés, usa los ajustes de datos de sitios de tu navegador.</li>
             <li><strong>No solicitamos datos personales:</strong> No pedimos nombres, direcciones de correo electrónico ni números de teléfono para utilizar la herramienta básica.</li>
           </ul>
 
@@ -46,17 +42,17 @@ const PrivacyPage: React.FC = () => {
             ConversorDeLetrasBonitas.org sigue un procedimiento estándar de uso de archivos de registro. Estos archivos registran a los visitantes cuando visitan sitios web. La información recopilada incluye direcciones de protocolo de Internet (IP), tipo de navegador, proveedor de servicios de Internet (ISP), fecha y hora, páginas de referencia/salida y posiblemente el número de clics. Estos no están vinculados a ninguna información que sea personalmente identificable.
           </p>
           <p>
-            Cuando el diagnóstico técnico está activado, enviamos a Cloudflare únicamente una categoría fija de fallo (visualización, navegador, operación, funcionamiento sin conexión o actualización) para contar errores. Los fallos del navegador distinguen scripts del sitio, externos o de origen desconocido; también contamos por separado los fallos recuperables al iniciar la página. Este envío no incluye el texto del conversor, direcciones de páginas, parámetros de búsqueda, mensajes de error, identificadores de usuario ni cookies. Las estadísticas distinguen el sitio público de las pruebas y se conservan durante tres meses en Cloudflare Analytics Engine. Cloudflare procesa por separado los datos de conexión necesarios para prestar su servicio. Un fallo en el envío del diagnóstico no impide utilizar la herramienta.
+            Cuando el diagnóstico técnico está activado, enviamos a Cloudflare únicamente categorías fijas de fallo o rendimiento, y una versión técnica de publicación (visualización, navegador, operación, funcionamiento sin conexión o actualización) para contar errores y agrupar medidas aproximadas de velocidad, interacción y estabilidad visual. Las medidas se envían por intervalos, sin texto, rutas ni valores exactos. Los fallos del navegador distinguen scripts del sitio, externos o de origen desconocido; también contamos por separado los fallos recuperables al iniciar la página. Este envío no incluye el texto del conversor, direcciones de páginas, parámetros de búsqueda, mensajes de error, identificadores de usuario ni cookies. Las estadísticas distinguen el sitio público de las pruebas y se conservan durante tres meses en Cloudflare Analytics Engine. Cloudflare procesa por separado los datos de conexión necesarios para prestar su servicio. Un fallo en el envío del diagnóstico no impide utilizar la herramienta.
           </p>
 
           <h3>3. Cookies y Web Beacons</h3>
           <p>
-            Como cualquier otro sitio web, utilizamos "cookies". Estas cookies se utilizan para almacenar información, incluidas las preferencias de los visitantes y las páginas del sitio web a las que el visitante accedió o visitó. La información se utiliza para optimizar la experiencia de los usuarios personalizando el contenido de nuestra página web según el tipo de navegador de los visitantes y/u otra información.
+            Como cualquier otro sitio web, utilizamos "cookies". Las preferencias de la herramienta se guardan con localStorage, no con cookies propias de cuenta. Los servicios externos de publicidad pueden utilizar cookies y tecnologías similares; puedes administrarlas desde tu navegador. La información se utiliza para optimizar la experiencia de los usuarios personalizando el contenido de nuestra página web según el tipo de navegador de los visitantes y/u otra información.
           </p>
 
-          <h3>4. Cookie de Google DoubleClick DART</h3>
+          <h3>4. Servicios de publicidad</h3>
           <p>
-            Google es uno de los proveedores externos en nuestro sitio. También utiliza cookies, conocidas como cookies DART, para publicar anuncios a los visitantes de nuestro sitio en función de su visita a conversordeletrasbonitas.org y otros sitios en Internet. Sin embargo, los visitantes pueden optar por rechazar el uso de cookies DART visitando la Política de privacidad de la red de contenido y anuncios de Google.
+            El sitio carga publicidad de Monetag mediante 5gvci.com y un script de effectivecpmnetwork.com. Estos servicios pueden procesar datos de conexión, cookies u otros identificadores según su configuración y sus propias políticas. Las fuentes se solicitan a Google Fonts y algunas imágenes a Unsplash; esas solicitudes también comunican datos de conexión al proveedor. Consulta las políticas del proveedor y los controles de privacidad de tu navegador.
           </p>
 
           <h3>5. Políticas de privacidad de terceros</h3>

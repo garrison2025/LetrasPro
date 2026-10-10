@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Mail, MessageSquare, MapPin, Send } from 'lucide-react';
 
 const ContactPage: React.FC = () => {
@@ -19,8 +19,8 @@ const ContactPage: React.FC = () => {
 
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6">Contáctanos</h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+          <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 dark:text-white">Contáctanos</h1>
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto dark:text-slate-300">
             ¿Tienes alguna sugerencia para un nuevo estilo de letra? ¿Encontraste un error? Estamos aquí para escucharte.
           </p>
         </div>
@@ -62,12 +62,12 @@ const ContactPage: React.FC = () => {
           </div>
 
           {/* Form Placeholder / Direct Action */}
-          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-100 shadow-sm flex flex-col justify-center items-center text-center">
+          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-100 shadow-sm flex flex-col justify-center items-center text-center dark:border-slate-700 dark:bg-slate-800">
              <div className="w-20 h-20 bg-primary-50 rounded-full flex items-center justify-center text-primary-600 mb-6">
                <Send size={32} />
              </div>
-             <h3 className="text-2xl font-bold text-slate-900 mb-4">Envíanos un mensaje directo</h3>
-             <p className="text-slate-500 mb-8">
+             <h3 className="text-2xl font-bold text-slate-900 mb-4 dark:text-white">Envíanos un mensaje directo</h3>
+             <p className="text-slate-500 mb-8 dark:text-slate-400">
                Actualmente gestionamos todas las consultas a través de nuestro correo electrónico oficial para asegurar una respuesta rápida y personalizada.
              </p>
              <a 

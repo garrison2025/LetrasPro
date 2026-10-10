@@ -1,4 +1,5 @@
 const CODES = new Set(['render', 'browser', 'operation', 'offline', 'update', 'browser_app', 'browser_external', 'browser_unknown', 'hydration']);
+for (const name of ['lcp', 'inp', 'cls']) for (const rating of ['good', 'needs', 'poor']) CODES.add(`perf_${name}_${rating}`);
 const headers = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'X-Content-Type-Options': 'nosniff' };
 
 export async function onRequest({ request, env }) {
@@ -25,13 +26,18 @@ export async function onRequest({ request, env }) {
     }
     body += decoder.decode();
     const event = JSON.parse(body);
-    if (!event || typeof event !== 'object' || Object.keys(event).length !== 1 || !CODES.has(event.code)) return new Response(null, { status: 400, headers });
+    if (!event || typeof event !== 'object' || !CODES.has(event.code)
+      || Object.keys(event).some(key => !['code', 'release', 'viewport'].includes(key))
+      || (event.release !== undefined && (typeof event.release !== 'string' || !/^(?:[a-f0-9]{7,40}|quality-20261010|development)$/.test(event.release)))
+      || (event.viewport !== undefined && !['compact', 'wide'].includes(event.viewport))) return new Response(null, { status: 400, headers });
+    const release = event.release || 'legacy';
+    const viewport = event.viewport || 'unknown';
     // Log only a validated fixed category; never echo or log a rejected payload.
-    console.warn(JSON.stringify({ event: 'letraspro_client_error', code: event.code }));
+    console.warn(JSON.stringify({ event: event.code.startsWith('perf_') ? 'letraspro_performance' : 'letraspro_client_error', code: event.code, release, viewport }));
     try {
       env.DIAGNOSTICS_STATS?.writeDataPoint({
         indexes: [event.code],
-        blobs: [event.code, ['conversordeletrasbonitas.org', 'www.conversordeletrasbonitas.org', 'letraspro.pages.dev'].includes(new URL(request.url).hostname) ? 'production' : 'preview'],
+        blobs: [event.code, ['conversordeletrasbonitas.org', 'www.conversordeletrasbonitas.org', 'letraspro.pages.dev'].includes(new URL(request.url).hostname) ? 'production' : 'preview', release, viewport],
         doubles: [1],
       });
     } catch {

@@ -13,6 +13,17 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+        env:
+          VITE_DIAGNOSTICS_ENABLED: 'true'
       - run: npm run check:pages
+      - run: npm run check:seo
+      - run: npm run check:offline
       - run: npm run check:http
       - run: npm audit --omit=dev
+      - name: Save complete dependency audit
+        run: npm audit --json > dependency-audit.json
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit
+          path: dependency-audit.json

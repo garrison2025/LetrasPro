@@ -69,7 +69,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     whyFeatures: [
       { title: 'Estilos Insanos', description: 'Fuentes agresivas y góticas ideales para clanes competitivos.', icon: 'skull' },
       { title: 'Símbolos de Armas', description: 'Complementa tu nick con símbolos de rifles, espadas y escudos.', icon: 'crosshair' },
-      { title: 'Compatible 100%', description: 'Nuestros caracteres están probados para no aparecer como "signo de interrogación" en el juego.', icon: 'check-circle' }
+      { title: 'Compatibilidad orientativa', description: 'Prueba el nick antes de confirmarlo; Free Fire puede rechazar caracteres o mostrarlos de otra forma.', icon: 'check-circle' }
     ],
     howToSteps: [
       'Escribe tu apodo o tag de clan.',
@@ -190,7 +190,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'Copia el texto cursivo y pégalo donde quieras decorar.'
     ],
     faqs: [
-      { question: '¿Funcionan las letras cursivas en Instagram?', answer: 'Sí, son compatibles con la biografía y captions de Instagram, así como en TikTok.' },
+      { question: '¿Funcionan las letras cursivas en Instagram?', answer: 'Puedes probarlas en la biografía y captions de Instagram, así como en TikTok. La aceptación y el aspecto dependen de cada aplicación.' },
       { question: '¿Tienen tildes estas letras?', answer: 'Nuestro conversor avanzado soporta la mayoría de caracteres acentuados y la letra ñ.' }
     ],
     recommendations: [
@@ -289,9 +289,9 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Conversor de Letras Amino',
     description: 'Decora tus blogs y wikis con letras aesthetic. Estilos verificados para la app Amino y perfiles soft.',
     filter: (f) => f.pages.includes('amino'),
-    content: 'La comunidad de Amino ama la estética. Nuestro conversor de letras Amino está diseñado específicamente para crear blogs, wikis y biografías hermosas y ordenadas. Hemos filtrado las fuentes para asegurar compatibilidad y evitar errores. Crea títulos "aesthetic", separadores y decoraciones soft. Desde estilos "small caps" (letras pequeñas) hasta decoraciones vaporwave, aquí tienes todo para que tu perfil se vea profesional y curado.',
+    content: 'La comunidad de Amino ama la estética. Nuestro conversor de letras Amino está diseñado específicamente para crear blogs, wikis y biografías hermosas y ordenadas. Hemos filtrado las fuentes para facilitar la elección; prueba el resultado porque la compatibilidad puede variar. Crea títulos "aesthetic", separadores y decoraciones soft. Desde estilos "small caps" (letras pequeñas) hasta decoraciones vaporwave, aquí tienes todo para que tu perfil se vea profesional y curado.',
     whyFeatures: [
-      { title: '100% Compatible con Amino', description: 'Fuentes probadas para que no salgan cuadros vacíos en la app.', icon: 'smartphone' },
+      { title: 'Compatibilidad con Amino', description: 'Prueba el texto en la app. La visualización depende del dispositivo y de las fuentes disponibles.', icon: 'smartphone' },
       { title: 'Estética Aesthetic / Soft', description: 'Fuentes suaves y minimalistas ideales para decorar blogs.', icon: 'heart' },
       { title: 'Organización Visual', description: 'Usa distintos estilos para jerarquizar títulos en tus wikis.', icon: 'list' }
     ],

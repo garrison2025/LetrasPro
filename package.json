@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs scripts/test-tools.mjs scripts/test-diagnostics.mjs scripts/test-update-notice.mjs scripts/test-worker-activation.mjs scripts/test-generator-performance.mjs",
+    "test": "node --test scripts/test-fonts.mjs scripts/test-browser-data.mjs scripts/test-tools.mjs scripts/test-diagnostics.mjs scripts/test-update-notice.mjs scripts/test-worker-activation.mjs scripts/test-generator-performance.mjs scripts/test-ui-regressions.mjs",
     "build": "vite build && node scripts/generate-sitemap.js dist && vite build --ssr entry-server.tsx --outDir .ssr && node scripts/prerender.mjs && node scripts/finalize-build.mjs",
     "preview": "node scripts/preview-pages.mjs",
     "sitemap": "node scripts/generate-sitemap.js public",
     "typecheck": "tsc --noEmit",
     "check:pages": "node scripts/check-pages.mjs",
     "check:http": "node scripts/check-http.mjs --local",
-    "check:deployment": "node scripts/check-http.mjs"
+    "check:deployment": "node scripts/check-http.mjs",
+    "check:seo": "node scripts/check-seo.mjs",
+    "check:offline": "node scripts/check-offline.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.0",
@@ -21,7 +23,8 @@
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.4",
     "react-router-dom": "^7.18.4",
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.2.1",
+    "web-vitals": "6.2.3"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",

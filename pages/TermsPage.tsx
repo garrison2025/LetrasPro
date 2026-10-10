@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from 'react';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { FileText } from 'lucide-react';
 
 const TermsPage: React.FC = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const canonicalUrl = "https://conversordeletrasbonitas.org/terminos-y-condiciones";
+const canonicalUrl = "https://conversordeletrasbonitas.org/terminos-y-condiciones";
 
   return (
     <div className="pt-16 pb-20 px-4 sm:px-6 lg:px-8">
@@ -17,17 +13,17 @@ const TermsPage: React.FC = () => {
         <link rel="canonical" href={canonicalUrl} />
       </Helmet>
 
-      <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm">
-        <div className="border-b border-slate-100 pb-8 mb-8">
+      <div className="max-w-4xl mx-auto bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm dark:bg-slate-800 dark:border-slate-700">
+        <div className="border-b border-slate-100 pb-8 mb-8 dark:border-slate-700">
            <div className="flex items-center gap-3 mb-4 text-primary-600">
             <FileText size={24} />
             <span className="font-bold uppercase tracking-wider text-sm">Legal</span>
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">Términos y Condiciones</h1>
-          <p className="text-slate-500">Última actualización: <strong>16 de diciembre</strong></p>
+          <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 dark:text-white">Términos y Condiciones</h1>
+          <p className="text-slate-500 dark:text-slate-400">Última actualización: <strong>10 de octubre de 2026</strong></p>
         </div>
 
-        <div className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-800">
+        <div className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-800 dark:prose-invert dark:prose-headings:text-white">
           <p>
             Bienvenido a <strong>ConversorDeLetrasBonitas.org</strong>. Estos términos y condiciones describen las reglas y regulaciones para el uso de nuestro sitio web.
           </p>
@@ -70,10 +66,10 @@ const TermsPage: React.FC = () => {
 
           <h3>6. Ley Aplicable</h3>
           <p>
-            Estos términos y condiciones se rigen e interpretan de acuerdo con las leyes globales de internet y cualquier disputa estará sujeta a la jurisdicción exclusiva de los tribunales competentes.
+            Estos términos y condiciones se rigen e interpretan de acuerdo con la legislación que resulte aplicable. Las disposiciones de esta página no limitan los derechos que las normas obligatorias reconozcan a los usuarios.
           </p>
           
-          <p className="mt-8 text-sm text-slate-400">
+          <p className="mt-8 text-sm text-slate-400 dark:text-slate-400">
             Si tienes alguna duda sobre estos Términos, contáctanos en: <strong>info@conversordeletrasbonitas.org</strong>
           </p>
         </div>

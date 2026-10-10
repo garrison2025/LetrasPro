@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { getPostBySlug } from '../data/blogPosts';
@@ -13,11 +13,7 @@ const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? getPostBySlug(slug) : undefined;
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
-
-  if (!post) {
+if (!post) {
     return <NotFoundPage />;
   }
 
@@ -32,7 +28,7 @@ const BlogPostPage: React.FC = () => {
       "description": post.excerpt,
       "image": post.imageUrl ? [post.imageUrl] : [],
       "author": {
-        "@type": "Person",
+        "@type": "Organization",
         "name": post.author
       },
       "datePublished": post.date,
@@ -102,6 +98,10 @@ const BlogPostPage: React.FC = () => {
         <meta property="og:url" content={canonicalUrl} />
         {post.imageUrl && <meta property="og:image" content={post.imageUrl} />}
         
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt} />
+        <meta name="twitter:image" content={post.imageUrl || 'https://conversordeletrasbonitas.org/og-image.png'} />
         {/* Schema */}
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
@@ -153,6 +153,10 @@ const BlogPostPage: React.FC = () => {
           </div>
         </header>
 
+        <aside className="mb-8 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300">
+          <p>Revisión editorial: 10 de octubre de 2026. Se conserva el título de la edición original. Las aplicaciones pueden cambiar sus límites y el aspecto de los caracteres.</p>
+          <p className="mt-2">Las ideas de diseño no garantizan aumentos de seguidores, alcance o conversiones. Usa texto normal para la información esencial y prueba los estilos antes de publicarlos.</p>
+        </aside>
         {/* Cover Image with srcset and explicit dimensions to prevent CLS */}
         {post.imageUrl && (
           <div className="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 relative group aspect-video">

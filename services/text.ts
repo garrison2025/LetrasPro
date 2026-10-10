@@ -22,3 +22,13 @@ export function splitCharacters(text: string): string[] {
 
 export const MAX_INPUT_LENGTH = 5000;
 export const MAX_OUTPUT_LENGTH = 100000;
+
+// Retain the existing UTF-16 budget without cutting a visible character in half.
+export function truncateText(text: string, limit = MAX_INPUT_LENGTH): string {
+  let result = '';
+  for (const character of splitCharacters(text.replace(/[\uD800-\uDFFF]/gu, '\uFFFD'))) {
+    if (result.length + character.length > limit) break;
+    result += character;
+  }
+  return result;
+}

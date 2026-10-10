@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Copy, Zap, RefreshCw, AlertTriangle } from 'lucide-react';
+import { PageMetadata as Helmet } from '../components/PageMetadata';
+import { Copy, RefreshCw, AlertTriangle } from 'lucide-react';
 import { generateZalgo } from '../services/zalgo';
 import Toast from '../components/Toast';
-import { MAX_INPUT_LENGTH } from '../services/text';
+import { truncateText } from '../services/text';
 import { useClipboard } from '../hooks/useClipboard';
 
 const GlitchPage: React.FC = () => {
@@ -56,8 +56,8 @@ const GlitchPage: React.FC = () => {
             <div>
                <label htmlFor="GlitchPage-input" className="block text-sm font-bold text-slate-400 mb-2">Escribe aquí</label>
                <textarea 
-                  id="GlitchPage-input" aria-label="Texto para efecto glitch" maxLength={MAX_INPUT_LENGTH} value={input}
-                  onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_LENGTH))}
+                  id="GlitchPage-input" aria-label="Texto para efecto glitch"  value={input}
+                  onChange={(e) => setInput(truncateText(e.target.value))}
                   placeholder="He comes..."
                   rows={3}
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all placeholder:text-slate-600"
