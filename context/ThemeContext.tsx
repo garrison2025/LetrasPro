@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, startTransition } from 'react';
 import { readStorage, writeStorage } from '../services/storage';
 
 type Theme = 'light' | 'dark';
@@ -15,9 +15,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [ready, setReady] = useState(false);
   useEffect(() => {
     const savedTheme = readStorage('theme');
-    setTheme(savedTheme === 'light' || savedTheme === 'dark' ? savedTheme
-      : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    setReady(true);
+    const preferredTheme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme
+      : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // Let the prerendered Suspense boundary hydrate before applying browser preferences.
+    startTransition(() => {
+      setTheme(preferredTheme);
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {
