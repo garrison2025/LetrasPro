@@ -12,7 +12,8 @@ const server = http.createServer((request, response) => {
   catch { response.writeHead(400); response.end(); return; }
   let target = path.resolve(dist, '.' + pathname);
   if (target !== dist && !target.startsWith(dist + path.sep)) { response.writeHead(403); response.end(); return; }
-  if (fs.existsSync(target) && fs.statSync(target).isDirectory()) target = path.join(target, 'index.html');
+  if (!path.extname(pathname) && fs.existsSync(`${target}.html`)) target += '.html';
+  else if (fs.existsSync(target) && fs.statSync(target).isDirectory()) target = path.join(target, 'index.html');
   let status = 200;
   if (!fs.existsSync(target) || !fs.statSync(target).isFile() || path.basename(target).startsWith('_')) { target = path.join(dist, '404.html'); status = 404; }
   response.writeHead(status, { 'content-type': mime[path.extname(target)] || 'application/octet-stream', 'cache-control': 'no-cache' });

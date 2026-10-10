@@ -6,9 +6,9 @@ export const workboxOptions: Omit<GenerateSWOptions, 'swDest'> = {
   globIgnores: ['sw.js', 'workbox-*.js'],
   cleanupOutdatedCaches: true,
   clientsClaim: true,
-  // Precache the public page URLs, not just the physical /index.html files.
+  // Precache the existing public URLs, without HTML extensions or trailing slashes.
   manifestTransforms: [async entries => ({
-    manifest: entries.map(entry => ({ ...entry, url: entry.url === 'index.html' ? '/' : entry.url.replace(/\/index\.html$/, '') })),
+    manifest: entries.map(entry => ({ ...entry, url: entry.url === 'index.html' ? '/' : entry.url.replace(/\.html$/, '') })),
     warnings: []
   })],
   runtimeCaching: [

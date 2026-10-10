@@ -7,7 +7,7 @@ const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]
 const titles = new Set();
 for (const url of urls) {
   const route = new URL(url).pathname;
-  const html = fs.readFileSync(path.join('dist', route, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join('dist', route === '/' ? 'index.html' : `${route}.html`), 'utf8');
   assert.equal((html.match(/<h1[\s>]/g) || []).length, 1, `H1: ${route}`);
   const title = html.match(/<title[^>]*>([^]*?)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `Unique title: ${route}`);
@@ -23,7 +23,7 @@ for (const url of urls) {
   for (const link of html.matchAll(/href="(\/[^"?#]*)/g)) {
     const target = link[1];
     if (target.startsWith('//')) continue;
-    assert.ok(fs.existsSync(path.join('dist', target)) || fs.existsSync(path.join('dist', target, 'index.html')), `Local link ${target} from ${route}`);
+    assert.ok(fs.existsSync(path.join('dist', target)) || fs.existsSync(path.join('dist', `${target}.html`)), `Local link ${target} from ${route}`);
   }
 }
 assert.equal(urls.length, 29);
