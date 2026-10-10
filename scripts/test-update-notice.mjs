@@ -24,10 +24,39 @@ const diagnostics = await import(diagnosticsURL);
 const require = createRequire(import.meta.url);
 const source = ts.transpileModule(fs.readFileSync(new URL('../components/UpdateNotice.tsx', import.meta.url), 'utf8'), {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, jsx: ts.JsxEmit.React },
-}).outputText.replace(/from ['"]([^'"]+)['"]/g, (_, name) => `from ${JSON.stringify(
+}).outputText.replace(/import\.meta\.env\.VITE_APP_RELEASE/g, JSON.stringify('test-release')).replace(/from ['"]([^'"]+)['"]/g, (_, name) => `from ${JSON.stringify(
   name === 'virtual:pwa-register' ? registrationURL : name === '../services/diagnostics' ? diagnosticsURL : pathToFileURL(require.resolve(name)).href
 )}`);
 const { default: UpdateNotice } = await import(dataURL(source));
+globalThis.fetch = async () => ({ ok: true, json: async () => ({ release: 'new-release' }) });
+
+test('worker-only changes do not prompt an update of the same application release', async () => {
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({ ok: true, json: async () => ({ release: 'test-release' }) });
+  let renderer;
+  await act(async () => { renderer = TestRenderer.create(React.createElement(UpdateNotice)); });
+  try {
+    await act(async () => { await registration.callbacks.onNeedRefresh(); });
+    assert.equal(renderer.toJSON(), null);
+  } finally {
+    await act(async () => renderer.unmount()); globalThis.fetch = previousFetch;
+  }
+});
+
+test('a failed version check still exposes a known waiting update without activating it', async () => {
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error('offline'); };
+  const before = registration.updates.length;
+  let renderer;
+  await act(async () => { renderer = TestRenderer.create(React.createElement(UpdateNotice)); });
+  try {
+    await act(async () => { await registration.callbacks.onNeedRefresh(); });
+    assert.equal(renderer.root.findByType('aside').props['aria-label'], 'Actualización de la aplicación');
+    assert.equal(registration.updates.length, before);
+  } finally {
+    await act(async () => renderer.unmount()); globalThis.fetch = previousFetch;
+  }
+});
 
 test('an available update waits for a user choice and can be dismissed', async () => {
   let renderer;

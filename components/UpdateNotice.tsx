@@ -12,7 +12,13 @@ const UpdateNotice: React.FC = () => {
     let active = true;
     const updateSW = registerSW({
       immediate: true,
-      onNeedRefresh() {
+      async onNeedRefresh() {
+        try {
+          const response = await fetch('/app-version.json', { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(5000) });
+          const version = response.ok ? await response.json() : null;
+          // An imported ad worker may change without a new application release.
+          if (version?.release === import.meta.env.VITE_APP_RELEASE) return;
+        } catch { /* Keep a known waiting update available when the version check fails. */ }
         if (active) setUpdate(() => () => updateSW(true));
       },
       onRegisterError() {

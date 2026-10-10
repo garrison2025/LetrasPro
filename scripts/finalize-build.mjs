@@ -3,6 +3,7 @@ import { generateSW } from 'workbox-build';
 import { workboxOptions } from '../.ssr/entry-server.js';
 
 const result = await generateSW({ ...workboxOptions, swDest: 'dist/sw.js' });
+fs.writeFileSync('dist/app-version.json', JSON.stringify({ release: process.env.CF_PAGES_COMMIT_SHA?.slice(0, 12) || 'quality-20261010' }));
 if (result.warnings.length) throw new Error(result.warnings.join('\n'));
 // The application owns activation; the ad worker otherwise skips the update prompt.
 fs.appendFileSync('dist/sw.js', `
