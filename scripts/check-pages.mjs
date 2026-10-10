@@ -38,4 +38,6 @@ assert.deepEqual(functionRoutes, { version: 1, include: ['/api/diagnostics'], ex
 assert.ok(!fs.readFileSync('index.tsx', 'utf8').includes('confirm('), 'Updates must not interrupt editing with a native dialog');
 assert.ok(sw.includes('try { importScripts('));
 assert.ok(sw.indexOf('precacheAndRoute') < sw.indexOf('self.options ='));
+assert.match(JSON.parse(fs.readFileSync('dist/app-version.json', 'utf8')).release, /^(?:[a-f0-9]{12}|quality-20261010)$/);
+assert.match(fs.readFileSync('dist/_headers', 'utf8'), /\/app-version\.json\s+Cache-Control: no-store/);
 console.log('Verified all 29 pages, metadata, internal links, structured data, assets and 404.');
