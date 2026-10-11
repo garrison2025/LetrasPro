@@ -50,7 +50,7 @@ const RepeaterPage: React.FC = () => {
     <div className="pt-20 pb-20 px-4 sm:px-6 lg:px-8">
       <Helmet>
         <title>Repetidor de Textos para WhatsApp y Bromas - LetrasPro</title>
-        <meta name="description" content="Repite un texto 100 o 1000 veces con un solo clic. Herramienta gratuita para bromas en WhatsApp, spam de texto y mensajes masivos." />
+        <meta name="description" content="Repite un texto 100 o 1000 veces con un solo clic. Herramienta gratuita para WhatsApp, patrones decorativos y pruebas de diseño con separadores." />
         <link rel="canonical" href="https://conversordeletrasbonitas.org/repetidor-de-texto" />
       </Helmet>
 
@@ -185,12 +185,19 @@ const RepeaterPage: React.FC = () => {
         {/* SEO Content */}
         <div className="mt-24 prose prose-slate dark:prose-invert prose-lg max-w-none">
           <h2>¿Para qué sirve un repetidor de texto?</h2>
-          <p>Esta herramienta es muy popular para:</p>
+          <p>Prepara muestras de texto para revisar diseños, separadores y saltos de línea antes de utilizarlos en un documento o mensaje.</p>
           <ul>
-            <li><strong>Bromas de WhatsApp:</strong> Envía una columna interminable de texto a tus amigos.</li>
-            <li><strong>Comentarios de Instagram:</strong> Llama la atención repitiendo un emoji o una palabra clave.</li>
-            <li><strong>Pruebas de diseño:</strong> Genera texto de relleno (Lorem Ipsum) rápidamente.</li>
+            <li><strong>Pruebas de diseño:</strong> Comprueba cómo se distribuye una frase repetida en una tarjeta.</li>
+            <li><strong>Listas de ejemplo:</strong> Usa saltos de línea para preparar filas de muestra.</li>
+            <li><strong>Patrones decorativos:</strong> Separa palabras o emojis con un signo elegido por ti.</li>
           </ul>
+          <h3>Ejemplo: tres repeticiones con coma</h3>
+          <p>Escribe Hola, elige 3 repeticiones, selecciona la coma y pulsa Generar Texto. Obtendrás:</p>
+          <pre data-tool-example>{repeatText('Hola', 3, ', ')}</pre>
+          <p>Con salto de línea, cada repetición ocupa una fila. Con un separador personalizado puedes usar, por ejemplo, « · ». El separador se coloca entre las copias, sin añadir uno al final.</p>
+          <h3>Qué hacer si el resultado no se genera</h3>
+          <p>Introduce texto y un número entero entre 1 y 1000. El resultado tiene un límite de 100 000 unidades de texto; un emoji puede ocupar varias. Si aparece el aviso de tamaño, reduce la frase o la cantidad. Después de cambiar la entrada, vuelve a generar antes de copiar.</p>
+          <p>La herramienta solo prepara texto: no envía mensajes automáticamente. Antes de pegar en WhatsApp o Instagram, revisa el tamaño y las reglas del espacio donde vas a publicarlo. Evita mensajes repetitivos no solicitados.</p>
         </div>
       </div>
       <Toast {...toastProps} />

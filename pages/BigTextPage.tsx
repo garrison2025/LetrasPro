@@ -77,6 +77,19 @@ const BigTextPage: React.FC = () => {
           </div>
         </div>
 
+        <section className="mt-12 prose prose-slate dark:prose-invert max-w-none" aria-labelledby="big-text-guide">
+          <h2 id="big-text-guide">Cómo conservar la forma de las letras grandes</h2>
+          <p>Escribe una palabra corta, como HOLA, y copia el bloque completo. El resultado contiene varias líneas de símbolos: no es una imagen ni una fuente instalada. Pégalo en un editor que conserve los saltos de línea y usa una tipografía monoespaciada, donde cada carácter ocupa el mismo ancho.</p>
+          <figure>
+            <figcaption>Ejemplo generado con la entrada HOLA</figcaption>
+            <pre className="overflow-x-auto text-xs whitespace-pre" data-tool-example>{generateBigText('HOLA')}</pre>
+          </figure>
+          <h3>Acentos, números y límites</h3>
+          <p>La entrada admite hasta 15 caracteres. Las letras se convierten a mayúsculas; las vocales acentuadas, la Ü y la Ñ añaden una fila para la marca. Los símbolos sin dibujo propio se conservan sin ampliar. Por ejemplo, compara ANO con AÑO antes de copiar para comprobar la tilde.</p>
+          <h3>Si el dibujo se desordena al pegar</h3>
+          <p>Comprueba si la aplicación elimina espacios, cambia de fuente o divide las líneas por falta de ancho. Prueba una palabra más corta y conserva todos los saltos. En Facebook o YouTube la vista final puede ser distinta de esta muestra; revisa el borrador y evita publicar un bloque que dificulte la lectura del resto del mensaje.</p>
+          <p>Para letras decorativas de una sola línea, usa el <a href="/">conversor de letras bonitas</a>.</p>
+        </section>
       </div>
       <Toast {...toastProps} />
     </div>
