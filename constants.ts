@@ -7,10 +7,10 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     title: 'Conversor de Letras Bonitas y Chidas - Copiar y Pegar',
     heading: 'Conversor de Letras Bonitas',
     description: 'El mejor conversor de letras bonitas y chidas para Instagram, TikTok, Free Fire y WhatsApp. Transforma tu texto en fuentes perronas y estéticas.',
-    content: 'Si buscas destacar en redes sociales, nuestro conversor de letras bonitas (y chidas) es la herramienta definitiva. A diferencia de otros sitios, este generador de fuentes utiliza Unicode para transformar tu nick o biografía en más de 140 estilos únicos. Ya sea que busques letras para Instagram, nicks para Free Fire o estados de WhatsApp, aquí encontrarás tipografías legibles y estéticas. Deja de usar fuentes aburridas; usa nuestro conversor para crear letras perronas y viralizar tu contenido.',
+    content: 'Si buscas destacar en redes sociales, nuestro conversor de letras bonitas (y chidas) es la herramienta definitiva. A diferencia de otros sitios, este generador de fuentes utiliza Unicode para transformar tu nick o biografía en más de 140 estilos únicos. Ya sea que busques letras para Instagram, nicks para Free Fire o estados de WhatsApp, aquí encontrarás tipografías legibles y estéticas. Deja de usar fuentes aburridas; usa nuestro conversor para crear letras perronas y comparar estilos antes de publicar.',
     filter: (f) => f.pages.includes('home'),
     whyFeatures: [
-      { title: 'Letras Chidas y Bonitas', description: 'La base de datos más grande de fuentes estéticas, cursivas y símbolos para destacar en LATAM.', icon: 'star' },
+      { title: 'Letras Chidas y Bonitas', description: 'Una colección de fuentes estéticas, cursivas y símbolos para comparar y copiar.', icon: 'star' },
       { title: 'Optimizado para Nicks', description: 'Prueba nuestras letras en Free Fire, PUBG, Fortnite y perfiles de Instagram; la compatibilidad puede variar.', icon: 'zap' },
       { title: 'Conversor 100% Gratuito', description: 'Sin registros. Copia y pega letras perronas para tus estados y biografías al instante.', icon: 'check' }
     ],
@@ -23,7 +23,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     faqs: [
       { question: '¿Qué es un conversor de letras chidas?', answer: 'Es una herramienta que transforma texto normal en símbolos Unicode que parecen fuentes tipográficas únicas y estéticas.' },
       { question: '¿Sirve para Nicks de Free Fire?', answer: '¡Sí! Muchos de nuestros estilos (como góticas y con símbolos) son perfectos para crear nicks veteranos y perrones.' },
-      { question: '¿Puedo usar estas letras en Instagram?', answer: 'Totalmente. Puedes pegarlas en tu biografía (bio), historias, comentarios y captions sin problemas.' }
+      { question: '¿Puedo usar estas letras en Instagram?', answer: 'Puedes probarlas en tu biografía (bio), historias, comentarios y captions. La aceptación y el aspecto varían según el campo, la aplicación y el dispositivo.' }
     ],
     recommendations: [
       { title: 'Letras para Instagram', path: '/letras-para-instagram', description: 'Decora tu biografía y stories.', color: 'from-pink-500 to-purple-500' },
@@ -39,7 +39,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     filter: (f) => f.tags?.includes('Instagram') || f.category === 'aesthetic' || f.category === 'script' || f.category === 'serif' || f.category === 'decorative',
     content: 'Tu biografía de Instagram es tu carta de presentación digital. Usar la fuente predeterminada es aburrido y no destaca. Con nuestro generador de letras para Instagram, puedes transformar tu nombre y biografía con estilos aesthetic, cursivas elegantes o negritas que captan la atención al instante. Estas fuentes son perfectas para resaltar palabras clave en tus captions (descripciones) o para darle un toque único a tus Stories sin necesidad de usar la herramienta de texto de la app.',
     whyFeatures: [
-      { title: 'Biografías Aesthetic', description: 'Crea un perfil único que atraiga nuevos seguidores al primer vistazo.', icon: 'star' },
+      { title: 'Biografías Aesthetic', description: 'Compara un nombre decorativo con una biografía legible y datos de contacto en texto normal.', icon: 'star' },
       { title: 'Comentarios Destacados', description: 'Haz que tus comentarios resalten entre miles usando negritas o estilos burbuja.', icon: 'message-circle' },
       { title: 'Stories Originales', description: 'Pega textos con diseños que no están disponibles en el editor nativo de Instagram.', icon: 'smartphone' }
     ],
@@ -56,7 +56,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     recommendations: [
       { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Perfectas para nombres de perfil.', color: 'from-pink-400 to-rose-500' },
       { title: 'Espacios Invisibles', path: '/texto-invisible', description: 'Crea espacios en tu biografía.', color: 'from-slate-400 to-slate-600' },
-      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Spam divertido para comentarios.', color: 'from-green-400 to-emerald-600' },
+      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Patrones y muestras de texto.', color: 'from-green-400 to-emerald-600' },
     ]
   },
   freefire: {
@@ -93,7 +93,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Letras para WhatsApp',
     description: 'Cambia la letra de WhatsApp en tus chats y estados. Escribe en negrita, cursiva, tachado o con estilo de máquina de escribir.',
     filter: (f) => f.tags?.includes('WhatsApp') || f.compatibility === 'high' || f.category === 'sans' || f.category === 'serif' || f.category === 'monospace',
-    content: '¿Cansado de la misma letra de siempre en tus chats? Con este conversor de letras para WhatsApp puedes ir más allá de las opciones básicas de la app. Sorprende a tus contactos enviando mensajes en fuentes góticas, letras azules, estilo máquina de escribir o caracteres invertidos. Es perfecto para felicitar cumpleaños de forma original, destacar anuncios en grupos o simplemente hacer bromas. También funciona perfecto para tu "Info" (Estado) de perfil.',
+    content: '¿Cansado de la misma letra de siempre en tus chats? Con este conversor de letras para WhatsApp puedes ir más allá de las opciones básicas de la app. Sorprende a tus contactos enviando mensajes en fuentes góticas, letras azules, estilo máquina de escribir o caracteres invertidos. Es perfecto para felicitar cumpleaños de forma original, destacar anuncios en grupos o simplemente hacer bromas. También puedes probarlo en tu "Info" de perfil; revisa el resultado antes de guardar.',
     whyFeatures: [
       { title: 'Más que Negritas', description: 'Accede a estilos que WhatsApp no tiene nativamente, como gótico o burbujas.', icon: 'message-square' },
       { title: 'Estados Únicos', description: 'Haz que tu Info de perfil destaque en la lista de contactos.', icon: 'user' },
@@ -121,7 +121,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Letras para TikTok',
     description: 'Personaliza tu nombre de TikTok con letras bonitas y aesthetic. Destaca en los comentarios y en tu descripción con fuentes únicas.',
     filter: (f) => f.category === 'aesthetic' || f.category === 'script' || f.tags?.includes('Cute') || f.category === 'decorative' || f.category === 'vaporwave',
-    content: 'TikTok es una plataforma visual, y tu perfil no debe ser la excepción. Usar letras bonitas para TikTok en tu nombre de usuario (Nick) y descripción te ayuda a construir una marca personal sólida. Los estilos "Aesthetic", "Vaporwave" y "Manuscrito" son tendencia y pueden ayudarte a ganar seguidores al hacer tu perfil más atractivo. Además, comentar en videos virales con fuentes llamativas aumenta la probabilidad de que tu comentario reciba likes y suba al top.',
+    content: 'TikTok es una plataforma visual, y tu perfil no debe ser la excepción. Usar letras bonitas para TikTok en tu nombre de usuario (Nick) y descripción te ayuda a construir una marca personal sólida. Compara los estilos "Aesthetic", "Vaporwave" y "Manuscrito" para preparar un nombre reconocible. Mantén las descripciones largas en texto normal y revisa cada campo antes de guardar; ninguna fuente garantiza seguidores, likes ni una posición destacada.',
     whyFeatures: [
       { title: 'Nombres Aesthetic', description: 'Fuentes suaves y decorativas que encajan con la estética "Clean Girl" o "Dark".', icon: 'sparkles' },
       { title: 'Destaca en Comentarios', description: 'Usa fuentes en negrita o mayúsculas separadas para llamar la atención del creador.', icon: 'trending-up' },
@@ -135,11 +135,11 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     ],
     faqs: [
       { question: '¿TikTok permite cambiar la fuente del nombre?', answer: 'Sí, puedes usar caracteres Unicode en tu nombre de perfil y descripción.' },
-      { question: '¿Qué estilo es el más viral?', answer: 'Los estilos "Small Caps" (Minúsculas pequeñas) y "Serif Italic" son muy populares ahora.' }
+      { question: '¿Qué estilo es el más viral?', answer: 'Puedes comparar "Small Caps" (Minúsculas pequeñas) y "Serif Italic", pero ninguna fuente garantiza viralidad. Elige según la legibilidad del nombre.' }
     ],
     recommendations: [
       { title: 'Texto Aesthetic', path: '/letras-amino', description: 'Fuentes soft y vaporwave.', color: 'from-purple-400 to-pink-400' },
-      { title: 'Texto Invisible', path: '/texto-invisible', description: 'Comentarios vacíos virales.', color: 'from-slate-500 to-slate-700' },
+      { title: 'Texto Invisible', path: '/texto-invisible', description: 'Compara caracteres en blanco.', color: 'from-slate-500 to-slate-700' },
       { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Estilos coquette.', color: 'from-pink-300 to-rose-400' },
     ]
   },
@@ -162,7 +162,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'En Discord, ve a "Editar perfil del servidor" o pégalo en el chat.'
     ],
     faqs: [
-      { question: '¿Funciona en los canales de texto?', answer: 'Sí, funciona en cualquier canal de texto, MD y en tu perfil.' },
+      { question: '¿Funciona en los canales de texto?', answer: 'Prueba una muestra en el campo de destino. Los mensajes, los nombres de canal y los apodos tienen reglas distintas; la aceptación depende también de los permisos y las reglas del servidor.' },
       { question: '¿Puedo usarlo para nombres de canales?', answer: 'Sí, pero recomendamos usar fuentes legibles y minúsculas para los canales.' }
     ],
     recommendations: [
@@ -205,9 +205,9 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Letras para Tatuajes',
     description: 'Diseña tu piel con el conversor de letras para tatuajes. Simula estilos Chicano, Gótico y Minimalista (Fine Line) gratis.',
     filter: (f) => f.pages.includes('tatuajes'),
-    content: 'Antes de marcar tu piel, visualiza tu idea. Este conversor de letras para tatuajes es esencial para encontrar la tipografía perfecta. Puedes experimentar con estilos Chicanos (cholos), Old English (Góticas), y Fine Line (Minimalistas) sin dolor. Es ideal para probar cómo se vería un nombre, una fecha en números romanos o una frase inspiradora. No te tatúes sin probar primero tus opciones en el mejor simulador de fuentes para tattoo.',
+    content: 'Antes de marcar tu piel, visualiza tu idea. Este conversor de letras para tatuajes sirve como referencia inicial para comparar estilos. Puedes experimentar con estilos Chicanos (cholos), Old English (Góticas), y Fine Line (Minimalistas) sin dolor. Es ideal para probar cómo se vería un nombre, una fecha en números romanos o una frase inspiradora. No te tatúes sin probar primero tus opciones en el mejor simulador de fuentes para tattoo.',
     whyFeatures: [
-      { title: 'Previsualización de Tatuajes', description: 'Evita arrepentimientos viendo cómo queda el diseño antes de ir al estudio.', icon: 'shield' },
+      { title: 'Previsualización de Tatuajes', description: 'Compara referencias antes de pedir un boceto al artista; la vista previa no reproduce la piel ni la escala final.', icon: 'shield' },
       { title: 'Estilos Exclusivos', description: 'Incluimos fuentes Chicanas, Gángster y de Caligrafía Fina.', icon: 'star' },
       { title: 'Inspiración Infinita', description: 'Encuentra la fuente perfecta para nombres de hijos o fechas especiales.', icon: 'heart' }
     ],
@@ -299,7 +299,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'Escribe el título de tu blog o wiki.',
       'Elige una fuente aesthetic o small caps.',
       'Copia el texto decorado.',
-      'Pégalo en tu Wiki o Bio de Amino para ganar seguidores.'
+      'Pégalo en un borrador de tu Wiki o Bio de Amino y revisa la lectura antes de publicar.'
     ],
     faqs: [
       { question: '¿Por qué usar letras diferentes en Amino?', answer: 'Ayuda a que tus publicaciones destaquen en el feed y sean más fáciles de leer.' },
@@ -315,28 +315,28 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     path: '/letras-facebook',
     title: 'Conversor de Letras para Facebook - Negritas y Listas',
     heading: 'Letras para Facebook',
-    description: 'Cambia la fuente de tus posts en Facebook. Negritas, itálicas y formatos para aumentar el alcance y ventas.',
-    content: 'Facebook no deja poner negritas nativamente, pero con nuestro conversor de letras para Facebook puedes hacerlo. Escribir títulos en negrita, listas ordenadas y frases destacadas detiene el scroll y aumenta la lectura. El algoritmo favorece el contenido que retiene la atención. Esta herramienta es vital para Community Managers, vendedores y grupos que quieren destacar sus anuncios y estados. Usa estilos legibles y profesionales.',
+    description: 'Cambia la fuente de tus posts en Facebook. Negritas, itálicas y formatos para publicaciones, comentarios y anuncios.',
+    content: 'Las opciones de formato dependen del campo de Facebook. Nuestro conversor de letras para Facebook genera caracteres Unicode con aspecto de negrita para que puedas probar títulos, listas y frases destacadas. No modifica las opciones nativas ni predice la distribución de una publicación. Esta herramienta es vital para Community Managers, vendedores y grupos que quieren destacar sus anuncios y estados. Usa estilos legibles y profesionales.',
     filter: (f) => f.pages.includes('facebook'),
     whyFeatures: [
-      { title: 'Más Alcance y Clics', description: 'Los posts con negritas tienen mayor CTR (tasa de clics).', icon: 'trending-up' },
+      { title: 'Más Alcance y Clics', description: 'Compara títulos breves y legibles; el estilo por sí solo no garantiza más alcance ni clics.', icon: 'trending-up' },
       { title: 'Negritas Reales', description: 'Consigue el efecto negrita (bold) en tus estados y comentarios.', icon: 'bold' },
-      { title: 'Anti-Spam', description: 'Caracteres seguros que no son marcados como spam por Facebook.', icon: 'shield' }
+      { title: 'Uso Responsable', description: 'Prueba el texto antes de publicar y respeta las reglas del perfil o grupo.', icon: 'shield' }
     ],
     howToSteps: [
       'Redacta tu estado o anuncio de venta.',
       'Selecciona el estilo negrita (sans o serif).',
       'Copia el texto formateado.',
-      'Publica en tu muro o grupo y observa cómo suben las interacciones.'
+      'Revisa el borrador en tu muro o grupo y publica solo si se lee correctamente.'
     ],
     faqs: [
-      { question: '¿Me pueden banear por usar esto?', answer: 'El conversor genera caracteres Unicode y no modifica el juego. No podemos garantizar su aceptación ni las decisiones de moderación; respeta las reglas de Free Fire y comprueba el nombre antes de guardarlo.' },
+      { question: '¿Me pueden banear por usar esto?', answer: 'El conversor genera texto Unicode, pero no controla la moderación de Facebook. Respeta las reglas de la plataforma y del grupo; ninguna letra evita los filtros de spam ni garantiza la aceptación de un nombre.' },
       { question: '¿Se ve en celulares?', answer: 'Sí, el texto es visible en la app móvil, Lite y escritorio.' }
     ],
     recommendations: [
       { title: 'Letras Grandes', path: '/letras-grandes', description: 'Carteles para comentarios.', color: 'from-blue-600 to-blue-800' },
       { title: 'Texto al Revés', path: '/texto-al-reves', description: 'Bromas para amigos.', color: 'from-indigo-500 to-purple-600' },
-      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Flood de comentarios.', color: 'from-green-500 to-emerald-600' },
+      { title: 'Repetidor de Texto', path: '/repetidor-de-texto', description: 'Patrones para pruebas de diseño.', color: 'from-green-500 to-emerald-600' },
     ]
   },
   tattoo: {
@@ -345,9 +345,9 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     heading: 'Conversor de Letras Tattoo',
     description: 'Inspiración para tu próximo tatuaje. Lettering profesional, chicano y estilos de tinta para probar.',
     filter: (f) => f.pages.includes('tattoo'),
-    content: 'El arte del lettering en la piel requiere precisión. Este conversor de letras tattoo es tu herramienta de bocetado gratuita. Ofrecemos una selección curada de fuentes que funcionan bien con aguja y tinta. Desde caligrafía clásica hasta estilos tribales y chicanos, cubrimos todas las tendencias. Úsalo para visualizar nombres de seres queridos o fechas importantes antes de ir al estudio. Tu piel merece el mejor diseño posible.',
+    content: 'El arte del lettering en la piel requiere precisión. Este conversor de letras tattoo es tu herramienta de bocetado gratuita. Ofrecemos estilos Unicode para comparar iniciales y fechas como inspiración; el artista debe adaptar el dibujo a la piel. Desde caligrafía clásica hasta estilos tribales y chicanos, cubrimos todas las tendencias. Úsalo para visualizar nombres de seres queridos o fechas importantes antes de ir al estudio. Tu piel merece el mejor diseño posible.',
     whyFeatures: [
-      { title: 'Diseño Profesional', description: 'Fuentes seleccionadas por su aptitud para ser tatuadas.', icon: 'pen-tool' },
+      { title: 'Diseño Profesional', description: 'Referencias de lettering para preparar una conversación con el artista.', icon: 'pen-tool' },
       { title: 'Visualización Previa', description: 'Imagina cómo quedará la frase antes de marcarte.', icon: 'eye' },
       { title: 'Estilos Variados', description: 'Encuentra desde minimalismo hasta barroco y gótico.', icon: 'layers' }
     ],
@@ -358,7 +358,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       'Consulta con tu tatuador mostrando el resultado.'
     ],
     faqs: [
-      { question: '¿Es útil para tatuadores?', answer: 'Sí, muchos profesionales lo usan como referencia rápida para clientes.' },
+      { question: '¿Es útil para tatuadores?', answer: 'Puede servir como referencia visual. No sustituye el dibujo profesional, la plantilla ni la revisión del artista.' },
       { question: '¿Qué estilos incluye?', answer: 'Chicano, Blackwork, Minimalista, Tradicional y Manuscrito.' }
     ],
     recommendations: [

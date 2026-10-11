@@ -508,7 +508,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               // Keep the placeholder readable in both themes.
               className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-600 dark:placeholder:text-slate-400 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
             />
-            
+            {usageGuide && <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Escribe, compara y copia una muestra corta. <a href="#ejemplo-conversion" className="text-primary-700 dark:text-primary-300 underline underline-offset-4">Ver ejemplo y límites de uso</a>.
+            </p>}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                  {QUICK_SYMBOLS.map((s, index) => (
@@ -666,6 +668,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               <dd data-conversion-example className="text-lg text-slate-900 dark:text-white break-words mt-2">{convertText(usageGuide.example, exampleFont.map, exampleFont.category === 'vaporwave')}</dd>
             </dl>}
             <p className="text-slate-600 dark:text-slate-300">{usageGuide.guidance}</p>
+            {usageGuide.workflow && <div className="mt-6 text-slate-700 dark:text-slate-200">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{usageGuide.workflow.title}</h3>
+              <ol className="list-decimal pl-5 space-y-2">{usageGuide.workflow.steps.map(step => <li key={step}>{step}</li>)}</ol>
+              <h4 className="font-bold mt-4 mb-2">Qué revisar antes de usar el resultado</h4>
+              <ul className="list-disc pl-5 space-y-2">{usageGuide.workflow.checks.map(check => <li key={check}>{check}</li>)}</ul>
+            </div>}
             <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">Base técnica: Unicode identifica caracteres; las fuentes determinan su representación visual. Consulta la <a href="https://www.unicode.org/faq/font_keyboard.html" className="underline text-primary-700 dark:text-primary-300">explicación del Consorcio Unicode sobre caracteres y fuentes</a>. El ejemplo anterior se calcula con este conversor; la recomendación de uso es de <Link to="/sobre-nosotros#equipo-editorial" className="underline text-primary-700 dark:text-primary-300">Equipo LetrasPro</Link>.</p>
           </section>}
 

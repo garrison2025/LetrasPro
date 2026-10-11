@@ -15,6 +15,13 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `
       <p class="lead">En el saturado mundo de las redes sociales, destacar es cada vez más difícil. Ya no basta con tener buenas fotos; la estética de tu texto juega un papel fundamental. Aquí es donde entra en juego una herramienta poderosa y a menudo subestimada: el <strong>conversor de letras bonitas</strong>.</p>
 
+      <h2>Ejercicio: un nombre destacado y datos fáciles de leer</h2>
+   <p>Partimos de María | Café, una muestra que incluye una tilde y un separador. Estas versiones salen de la conversión de LetrasPro; no son capturas de Instagram ni pruebas de compatibilidad con Facebook.</p>
+   <figure data-editorial-example><figcaption>Muestra reproducible en LetrasPro: María | Café</figcaption><div class="overflow-x-auto"><table><thead><tr><th scope="col">Estilo</th><th scope="col">Resultado del conversor</th></tr></thead><tbody><tr><th scope="row">Sans Bold</th><td data-font-example="pro-sans-bold" data-example-input="María | Café">𝗠𝗮𝗿𝗶́𝗮 | 𝗖𝗮𝗳𝗲́</td></tr><tr><th scope="row">Cursive Fine</th><td data-font-example="pro-script-fine" data-example-input="María | Café">ℳ𝒶𝓇𝒾́𝒶 | 𝒞𝒶𝒻ℯ́</td></tr></tbody></table></div></figure>
+   <ol><li>Escribe María | Café en <a href="/letras-para-instagram">Letras para Instagram</a> y busca Sans Bold.</li><li>Copia el resultado y añade debajo «Café de especialidad · Horario 9–18» en texto normal.</li><li>Pega la composición en un borrador del campo elegido y compara las tildes con el original.</li><li>Repite la prueba por separado en <a href="/letras-facebook">Facebook</a>; no des por hecho que un campo acepta lo mismo que otro.</li></ol>
+   <p><strong>Si falla:</strong> si desaparece una letra, se ve un cuadro vacío o el nombre se rechaza, conserva el nombre normal y decora solo una frase secundaria. Mantén direcciones, teléfonos y horarios sin transformar. El criterio de éxito es que se lea y conserve el significado, no un aumento prometido de seguidores.</p>
+   <p><strong>Referencia técnica:</strong> <a href="https://www.unicode.org/faq/font_keyboard.html" target="_blank" rel="noopener noreferrer">Unicode explica la diferencia entre caracteres y fuentes</a>. Cambiar los caracteres no instala una tipografía nueva.</p>
+
       <p>Si alguna vez te has preguntado cómo hacen los influencers para tener esas biografías con letras cursivas, negritas o con símbolos extraños, has llegado al lugar correcto. En esta guía extensa, desglosaremos todo lo que necesitas saber sobre las <a href="https://conversordeletrasbonitas.org/letras-facebook">letras para Facebook</a>, Instagram y otras plataformas, asegurando que tu perfil no pase desapercibido en 2025.</p>
 
       <h2>¿Por qué la tipografía importa en Redes Sociales?</h2>
@@ -22,7 +29,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>La tipografía es el tono de voz de tu texto. Escribir en una fuente estándar es como hablar en un tono monótono. Al utilizar un <strong>conversor de letras bonitas</strong>, le das entonación, carácter y personalidad a tus palabras. No se trata solo de decoración; es psicología visual aplicada al marketing digital.</p>
       
       <blockquote>
-        <p><strong>Dato curioso:</strong> Según estudios recientes de neuromarketing digital, las publicaciones con elementos visuales destacados en el texto (negritas, cursivas o símbolos) tienen hasta un <strong>40% más de probabilidades</strong> de retener la atención del usuario durante el scroll.</p>
+        <p><strong>Criterio práctico:</strong> Usa el estilo decorativo para destacar una frase breve y compara su lectura con el texto normal. No contamos con un estudio que permita atribuir a estas letras un aumento concreto de atención, clics o seguidores.</p>
       </blockquote>
 
       <p>Existen tres razones principales por las que deberías empezar a usar estas herramientas hoy mismo:</p>
@@ -102,6 +109,12 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `
       <p class="lead">Un tatuaje es para siempre (o casi). Por eso, elegir la tipografía correcta para una frase, un nombre o una fecha es una decisión crítica. A diferencia del papel, la piel envejece, se estira y cambia con el tiempo. Un buen <strong>conversor de letras para tatuajes</strong> no solo te ayuda a visualizar el diseño, sino que puede ser la herramienta que evite un desastre estético en el futuro.</p>
 
+      <h2>Ejercicio: comparar la misma frase antes de llevarla al estudio</h2>
+   <p>Usamos Siempre aquí para comparar una referencia gótica con otra cursiva. Ambas se generan con la misma herramienta de esta web; no muestran tinta sobre piel ni una plantilla lista para tatuar.</p>
+   <figure data-editorial-example><figcaption>Muestra reproducible en LetrasPro: Siempre aquí</figcaption><div class="overflow-x-auto"><table><thead><tr><th scope="col">Estilo</th><th scope="col">Resultado del conversor</th></tr></thead><tbody><tr><th scope="row">Gothic Normal</th><td data-font-example="pro-fraktur" data-example-input="Siempre aquí">𝔖𝔦𝔢𝔪𝔭𝔯𝔢 𝔞𝔮𝔲𝔦́</td></tr><tr><th scope="row">Cursive Fine</th><td data-font-example="pro-script-fine" data-example-input="Siempre aquí">𝒮𝒾ℯ𝓂𝓅𝓇ℯ 𝒶𝓆𝓊𝒾́</td></tr></tbody></table></div></figure>
+   <ol><li>Escribe la frase completa en <a href="/letras-tatuajes">Letras para Tatuajes</a> y comprueba primero la ortografía.</li><li>Compara Gothic Normal y Cursive Fine, revisando la í y el espacio entre palabras.</li><li>Guarda el original junto a las dos referencias; indica al artista dónde imaginas el salto de línea.</li><li>Pide un boceto al tamaño previsto y revisa la lectura antes de aprobarlo.</li></ol>
+   <p><strong>Qué no resuelve esta comparación:</strong> no calcula el tamaño mínimo, la separación de trazos ni la evolución del tatuaje. Si una letra se confunde, pide otra composición al artista. Para una fecha o un monograma, usa el ejercicio de <a href="/letras-tattoo">iniciales y fechas tattoo</a>.</p>
+
       <p>En este artículo detallado, exploraremos los estilos más populares del año, cómo usar un <strong>conversor de letras para tatuajes cursiva</strong> o gótica correctamente, y consejos profesionales para llevar tu idea al estudio de tatuajes.</p>
 
       <h2>El auge del Lettering en el Tatuaje Moderno</h2>
@@ -177,6 +190,12 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `
       <p class="lead">En el lobby de cualquier Battle Royale, tu nombre es lo primero que ven tus enemigos (y lo último que ven en la killcam cuando los eliminas). Un nick genérico como "Juan123" no transmite nada. Pero un nick estilizado como "𝕵𝖚𝖆𝖓☠" o "Jᴜᴀɴ⚡" impone respeto inmediato. Para lograr esto, necesitas dominar el uso del <strong>conversor de letras graffiti</strong> y otras herramientas de símbolos.</p>
 
+      <h2>Ejercicio: un nick visible antes de añadir símbolos</h2>
+   <p>Comenzamos con Luna7, sin adornos, para revisar el nombre y el número por separado. Estas son salidas del generador, no nombres reservados ni aceptados por Free Fire.</p>
+   <figure data-editorial-example><figcaption>Muestra reproducible en LetrasPro: Luna7</figcaption><div class="overflow-x-auto"><table><thead><tr><th scope="col">Estilo</th><th scope="col">Resultado del conversor</th></tr></thead><tbody><tr><th scope="row">Gothic Bold</th><td data-font-example="pro-fraktur-bold" data-example-input="Luna7">𝕷𝖚𝖓𝖆7</td></tr><tr><th scope="row">Sans Bold</th><td data-font-example="pro-sans-bold" data-example-input="Luna7">𝗟𝘂𝗻𝗮𝟳</td></tr></tbody></table></div></figure>
+   <ol><li>Escribe Luna7 en <a href="/nicks-para-free-fire">Nicks para Free Fire</a>.</li><li>Compara Gothic Bold con Sans Bold y conserva una copia normal del nick.</li><li>Añade como máximo un adorno al principio para poder identificar qué carácter falla.</li><li>Pega el candidato en la vista previa del juego y comprueba aceptación, disponibilidad y coste antes de confirmar.</li></ol>
+   <p><strong>Si el juego rechaza el nick:</strong> retira primero el adorno, después prueba otra variante y finalmente el original. Si ninguna se admite, puede haber otras restricciones del campo. LetrasPro no consulta la disponibilidad, no cambia el nombre dentro del juego y no evita decisiones de moderación.</p>
+
       <p>Esta guía está dedicada a los jugadores competitivos de Free Fire, PUBG, COD Mobile y Fortnite que buscan elevar su identidad visual dentro del juego y destacar entre millones de usuarios.</p>
 
       <h2>La Psicología detrás de un buen Nickname Pro</h2>
@@ -236,8 +255,8 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: '4',
     slug: 'como-usar-fuentes-bonitas-canva-seguidores-instagram',
-    title: 'Cómo usar Fuentes Bonitas y Canva para duplicar tus seguidores en Instagram',
-    excerpt: 'Descubre la estrategia definitiva de diseño visual en redes sociales. Aprende a fusionar la potencia de las plantillas de Canva con la personalidad de un conversor de letras bonitas para crear un feed de Instagram profesional, coherente y de altísimo impacto que multiplique tus seguidores orgánicos.',
+    title: 'Cómo usar Fuentes Bonitas y Canva en tus publicaciones de Instagram',
+    excerpt: 'Fuentes bonitas y Canva para Instagram: ejemplos con un conversor de letras bonitas, pasos de diseño y consejos para revisar la legibilidad.',
     date: '2026-06-15',
     author: 'Equipo LetrasPro',
     tags: ['Instagram', 'Canva', 'Diseño', 'Marketing', 'Tipografía'],
@@ -245,7 +264,13 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `
       <p class="lead">En la saturada jungla digital que representa Instagram en la actualidad, capturar y retener la atención del usuario se ha convertido en la moneda de cambio más valiosa. Ya no basta simplemente con publicar fotos estéticas o vídeos dinámicos; la composición visual de cada elemento, incluida la tipografía, juega un papel crucial en la decisión de un usuario de pulsar el botón de "Seguir". Aquí es donde ocurre la magia: al combinar la versatilidad de diseño de <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> con la expresividad tipográfica de nuestro <a href="/">conversor de letras bonitas</a>, obtienes una ventaja competitiva brutal para diferenciar tu marca personal o negocio.</p>
 
-      <p>A lo largo de este extenso artículo de más de 2000 palabras, analizaremos paso a paso y de manera puramente estratégica cómo puedes dominar estas dos herramientas gratuitas para renovar por completo tu presencia visual, aumentar tu alcance de forma orgánica, mejorar tus métricas de interacción (engagement) y evaluar si los cambios ayudan a convertir visitantes en seguidores, sin garantizar resultados.</p>
+      <h2>Ejercicio: separar texto decorativo y texto informativo</h2>
+   <p>La muestra Café de Luna permite preparar un título corto para una publicación. La tabla muestra caracteres generados aquí; no reproduce la interfaz de Canva ni acredita resultados de una cuenta de Instagram.</p>
+   <figure data-editorial-example><figcaption>Muestra reproducible en LetrasPro: Café de Luna</figcaption><div class="overflow-x-auto"><table><thead><tr><th scope="col">Estilo</th><th scope="col">Resultado del conversor</th></tr></thead><tbody><tr><th scope="row">Sans Bold</th><td data-font-example="pro-sans-bold" data-example-input="Café de Luna">𝗖𝗮𝗳𝗲́ 𝗱𝗲 𝗟𝘂𝗻𝗮</td></tr><tr><th scope="row">Cursive Fine</th><td data-font-example="pro-script-fine" data-example-input="Café de Luna">𝒞𝒶𝒻ℯ́ 𝒹ℯ ℒ𝓊𝓃𝒶</td></tr></tbody></table></div></figure>
+   <ol><li>Convierte el título en <a href="/letras-para-instagram">Letras para Instagram</a> y conserva el original.</li><li>En tu diseño de Canva, compara una caja con texto normal y otra con la muestra pegada, manteniendo el mismo espacio disponible.</li><li>Escribe «Tres pasos para preparar café» y los pasos del proceso en texto normal con una fuente del editor.</li><li>Revisa el diseño exportado en móvil; si hay cuadros, tildes extrañas o cortes, sustituye la muestra por texto normal.</li></ol>
+   <p><strong>Qué evaluar:</strong> si se distingue el título, si las tildes se mantienen y si las instrucciones se leen sin ampliar. Las opciones de Canva dependen del editor y de la cuenta; pegar Unicode no añade un archivo de fuente ni desbloquea funciones de pago. Guarda una versión sin decoración para poder comparar. Este ejercicio no garantiza clics, alcance ni seguidores.</p>
+
+      <p>En esta guía, analizaremos paso a paso y de manera puramente estratégica cómo puedes dominar estas dos herramientas gratuitas para renovar por completo tu presencia visual, aumentar tu alcance de forma orgánica, mejorar tus métricas de interacción (engagement) y evaluar si los cambios ayudan a convertir visitantes en seguidores, sin garantizar resultados.</p>
 
       <h2>1. El Paradigma de la Primera Impresión: La Economía de la Atención en Instagram</h2>
       <p>Cuando un usuario llega a tu perfil de Instagram desde la pestaña Explorar, un Reel viral o un comentario interactivo, tu cuenta tiene un promedio de <strong>menos de tres segundos</strong> para causar una primera impresión impactante. En ese microsegundo de tiempo, el cerebro del usuario no lee el texto completo ni analiza en detalle tus publicaciones; procesa la estructura visual, la armonía cromática y la coherencia del diseño general.</p>
@@ -257,7 +282,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>Utilizar un <strong>conversor de letras bonitas</strong> te permite dotar de alma a tus textos sin necesidad de poseer conocimientos avanzados de diseño tipográfico. Analicemos cómo la psicología de las fuentes influye en tu audiencia:</p>
       <ul>
         <li><strong>Fuentes Cursivas y Script (Elegancia y Cercanía):</strong> Las <a href="/letras-cursivas">letras cursivas</a> evocan la escritura manual tradicional. Comunican sofisticación, feminidad, delicadeza y una profunda conexión humana. Son la opción perfecta para marcas de belleza, marcas personales de asesoramiento, bienestar, moda de alta gama o creadores de contenido que buscan una atmósfera íntima y honesta.</li>
-        <li><strong>Fuentes Sans-Serif Negritas (Impacto y Modernidad):</strong> Las tipografías de palo seco en formato grueso transmiten fuerza, claridad, innovación y confianza. En el entorno móvil, son las reinas absolutas de la legibilidad. Si buscas destacar títulos en carruseles de Instagram o portadas de Reels, una tipografía Sans-Serif modificada es tu mejor aliada para garantizar un CTR elevado.</li>
+        <li><strong>Fuentes Sans-Serif Negritas (Impacto y Modernidad):</strong> Las tipografías de palo seco en formato grueso transmiten fuerza, claridad, innovación y confianza. En el entorno móvil, son las reinas absolutas de la legibilidad. Si buscas destacar títulos en carruseles de Instagram o portadas de Reels, una tipografía Sans-Serif modificada es tu mejor aliada para comparar la legibilidad de un título. No garantiza un CTR elevado.</li>
         <li><strong>Fuentes Góticas y Blackletter (Poder, Cultura y Tradición):</strong> Las <a href="/letras-goticas">letras góticas</a> evocan historia, arte urbano, rebelión y una fuerte herencia cultural. Son ideales para nichos específicos como el gaming, la cultura del tatuaje, el streetwear, la música alternativa y las comunidades urbanas. Proyectan un aire de autenticidad indiscutible.</li>
         <li><strong>Fuentes Retro o Typewriter (Estilo Máquina de Escribir):</strong> Transmiten nostalgia, intelecto, honestidad y un enfoque editorial. Son fantásticas para escritores, psicólogos, coaches de vida o marcas de estilo vintage que valoran el minimalismo y el encanto clásico.</li>
       </ul>
@@ -291,7 +316,7 @@ export const BLOG_POSTS: BlogPost[] = [
       </ul>
 
       <h2>5. La Fórmula del "Carrusel Magnético": El formato estrella para ganar seguidores</h2>
-      <p>Si tu objetivo prioritario es duplicar tu base de seguidores en Instagram, el formato de publicación que debes priorizar por encima de casi cualquier otro es el <strong>Carrusel Educativo de Canva</strong>.</p>
+      <p>Si quieres explicar un proceso por pasos en Instagram, puedes preparar un <strong>Carrusel Educativo de Canva</strong>. Elige el formato según lo que necesitas enseñar y evalúa el resultado; no garantiza duplicar tu base de seguidores.</p>
       <p>¿Por qué los carruseles son tan efectivos? La respuesta radica en el propio algoritmo de Instagram. Cuando un usuario ve tu carrusel en el feed y pasa de largo sin deslizar, Instagram puede mostrarle de nuevo esa publicación, pero no hay una secuencia ni un plazo garantizados. La distribución de cada publicación varía; este formato no garantiza más interacciones.</p>
       <p>A continuación, te presentamos la estructura milimétricamente diseñada de un carrusel magnético de alto impacto, utilizando la combinación de Canva y nuestras fuentes especiales:</p>
       
@@ -373,7 +398,7 @@ export const BLOG_POSTS: BlogPost[] = [
       </table>
 
       <h2>9. Accesibilidad y Buenas Prácticas: Los límites del diseño</h2>
-      <p>Aunque un conversor de letras bonitas es una herramienta con un potencial creativo sin límites, un gran de diseño requiere técnica y sentido común. Para garantizar que tu crecimiento en Instagram sea sólido y no perjudique la experiencia de ningún usuario, es fundamental adherirse a las siguientes directrices de accesibilidad digital:</p>
+      <p>Aunque un conversor de letras bonitas es una herramienta con un potencial creativo sin límites, un gran de diseño requiere técnica y sentido común. Para que el diseño siga siendo legible y respete la experiencia de otros usuarios, es fundamental adherirse a las siguientes directrices de accesibilidad digital:</p>
       <ul>
         <li><strong>Prioriza la Legibilidad ante Todo:</strong> Si un seguidor potencial tiene que esforzarse para descifrar qué dice una palabra en tu diseño de Canva o en tu biografía de Instagram, se marchará de inmediato. Evita las fuentes excesivamente saturadas de adornos o efectos góticos densos para títulos largos.</li>
         <li><strong>Respeta a los Lectores de Pantalla:</strong> Millones de personas con discapacidad visual navegan en redes sociales utilizando lectores de pantalla automáticos. Estos programas leen el código Unicode de forma literal. Si escribes una frase entera en un estilo modificado, el lector de pantalla podría deletrear cada letra por su nombre técnico matemático en lugar de pronunciar la palabra completa. Utiliza las fuentes bonitas para resaltar palabras clave individuales, títulos de impacto, nombres o marcas específicas, nunca para descripciones largas o datos de contacto críticos.</li>
@@ -398,7 +423,14 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `
       <p class="lead">Construir una marca memorable en la era del bombardeo digital constante requiere mucho más que un logotipo bonito o un producto excelente. La clave del éxito empresarial radica en la coherencia y el reconocimiento instantáneo. Cuando un cliente potencial navega por internet, debe ser capaz de identificar tu negocio de inmediato a través de tus colores, tu estructura de diseño y, por supuesto, tu tipografía característica. En esta completísima guía, te enseñaremos paso a paso cómo crear un <strong>Kit de Marca (Brand Kit)</strong> sumamente profesional utilizando <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> y cómo inyectar personalidad única en tus diseños integrando letras estéticas de nuestro <a href="/">conversor de letras bonitas</a>.</p>
 
-      <p>A lo largo de este artículo de más de 2000 palabras, no solo abordaremos la parte técnica del software, sino que también nos sumergiremos en los principios psicológicos del branding moderno, el neuromarketing visual y la dirección de arte digital. Al finalizar esta lectura, tendrás en tus manos un mapa de ruta perfectamente detallado para renovar por completo la percepción de tu marca, infundirle autoridad y diferenciarte definitivamente de tus competidores más cercanos.</p>
+      <h2>Ejercicio: una ficha de marca que puedas reutilizar</h2>
+   <p>Para la marca ficticia Luna Café, conserva una forma normal del nombre y una muestra decorativa. Es un ejemplo de organización del contenido, no un Kit de Marca ya configurado en Canva.</p>
+   <figure data-editorial-example><figcaption>Muestra reproducible en LetrasPro: Luna Café</figcaption><div class="overflow-x-auto"><table><thead><tr><th scope="col">Estilo</th><th scope="col">Resultado del conversor</th></tr></thead><tbody><tr><th scope="row">Sans Bold</th><td data-font-example="pro-sans-bold" data-example-input="Luna Café">𝗟𝘂𝗻𝗮 𝗖𝗮𝗳𝗲́</td></tr><tr><th scope="row">Serif Italic</th><td data-font-example="pro-serif-italic" data-example-input="Luna Café">𝐿𝑢𝑛𝑎 𝐶𝑎𝑓𝑒́</td></tr></tbody></table></div></figure>
+   <ul><li><strong>Nombre principal:</strong> Luna Café en texto normal, para datos de contacto y documentos.</li><li><strong>Acento visual:</strong> elige una de las muestras solo para títulos cortos.</li><li><strong>Texto informativo:</strong> «Café de especialidad · Abierto 9–18», sin convertir.</li><li><strong>Alternativa:</strong> guarda el nombre sin decoración para formatos donde no se lea bien.</li></ul>
+   <p>Prepara dos composiciones, una sobre fondo claro y otra sobre fondo oscuro. Comprueba contraste, tildes y lectura en el archivo exportado. Si tu cuenta no incluye las funciones necesarias de Kit de Marca, conserva esta ficha en un documento o diseño reutilizable: no hace falta prometer una función concreta de un plan.</p>
+   <p><strong>Límite:</strong> los estilos de LetrasPro son texto Unicode, no fuentes TTF u OTF para cargar en Canva. Un nombre decorativo tampoco demuestra exclusividad ni disponibilidad de una marca. Puedes reproducir estas muestras con el <a href="/">conversor de letras bonitas</a>.</p>
+
+      <p>En esta guía, no solo abordaremos la parte técnica del software, sino que también nos sumergiremos en los principios psicológicos del branding moderno, el neuromarketing visual y la dirección de arte digital. Al finalizar esta lectura, tendrás en tus manos un mapa de ruta perfectamente detallado para renovar por completo la percepción de tu marca, infundirle autoridad y diferenciarte definitivamente de tus competidores más cercanos.</p>
 
       <h2>1. ¿Qué es un Kit de Marca (Brand Kit) y por qué tu negocio lo necesita hoy mismo?</h2>
       <p>Un Kit de Marca es un documento estratégico o una biblioteca centralizada de activos visuales que define las reglas fundamentales de la identidad de tu empresa. En términos sencillos, es el manual de estilo que recopila tus logotipos, tu paleta de colores oficial, tus tipografías corporativas, tus elementos gráficos y el tono visual general de tus composiciones.</p>
@@ -504,7 +536,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <h2>7. Accesibilidad Digital y Lectura Humana: Lo que debes evitar</h2>
       <p>Crear un Kit de Marca no consiste únicamente en hacer que todo se vea estético; debe ser funcional y accesible para cualquier tipo de usuario. Cuando diseñes con letras estéticas y Canva, ten siempre presentes estas tres directrices cruciales:</p>
       <ol>
-        <li><strong>Relación de Contraste Óptima:</strong> Asegúrate de que el texto de tus diseños sea fácil de leer incluso bajo luz directa del sol. Nunca utilices fuentes finas blancas sobre fondos amarillos o grises claros. Utiliza el medidor de contraste nativo de Canva o herramientas de accesibilidad externa para garantizar que la relación sea de al menos 4.5:1.</li>
+        <li><strong>Relación de Contraste Óptima:</strong> Asegúrate de que el texto de tus diseños sea fácil de leer incluso bajo luz directa del sol. Nunca utilices fuentes finas blancas sobre fondos amarillos o grises claros. Utiliza una herramienta de contraste para garantizar que la relación sea de al menos 4.5:1.</li>
         <li><strong>Jerarquía Visual Rigurosa:</strong> Limita tus composiciones a un máximo de dos familias tipográficas. Demasiada variedad tipográfica satura el cerebro del lector y devalúa la elegancia del diseño. Utiliza el conversor de letras únicamente para destacar puntos específicos del título o de la biografía.</li>
         <li><strong>Evita la Saturación de Adornos:</strong> Aunque las florituras y los símbolos tipográficos son hermosos, un exceso de ellos puede hacer que tu diseño se perciba sobrecargado, desordenado y confuso. Deja espacio en blanco en tus diseños; el espacio negativo permite que el diseño respire y dirige el ojo del usuario hacia lo verdaderamente relevante.</li>
       </ol>
@@ -527,7 +559,14 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `
       <p class="lead">La tipografía es el lenguaje silencioso del diseño. Antes de que un usuario comience a leer la primera palabra de un texto, su subconsciente ya ha descodificado el mensaje de marca, el tono de voz y la atmósfera emocional de tu publicación a través del estilo de la letra. En el diseño gráfico profesional, dominar la combinación tipográfica es el equivalente a saber mezclar colores de forma armónica. Sin embargo, para muchos creadores independientes y emprendedores que utilizan <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a>, emparejar tipos de letra puede resultar una tarea abrumadora y llena de dudas. ¿Cómo saber qué fuentes combinan y cuáles chocan visualmente de forma desastrosa?</p>
 
-      <p>En esta extensísima y detallada guía de más de 2000 palabras, te revelaremos los secretos editoriales mejor guardados sobre el emparejamiento tipográfico. Aprenderás las reglas del contraste, los conceptos de jerarquía visual y cómo potenciar tus diseños creativos (desde carteles publicitarios hasta elegantes invitaciones de boda) fusionando la versatilidad de Canva con la personalidad única de las fuentes de nuestro <a href="/">conversor de letras bonitas</a>.</p>
+      <h2>Ejercicio: comparar jerarquías sin decorar todo el párrafo</h2>
+   <p>Usamos Taller de cerámica como título. Primero compara estas dos salidas del conversor; luego elige una y conserva el resto de la información en texto normal.</p>
+   <figure data-editorial-example><figcaption>Muestra reproducible en LetrasPro: Taller de cerámica</figcaption><div class="overflow-x-auto"><table><thead><tr><th scope="col">Estilo</th><th scope="col">Resultado del conversor</th></tr></thead><tbody><tr><th scope="row">Serif Bold</th><td data-font-example="pro-serif-bold" data-example-input="Taller de cerámica">𝐓𝐚𝐥𝐥𝐞𝐫 𝐝𝐞 𝐜𝐞𝐫𝐚́𝐦𝐢𝐜𝐚</td></tr><tr><th scope="row">Sans Bold</th><td data-font-example="pro-sans-bold" data-example-input="Taller de cerámica">𝗧𝗮𝗹𝗹𝗲𝗿 𝗱𝗲 𝗰𝗲𝗿𝗮́𝗺𝗶𝗰𝗮</td></tr></tbody></table></div></figure>
+   <ul><li><strong>Título:</strong> Taller de cerámica, con una sola variante decorativa.</li><li><strong>Subtítulo:</strong> Iniciación para principiantes, en una fuente normal del editor.</li><li><strong>Datos:</strong> Sábado · 10:00 · Reserva previa, sin transformar.</li></ul>
+   <ol><li>Prepara una versión con Serif Bold y otra con Sans Bold, manteniendo el mismo texto y espacio.</li><li>Comprueba si el título se reconoce antes que los datos; si todo compite por la atención, reduce el énfasis.</li><li>Revisa la á, el interlineado y el ancho en móvil y en el archivo exportado.</li><li>Si una letra no se muestra correctamente, usa el original con una fuente del editor.</li></ol>
+   <p>Esta comparación prueba una jerarquía, no una fórmula universal de éxito. No necesita mezclar tres alfabetos decorativos ni aplicar un valor fijo de espaciado. Consulta <a href="https://www.unicode.org/faq/font_keyboard.html" target="_blank" rel="noopener noreferrer">la explicación de Unicode sobre fuentes y caracteres</a> y reproduce los estilos en el <a href="/">conversor</a>.</p>
+
+      <p>En esta guía encontrarás criterios de contraste, jerarquía y legibilidad para comparar combinaciones tipográficas. Aprenderás las reglas del contraste, los conceptos de jerarquía visual y cómo potenciar tus diseños creativos (desde carteles publicitarios hasta elegantes invitaciones de boda) fusionando la versatilidad de Canva con la personalidad única de las fuentes de nuestro <a href="/">conversor de letras bonitas</a>.</p>
 
       <h2>1. La Regla de Oro de la Tipografía: Contraste o Armonía, Nunca Conflicto</h2>
       <p>Al combinar dos fuentes diferentes en un solo diseño, tu objetivo debe ser lograr un contraste claro y deliberado o una armonía suave y unificada. El peor error que puedes cometer en diseño es emparejar dos fuentes que se parezcan demasiado pero que pertenezcan a familias diferentes.</p>
@@ -549,7 +588,7 @@ export const BLOG_POSTS: BlogPost[] = [
       </ol>
 
       <h2>3. Fórmulas de Emparejamiento Tipográfico Infalibles para Canva</h2>
-      <p>Si no quieres fallar en tus diseños creativos, te recomendamos aplicar estas tres fórmulas estéticas de éxito garantizado dentro de la plataforma de <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a>:</p>
+      <p>Si no quieres fallar en tus diseños creativos, te recomendamos aplicar estas tres combinaciones tipográficas para comparar dentro de la plataforma de <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a>:</p>
       
       <h3>Fórmula 1: La Combinación Editorial de Moda (Serif Bold + Sans-Serif Light)</h3>
       <p>Esta es la combinación favorita de las revistas de moda de alta gama, estudios de arquitectura y marcas de cosmética premium. Utiliza una tipografía Serif muy elegante y gruesa para el título principal en Canva (por ejemplo, "Playfair Display" en negrita) y acompáñala con un subtítulo o cuerpo de texto en "Montserrat" o "Inter" en formato ligero y con un espaciado de letras (tracking) ligeramente ampliado. El resultado es sofisticado, espacioso, limpio y muy profesional.</p>
@@ -626,8 +665,8 @@ export const BLOG_POSTS: BlogPost[] = [
       <p>Para dar el salto definitivo de un diseño aficionado a un trabajo de agencia publicitaria profesional, debes afinar los detalles. Canva te permite realizar ajustes tipográficos precisos mediante su barra de herramientas de texto superior:</p>
       <ul>
         <li><strong>Corrige el Interlineado (Leading):</strong> Las plantillas estándar de Canva a veces vienen con un interlineado muy amplio por defecto. Si tu título tiene dos líneas, reduce el interlineado a un valor entre 1.0 y 1.2 para que las palabras se sientan más unificadas y fuertes visualmente.</li>
-        <li><strong>Ajusta el Interletrado (Kerning / Tracking):</strong> Para títulos cortos o subtítulos escritos en mayúsculas, amplía el interletrado (spacing) a un valor de 150 a 200. Esto añade un toque editorial sumamente elegante y prémium al diseño de forma instantánea.</li>
-        <li><strong>Aplica Efectos con Moderación:</strong> La pestaña "Efectos" de Canva es fantástica. El efecto "Flotante" (una sombra sutil) es perfecto para destacar textos blancos colocados encima de fotografías complejas, garantizando una excelente legibilidad sin ensuciar la imagen.</li>
+        <li><strong>Ajusta el Interletrado (Kerning / Tracking):</strong> Para títulos cortos o subtítulos escritos en mayúsculas, ajusta el interletrado (spacing) poco a poco y revisa la palabra al tamaño final. El valor adecuado depende de la fuente, el tamaño y el editor; una separación excesiva puede dificultar la lectura.</li>
+        <li><strong>Aplica Efectos con Moderación:</strong> La pestaña "Efectos" de Canva es fantástica. El efecto "Flotante" (una sombra sutil) es perfecto para destacar textos blancos colocados encima de fotografías complejas, y comprueba si mejora la lectura sobre esa fotografía; el efecto por sí solo no garantiza contraste suficiente.</li>
       </ul>
 
       <h2>8. Conclusión: La Belleza de la Simplicidad Tipográfica</h2>

@@ -54,7 +54,7 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
 
           <h3>¿Quiénes Somos?</h3>
           <p>
-            Detrás de este sitio web hay un equipo multidisciplinario de expertos en SEO, ingenieros frontend y diseñadores UX. Entendemos las frustraciones de los caracteres ilegibles o los "cuadros vacíos" en Android, y por eso hemos implementado filtros orientativos para explorar fuentes en cada plataforma específica (como Facebook o Amino), sin garantizar su aceptación o legibilidad en todos los casos.
+            LetrasPro reúne herramientas de conversión de texto y guías de uso publicadas bajo el nombre Equipo LetrasPro. Los filtros por plataforma (como Facebook o Amino) sirven para explorar estilos; no certifican su aceptación ni su legibilidad en todos los dispositivos. Puedes consultar cómo preparamos los ejemplos en el criterio editorial de esta página.
           </p>
           
           <p>

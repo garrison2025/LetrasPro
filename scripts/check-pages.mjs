@@ -109,8 +109,8 @@ for (const url of urls) {
     assert.equal(article.author['@id'], `${siteUrl}/sobre-nosotros#equipo-editorial`);
     assert.equal(article.publisher['@id'], organization['@id']);
     assert.equal(webpage.mainEntity['@id'], article['@id']);
-    assert.equal(article.dateModified, '2026-10-10');
-    assert.ok(html.includes('Revisión editorial: 10 de octubre de 2026'), `Visible review date: ${route}`);
+    assert.equal(article.dateModified, '2026-10-11');
+    assert.ok(html.includes('Revisión editorial: 11 de octubre de 2026'), `Visible review date: ${route}`);
     assert.ok([...html.matchAll(/<a\s[^>]*>/g)].some(([anchor]) => anchor.includes('href="/sobre-nosotros#equipo-editorial"') && anchor.includes('rel="author"')), `Visible author link: ${route}`);
   }
   for (const link of html.matchAll(/href="(\/[^"?#]*)/g)) {

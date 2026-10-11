@@ -144,6 +144,12 @@ const GlitchPage: React.FC = () => {
            <p className="text-slate-400 leading-relaxed mb-4">
              El texto Zalgo es una forma de arte digital que utiliza "caracteres combinados" de Unicode. Estos son símbolos especiales diseñados para apilarse verticalmente encima o debajo de una letra. Al apilar muchos de ellos, se crea ese efecto de "ruido" o "glitch" que parece estar rompiendo la página web.
            </p>
+           <h3 className="text-xl font-bold text-slate-200 mt-8 mb-3">Prueba breve: de texto normal a distorsionado</h3>
+           <p className="text-slate-400 leading-relaxed mb-4">Escribe Noche. Coloca los tres controles en 0 para obtener Noche sin marcas añadidas. Después sube solo Caos Superior y pulsa Regenerar Caos: pueden aparecer marcas por encima de las letras. Si no aparecen, regenera o aumenta la intensidad. Activa Caos Inferior o Medio por separado para reconocer su efecto.</p>
+           <p className="text-slate-400 leading-relaxed mb-4">Los valores de los controles indican intensidad, no una medición de compatibilidad. El generador elige marcas al azar; al regenerar puedes obtener otra combinación, incluso con los mismos valores. No necesitas llevar todos los controles al máximo para crear un título de terror.</p>
+           <h3 className="text-xl font-bold text-slate-200 mt-8 mb-3">Si se corta el resultado o cuesta leerlo</h3>
+           <p className="text-slate-400 leading-relaxed mb-4">Reduce primero las marcas superiores e inferiores y prueba una palabra corta. Algunas aplicaciones recortan la altura de la línea, eliminan marcas o rechazan nombres demasiado largos. Copia una muestra en un borrador y revísala antes de publicar; esta vista previa no confirma la aceptación de otra plataforma.</p>
+           <p className="text-slate-400 leading-relaxed">Conserva el texto original para poder editarlo. Evita el efecto en direcciones, instrucciones o párrafos largos: los caracteres combinados pueden dificultar la búsqueda y la lectura asistida. Consulta la explicación técnica de <a className="text-red-300 underline" href="https://www.unicode.org/faq/char_combmark.html" target="_blank" rel="noopener noreferrer">Unicode sobre caracteres combinados</a>.</p>
         </div>
       </div>
       <Toast {...toastProps} />

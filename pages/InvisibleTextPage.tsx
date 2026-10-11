@@ -34,7 +34,7 @@ const InvisibleTextPage: React.FC = () => {
             Texto Invisible
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Copia caracteres vacíos para enviar mensajes en blanco en WhatsApp o ponerte un nick invisible en Free Fire.
+            Copia caracteres en blanco para probar espacios en WhatsApp o nicks de Free Fire. La aceptación depende de cada aplicación y campo.
           </p>
         </div>
 
@@ -59,13 +59,13 @@ const InvisibleTextPage: React.FC = () => {
             >
               <Copy size={20} /> Copiar Carácter
             </button>
-            <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">Funciona en: Free Fire, WhatsApp, Facebook</p>
+            <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">Prueba antes de guardar: Free Fire, WhatsApp y Facebook pueden rechazarlo.</p>
           </div>
 
           {/* Other Options */}
           <div className="space-y-4">
             {[
-              { label: 'Espacio Pequeño (Zero Width)', char: '\u200B', desc: 'Para ocultar enlaces o trucos de formato' },
+              { label: 'Espacio Pequeño (Zero Width)', char: '\u200B', desc: 'Carácter sin ancho visible; no equivale a un espacio normal' },
               { label: 'Espacio Braille (Pattern Blank)', char: '\u2800', desc: 'Alternativa si el primero no funciona' },
               { label: 'Espacio Largo', char: '\u3000', desc: 'Espacio ideográfico japonés' }
             ].map((item, i) => (
@@ -93,9 +93,22 @@ const InvisibleTextPage: React.FC = () => {
            <Info className="flex-shrink-0 text-blue-600 dark:text-blue-400" />
            <div className="text-sm text-blue-800 dark:text-blue-200">
              <p className="font-bold mb-1">¿Cómo usar en Free Fire?</p>
-             <p>Para tener un nombre con espacio, copia el carácter "U+3164". Luego pégalo en el cuadro de cambio de nombre. Puedes combinarlo: "Juan[ESPACIO]Pro".</p>
+             <p>Copia U+3164 y prueba a pegarlo entre Juan y Pro en la vista previa del nombre. No confirmes un cambio de pago hasta comprobar el resultado. El juego puede rechazar o eliminar el carácter.</p>
            </div>
         </div>
+        <section className="mt-12 prose prose-slate dark:prose-invert max-w-none" aria-labelledby="invisible-guide">
+          <h2 id="invisible-guide">Qué carácter invisible estás copiando</h2>
+          <p>Estos botones copian caracteres distintos, no una cadena vacía. La apariencia depende de la fuente y del lugar donde se peguen. Usa esta comparación para identificar la opción, en lugar de suponer que todos los espacios son iguales.</p>
+          <dl data-tool-example>
+            <dt>U+3164 · Hangul Filler</dt><dd>Carácter de relleno hangul; no es el espacio común del teclado.</dd>
+            <dt>U+200B · Zero Width Space</dt><dd>No tiene ancho visible y puede intervenir en los puntos de corte de una línea.</dd>
+            <dt>U+2800 · Braille Pattern Blank</dt><dd>Patrón braille sin puntos; puede ocupar un espacio visible según la fuente.</dd>
+            <dt>U+3000 · Ideographic Space</dt><dd>Espacio ideográfico, normalmente más ancho que un espacio latino.</dd>
+          </dl>
+          <h3>Cómo comprobar la copia</h3>
+          <p>Pega el carácter entre dos letras, como A y B, en un borrador. Comprueba si se conserva al guardar. Si no puedes copiar automáticamente, selecciona el campo de copia manual. Si la aplicación elimina el carácter, utiliza un espacio normal o un separador visible: esta herramienta no puede cambiar sus reglas.</p>
+          <p>No uses caracteres ocultos para suplantar nombres, ocultar destinos de enlaces ni dificultar la lectura de información importante. Para un nombre reconocible, prueba <a href="/nicks-para-free-fire">nicks para Free Fire</a> con letras visibles.</p>
+        </section>
       </div>
       <Toast {...toastProps} />
     </div>

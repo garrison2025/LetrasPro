@@ -37,7 +37,7 @@ if (!post) {
       },
       "datePublished": post.date,
       // Matches the editorial review date already displayed below the header.
-      "dateModified": "2026-10-10",
+      "dateModified": "2026-10-11",
       "inLanguage": "es",
       "publisher": { "@id": ORGANIZATION_ID },
       "mainEntityOfPage": {
@@ -167,7 +167,7 @@ if (!post) {
         </header>
 
         <aside className="mb-8 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300">
-          <p>Revisión editorial: 10 de octubre de 2026. Se conserva el título de la edición original. Las aplicaciones pueden cambiar sus límites y el aspecto de los caracteres.</p>
+          <p>Revisión editorial: 11 de octubre de 2026. Se conservan las fechas de publicación; se han revisado las afirmaciones y añadido ejemplos reproducibles. Las aplicaciones pueden cambiar sus límites y el aspecto de los caracteres.</p>
           <p className="mt-2">Las ideas de diseño no garantizan aumentos de seguidores, alcance o conversiones. Usa texto normal para la información esencial y prueba los estilos antes de publicarlos.</p>
         </aside>
         {/* Cover Image with srcset and explicit dimensions to prevent CLS */}

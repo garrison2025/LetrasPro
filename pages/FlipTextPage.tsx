@@ -92,6 +92,23 @@ const FlipTextPage: React.FC = () => {
               </button>
            </div>
         </div>
+        <section className="mt-12 prose prose-slate dark:prose-invert max-w-none" aria-labelledby="flip-guide">
+          <h2 id="flip-guide">Invertir el orden y poner boca abajo son dos resultados distintos</h2>
+          <p>Escribe hola y cambia entre los dos botones. Espejo / Invertir cambia el orden de los caracteres; no crea un reflejo gráfico de cada letra. Boca Abajo también sustituye las letras que tienen una equivalencia visual en el conversor.</p>
+          <dl data-tool-example>
+            <dt>Original</dt><dd>hola</dd>
+            <dt>Espejo / Invertir</dt><dd>{flipText('hola', 'reverse')}</dd>
+            <dt>Boca Abajo</dt><dd>{flipText('hola', 'upside-down')}</dd>
+          </dl>
+          <h3>Cómo copiar sin perder el sentido</h3>
+          <ol>
+            <li>Elige el modo y comprueba la frase completa en Resultado.</li>
+            <li>Copia una muestra corta y pégala en un borrador de la aplicación de destino.</li>
+            <li>Conserva el texto original si necesitas recuperar nombres, fechas o instrucciones.</li>
+          </ol>
+          <p>Los acentos, emojis y signos sin equivalencia pueden conservar su orientación original. El resultado no cifra ni protege un mensaje: cualquiera puede volver a ordenar el texto. Para información importante, acompaña la versión decorativa con texto normal.</p>
+          <p>Si aparecen cuadros vacíos, utiliza Espejo / Invertir o reduce los símbolos. También puedes comparar <a href="/letras-cursivas">letras cursivas</a> sin invertir la frase.</p>
+        </section>
       </div>
       <Toast {...toastProps} />
     </div>
