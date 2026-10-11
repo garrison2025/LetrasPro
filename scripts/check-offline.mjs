@@ -20,6 +20,7 @@ try {
     assert.ok(matches(`${page.route}?q=Elegante&utm_source=test`), `Offline query ${page.route}`);
   }
   for (const route of ['/favicon.ico?v=1', '/logo.svg?v=4', '/apple-touch-icon.png?v=1']) assert.ok(matches(route), route);
+  for (const file of fs.readdirSync('dist/assets').filter(file => file.endsWith('.woff2'))) assert.ok(matches(`/assets/${file}`), `Offline font ${file}`);
   assert.ok(!matches('/__missing_page__'), 'Do not turn unknown URLs into the homepage');
   assert.equal(workboxOptions.navigateFallback, undefined);
   console.log(`Verified actual Workbox URL matching for ${pages.length} pages with queries and versioned icons.`);

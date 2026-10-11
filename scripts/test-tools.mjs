@@ -11,12 +11,45 @@ function moduleURL(file) {
   if (file !== '../services/text.ts') outputText = outputText.replace(/from ['"]\.\/text['"]/g, `from '${textURL}'`);
   return `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`;
 }
-const { splitCharacters, MAX_OUTPUT_LENGTH } = await import(textURL);
+const { splitCharacters, truncateText, MAX_OUTPUT_LENGTH } = await import(textURL);
 const { flipText } = await import(moduleURL('../services/flipMaps.ts'));
 const { generateBigText } = await import(moduleURL('../services/bigFonts.ts'));
 const { generateZalgo } = await import(moduleURL('../services/zalgo.ts'));
 const { repeatText } = await import(moduleURL('../services/repeater.ts'));
 const { copyText } = await import(moduleURL('../services/clipboard.ts'));
+
+test('Latin fast path and Unicode segmentation match browser grapheme boundaries', () => {
+  const segmenter = new Intl.Segmenter('es', { granularity: 'grapheme' });
+  const reference = value => Array.from(segmenter.segment(value.normalize('NFC')), part => part.segment);
+  const latin = Array.from({ length: 224 }, (_, i) => String.fromCharCode(i + 32)).join('');
+  const samples = ['', latin, '¡Hola!\tÁÉÍÓÚ ñü\n'.repeat(300), 'a\r\nb', '\u0600a', 'a\u0301\u0323', '👨‍👩‍👧‍👦🇪🇸👍🏽', 'क्‍ष ಕನ್ನಡ', '\r\n\t\0', '𝓐𝓫𝓬'.repeat(1000)];
+  let seed = 17;
+  const pieces = ['a', 'ñ', 'ü', '\r', '\n', '\t', '\u0301', '\u0323', '\u0600', '🇪', '🇸', '👩', '\u200d', '👍', '🏽', '漢', 'क', '्'];
+  for (let i = 0; i < 300; i++) {
+    let sample = '';
+    for (let j = 0; j < 30; j++) {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      sample += pieces[seed % pieces.length];
+    }
+    samples.push(sample);
+  }
+  for (const sample of samples) assert.deepEqual(splitCharacters(sample), reference(sample));
+});
+
+test('short input and truncation retain NFC, repair lone surrogates and never cut emoji', () => {
+  const segmenter = new Intl.Segmenter('es', { granularity: 'grapheme' });
+  for (const sample of ['', '¡Niño u\u0308!', '\uD800x\uDFFF', 'A👨‍👩‍👧‍👦🇪🇸👍🏽B', 'á'.repeat(5001), 'a'.repeat(4999) + '👩‍💻', '\r\nA']) {
+    const normalized = sample.replace(/[\uD800-\uDFFF]/gu, '\uFFFD').normalize('NFC');
+    for (const limit of [0, 1, 2, 5, 12, 5000]) {
+      let expected = '';
+      for (const { segment } of segmenter.segment(normalized)) {
+        if (expected.length + segment.length > limit) break;
+        expected += segment;
+      }
+      assert.equal(truncateText(sample, limit), expected);
+    }
+  }
+});
 
 test('reverse text preserves emoji, flags, joined families and Spanish combining accents', () => {
   assert.equal(flipText('A😊B', 'reverse'), 'B😊A');

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { criticalCSS } from './critical-css.mjs';
 
 const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
@@ -13,8 +14,19 @@ const fontFaces = [...fontCSS.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(match =
 assert.equal(fontFaces.length, 34, 'Preserve all original Google Fonts subsets and weights');
 for (const face of fontFaces) {
   assert.match(face, /font-display: swap/);
-  assert.match(face, /src: url\(https:\/\/fonts\.gstatic\.com\/[^)]+\.woff2\)/);
+  assert.match(face, /src: url\((?:https:\/\/fonts\.gstatic\.com\/[^)]+|\/assets\/(?:inter|outfit)-latin-[a-f0-9]{12})\.woff2\)/);
   assert.match(face, /unicode-range:/);
+}
+for (const [family, hash] of [
+  ['inter', '3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62'],
+  ['outfit', '6c18d579fd87c3776be068b762cbc83fde3acb543d49eabd3ade842eb987e887'],
+]) {
+  const file = `/assets/${family}-latin-${hash.slice(0, 12)}.woff2`;
+  const bytes = fs.readFileSync(`dist${file}`);
+  assert.equal(bytes.toString('ascii', 0, 4), 'wOF2', `Valid local ${family} font`);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, `Unmodified original ${family} font`);
+  assert.ok(fontCSS.includes(file), `Use local ${family} font`);
+  assert.match(fs.readFileSync(`dist/licenses/${family}-OFL.txt`, 'utf8'), /SIL OPEN FONT LICENSE Version 1.1/);
 }
 for (const url of urls) {
   const route = new URL(url).pathname;
