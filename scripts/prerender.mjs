@@ -3,7 +3,14 @@ import path from 'node:path';
 import { render } from '../.ssr/entry-server.js';
 
 const dist = path.resolve('dist');
-const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
+let template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
+// Preserve every compiled rule while removing the stylesheet network round trip.
+// The complete stylesheet also covers menus, saved input and client navigation.
+template = template.replace(/<link\b[^>]*rel="stylesheet"[^>]*href="(\/assets\/[^\"]+\.css)"[^>]*>/g, (_, href) => {
+  const css = fs.readFileSync(path.join(dist, href), 'utf8');
+  if (/<\/style/i.test(css)) throw new Error('Unsafe inline stylesheet');
+  return `<style data-site-styles>${css}</style>`;
+});
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
 const manifest = JSON.parse(fs.readFileSync(path.join(dist, '.vite/manifest.json'), 'utf8'));
 const toolPages = {

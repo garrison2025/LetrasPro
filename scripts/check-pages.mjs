@@ -28,6 +28,13 @@ for (const url of urls) {
   assert.ok(html.includes('property="og:image"'), `Share image: ${route}`);
   assert.ok(html.includes('data-prerendered="true"'), `Initial content: ${route}`);
   assert.ok(!html.includes('fonts.googleapis.com'), `No render-blocking font stylesheet: ${route}`);
+  assert.ok(!/<link[^>]+rel="stylesheet"/.test(html), `No stylesheet request before first paint: ${route}`);
+  const inlineCSS = html.match(/<style data-site-styles>([^]*?)<\/style>/)?.[1];
+  const builtCSS = manifest['index.html'].css.map(file => fs.readFileSync(path.join('dist', file), 'utf8')).join('');
+  assert.equal(inlineCSS, builtCSS, `Complete compiled stylesheet preserved: ${route}`);
+  const fontPreloads = [...html.matchAll(/<link[^>]+rel="preload"[^>]+as="font"[^>]+href="([^"]+)"[^>]+crossorigin/g)].map(match => match[1]);
+  assert.equal(fontPreloads.length, 2, `Only the two first-screen fonts preloaded: ${route}`);
+  for (const font of fontPreloads) assert.ok(inlineCSS.includes(font), `Preload matches the existing font: ${route}`);
   const preloads = [...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="([^"]+)"/g)].map(match => match[1]);
   const routeChunks = preloads.filter(file => Object.entries(manifest).some(([key, entry]) => key.startsWith('pages/') && `/${entry.file}` === file));
   assert.equal(routeChunks.length, 1, `Preload only the current page module: ${route}`);
