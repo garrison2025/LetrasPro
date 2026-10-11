@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { criticalCSS } from './critical-css.mjs';
 
 const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
@@ -28,10 +29,15 @@ for (const url of urls) {
   assert.ok(html.includes('property="og:image"'), `Share image: ${route}`);
   assert.ok(html.includes('data-prerendered="true"'), `Initial content: ${route}`);
   assert.ok(!html.includes('fonts.googleapis.com'), `No render-blocking font stylesheet: ${route}`);
-  assert.ok(!/<link[^>]+rel="stylesheet"/.test(html), `No stylesheet request before first paint: ${route}`);
-  const inlineCSS = html.match(/<style data-site-styles>([^]*?)<\/style>/)?.[1];
+  assert.ok(!/<link[^>]+rel="stylesheet"/.test(html.replace(/<noscript>[^]*?<\/noscript>/g, '')), `No blocking stylesheet before first paint: ${route}`);
+  const inlineCSS = html.match(/<style data-critical-styles>([^]*?)<\/style>/)?.[1];
   const builtCSS = manifest['index.html'].css.map(file => fs.readFileSync(path.join('dist', file), 'utf8')).join('');
-  assert.equal(inlineCSS, builtCSS, `Complete compiled stylesheet preserved: ${route}`);
+  const initialContent = html.slice(html.indexOf('<div id="root"'), html.lastIndexOf('</div>') + 6);
+  assert.equal(inlineCSS, criticalCSS(builtCSS, initialContent), `Initial styles match compiled rules: ${route}`);
+  for (const file of manifest['index.html'].css) {
+    assert.ok(html.includes(`rel="preload" as="style" href="/${file}" onload="this.onload=null;this.rel='stylesheet'"`), `Complete stylesheet loads asynchronously: ${route}`);
+    assert.ok(html.includes(`<noscript><link rel="stylesheet" href="/${file}"></noscript>`), `Styles without JavaScript: ${route}`);
+  }
   const fontPreloads = [...html.matchAll(/<link[^>]+rel="preload"[^>]+as="font"[^>]+href="([^"]+)"[^>]+crossorigin/g)].map(match => match[1]);
   assert.equal(fontPreloads.length, 2, `Only the two first-screen fonts preloaded: ${route}`);
   for (const font of fontPreloads) assert.ok(inlineCSS.includes(font), `Preload matches the existing font: ${route}`);
