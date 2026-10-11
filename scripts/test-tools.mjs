@@ -59,6 +59,21 @@ test('reverse text preserves emoji, flags, joined families and Spanish combining
   assert.equal(flipText('', 'reverse'), '');
 });
 
+test('large pasted text stops segmentation as soon as the input budget is reached', () => {
+  const OriginalSegmenter = Intl.Segmenter;
+  let visited = 0;
+  try {
+    Intl.Segmenter = class {
+      segment(value) {
+        const segments = new OriginalSegmenter('es', { granularity: 'grapheme' }).segment(value);
+        return (function* () { for (const part of segments) { visited++; yield part; } })();
+      }
+    };
+    assert.equal(truncateText('👩‍💻'.repeat(20000), 10), '👩‍💻👩‍💻');
+    assert.equal(visited, 3, 'Do not iterate the remaining 19,997 emoji');
+  } finally { Intl.Segmenter = OriginalSegmenter; }
+});
+
 test('older browsers also keep graphemes intact without Intl.Segmenter', () => {
   const segmenter = Intl.Segmenter;
   try {

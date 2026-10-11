@@ -28,6 +28,15 @@ const INSTAGRAM_BIO_LIMIT = 150;
 
 const QUICK_SYMBOLS = ['★', '✨', '⚡', '꧁', '꧂', '❤', '☠', '⚔', '✿', '❣', 'ღ', '♕', '➳', '➤', '•', '░', '【', '】'];
 
+// Keep each font's conversion when the list is reordered or extended.
+const FontPreview = React.memo(({ font, originalText, ...props }: Omit<React.ComponentProps<typeof FontCard>, 'rawText' | 'displaySegments'>) => {
+  const preview = useMemo(() => {
+    const rawText = applyDecoration(convertText(originalText, font.map, font.category === 'vaporwave'), 'none');
+    return { rawText, displaySegments: getDisplaySegments(rawText, font.map) };
+  }, [font, originalText]);
+  return <FontCard font={font} originalText={originalText} {...preview} {...props} />;
+});
+
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -325,11 +334,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   const visibleFonts = useMemo(() => filteredFonts.slice(0, visibleCount), [filteredFonts, visibleCount]);
   const previewText = useMemo(() => transformText(debouncedText || 'Vista Previa', textCase), [debouncedText, textCase]);
-  const fontPreviews = useMemo(() => visibleFonts.map(font => {
-    const mappedText = convertText(previewText, font.map, font.category === 'vaporwave');
-    const rawText = applyDecoration(mappedText, activeDecorator);
-    return { font, rawText, segments: getDisplaySegments(rawText, font.map) };
-  }), [visibleFonts, previewText, activeDecorator]);
   const hasMore = visibleCount < filteredFonts.length;
 
   const getIcon = (iconName: string) => {
@@ -598,14 +602,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             <button type="button" onClick={() => { updateSearchQuery(''); setActiveTone('Todos'); }} className="px-5 py-3 rounded-xl bg-primary-600 text-white font-bold">Restablecer filtros</button>
           </div>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {fontPreviews.map(({ font, rawText, segments }) => {
+            {visibleFonts.map(font => {
               return (
-                <FontCard
+                <FontPreview
                   key={font.id}
                   font={font}
-                  rawText={rawText}
                   originalText={previewText} // Pass readable text for accessibility
-                  displaySegments={segments}
                   isFavorite={favorites.includes(font.id)}
                   viewMode={viewMode}
                   onToggleFavorite={toggleFavorite}

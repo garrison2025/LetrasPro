@@ -32,9 +32,17 @@ export function truncateText(text: string, limit = MAX_INPUT_LENGTH): string {
   const normalized = text.replace(/[\uD800-\uDFFF]/gu, '\uFFFD').normalize('NFC');
   if (normalized.length <= limit) return normalized;
   let result = '';
-  for (const character of splitCharacters(normalized)) {
-    if (result.length + character.length > limit) break;
-    result += character;
+  if (typeof Intl.Segmenter === 'function') {
+    // Stop at the budget instead of materializing every grapheme in a large paste.
+    for (const { segment } of new Intl.Segmenter('es', { granularity: 'grapheme' }).segment(normalized)) {
+      if (result.length + segment.length > limit) break;
+      result += segment;
+    }
+  } else {
+    for (const character of splitCharacters(normalized)) {
+      if (result.length + character.length > limit) break;
+      result += character;
+    }
   }
   return result;
 }
