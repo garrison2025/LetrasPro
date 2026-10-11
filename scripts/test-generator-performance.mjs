@@ -149,3 +149,44 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
     delete globalThis.previewConversions;
   }
 });
+
+test('case buttons commit their state before deferred previews and the final text catches up', async () => {
+  const previousWindow = globalThis.window;
+  const previousStorage = globalThis.localStorage;
+  const previousAct = globalThis.IS_REACT_ACT_ENVIRONMENT;
+  const commits = [];
+  globalThis.window = { addEventListener() {}, removeEventListener() {} };
+  globalThis.localStorage = { getItem() { return null; }, setItem() {} };
+  globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+  globalThis.fontCardRenders = 0;
+  let renderer;
+  try {
+    const recordCommit = () => {
+      if (!renderer) return;
+      commits.push({
+        upper: renderer.root.findByProps({ 'aria-label': 'Convertir a mayúsculas' }).props['aria-pressed'],
+        preview: renderer.root.findAllByProps({ role: 'img' })[0].props['aria-label'],
+      });
+    };
+    await act(async () => {
+      renderer = TestRenderer.create(React.createElement(React.Profiler, { id: 'generator', onRender: recordCommit },
+        React.createElement(MemoryRouter, null, React.createElement(GeneratorPage, { config: PAGE_CONFIGS.home }))), {
+        unstable_isConcurrent: true,
+        createNodeMock: () => ({ value: '', getBoundingClientRect: () => ({ bottom: 200 }) }),
+      });
+    });
+    const latest = 'Último ñ 👨‍👩‍👧‍👦🇪🇸';
+    await act(async () => renderer.root.findByProps({ 'aria-label': 'Texto para convertir' }).props.onChange({ target: { value: latest } }));
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 330)); });
+    commits.length = 0;
+    await act(async () => renderer.root.findByProps({ 'aria-label': 'Convertir a mayúsculas' }).props.onClick());
+    assert.ok(commits.some(commit => commit.upper && commit.preview === latest), 'Button feedback is committed before converting the previews');
+    assert.equal(commits.at(-1).preview, latest.toUpperCase(), 'The preview catches up without a fixed extra timer');
+  } finally {
+    if (renderer) await act(async () => renderer.unmount());
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+    if (previousStorage === undefined) delete globalThis.localStorage; else globalThis.localStorage = previousStorage;
+    if (previousAct === undefined) delete globalThis.IS_REACT_ACT_ENVIRONMENT; else globalThis.IS_REACT_ACT_ENVIRONMENT = previousAct;
+    delete globalThis.fontCardRenders;
+  }
+});

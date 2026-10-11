@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback, useDeferredValue } from 'react';
 import { useLocation, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { PageConfig, TextCase, FontStyle } from '../types';
@@ -333,7 +333,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const availableTones = useMemo(() => TONES.filter(tone => FONTS.some(font => config.filter(font) && matchesTone(font, tone))), [config.filter]);
 
   const visibleFonts = useMemo(() => filteredFonts.slice(0, visibleCount), [filteredFonts, visibleCount]);
-  const previewText = useMemo(() => transformText(debouncedText || 'Vista Previa', textCase), [debouncedText, textCase]);
+  const transformedPreview = useMemo(() => transformText(debouncedText || 'Vista Previa', textCase), [debouncedText, textCase]);
+  // Each memoized preview can yield to typing while React renders the new text.
+  const previewText = useDeferredValue(transformedPreview);
   const hasMore = visibleCount < filteredFonts.length;
 
   const getIcon = (iconName: string) => {
