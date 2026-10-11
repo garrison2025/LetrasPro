@@ -14,7 +14,7 @@ const fontFaces = [...fontCSS.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(match =
 assert.equal(fontFaces.length, 34, 'Preserve all original Google Fonts subsets and weights');
 for (const face of fontFaces) {
   assert.match(face, /font-display: swap/);
-  assert.match(face, /src: url\((?:https:\/\/fonts\.gstatic\.com\/[^)]+|\/assets\/(?:inter|outfit)-latin-[a-f0-9]{12})\.woff2\)/);
+  assert.match(face, /src: url\((?:https:\/\/fonts\.gstatic\.com\/[^)]+|\/assets\/(?:inter|outfit)-(?:latin|latin-ext|cyrillic)-[a-f0-9]{12})\.woff2\)/);
   assert.match(face, /unicode-range:/);
 }
 for (const [family, hash] of [
@@ -27,6 +27,14 @@ for (const [family, hash] of [
   assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, `Unmodified original ${family} font`);
   assert.ok(fontCSS.includes(file), `Use local ${family} font`);
   assert.match(fs.readFileSync(`dist/licenses/${family}-OFL.txt`, 'utf8'), /SIL OPEN FONT LICENSE Version 1.1/);
+}
+for (const [subset, hash] of [
+  ['cyrillic', '71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075'],
+  ['latin-ext', '5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2'],
+]) {
+  const file = `/assets/inter-${subset}-${hash.slice(0, 12)}.woff2`;
+  assert.equal(createHash('sha256').update(fs.readFileSync(`dist${file}`)).digest('hex'), hash, `Original Inter ${subset} font`);
+  assert.ok(fontCSS.includes(file));
 }
 for (const url of urls) {
   const route = new URL(url).pathname;

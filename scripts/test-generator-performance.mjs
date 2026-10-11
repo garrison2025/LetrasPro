@@ -17,6 +17,7 @@ function loadSource(filename) {
   let source = fs.readFileSync(filename, 'utf8');
   if (filename.endsWith('.json')) return dataURL(`export default ${source}`);
   if (filename.endsWith('FontCard.tsx')) source = source.replace('const [justCopied', 'globalThis.fontCardRenders++; const [justCopied');
+  if (filename.endsWith('fontMaps.ts')) source = source.replace('const normalized = text.normalize', "if (text === globalThis.trackedPreviewText) globalThis.previewConversions++; const normalized = text.normalize");
   let output = ts.transpileModule(source, {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, jsx: ts.JsxEmit.React },
   }).outputText;
@@ -130,13 +131,21 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
     await act(async () => { await new Promise(resolve => setTimeout(resolve, 330)); });
     const preview = renderer.root.findAllByProps({ role: 'img' }).find(node => node.props['aria-label'] === latest.toUpperCase());
     assert.ok(preview, 'Preview eventually renders the latest text');
+    globalThis.trackedPreviewText = latest.toUpperCase();
+    globalThis.previewConversions = 0;
     await act(async () => { renderer.root.findByProps({ 'aria-label': 'Añadir Normal Sans a favoritos' }).props.onClick({ stopPropagation() {} }); });
     assert.ok(renderer.root.findByProps({ 'aria-label': 'Quitar Normal Sans de favoritos' }));
+    assert.equal(globalThis.previewConversions, 0, 'Favoriting keeps every existing conversion');
+    await act(async () => { renderer.root.findAllByType('button').find(node => node.children.includes('Cargar más estilos')).props.onClick(); });
+    assert.equal(globalThis.previewConversions, 24, 'Loading more converts only the 24 new cards');
+    assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 48);
   } finally {
     if (renderer) await act(async () => { renderer.unmount(); });
     if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
     if (previousStorage === undefined) delete globalThis.localStorage; else globalThis.localStorage = previousStorage;
     if (navigatorDescriptor) Object.defineProperty(globalThis, 'navigator', navigatorDescriptor); else delete globalThis.navigator;
     delete globalThis.fontCardRenders;
+    delete globalThis.trackedPreviewText;
+    delete globalThis.previewConversions;
   }
 });
