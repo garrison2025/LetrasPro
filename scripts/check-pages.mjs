@@ -39,6 +39,7 @@ for (const [subset, hash] of [
 for (const url of urls) {
   const route = new URL(url).pathname;
   const html = fs.readFileSync(path.join('dist', route === '/' ? 'index.html' : `${route}.html`), 'utf8');
+  assert.ok(!/[\u0000\uFFFD]/u.test(html), `No corrupt Unicode in prerendered page: ${route}`);
   assert.equal((html.match(/<h1[\s>]/g) || []).length, 1, `H1: ${route}`);
   const title = html.match(/<title[^>]*>([^]*?)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `Unique title: ${route}`);

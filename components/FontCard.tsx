@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
 import { copyText } from '../services/clipboard';
@@ -31,6 +31,7 @@ const FontCard: React.FC<FontCardProps> = ({
   const [justCopied, setJustCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
+  const imageGenerationRef = useRef(false);
   const [imageError, setImageError] = useState(false);
 
   const handleCopy = async () => {
@@ -54,17 +55,25 @@ const FontCard: React.FC<FontCardProps> = ({
 
   const handleDownloadImage = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (imageGenerationRef.current) return;
+    imageGenerationRef.current = true;
     setIsGeneratingImg(true);
     setImageError(false);
+    let imageUrl: string | undefined;
     
     try {
+      // Capture this click's text before yielding so later edits cannot change the export.
+      const text = getCurrentText(font);
+      const fontSize = 54;
+      const canvasFont = `900 ${fontSize}px Inter, sans-serif`;
+      await new Promise<void>(resolve => setTimeout(resolve, 0));
+      await document.fonts?.load(canvasFont, text).catch(() => undefined);
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas unavailable');
 
-      const lines = getCurrentText(font).split('\n');
-      const fontSize = 54;
-      ctx.font = `900 ${fontSize}px sans-serif`;
+      const lines = text.split('\n');
+      ctx.font = canvasFont;
       
       const maxLineWidth = Math.max(...lines.map(l => ctx.measureText(l).width));
       
@@ -85,7 +94,7 @@ const FontCard: React.FC<FontCardProps> = ({
 
       // Texto
       ctx.fillStyle = '#0f172a'; // Slate 900
-      ctx.font = `900 ${fontSize}px sans-serif`;
+      ctx.font = canvasFont;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
@@ -100,12 +109,20 @@ const FontCard: React.FC<FontCardProps> = ({
 
       const link = document.createElement('a');
       link.download = `letras-pro-${font.id}.png`;
-      link.href = canvas.toDataURL('image/png');
+      const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) throw new Error('Image encoding unavailable');
+      imageUrl = URL.createObjectURL(blob);
+      link.href = imageUrl;
       link.click();
     } catch (err) {
       console.warn('LetrasPro: image export unavailable');
       setImageError(true);
     } finally {
+      if (imageUrl) {
+        const completedUrl = imageUrl;
+        setTimeout(() => URL.revokeObjectURL(completedUrl), 1000);
+      }
+      imageGenerationRef.current = false;
       setIsGeneratingImg(false);
     }
   };
@@ -199,7 +216,7 @@ const FontCard: React.FC<FontCardProps> = ({
       <div className="p-6 md:p-8 relative z-10">
         <div className="flex justify-between items-start mb-4 md:mb-6">
            <div className="flex flex-wrap items-center gap-2">
-             <span className="inline-flex items-center px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] shadow-sm">
+             <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 uppercase tracking-[0.2em] shadow-sm">
                {font.name}
              </span>
              {font.compatibility === 'high' ? (
@@ -221,11 +238,12 @@ const FontCard: React.FC<FontCardProps> = ({
              <button
                 onClick={handleDownloadImage}
                 disabled={isGeneratingImg}
+                aria-busy={isGeneratingImg}
                 className="p-2 md:p-3 text-slate-500 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm"
                 title="Descargar PNG Pro"
                 aria-label={`Descargar imagen de estilo ${font.name}`}
              >
-                <Download size={18} />
+                <Download size={18} className={isGeneratingImg ? 'animate-pulse' : undefined} />
              </button>
              <button
                 className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm ${
@@ -266,7 +284,7 @@ const FontCard: React.FC<FontCardProps> = ({
         
         <div className="mt-4 md:mt-6 flex flex-wrap gap-1 items-center">
           {font.tags?.map(t => (
-            <span key={t} className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
+            <span key={t} className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest px-2 py-0.5 border border-slate-100 dark:border-slate-700 rounded-md">#{t}</span>
           ))}
         </div>
         {copyError && <p role="alert" className="mt-3 text-sm text-red-600 dark:text-red-400">No se pudo copiar. Selecciona el texto y cópialo manualmente.</p>}
