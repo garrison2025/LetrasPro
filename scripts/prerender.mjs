@@ -5,6 +5,20 @@ import { render } from '../.ssr/entry-server.js';
 const dist = path.resolve('dist');
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const sitemap = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
+const manifest = JSON.parse(fs.readFileSync(path.join(dist, '.vite/manifest.json'), 'utf8'));
+const toolPages = {
+  '/repetidor-de-texto': 'RepeaterPage',
+  '/texto-glitch': 'GlitchPage',
+  '/texto-invisible': 'InvisibleTextPage',
+  '/texto-al-reves': 'FlipTextPage',
+  '/letras-grandes': 'BigTextPage',
+  '/blog': 'BlogIndexPage',
+  '/sobre-nosotros': 'AboutPage',
+  '/contacto': 'ContactPage',
+  '/politica-de-privacidad': 'PrivacyPage',
+  '/terminos-y-condiciones': 'TermsPage',
+  '/404': 'NotFoundPage',
+};
 const routes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1]).pathname);
 if (new Set(routes).size !== routes.length || routes.length !== 29) throw new Error('Unexpected route list; check sitemap and routes together.');
 
@@ -18,6 +32,11 @@ for (const route of [...routes, '/404']) {
   const description = getMeta('description') || '';
   const canonical = `https://conversordeletrasbonitas.org${route === '/' ? '/' : route}`;
   const extras = [];
+  const pageName = route.startsWith('/blog/') ? 'BlogPostPage' : toolPages[route] || 'GeneratorPage';
+  const pageChunk = manifest[`pages/${pageName}.tsx`]?.file;
+  if (!pageChunk || !fs.existsSync(path.join(dist, pageChunk))) throw new Error(`Missing page chunk: ${route}`);
+  // Discover only this route's lazy module before the application starts hydrating.
+  extras.push(`<link rel="modulepreload" crossorigin href="/${pageChunk}">`);
   for (const [property, value] of [['og:type','website'],['og:title',title],['og:description',description],['og:url',canonical],['og:image','https://conversordeletrasbonitas.org/og-image.png']]) {
     if (!page.includes(`property="${property}"`)) extras.push(`<meta data-rh="true" property="${property}" content="${value.replace(/"/g, '&quot;')}"/>`);
   }

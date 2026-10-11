@@ -36,6 +36,57 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const { default: GeneratorPage } = await import(loadSource(path.join(root, 'pages/GeneratorPage.tsx')));
 const { PAGE_CONFIGS } = await import(loadSource(path.join(root, 'constants.ts')));
 
+test('sticky input observes viewport crossings and rebuilds at desktop/mobile resize without a scroll listener', async () => {
+  const previousWindow = globalThis.window;
+  const previousStorage = globalThis.localStorage;
+  const previousObserver = globalThis.IntersectionObserver;
+  const listeners = new Map();
+  const observers = [];
+  globalThis.window = {
+    innerWidth: 390,
+    addEventListener: (name, listener) => listeners.set(name, listener),
+    removeEventListener: (name, listener) => { if (listeners.get(name) === listener) listeners.delete(name); },
+  };
+  globalThis.localStorage = { getItem() { return null; }, setItem() {} };
+  globalThis.IntersectionObserver = class {
+    constructor(callback, options) { this.callback = callback; this.options = options; observers.push(this); }
+    observe(element) { this.element = element; }
+    disconnect() { this.disconnected = true; }
+  };
+  let renderer;
+  try {
+    await act(async () => {
+      renderer = TestRenderer.create(React.createElement(MemoryRouter, null, React.createElement(GeneratorPage, { config: PAGE_CONFIGS.home })), {
+        createNodeMock: () => ({ value: '', getBoundingClientRect: () => ({ bottom: 200 }) }),
+      });
+    });
+    const stickyHidden = () => renderer.root.findAllByType('div').find(node => node.props.className?.includes('fixed top-[64px]')).props.hidden;
+    assert.equal(listeners.has('scroll'), false);
+    assert.equal(observers[0].options.rootMargin, '-64px 0px 0px 0px');
+    assert.equal(stickyHidden(), true);
+    await act(async () => observers[0].callback([{ boundingClientRect: { bottom: 64 } }]));
+    assert.equal(stickyHidden(), false, 'Show sticky input above the mobile header');
+    await act(async () => observers[0].callback([{ boundingClientRect: { bottom: 900 } }]));
+    assert.equal(stickyHidden(), true, 'Do not show sticky input when the editor is below the viewport');
+    window.innerWidth = 1280;
+    await act(async () => listeners.get('resize')());
+    assert.equal(observers[0].disconnected, true);
+    assert.equal(observers[1].options.rootMargin, '-80px 0px 0px 0px');
+    await act(async () => observers[1].callback([{ boundingClientRect: { bottom: 79 } }]));
+    assert.equal(stickyHidden(), false);
+    await act(async () => renderer.unmount());
+    renderer = null;
+    assert.equal(observers[1].disconnected, true);
+    assert.equal(listeners.has('resize'), false);
+  } finally {
+    if (renderer) await act(async () => renderer.unmount());
+    globalThis.window = previousWindow;
+    globalThis.localStorage = previousStorage;
+    if (previousObserver === undefined) delete globalThis.IntersectionObserver;
+    else globalThis.IntersectionObserver = previousObserver;
+  }
+});
+
 test('typing skips unchanged cards while immediate copy, case changes and preview updates stay correct', async () => {
   const previousWindow = globalThis.window;
   const previousStorage = globalThis.localStorage;

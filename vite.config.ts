@@ -43,6 +43,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   ssr: { noExternal: ['react-helmet-async'] },
   build: {
     outDir: 'dist',
+    manifest: !isSsrBuild,
     sourcemap: false,
     minify: isSsrBuild ? false : 'terser',
     terserOptions: {
