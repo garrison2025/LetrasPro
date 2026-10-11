@@ -1,7 +1,11 @@
 export function splitCharacters(text: string): string[] {
   const normalized = text.normalize('NFC');
+  // These Latin characters cannot join into multi-code-point graphemes.
+  if (/^[\u0020-\u007e\u00a0-\u00ff\t\n]*$/.test(normalized)) return [...normalized];
   if (typeof Intl.Segmenter === 'function') {
-    return [...new Intl.Segmenter('es', { granularity: 'grapheme' }).segment(normalized)].map(part => part.segment);
+    const result: string[] = [];
+    for (const part of new Intl.Segmenter('es', { granularity: 'grapheme' }).segment(normalized)) result.push(part.segment);
+    return result;
   }
   // Keep combining marks, emoji modifiers, flags and joined emoji together on older browsers.
   const result: string[] = [];
@@ -25,8 +29,10 @@ export const MAX_OUTPUT_LENGTH = 100000;
 
 // Retain the existing UTF-16 budget without cutting a visible character in half.
 export function truncateText(text: string, limit = MAX_INPUT_LENGTH): string {
+  const normalized = text.replace(/[\uD800-\uDFFF]/gu, '\uFFFD').normalize('NFC');
+  if (normalized.length <= limit) return normalized;
   let result = '';
-  for (const character of splitCharacters(text.replace(/[\uD800-\uDFFF]/gu, '\uFFFD'))) {
+  for (const character of splitCharacters(normalized)) {
     if (result.length + character.length > limit) break;
     result += character;
   }
