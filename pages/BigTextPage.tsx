@@ -48,10 +48,10 @@ const BigTextPage: React.FC = () => {
                  id="big-text-input" value={text}
                  onChange={(e) => setText(truncateText(e.target.value))}
                  placeholder="HOLA"
-                 className="flex-grow px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-green-500 outline-none"
+                 className="min-w-0 flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-green-500 outline-none"
                  maxLength={15}
                />
-               <button aria-label="Borrar texto" onClick={() => setText('')} className="p-3 text-slate-400 hover:text-red-500 bg-slate-100 dark:bg-slate-700 rounded-xl transition-colors"><Trash2 size={20} /></button>
+               <button aria-label="Borrar texto" onClick={() => setText('')} className="shrink-0 p-3 text-slate-600 dark:text-slate-300 hover:text-red-600 bg-slate-100 dark:bg-slate-700 rounded-xl transition-colors"><Trash2 size={20} /></button>
              </div>
              <p className="text-xs text-slate-400 mt-2 text-right">Máximo 15 caracteres. Admite letras, números y acentos; otros símbolos se conservan sin ampliar.</p>
           </div>

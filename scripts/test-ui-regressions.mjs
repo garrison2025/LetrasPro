@@ -102,7 +102,7 @@ test('PNG export uses current text and rejects oversized images without triggeri
     fillRect() {}, fillText(text) { rendered.push(text); },
   };
   globalThis.document = { createElement: tag => tag === 'canvas'
-    ? { getContext: () => context, toDataURL: () => 'data:image/png;base64,test' }
+    ? { getContext: () => context, toBlob: callback => callback(new Blob(['png'], { type: 'image/png' })) }
     : { click() { downloads++; } } };
   console.warn = () => {};
   const font = FONTS[0];
@@ -119,6 +119,53 @@ test('PNG export uses current text and rejects oversized images without triggeri
     assert.equal(downloads, 1);
     assert.ok(JSON.stringify(renderer.toJSON()).includes('imagen'));
     assert.equal(download().props.disabled, false);
+  } finally {
+    await act(async () => renderer.unmount());
+    globalThis.document = previousDocument; console.warn = previousWarn;
+  }
+});
+
+test('PNG export stays busy until encoding finishes, snapshots text and recovers from encoding failure', async () => {
+  const previousDocument = globalThis.document;
+  const previousWarn = console.warn;
+  let encode; let currentText = 'María 🇪🇸'; let downloads = 0;
+  const rendered = [];
+  const context = {
+    measureText: () => ({ width: 120 }), createLinearGradient: () => ({ addColorStop() {} }),
+    fillRect() {}, fillText(text) { rendered.push(text); },
+  };
+  globalThis.document = {
+    fonts: { load: async () => [] },
+    createElement: tag => tag === 'canvas'
+      ? { getContext: () => context, toBlob: callback => { encode = callback; } }
+      : { click() { downloads++; } },
+  };
+  console.warn = () => {};
+  const renderer = await mount(React.createElement(FontCard, {
+    font: FONTS[0], rawText: 'Old', originalText: 'Old', displaySegments: [], isFavorite: false,
+    viewMode: 'list', onToggleFavorite() {}, onCopy() {}, getCurrentText: () => currentText,
+  }));
+  const download = () => renderer.root.findAllByType('button').find(node => node.props['aria-label']?.startsWith('Descargar'));
+  let pending;
+  try {
+    await act(async () => { pending = download().props.onClick({ stopPropagation() {} }); });
+    assert.equal(download().props.disabled, true);
+    assert.equal(download().props['aria-busy'], true);
+    currentText = 'Later edit';
+    await act(async () => download().props.onClick({ stopPropagation() {} }));
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 10)); });
+    assert.ok(rendered.includes('María 🇪🇸'));
+    assert.ok(!rendered.includes('Later edit'));
+    assert.equal(downloads, 0);
+    await act(async () => { encode(null); await pending; });
+    assert.equal(download().props.disabled, false);
+    assert.ok(renderer.root.findAllByProps({ role: 'alert' }).length);
+    await act(async () => { pending = download().props.onClick({ stopPropagation() {} }); });
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 10)); });
+    await act(async () => { encode(new Blob(['png'], { type: 'image/png' })); await pending; });
+    assert.equal(downloads, 1);
+    assert.equal(download().props.disabled, false);
+    assert.equal(renderer.root.findAllByProps({ role: 'alert' }).length, 0);
   } finally {
     await act(async () => renderer.unmount());
     globalThis.document = previousDocument; console.warn = previousWarn;

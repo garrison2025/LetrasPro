@@ -40,9 +40,9 @@ const ContactPage: React.FC = () => {
                   <div className="bg-white/20 p-3 rounded-lg">
                     <Mail size={24} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm text-primary-200 font-medium uppercase tracking-wider">Email</p>
-                    <a href="mailto:info@conversordeletrasbonitas.org" className="text-lg font-semibold hover:text-primary-200 transition-colors">
+                    <a href="mailto:info@conversordeletrasbonitas.org" className="break-all text-lg font-semibold hover:text-primary-200 transition-colors">
                       info@conversordeletrasbonitas.org
                     </a>
                   </div>

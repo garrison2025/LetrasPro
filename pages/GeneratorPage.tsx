@@ -433,7 +433,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       </div>
 
       <div className="pt-6 md:pt-12 pb-8 md:pb-20 px-4 text-center">
-        <nav className="flex justify-center items-center gap-2 text-xs md:text-sm text-slate-500 mb-3 md:mb-6" aria-label="Breadcrumb">
+        <nav className="flex justify-center items-center gap-2 text-xs md:text-sm text-slate-600 dark:text-slate-300 mb-3 md:mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-primary-600 transition-colors flex items-center gap-1 font-medium">
             <Home size={12} /> Inicio
           </Link>
@@ -456,7 +456,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <div ref={inputContainerRef} className="bg-white dark:bg-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-6 md:mb-8">
           <div className="p-5 md:p-8">
             <div className="flex flex-wrap justify-between items-center mb-4 md:mb-6 gap-3">
-              <div className="hidden sm:flex gap-2 items-center text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
+              <div className="hidden sm:flex gap-2 items-center text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
                 <Type size={14} /> Panel
               </div>
               <div className="flex gap-1.5 md:gap-2 w-full sm:w-auto justify-between sm:justify-end">
@@ -465,7 +465,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                     <button
                       key={mode}
                       onClick={() => setTextCase(textCase === mode ? 'original' : mode)}
-                      className={`flex-1 sm:flex-none px-3 py-2 md:py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800'}`}
+                      className={`flex-1 sm:flex-none px-3 py-2 md:py-1.5 rounded-xl text-[10px] md:text-xs font-black uppercase tracking-tighter transition-all ${textCase === mode ? 'bg-primary-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'}`}
                       aria-label={`Convertir a ${mode === 'upper' ? 'mayúsculas' : mode === 'lower' ? 'minúsculas' : 'iniciales mayúsculas'}`}
                       aria-pressed={textCase === mode}
                     >
@@ -505,8 +505,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               value={inputText}
               onChange={(e) => setInputText(truncateText(e.target.value))}
               placeholder="Escribe aquí..."
-              // INCREASED CONTRAST FOR PLACEHOLDER: text-slate-400 instead of 300
-              className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-400 dark:placeholder:text-slate-600 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
+              // Keep the placeholder readable in both themes.
+              className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-600 dark:placeholder:text-slate-400 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
             />
             
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
@@ -526,7 +526,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                </div>
                <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-6">
                  <div className="flex flex-col items-start sm:items-end">
-                   <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+                   <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300 mb-1">
                      <Type size={12} /> Caracteres visibles
                    </div>
                    <div className="flex items-baseline gap-1" title="El límite de entrada es de 5000 unidades; un emoji puede ocupar varias. Comprueba el resultado en la aplicación de destino.">
@@ -556,7 +556,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                   placeholder="Buscar estilo..." aria-label="Buscar estilo" maxLength={100}
                   value={searchQuery}
                   onChange={(e) => updateSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white placeholder:text-slate-400"
+                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:ring-2 focus:ring-primary-500 outline-none transition-all shadow-sm text-slate-700 dark:text-white placeholder:text-slate-600 dark:placeholder:text-slate-400"
                 />
              </div>
              
@@ -676,7 +676,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           {config.recommendations && config.recommendations.length > 0 && (
             <section className="max-w-5xl mx-auto">
                <div className="text-center mb-10">
-                 <span className="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">
+                 <span className="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 mb-4">
                    <Sparkles size={14} /> Podría interesarte
                  </span>
                  <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white">Explora otras Herramientas</h2>
@@ -787,7 +787,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                  {ratingSaved ? 'Tu valoración personal está guardada en este navegador.' : 'Tu valoración está disponible solo en esta sesión; no se pudo guardar.'}
                </div>
              ) : (
-               <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
+               <p className="text-xs text-slate-600 dark:text-slate-300 font-bold uppercase tracking-widest">
                  Sin valoración personal
                </p>
              )}
