@@ -13,6 +13,9 @@ const toolPages = {
   '/texto-invisible': 'InvisibleTextPage',
   '/texto-al-reves': 'FlipTextPage',
   '/letras-grandes': 'BigTextPage',
+  '/moldes-de-letras-para-imprimir': 'PrintableLettersPage',
+  '/generador-de-firmas-bonitas': 'SignaturePage',
+  '/generador-de-texto-curvo': 'CurvedTextPage',
   '/blog': 'BlogIndexPage',
   '/sobre-nosotros': 'AboutPage',
   '/contacto': 'ContactPage',
@@ -21,7 +24,7 @@ const toolPages = {
   '/404': 'NotFoundPage',
 };
 const routes = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1]).pathname);
-if (new Set(routes).size !== routes.length || routes.length !== 29) throw new Error('Unexpected route list; check sitemap and routes together.');
+if (new Set(routes).size !== routes.length || routes.length !== 32) throw new Error('Unexpected route list; check sitemap and routes together.');
 
 for (const route of [...routes, '/404']) {
   const { html, head } = await render(route);

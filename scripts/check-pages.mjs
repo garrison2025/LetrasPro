@@ -120,7 +120,7 @@ for (const url of urls) {
   }
   crawlLinks.set(route, [...html.matchAll(/<a[^>]+href="(\/[^"?#]*)/g)].map(match => match[1]));
 }
-assert.equal(urls.length, 29);
+assert.equal(urls.length, 32);
 const reached = new Set();
 const pending = ['/'];
 while (pending.length) {
@@ -144,7 +144,7 @@ assert.ok(sw.includes('try { importScripts('));
 assert.ok(sw.indexOf('precacheAndRoute') < sw.indexOf('self.options ='));
 assert.match(JSON.parse(fs.readFileSync('dist/app-version.json', 'utf8')).release, /^(?:[a-f0-9]{12}|quality-20261010)$/);
 assert.match(fs.readFileSync('dist/_headers', 'utf8'), /\/app-version\.json\s+Cache-Control: no-store/);
-console.log('Verified all 29 pages, metadata, internal links, structured data, assets and 404.');
+console.log('Verified all 32 pages, metadata, internal links, structured data, assets and 404.');
 
 function applicationPageName(route) {
   if (route.startsWith('/blog/')) return 'BlogPostPage';
@@ -152,6 +152,9 @@ function applicationPageName(route) {
     '/repetidor-de-texto': 'RepeaterPage', '/texto-glitch': 'GlitchPage',
     '/texto-invisible': 'InvisibleTextPage', '/texto-al-reves': 'FlipTextPage',
     '/letras-grandes': 'BigTextPage', '/blog': 'BlogIndexPage',
+    '/moldes-de-letras-para-imprimir': 'PrintableLettersPage',
+    '/generador-de-firmas-bonitas': 'SignaturePage',
+    '/generador-de-texto-curvo': 'CurvedTextPage',
     '/sobre-nosotros': 'AboutPage', '/contacto': 'ContactPage',
     '/politica-de-privacidad': 'PrivacyPage', '/terminos-y-condiciones': 'TermsPage',
   }[route] || 'GeneratorPage';

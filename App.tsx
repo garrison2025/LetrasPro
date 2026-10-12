@@ -24,6 +24,9 @@ const GlitchPage = lazy(() => import('./pages/GlitchPage'));
 const InvisibleTextPage = lazy(() => import('./pages/InvisibleTextPage'));
 const FlipTextPage = lazy(() => import('./pages/FlipTextPage'));
 const BigTextPage = lazy(() => import('./pages/BigTextPage'));
+const PrintableLettersPage = lazy(() => import('./pages/PrintableLettersPage'));
+const SignaturePage = lazy(() => import('./pages/SignaturePage'));
+const CurvedTextPage = lazy(() => import('./pages/CurvedTextPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function App({ isStatic = false, helmetContext }: { isStatic?: boolean; helmetContext?: { helmet?: HelmetServerState } }) {
@@ -72,6 +75,9 @@ function App({ isStatic = false, helmetContext }: { isStatic?: boolean; helmetCo
                     <Route path="/texto-invisible" element={<InvisibleTextPage />} />
                     <Route path="/texto-al-reves" element={<FlipTextPage />} />
                     <Route path="/letras-grandes" element={<BigTextPage />} />
+                    <Route path="/moldes-de-letras-para-imprimir" element={<PrintableLettersPage />} />
+                    <Route path="/generador-de-firmas-bonitas" element={<SignaturePage />} />
+                    <Route path="/generador-de-texto-curvo" element={<CurvedTextPage />} />
 
                     {/* Blog Pages */}
                     <Route path="/blog" element={<BlogIndexPage />} />

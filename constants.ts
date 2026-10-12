@@ -388,5 +388,8 @@ export const NAVIGATION_LINKS: NavLink[] = [
   { label: 'Glitch', path: '/texto-glitch', group: 'tools' },
   { label: 'Al Revés', path: '/texto-al-reves', group: 'tools' },
   { label: 'Grandes', path: '/letras-grandes', group: 'tools' },
+  { label: 'Moldes para Imprimir', path: '/moldes-de-letras-para-imprimir', group: 'tools' },
+  { label: 'Firmas Bonitas', path: '/generador-de-firmas-bonitas', group: 'tools' },
+  { label: 'Texto Curvo', path: '/generador-de-texto-curvo', group: 'tools' },
   { label: 'Blog', path: '/blog' },
 ];

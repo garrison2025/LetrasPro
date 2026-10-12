@@ -32,7 +32,10 @@ const STATIC_PATHS = [
   '/sobre-nosotros',
   '/contacto',
   '/politica-de-privacidad',
-  '/terminos-y-condiciones'
+  '/terminos-y-condiciones',
+  '/moldes-de-letras-para-imprimir',
+  '/generador-de-firmas-bonitas',
+  '/generador-de-texto-curvo'
 ];
 
 const getBlogSlugs = () => {
