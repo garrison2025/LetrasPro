@@ -30,6 +30,9 @@ const Footer: React.FC = () => {
               <li><Link to="/texto-invisible" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Texto Invisible</Link></li>
               <li><Link to="/letras-graffiti" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Graffiti & Burbujas</Link></li>
               <li><Link to="/letras-tatuajes" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Fuentes Tatuajes</Link></li>
+              <li><Link to="/moldes-de-letras-para-imprimir" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Moldes de Letras</Link></li>
+              <li><Link to="/generador-de-firmas-bonitas" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Firmas Bonitas</Link></li>
+              <li><Link to="/generador-de-texto-curvo" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Texto Curvo</Link></li>
             </ul>
           </div>
 
