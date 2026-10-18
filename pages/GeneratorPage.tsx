@@ -98,9 +98,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const exampleFont = useMemo(() => FONTS.find(font => config.filter(font)
     && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
-  // Keep the homepage title concise; preserve other pages' date formatting.
+  // Format generator titles using the recorded content update date.
   const dynamicTitle = useMemo(() => {
-    if (config.path === '/') return config.title;
     let t = config.title;
     if (t.includes('2025')) {
       t = t.replace('2025', `${month} ${year}`);
@@ -108,7 +107,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       t = `${t} (${month} ${year})`;
     }
     return t;
-  }, [config.path, config.title, month, year]);
+  }, [config.title, month, year]);
 
   const dynamicDescription = config.description.replace('2025', year);
 
@@ -380,7 +379,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={config.title} />
+        <meta property="og:image:alt" content={config.path === '/' ? dynamicTitle : config.title} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Conversor de Letras Bonitas" />
         <meta name="twitter:card" content="summary_large_image" />
