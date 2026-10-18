@@ -379,7 +379,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={config.title} />
+        <meta property="og:image:alt" content={config.path === '/' ? dynamicTitle : config.title} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Conversor de Letras Bonitas" />
         <meta name="twitter:card" content="summary_large_image" />
