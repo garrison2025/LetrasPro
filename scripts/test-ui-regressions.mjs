@@ -62,8 +62,10 @@ test('desktop and mobile navigation expose every generator and tool, and close o
   globalThis.document = { addEventListener() {}, removeEventListener() {}, querySelector: () => null, documentElement: { classList: { add() {}, remove() {} } } };
   window.document = globalThis.document;
   let go;
+  let currentPath;
   function HeaderRoute() {
     go = useNavigate();
+    currentPath = useLocation().pathname;
     return React.createElement(Navbar);
   }
   let renderer;
@@ -76,12 +78,20 @@ test('desktop and mobile navigation expose every generator and tool, and close o
     for (const group of ['Generadores', 'Plataformas', 'Herramientas']) {
       await act(async () => control(`Abrir menú de ${group}`).props.onClick());
       links().forEach(href => desktopLinks.add(href));
+      await act(async () => control(`Abrir menú de ${group}`).props.onClick());
     }
     const required = [...Object.values(PAGE_CONFIGS).map(config => config.path),
       '/repetidor-de-texto', '/texto-invisible', '/texto-glitch', '/texto-al-reves', '/letras-grandes'];
     for (const route of required) assert.ok(desktopLinks.has(route), `Desktop entry: ${route}`);
     await act(async () => control('Abrir menú de navegación').props.onClick());
     for (const route of required) assert.ok(links().includes(route), `Mobile entry: ${route}`);
+    assert.equal(renderer.root.findAllByType('h3')[0].children.join(''), 'Plataformas', 'Platform entries precede the long generator list on mobile');
+    assert.ok(links().indexOf('/nicks-para-free-fire') < links().indexOf('/letras-cursivas'), 'Free Fire is near the start of the mobile menu');
+    const freeFire = renderer.root.findAllByType('a').find(node => node.props.href === '/nicks-para-free-fire');
+    await act(async () => freeFire.props.onClick({ button: 0, preventDefault() {} }));
+    assert.equal(currentPath, '/nicks-para-free-fire');
+    assert.equal(control('Abrir menú de navegación').props['aria-expanded'], false, 'Choosing Free Fire closes the mobile menu');
+    await act(async () => control('Abrir menú de navegación').props.onClick());
     await act(async () => go('/letras-para-tiktok'));
     assert.equal(control('Abrir menú de navegación').props['aria-expanded'], false);
     assert.ok(renderer.root.findAllByType('button').filter(node => node.props['aria-haspopup']).every(node => node.props['aria-expanded'] === false));
