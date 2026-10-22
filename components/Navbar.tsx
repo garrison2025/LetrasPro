@@ -195,9 +195,9 @@ const Navbar: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Plataformas</h3>
               <div className="grid grid-cols-1 gap-1">
-                {generators.map((link) => (
+                {platforms.map((link) => (
                   <RouterNavLink
                     key={link.path}
                     to={link.path}
@@ -218,9 +218,9 @@ const Navbar: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Plataformas</h3>
+              <h3 className="px-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Generadores</h3>
               <div className="grid grid-cols-1 gap-1">
-                {platforms.map((link) => (
+                {generators.map((link) => (
                   <RouterNavLink
                     key={link.path}
                     to={link.path}
