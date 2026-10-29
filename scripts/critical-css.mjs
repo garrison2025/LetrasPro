@@ -2,11 +2,10 @@ import postcss from 'postcss';
 import selectorParser from 'postcss-selector-parser';
 
 export function criticalCSS(source, html) {
-  // Include the header, editor and first result card. Smaller tool/static pages
-  // without result cards use their entire initial markup.
-  const firstCardEnd = html.indexOf('</article>');
-  const initial = firstCardEnd === -1 ? html : html.slice(0, firstCardEnd + 10);
-  const classes = new Set(['dark', 'light', ...[...initial.matchAll(/class="([^"]*)"/g)].flatMap(match => match[1].split(/\s+/))]);
+  // Style all prerendered content before the async stylesheet arrives, so later
+  // cards and sections do not trigger layout transitions during initial load.
+  const classes = new Set(['dark', 'light', ...[...html.matchAll(/class="([^"]*)"/g)].flatMap(match =>
+    match[1].replace(/&(?:amp|lt|gt|quot|#x27);/g, entity => ({ '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#x27;': "'" })[entity]).split(/\s+/))]);
   const css = postcss.parse(source);
   css.walkRules(rule => {
     if (rule.parent.type === 'atrule' && /keyframes$/.test(rule.parent.name)) return;

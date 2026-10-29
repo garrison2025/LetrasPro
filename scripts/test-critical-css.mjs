@@ -4,7 +4,7 @@ import { criticalCSS } from './critical-css.mjs';
 
 test('critical CSS preserves first-screen responsive, escaped and conditional rules in cascade order', () => {
   const source = '@font-face{font-family:Inter;src:url(font.woff2)}*{box-sizing:border-box}.editor{color:red}.unused{color:blue}@media(min-width:640px){.sm\\:p-8{padding:2rem}}.editor:not(.disabled){color:green}:is(.dark .dark\\:text-white){color:white}.editor:hover{color:purple}.editor{color:black}';
-  const html = '<div class="editor sm:p-8"><article>first</article><section class="unused">later</section></div>';
+  const html = '<div class="editor sm:p-8"><article>first</article></div>';
   const css = criticalCSS(source, html);
   assert.ok(css.includes('@font-face{font-family:Inter;src:url(font.woff2)}'));
   assert.ok(css.includes('*{box-sizing:border-box}'));
@@ -14,6 +14,21 @@ test('critical CSS preserves first-screen responsive, escaped and conditional ru
   assert.ok(css.includes('.editor:hover{color:purple}'));
   assert.ok(!css.includes('.unused'));
   assert.ok(css.indexOf('.editor{color:red}') < css.indexOf('.editor{color:black}'));
+});
+
+test('initial styles cover later cards and sections before the full stylesheet loads', () => {
+  const source = '.card{padding:1rem}.later{margin-top:6rem;transition:all .3s}.unused{color:red}';
+  const css = criticalCSS(source, '<main><article class="card">first</article><section class="later">FAQ</section></main>');
+  assert.ok(css.includes('.later{margin-top:6rem;transition:all .3s}'));
+  assert.ok(!css.includes('.unused'));
+});
+
+test('React-escaped arbitrary variants retain their initial typography and preview rules', () => {
+  const source = '.\\[\\&_\\.lead\\]\\:text-xl .lead{font-size:1.25rem}.\\[\\&\\>svg\\]\\:w-full>svg{width:100%}.unused{color:red}';
+  const css = criticalCSS(source, '<section class="[&amp;_.lead]:text-xl [&amp;&gt;svg]:w-full"><p class="lead">Guide</p><svg></svg></section>');
+  assert.ok(css.includes('font-size:1.25rem'));
+  assert.ok(css.includes('width:100%'));
+  assert.ok(!css.includes('.unused'));
 });
 
 test('critical CSS retains global rules and animations while pruning unused selector alternatives', () => {
