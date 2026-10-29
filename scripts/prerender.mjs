@@ -42,8 +42,11 @@ for (const route of [...routes, '/404']) {
   const canonical = `https://conversordeletrasbonitas.org${route === '/' ? '/' : route}`;
   const extras = [];
   const pageName = route.startsWith('/blog/') ? 'BlogPostPage' : toolPages[route] || 'GeneratorPage';
-  // Combining accents in the initial Unicode examples use this existing subset.
-  if (pageName === 'GeneratorPage') extras.push('<link rel="preload" as="font" type="font/woff2" href="/assets/inter-latin-ext-5c66f9e07e90.woff2" crossorigin>');
+  // The initial Unicode examples use both of these existing local subsets.
+  if (pageName === 'GeneratorPage') extras.push(
+    '<link rel="preload" as="font" type="font/woff2" href="/assets/inter-latin-ext-5c66f9e07e90.woff2" crossorigin>',
+    '<link rel="preload" as="font" type="font/woff2" href="/assets/inter-cyrillic-71d5ee93cc1e.woff2" crossorigin>',
+  );
   const pageChunk = manifest[`pages/${pageName}.tsx`]?.file;
   if (!pageChunk || !fs.existsSync(path.join(dist, pageChunk))) throw new Error(`Missing page chunk: ${route}`);
   // Discover only this route's lazy module before the application starts hydrating.
