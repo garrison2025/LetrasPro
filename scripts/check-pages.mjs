@@ -67,7 +67,7 @@ for (const url of urls) {
     assert.ok(html.includes(`<noscript><link rel="stylesheet" href="/${file}"></noscript>`), `Styles without JavaScript: ${route}`);
   }
   const fontPreloads = [...html.matchAll(/<link[^>]+rel="preload"[^>]+as="font"[^>]+href="([^"]+)"[^>]+crossorigin/g)].map(match => match[1]);
-  assert.equal(fontPreloads.length, applicationPageName(route) === 'GeneratorPage' ? 3 : 2, `Preload only this page's first-screen font subsets: ${route}`);
+  assert.equal(fontPreloads.length, applicationPageName(route) === 'GeneratorPage' ? 4 : 2, `Preload only this page's first-screen font subsets: ${route}`);
   for (const font of fontPreloads) assert.ok(inlineCSS.includes(font), `Preload matches the existing font: ${route}`);
   const preloads = [...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="([^"]+)"/g)].map(match => match[1]);
   const routeChunks = preloads.filter(file => Object.entries(manifest).some(([key, entry]) => key.startsWith('pages/') && `/${entry.file}` === file));
