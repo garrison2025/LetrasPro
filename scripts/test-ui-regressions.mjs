@@ -31,6 +31,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const load = file => import(loadSource(path.join(root, file)));
 const { default: GeneratorPage } = await load('pages/GeneratorPage.tsx');
 const { default: RepeaterPage } = await load('pages/RepeaterPage.tsx');
+const { default: CurvedTextPage } = await load('pages/CurvedTextPage.tsx');
 const { default: CommentsSection } = await load('components/CommentsSection.tsx');
 const { default: FontCard } = await load('components/FontCard.tsx');
 const { default: RouteNavigation } = await load('components/RouteNavigation.tsx');
@@ -55,6 +56,17 @@ async function mount(component, options = {}) {
 const button = (renderer, label) => renderer.root.findAllByType('button').find(node => node.children.includes(label));
 globalThis.window = { scrollTo() {}, addEventListener() {}, removeEventListener() {}, matchMedia: () => ({ matches: false }) };
 globalThis.localStorage = { getItem: () => null, setItem() {} };
+
+test('the curved text size starts on a valid slider step and preserves its displayed value', async () => {
+  const renderer = await mount(React.createElement(MemoryRouter, null, React.createElement(CurvedTextPage)));
+  try {
+    const slider = renderer.root.findAllByType('input').find(input => input.props.id === 'curve-size');
+    assert.equal(slider.props.value, 65);
+    assert.equal((Number(slider.props.value) - Number(slider.props.min)) % Number(slider.props.step), 0);
+    await act(async () => slider.props.onChange({ target: { value: '66' } }));
+    assert.equal(slider.props.value, 66);
+  } finally { await act(async () => renderer.unmount()); }
+});
 
 test('desktop and mobile navigation expose every generator and tool, and close on navigation', async () => {
   const previousDocument = globalThis.document;

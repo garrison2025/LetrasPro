@@ -48,7 +48,7 @@ export default function CurvedTextPage() {
       <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">Generador de Texto Curvo</h1>
       <p className="max-w-3xl text-lg text-slate-700 dark:text-slate-300">Escribe un título y convierte tu texto en un arco hacia arriba o hacia abajo. Cambia la curvatura, el color y el tamaño para diseños de insignias, invitaciones y encabezados.</p>
     </div>
-    <div className="grid lg:grid-cols-[350px_1fr] gap-6 items-start">
+    <div className="grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
       <section aria-label="Editar texto curvo" className="p-5 sm:p-6 bg-white dark:bg-slate-800 rounded-2xl border dark:border-slate-700 shadow-sm space-y-5">
         <div><label htmlFor="curve-text" className="block font-bold text-sm mb-2">Texto para curvar</label><input id="curve-text" className={field} maxLength={42} value={text} onChange={e => setText(e.target.value)} placeholder="Mi título" /></div>
         <fieldset><legend className="font-bold text-sm mb-2">Dirección de la curva</legend><div className="grid grid-cols-2 gap-2">
@@ -56,7 +56,7 @@ export default function CurvedTextPage() {
           <button type="button" onClick={() => setDirection('abajo')} aria-pressed={direction === 'abajo'} className={'rounded-xl border px-3 py-3 font-semibold ' + (direction === 'abajo' ? 'bg-violet-100 text-violet-900 border-violet-600' : 'bg-slate-50 dark:bg-slate-700 dark:border-slate-600')}>Arco inferior</button>
         </div></fieldset>
         <div><label htmlFor="curve-angle" className="block font-bold text-sm mb-2">Curvatura: {curve}</label><input id="curve-angle" className="w-full accent-violet-700" type="range" min="0" max="180" step="5" value={curve} onChange={e => setCurve(Number(e.target.value))} /></div>
-        <div><label htmlFor="curve-size" className="block font-bold text-sm mb-2">Tamaño: {size}px</label><input id="curve-size" className="w-full accent-violet-700" type="range" min="24" max="90" step="2" value={size} onChange={e => setSize(Number(e.target.value))} /></div>
+        <div><label htmlFor="curve-size" className="block font-bold text-sm mb-2">Tamaño: {size}px</label><input id="curve-size" className="w-full accent-violet-700" type="range" min="24" max="90" step="1" value={size} onChange={e => setSize(Number(e.target.value))} /></div>
         <div className="flex items-center gap-4"><label htmlFor="curve-color" className="font-bold text-sm">Color</label><input id="curve-color" type="color" className="w-14 h-11 cursor-pointer" value={color} onChange={e => setColor(e.target.value)} /></div>
         <label className="flex gap-3 items-center text-sm font-medium"><input type="checkbox" className="size-5 accent-violet-700" checked={guide} onChange={e => setGuide(e.target.checked)} /> Mostrar línea guía en el diseño</label>
         <div className="grid grid-cols-2 gap-2">
@@ -67,7 +67,7 @@ export default function CurvedTextPage() {
       </section>
       <section aria-label="Vista previa del texto curvo" className="p-5 sm:p-7 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-2xl">
         <h2 className="font-bold mb-3">Vista previa en tiempo real</h2>
-        <div className="rounded-xl bg-white min-h-44 overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg,#f1f5f9 1px,transparent 1px),linear-gradient(#f1f5f9 1px,transparent 1px)', backgroundSize: '20px 20px' }}><div className="w-full" dangerouslySetInnerHTML={{ __html: svg }} /></div>
+        <div className="rounded-xl bg-white min-h-44 overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg,#f1f5f9 1px,transparent 1px),linear-gradient(#f1f5f9 1px,transparent 1px)', backgroundSize: '20px 20px' }}><div className="graphic-preview w-full" dangerouslySetInnerHTML={{ __html: svg }} /></div>
         <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">El PNG se guarda sin fondo. Si quieres seguir editando la curva, descarga el SVG para usarlo en un editor vectorial.</p>
       </section>
     </div>

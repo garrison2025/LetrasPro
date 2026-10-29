@@ -48,7 +48,7 @@ export default function PrintableLettersPage() {
       <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">Moldes de Letras para Imprimir</h1>
       <p className="text-lg text-slate-700 dark:text-slate-300 max-w-3xl">Crea un molde de una letra, un número o una palabra personalizada. Elige el contorno hueco para recortar, calcar o colorear y descarga el archivo sin marcas de agua.</p>
     </div>
-    <div className="grid lg:grid-cols-[350px_1fr] gap-6 items-start">
+    <div className="grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
       <section aria-label="Personaliza el molde" className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl p-5 sm:p-6 shadow-sm space-y-5">
         <div>
           <label htmlFor="molde-mode" className="block mb-2 text-sm font-bold">Tipo de molde</label>
@@ -78,7 +78,7 @@ export default function PrintableLettersPage() {
       </section>
       <section aria-label="Vista previa del molde A4" className="bg-slate-100 dark:bg-slate-800 rounded-2xl p-3 sm:p-5 border border-slate-200 dark:border-slate-700">
         <h2 className="font-bold mb-3">Vista previa · Hoja A4</h2>
-        <div className="max-w-[540px] mx-auto aspect-[794/1123] bg-white shadow-xl" dangerouslySetInnerHTML={{ __html: svg }} />
+        <div className="graphic-preview max-w-[540px] mx-auto aspect-[794/1123] bg-white shadow-xl" dangerouslySetInnerHTML={{ __html: svg }} />
       </section>
     </div>
     <section className="prose prose-slate dark:prose-invert max-w-3xl mt-12">

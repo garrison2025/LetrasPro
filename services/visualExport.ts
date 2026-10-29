@@ -57,7 +57,13 @@ export function printSvg(svg: string): boolean {
   popup.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Molde de letras</title><style>@page{size:A4;margin:0}html,body{margin:0;background:white}svg{display:block;width:210mm;height:297mm;max-width:100%}@media screen{body{display:flex;justify-content:center;background:#eee}svg{box-shadow:0 2px 14px #ccc}}</style></head><body>' + svg + '</body></html>');
   popup.document.close();
   popup.focus();
-  popup.addEventListener('load', () => popup.print(), { once: true });
-  window.setTimeout(() => { if (!popup.closed) popup.print(); }, 500);
+  let printed = false;
+  const printOnce = () => {
+    if (printed || popup.closed) return;
+    printed = true;
+    popup.print();
+  };
+  popup.addEventListener('load', printOnce, { once: true });
+  window.setTimeout(printOnce, 500);
   return true;
 }
