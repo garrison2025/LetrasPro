@@ -20,7 +20,7 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/politica-de-privacida
             <span className="font-bold uppercase tracking-wider text-sm">Legal</span>
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 dark:text-white">Política de Privacidad</h1>
-          <p className="text-slate-500 dark:text-slate-400">Última actualización: <strong>10 de octubre de 2026</strong></p>
+          <p className="text-slate-500 dark:text-slate-400">Última actualización: <strong>29 de octubre de 2026</strong></p>
         </div>
 
         <div className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-800 prose-a:text-primary-600 dark:prose-invert dark:prose-headings:text-white">
@@ -52,7 +52,7 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/politica-de-privacida
 
           <h3>4. Servicios de publicidad</h3>
           <p>
-            El sitio carga publicidad de Monetag mediante 5gvci.com y un script de effectivecpmnetwork.com. Estos servicios pueden procesar datos de conexión, cookies u otros identificadores según su configuración y sus propias políticas. Las fuentes se solicitan a Google Fonts y algunas imágenes a Unsplash; esas solicitudes también comunican datos de conexión al proveedor. Consulta las políticas del proveedor y los controles de privacidad de tu navegador.
+            El sitio utiliza Google AdSense como servicio de publicidad. Google puede procesar datos de conexión, cookies u otros identificadores según su configuración y sus propias políticas. Las fuentes se solicitan a Google Fonts y algunas imágenes a Unsplash; esas solicitudes también comunican datos de conexión al proveedor. Consulta las políticas del proveedor y los controles de privacidad de tu navegador.
           </p>
 
           <h3>5. Políticas de privacidad de terceros</h3>
