@@ -39,7 +39,7 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/blog";
             >
               <div className="p-8 flex-grow">
                 {/* Tags */}
-                <div className="flex gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map(tag => (
                     <span key={tag} className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs font-semibold rounded-md dark:bg-slate-700 dark:text-slate-300">
                       #{tag}

@@ -6,6 +6,7 @@ import { criticalCSS } from './critical-css.mjs';
 
 const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
+const sitemapDates = new Map([...sitemap.matchAll(/<url>([^]*?)<\/url>/g)].map(match => [new URL(match[1].match(/<loc>([^<]+)<\/loc>/)[1]).pathname, match[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1]]));
 const titles = new Set();
 const crawlLinks = new Map();
 const manifest = JSON.parse(fs.readFileSync('dist/.vite/manifest.json', 'utf8'));
@@ -55,6 +56,9 @@ for (const url of urls) {
   assert.ok(!html.includes('fonts.googleapis.com'), `No render-blocking font stylesheet: ${route}`);
   assert.ok(!/<link[^>]+rel="stylesheet"/.test(html.replace(/<noscript>[^]*?<\/noscript>/g, '')), `No blocking stylesheet before first paint: ${route}`);
   const inlineCSS = html.match(/<style data-critical-styles>([^]*?)<\/style>/)?.[1];
+  if (['/moldes-de-letras-para-imprimir', '/generador-de-firmas-bonitas', '/generador-de-texto-curvo'].includes(route)) {
+    assert.match(inlineCSS, /\.graphic-preview\s*>\s*svg/, `Responsive preview styles available before hydration: ${route}`);
+  }
   const builtCSS = manifest['index.html'].css.map(file => fs.readFileSync(path.join('dist', file), 'utf8')).join('');
   const initialContent = html.slice(html.indexOf('<div id="root"'), html.lastIndexOf('</div>') + 6);
   assert.equal(inlineCSS, criticalCSS(builtCSS, initialContent), `Initial styles match compiled rules: ${route}`);
@@ -63,7 +67,7 @@ for (const url of urls) {
     assert.ok(html.includes(`<noscript><link rel="stylesheet" href="/${file}"></noscript>`), `Styles without JavaScript: ${route}`);
   }
   const fontPreloads = [...html.matchAll(/<link[^>]+rel="preload"[^>]+as="font"[^>]+href="([^"]+)"[^>]+crossorigin/g)].map(match => match[1]);
-  assert.equal(fontPreloads.length, 2, `Only the two first-screen fonts preloaded: ${route}`);
+  assert.equal(fontPreloads.length, applicationPageName(route) === 'GeneratorPage' ? 3 : 2, `Preload only this page's first-screen font subsets: ${route}`);
   for (const font of fontPreloads) assert.ok(inlineCSS.includes(font), `Preload matches the existing font: ${route}`);
   const preloads = [...html.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="([^"]+)"/g)].map(match => match[1]);
   const routeChunks = preloads.filter(file => Object.entries(manifest).some(([key, entry]) => key.startsWith('pages/') && `/${entry.file}` === file));
@@ -113,6 +117,7 @@ for (const url of urls) {
     assert.equal(article.publisher['@id'], organization['@id']);
     assert.equal(webpage.mainEntity['@id'], article['@id']);
     assert.equal(article.dateModified, '2026-10-11');
+    assert.equal(sitemapDates.get(route), article.dateModified, `Sitemap matches the article review date: ${route}`);
     assert.ok(html.includes('Revisión editorial: 11 de octubre de 2026'), `Visible review date: ${route}`);
     assert.ok([...html.matchAll(/<a\s[^>]*>/g)].some(([anchor]) => anchor.includes('href="/sobre-nosotros#equipo-editorial"') && anchor.includes('rel="author"')), `Visible author link: ${route}`);
   }

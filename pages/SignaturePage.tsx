@@ -58,7 +58,7 @@ export default function SignaturePage() {
       <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">Generador de Firmas Bonitas</h1>
       <p className="max-w-3xl text-lg text-slate-700 dark:text-slate-300">Escribe tu nombre, prueba distintas firmas tipográficas y descarga un diseño para tus proyectos creativos, invitaciones o marcas de agua.</p>
     </div>
-    <div className="grid lg:grid-cols-[350px_1fr] gap-6 items-start">
+    <div className="grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
       <section aria-label="Editor de firma bonita" className="p-5 sm:p-6 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm space-y-5">
         <div><label htmlFor="firma-name" className="block text-sm font-bold mb-2">Tu nombre</label><input id="firma-name" className={field} maxLength={48} value={name} onChange={e => setName(e.target.value)} /></div>
         <fieldset><legend className="text-sm font-bold mb-2">Estilo de la firma</legend>
@@ -78,7 +78,7 @@ export default function SignaturePage() {
       <section className="p-5 sm:p-7 bg-slate-100 dark:bg-slate-800 rounded-2xl border dark:border-slate-700">
         <h2 className="font-bold mb-3">Vista previa de tu firma</h2>
         <div className="relative rounded-xl bg-white min-h-44 flex items-center justify-center overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg,#f1f5f9 1px,transparent 1px),linear-gradient(#f1f5f9 1px,transparent 1px)', backgroundSize: '20px 20px' }}>
-          <div className="w-full" dangerouslySetInnerHTML={{ __html: svg }} />
+          <div className="graphic-preview w-full" dangerouslySetInnerHTML={{ __html: svg }} />
         </div>
         <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">El PNG se exporta con fondo transparente. El aspecto de la tipografía puede variar según las fuentes instaladas en tu dispositivo.</p>
       </section>

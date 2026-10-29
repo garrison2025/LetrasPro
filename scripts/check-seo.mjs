@@ -4,8 +4,7 @@ import assert from 'node:assert/strict';
 
 const baseline = JSON.parse(fs.readFileSync(new URL('./fixtures/seo-baseline.json', import.meta.url), 'utf8'));
 const routes = [...fs.readFileSync('dist/sitemap.xml', 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1]).pathname);
-assert.deepEqual(routes.filter(route => baseline.some(page => page.route === route)), baseline.map(page => page.route), 'Existing public URLs must remain unchanged');
-assert.deepEqual(routes.filter(route => !baseline.some(page => page.route === route)).sort(), ['/generador-de-firmas-bonitas', '/generador-de-texto-curvo', '/moldes-de-letras-para-imprimir'], 'Only approved new URLs');
+assert.deepEqual(routes, baseline.map(page => page.route), 'All approved public URLs must remain unchanged');
 assert.equal(new Set(routes).size, routes.length, 'All URLs must be unique');
 for (const page of baseline) {
   const html = fs.readFileSync(path.join('dist', page.route === '/' ? 'index.html' : `${page.route}.html`), 'utf8');
