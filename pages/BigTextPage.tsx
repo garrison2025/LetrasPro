@@ -56,13 +56,24 @@ const BigTextPage: React.FC = () => {
              <p className="text-xs text-slate-400 mt-2 text-right">Máximo 15 caracteres. Admite letras, números y acentos; otros símbolos se conservan sin ampliar.</p>
           </div>
 
-          <div className="bg-slate-900 rounded-2xl p-6 overflow-x-auto border border-slate-800 shadow-2xl relative group min-h-[200px] flex items-center justify-center">
+          <div role="region" aria-label="Vista previa de arte ASCII" tabIndex={0}
+            onKeyDown={event => {
+              if (event.target !== event.currentTarget) return;
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                event.currentTarget.scrollLeft += event.key === 'ArrowRight' ? 80 : -80;
+              } else if (event.key === 'Home' || event.key === 'End') {
+                event.preventDefault();
+                event.currentTarget.scrollLeft = event.key === 'Home' ? 0 : event.currentTarget.scrollWidth;
+              }
+            }}
+            className="bg-slate-900 rounded-2xl p-6 overflow-x-auto border border-slate-800 shadow-2xl relative group min-h-[200px] flex items-center justify-start">
              {text ? (
-               <pre className="font-mono text-xs sm:text-sm md:text-base text-green-400 leading-none whitespace-pre select-all text-center">
+               <pre className="shrink-0 mx-auto font-mono text-xs sm:text-sm md:text-base text-green-400 leading-none whitespace-pre select-all text-center">
                  {result}
                </pre>
              ) : (
-               <span className="text-slate-600 italic font-mono">...el arte aparecerá aquí...</span>
+               <span className="mx-auto text-slate-600 italic font-mono">...el arte aparecerá aquí...</span>
              )}
              
              {text && (

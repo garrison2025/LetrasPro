@@ -98,6 +98,12 @@ const Navbar: React.FC = () => {
           : 'bg-transparent border-b border-transparent'
       }`}
       ref={dropdownRef}
+      onBlur={event => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setActiveDropdown(null);
+          setIsOpen(false);
+        }
+      }}
       onKeyDown={event => {
         if (event.key === 'Escape') {
           dropdownRef.current?.querySelector<HTMLButtonElement>('button[aria-expanded="true"]')?.focus();
