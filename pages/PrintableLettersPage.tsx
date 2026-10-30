@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { downloadPng, downloadSvg, escapeSvg, printSvg } from '../services/visualExport';
+import { useFittedSvg } from '../hooks/useFittedSvg';
 
 const alphabet = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789'.split('');
 const inputClass = 'w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500';
@@ -27,7 +28,8 @@ export default function PrintableLettersPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const text = mode === 'letter' ? letter : word;
-  const svg = useMemo(() => buildTemplate(text, outlines, guides), [text, outlines, guides]);
+  const source = useMemo(() => buildTemplate(text, outlines, guides), [text, outlines, guides]);
+  const { previewRef, svg } = useFittedSvg(source, 674);
   const filename = 'molde-letras-' + (text || 'a');
 
   const savePng = async () => {
@@ -78,7 +80,7 @@ export default function PrintableLettersPage() {
       </section>
       <section aria-label="Vista previa del molde A4" className="bg-slate-100 dark:bg-slate-800 rounded-2xl p-3 sm:p-5 border border-slate-200 dark:border-slate-700">
         <h2 className="font-bold mb-3">Vista previa · Hoja A4</h2>
-        <div className="graphic-preview max-w-[540px] mx-auto aspect-[794/1123] bg-white shadow-xl" dangerouslySetInnerHTML={{ __html: svg }} />
+        <div ref={previewRef} className="graphic-preview max-w-[540px] mx-auto aspect-[794/1123] bg-white shadow-xl" dangerouslySetInnerHTML={{ __html: svg }} />
       </section>
     </div>
     <section className="prose prose-slate dark:prose-invert max-w-3xl mt-12">

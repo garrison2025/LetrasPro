@@ -19,6 +19,12 @@
   height: auto;
 }
 
+/* Empty Auto ads placeholders can retain a desktop width after a resize.
+   Do not constrain hosts once Google inserts an iframe or other ad content. */
+.google-auto-placed ins.adsbygoogle > div[id$="_host"]:empty {
+  max-width: 100%;
+}
+
 .fallback-char {
   display: inline-block;
   color: inherit;
