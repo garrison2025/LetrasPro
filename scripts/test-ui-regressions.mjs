@@ -41,6 +41,65 @@ const { PAGE_CONFIGS } = await load('constants.ts');
 const { FONTS } = await load('services/fontMaps.ts');
 const { TONES, matchesTone } = await load('services/fontFilters.ts');
 const { truncateText } = await load('services/text.ts');
+const { useFittedSvg } = await load('hooks/useFittedSvg.ts');
+
+test('graphic fitting retains complete text, measures the selected font and path, and cleans up font events', async () => {
+  const previousDocument = globalThis.document;
+  let fontEvent;
+  let current;
+  let widthAt100 = 1200;
+  let pathLength = 0;
+  let probes = 0;
+  globalThis.document = { fonts: {
+    ready: Promise.resolve(),
+    addEventListener(type, listener) { assert.equal(type, 'loadingdone'); fontEvent = listener; },
+    removeEventListener(type, listener) { if (fontEvent === listener) fontEvent = undefined; },
+  } };
+  const rootNode = {
+    querySelector(selector) {
+      if (selector === 'defs path') return pathLength ? { getTotalLength: () => pathLength } : null;
+      return { textContent: 'WILLIAM Ñ <&>', cloneNode() {
+        let size = 100;
+        return {
+          setAttribute(name, value) { if (name === 'font-size') size = Number(value); },
+          getComputedTextLength: () => widthAt100 * size / 100 + 12,
+          getBBox: () => ({ width: widthAt100 * size / 100 + 12 }),
+          remove() { probes--; },
+        };
+      } };
+    },
+    appendChild() { probes++; },
+  };
+  function Probe({ source }) {
+    current = useFittedSvg(source, 674);
+    return React.createElement('div', { ref: current.previewRef });
+  }
+  const source = '<svg><text font-size="100">WILLIAM Ñ &lt;&amp;&gt;</text></svg>';
+  let renderer;
+  try {
+    await act(async () => { renderer = TestRenderer.create(React.createElement(Probe, { source }), {
+      createNodeMock: () => ({ querySelector: () => rootNode }),
+    }); });
+    assert.ok(current.fittedSize < 100);
+    assert.ok(widthAt100 * current.fittedSize / 100 + 12 <= 674);
+    assert.ok(current.svg.includes('WILLIAM Ñ &lt;&amp;&gt;'), 'Keep every escaped character');
+    assert.equal(probes, 0, 'Measurement nodes are removed');
+    widthAt100 = 300;
+    await act(async () => fontEvent());
+    assert.equal(current.fittedSize, 100, 'A changed font is measured from the requested size');
+    widthAt100 = 1200;
+    pathLength = 900;
+    await act(async () => renderer.update(React.createElement(Probe, { source: source.replace('<svg>', '<svg data-curved="true">') })));
+    assert.ok(widthAt100 * current.fittedSize / 100 + 12 <= 840, 'Reserve space at both path ends');
+    assert.ok(current.fittedSize > 60, 'Use the curve length rather than the straight-page budget');
+    await act(async () => renderer.unmount());
+    renderer = undefined;
+    assert.equal(fontEvent, undefined);
+  } finally {
+    if (renderer) await act(async () => renderer.unmount());
+    if (previousDocument === undefined) delete globalThis.document; else globalThis.document = previousDocument;
+  }
+});
 let currentLocation;
 let navigate;
 function GeneratorRoute() {

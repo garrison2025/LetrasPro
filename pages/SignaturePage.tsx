@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { downloadPng, downloadSvg, escapeSvg } from '../services/visualExport';
+import { useFittedSvg } from '../hooks/useFittedSvg';
 
 type SignatureStyle = 'caligrafica' | 'clasica' | 'moderna' | 'marcada';
 const fonts: Record<SignatureStyle, string> = {
@@ -38,7 +39,8 @@ export default function SignaturePage() {
   const [underline, setUnderline] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const svg = useMemo(() => buildSignature(name, style, color, size, underline), [name, style, color, size, underline]);
+  const source = useMemo(() => buildSignature(name, style, color, size, underline), [name, style, color, size, underline]);
+  const { previewRef, svg, fittedSize, measured } = useFittedSvg(source, 780);
   const filename = 'firma-bonita-' + (name || 'mi-nombre');
   const savePng = async () => {
     setBusy(true); setError('');
@@ -67,7 +69,7 @@ export default function SignaturePage() {
           </button>)}</div>
         </fieldset>
         <div className="flex items-center gap-4"><label htmlFor="firma-color" className="text-sm font-bold">Color de tinta</label><input id="firma-color" type="color" className="w-14 h-11 rounded-lg cursor-pointer" value={color} onChange={e => setColor(e.target.value)} /></div>
-        <div><label htmlFor="firma-size" className="text-sm font-bold block mb-2">Tamaño: {size}px</label><input id="firma-size" className="w-full accent-violet-700" type="range" min="48" max="150" step="2" value={size} onChange={e => setSize(Number(e.target.value))} /></div>
+        <div><label htmlFor="firma-size" className="text-sm font-bold block mb-2">Tamaño: {size}px<span className="font-normal" role="status">{measured && fittedSize < size - 0.1 ? ` · ajustado a ${Number(fittedSize.toFixed(1))}px` : ''}</span></label><input id="firma-size" className="w-full accent-violet-700" type="range" min="48" max="150" step="2" value={size} onChange={e => setSize(Number(e.target.value))} /></div>
         <label className="flex gap-3 text-sm items-center font-medium"><input className="size-5 accent-violet-700" type="checkbox" checked={underline} onChange={e => setUnderline(e.target.checked)} /> Añadir trazo debajo</label>
         <div className="flex flex-wrap gap-3">
           <button type="button" className="flex-1 rounded-xl bg-violet-700 text-white font-bold py-3 px-4 hover:bg-violet-800 disabled:opacity-50" disabled={busy} onClick={() => void savePng()}>{busy ? 'Exportando…' : 'Descargar PNG'}</button>
@@ -78,7 +80,7 @@ export default function SignaturePage() {
       <section className="p-5 sm:p-7 bg-slate-100 dark:bg-slate-800 rounded-2xl border dark:border-slate-700">
         <h2 className="font-bold mb-3">Vista previa de tu firma</h2>
         <div className="relative rounded-xl bg-white min-h-44 flex items-center justify-center overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg,#f1f5f9 1px,transparent 1px),linear-gradient(#f1f5f9 1px,transparent 1px)', backgroundSize: '20px 20px' }}>
-          <div className="graphic-preview w-full" dangerouslySetInnerHTML={{ __html: svg }} />
+          <div ref={previewRef} className="graphic-preview w-full" dangerouslySetInnerHTML={{ __html: svg }} />
         </div>
         <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">El PNG se exporta con fondo transparente. El aspecto de la tipografía puede variar según las fuentes instaladas en tu dispositivo.</p>
       </section>

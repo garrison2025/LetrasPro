@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { downloadPng, downloadSvg, escapeSvg } from '../services/visualExport';
+import { useFittedSvg } from '../hooks/useFittedSvg';
 
 type Direction = 'arriba' | 'abajo';
 const field = 'w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-4 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500';
@@ -29,7 +30,8 @@ export default function CurvedTextPage() {
   const [guide, setGuide] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const svg = useMemo(() => makeCurvedSvg(text, direction, curve, size, color, guide), [text, direction, curve, size, color, guide]);
+  const source = useMemo(() => makeCurvedSvg(text, direction, curve, size, color, guide), [text, direction, curve, size, color, guide]);
+  const { previewRef, svg, fittedSize, measured } = useFittedSvg(source, 710);
   const filename = 'texto-curvo-' + (text || 'titulo');
   const exportPng = async () => {
     setBusy(true); setError('');
@@ -56,7 +58,7 @@ export default function CurvedTextPage() {
           <button type="button" onClick={() => setDirection('abajo')} aria-pressed={direction === 'abajo'} className={'rounded-xl border px-3 py-3 font-semibold ' + (direction === 'abajo' ? 'bg-violet-100 text-violet-900 border-violet-600' : 'bg-slate-50 dark:bg-slate-700 dark:border-slate-600')}>Arco inferior</button>
         </div></fieldset>
         <div><label htmlFor="curve-angle" className="block font-bold text-sm mb-2">Curvatura: {curve}</label><input id="curve-angle" className="w-full accent-violet-700" type="range" min="0" max="180" step="5" value={curve} onChange={e => setCurve(Number(e.target.value))} /></div>
-        <div><label htmlFor="curve-size" className="block font-bold text-sm mb-2">Tamaño: {size}px</label><input id="curve-size" className="w-full accent-violet-700" type="range" min="24" max="90" step="1" value={size} onChange={e => setSize(Number(e.target.value))} /></div>
+        <div><label htmlFor="curve-size" className="block font-bold text-sm mb-2">Tamaño: {size}px<span className="font-normal" role="status">{measured && fittedSize < size - 0.1 ? ` · ajustado a ${Number(fittedSize.toFixed(1))}px` : ''}</span></label><input id="curve-size" className="w-full accent-violet-700" type="range" min="24" max="90" step="1" value={size} onChange={e => setSize(Number(e.target.value))} /></div>
         <div className="flex items-center gap-4"><label htmlFor="curve-color" className="font-bold text-sm">Color</label><input id="curve-color" type="color" className="w-14 h-11 cursor-pointer" value={color} onChange={e => setColor(e.target.value)} /></div>
         <label className="flex gap-3 items-center text-sm font-medium"><input type="checkbox" className="size-5 accent-violet-700" checked={guide} onChange={e => setGuide(e.target.checked)} /> Mostrar línea guía en el diseño</label>
         <div className="grid grid-cols-2 gap-2">
@@ -67,7 +69,7 @@ export default function CurvedTextPage() {
       </section>
       <section aria-label="Vista previa del texto curvo" className="p-5 sm:p-7 bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 rounded-2xl">
         <h2 className="font-bold mb-3">Vista previa en tiempo real</h2>
-        <div className="rounded-xl bg-white min-h-44 overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg,#f1f5f9 1px,transparent 1px),linear-gradient(#f1f5f9 1px,transparent 1px)', backgroundSize: '20px 20px' }}><div className="graphic-preview w-full" dangerouslySetInnerHTML={{ __html: svg }} /></div>
+        <div className="rounded-xl bg-white min-h-44 overflow-hidden" style={{ backgroundImage: 'linear-gradient(90deg,#f1f5f9 1px,transparent 1px),linear-gradient(#f1f5f9 1px,transparent 1px)', backgroundSize: '20px 20px' }}><div ref={previewRef} className="graphic-preview w-full" dangerouslySetInnerHTML={{ __html: svg }} /></div>
         <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">El PNG se guarda sin fondo. Si quieres seguir editando la curva, descarga el SVG para usarlo en un editor vectorial.</p>
       </section>
     </div>
