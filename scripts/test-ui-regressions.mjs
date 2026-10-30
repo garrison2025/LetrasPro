@@ -32,6 +32,7 @@ const load = file => import(loadSource(path.join(root, file)));
 const { default: GeneratorPage } = await load('pages/GeneratorPage.tsx');
 const { default: RepeaterPage } = await load('pages/RepeaterPage.tsx');
 const { default: CurvedTextPage } = await load('pages/CurvedTextPage.tsx');
+const { default: BigTextPage } = await load('pages/BigTextPage.tsx');
 const { default: CommentsSection } = await load('components/CommentsSection.tsx');
 const { default: FontCard } = await load('components/FontCard.tsx');
 const { default: RouteNavigation } = await load('components/RouteNavigation.tsx');
@@ -166,6 +167,58 @@ test('desktop and mobile navigation expose every generator and tool, and close o
     await act(async () => go('/letras-para-tiktok'));
     assert.equal(control('Abrir menú de navegación').props['aria-expanded'], false);
     assert.ok(renderer.root.findAllByType('button').filter(node => node.props['aria-haspopup']).every(node => node.props['aria-expanded'] === false));
+  } finally {
+    if (renderer) await act(async () => renderer.unmount());
+    globalThis.document = previousDocument;
+    if (previousWindowDocument) window.document = previousWindowDocument; else delete window.document;
+  }
+});
+
+test('ASCII preview supports horizontal keyboard navigation without intercepting copy-button keys', async () => {
+  const renderer = await mount(React.createElement(BigTextPage));
+  try {
+    const preview = renderer.root.findByProps({ 'aria-label': 'Vista previa de arte ASCII' });
+    const box = { scrollLeft: 0, scrollWidth: 900 };
+    let prevented = 0;
+    const press = (key, target = box) => preview.props.onKeyDown({ key, target, currentTarget: box, preventDefault() { prevented++; } });
+    press('ArrowRight'); assert.equal(box.scrollLeft, 80);
+    press('ArrowLeft'); assert.equal(box.scrollLeft, 0);
+    press('End'); assert.equal(box.scrollLeft, 900);
+    press('Home'); assert.equal(box.scrollLeft, 0);
+    press('End', {}); press('Enter');
+    assert.equal(box.scrollLeft, 0);
+    assert.equal(prevented, 4);
+  } finally { await act(async () => renderer.unmount()); }
+});
+
+test('navigation keeps internal focus, closes on focus exit and restores its trigger on Escape', async () => {
+  const previousDocument = globalThis.document;
+  const previousWindowDocument = window.document;
+  globalThis.document = { addEventListener() {}, removeEventListener() {}, querySelector: () => null, documentElement: { classList: { add() {}, remove() {} } } };
+  window.document = globalThis.document;
+  const inside = {};
+  let focusReturned = 0;
+  const nav = { contains: target => target === inside, querySelector: () => ({ focus() { focusReturned++; } }) };
+  let renderer;
+  const control = label => renderer.root.findAllByType('button').find(node => node.props['aria-label'] === label);
+  try {
+    renderer = await mount(React.createElement(MemoryRouter, null, React.createElement(ThemeProvider, null, React.createElement(Navbar))), {
+      createNodeMock: element => element.type === 'nav' ? nav : null,
+    });
+    const header = () => renderer.root.findByType('nav');
+    await act(async () => control('Abrir menú de navegación').props.onClick());
+    await act(async () => header().props.onBlur({ currentTarget: nav, relatedTarget: inside }));
+    assert.equal(control('Cerrar menú de navegación').props['aria-expanded'], true, 'Tab within navigation keeps the menu open');
+    await act(async () => header().props.onKeyDown({ key: 'Escape' }));
+    assert.equal(control('Abrir menú de navegación').props['aria-expanded'], false);
+    assert.equal(focusReturned, 1);
+    await act(async () => control('Abrir menú de navegación').props.onClick());
+    await act(async () => header().props.onBlur({ currentTarget: nav, relatedTarget: {} }));
+    assert.equal(control('Abrir menú de navegación').props['aria-expanded'], false, 'Focus can leave without being covered');
+    assert.equal(focusReturned, 1, 'Leaving navigation does not steal focus');
+    await act(async () => control('Abrir menú de Herramientas').props.onClick());
+    await act(async () => header().props.onBlur({ currentTarget: nav, relatedTarget: null }));
+    assert.equal(control('Abrir menú de Herramientas').props['aria-expanded'], false, 'Focus loss also closes desktop dropdowns');
   } finally {
     if (renderer) await act(async () => renderer.unmount());
     globalThis.document = previousDocument;
