@@ -270,6 +270,7 @@ const FontCard: React.FC<FontCardProps> = ({
              onKeyDown={event => {
                if (event.target !== event.currentTarget || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
                const region = event.currentTarget;
+               if (region.scrollHeight <= region.clientHeight) return;
                if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
                  event.preventDefault();
                  region.scrollTop += event.key === 'ArrowDown' ? 80 : -80;

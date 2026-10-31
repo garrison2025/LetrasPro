@@ -200,6 +200,9 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
     key('End', { target: {} });
     key('Tab');
     assert.equal(prevented, handled, 'Keep browser shortcuts, child controls and Tab behavior');
+    region.scrollHeight = region.clientHeight;
+    key('PageDown');
+    assert.equal(prevented, handled, 'Short previews keep normal page scrolling');
     const input = renderer.root.findByProps({ 'aria-label': 'Texto para convertir' });
     const latest = 'Último ñ 👨‍👩‍👧‍👦🇪🇸';
     for (const value of ['U', 'Último', latest]) {
