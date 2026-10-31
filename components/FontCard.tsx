@@ -132,7 +132,7 @@ const FontCard: React.FC<FontCardProps> = ({
       displaySegments.map((seg, i) => (
         <span 
           key={i} 
-          title={seg.isFallback ? 'Carácter conservado sin transformar' : undefined}
+          title={seg.isFallback ? 'Carácter conservado sin transformar' : seg.isCombined ? 'Combinación Unicode con acento' : undefined}
           className={`${seg.isFallback ? 'fallback-char' : ''} ${seg.isCombined ? 'text-primary-600 dark:text-primary-400 font-black' : ''} relative group/seg`}
         >
           {seg.content}
@@ -169,7 +169,7 @@ const FontCard: React.FC<FontCardProps> = ({
          <div 
            role="img"
            aria-label={`Biografía con estilo: ${originalText}`}
-           className="text-slate-800 dark:text-slate-200 text-sm whitespace-pre-wrap leading-tight font-bold tracking-tight"
+           className="text-slate-800 dark:text-slate-200 text-sm whitespace-pre-wrap break-words leading-tight font-bold tracking-tight"
          >
            {renderTextContent()}
          </div>
@@ -266,7 +266,21 @@ const FontCard: React.FC<FontCardProps> = ({
 
         {imageError && <p role="alert" className="text-sm text-red-600 dark:text-red-400">No se pudo crear la imagen. Prueba con un texto más corto.</p>}
         <div className="min-h-[4rem] flex items-center">
-           <div className="w-full">
+           <div role="region" aria-label={`Vista previa de ${font.name}`} tabIndex={0}
+             onKeyDown={event => {
+               if (event.target !== event.currentTarget || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+               const region = event.currentTarget;
+               if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                 event.preventDefault();
+                 region.scrollTop += event.key === 'ArrowDown' ? 80 : -80;
+               } else if (event.key === 'PageDown' || event.key === 'PageUp') {
+                 event.preventDefault();
+                 region.scrollTop += event.key === 'PageDown' ? region.clientHeight : -region.clientHeight;
+               } else if (event.key === 'Home' || event.key === 'End') {
+                 event.preventDefault();
+                 region.scrollTop = event.key === 'Home' ? 0 : region.scrollHeight;
+               }
+             }} className="w-full max-h-72 overflow-auto">
              {viewMode === 'list' && (
                /* Accessibility: Critical Fix for Unicode */
                <p 

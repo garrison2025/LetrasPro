@@ -22,7 +22,9 @@ test('Latin fast path and Unicode segmentation match browser grapheme boundaries
   const segmenter = new Intl.Segmenter('es', { granularity: 'grapheme' });
   const reference = value => Array.from(segmenter.segment(value.normalize('NFC')), part => part.segment);
   const latin = Array.from({ length: 224 }, (_, i) => String.fromCharCode(i + 32)).join('');
-  const samples = ['', latin, '¡Hola!\tÁÉÍÓÚ ñü\n'.repeat(300), 'a\r\nb', '\u0600a', 'a\u0301\u0323', '👨‍👩‍👧‍👦🇪🇸👍🏽', 'क्‍ष ಕನ್ನಡ', '\r\n\t\0', '𝓐𝓫𝓬'.repeat(1000)];
+  const styled = [[0x2100, 0x214f], [0x2460, 0x24ff], [0x2580, 0x259f], [0xff01, 0xff60], [0x1d400, 0x1d7ff]]
+    .map(([start, end]) => Array.from({ length: end - start + 1 }, (_, i) => String.fromCodePoint(start + i)).join('')).join('');
+  const samples = ['', latin, styled, styled + '\u0301', '\u0600' + styled, styled + '\u200d👩', '¡Hola!\tÁÉÍÓÚ ñü\n'.repeat(300), 'a\r\nb', '\u0600a', 'a\u0301\u0323', '👨‍👩‍👧‍👦🇪🇸👍🏽', 'क्‍ष ಕನ್ನಡ', '\r\n\t\0', '𝓐𝓫𝓬'.repeat(1000)];
   let seed = 17;
   const pieces = ['a', 'ñ', 'ü', '\r', '\n', '\t', '\u0301', '\u0323', '\u0600', '🇪', '🇸', '👩', '\u200d', '👍', '🏽', '漢', 'क', '्'];
   for (let i = 0; i < 300; i++) {

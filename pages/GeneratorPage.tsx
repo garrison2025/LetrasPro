@@ -86,6 +86,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const inputContainerRef = useRef<HTMLDivElement>(null);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const latestInputText = useRef(inputText);
+  latestInputText.current = inputText;
   const debouncedText = useDebounce(inputText, 300);
   const characterCount = useMemo(() => splitCharacters(inputText).length, [inputText]);
 
@@ -217,9 +219,27 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   };
 
   useEffect(() => {
+    if (!browserReady || inputText !== debouncedText) return;
+    recordStorage('input', writeStorage('let_pro_input', debouncedText));
+  }, [browserReady, inputText, debouncedText]);
+
+  useEffect(() => {
     if (!browserReady) return;
-    recordStorage('input', writeStorage('let_pro_input', inputText));
-  }, [browserReady, inputText]);
+    const saveInput = () => writeStorage('let_pro_input', latestInputText.current);
+    const flushInput = () => recordStorage('input', saveInput());
+    const document = window.document;
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') flushInput();
+    };
+    window.addEventListener('pagehide', flushInput);
+    document?.addEventListener('visibilitychange', onVisibilityChange);
+    return () => {
+      // Preserve the last keystroke when navigating away before the timer fires.
+      saveInput();
+      window.removeEventListener('pagehide', flushInput);
+      document?.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, [browserReady]);
 
   useEffect(() => {
     if (!browserReady) return;

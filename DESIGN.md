@@ -21,6 +21,9 @@ Spanish browser-local text tools for people preparing names and messages; retain
 - Add Google's documented `google-anno-skip` marker to tool workspaces and the generator introduction; leave editorial sections outside those regions and preserve the AdSense loader. This marker excludes ad-intent annotations, not all Auto ads or global anchors.
 - Wait for the initial document load before installing/updating the offline cache; retain the explicit application-update choice.
 - Accept only compatible dependency fixes in this pass; do not downgrade the PWA stack or force dependency overrides.
+- Batch input persistence after typing pauses and flush the latest draft on page hide, backgrounding and navigation; keep immediate copy independent of that timer.
+- Optimize only independently verified single-code-point alphabet ranges; accents, flags, joined emoji and other complex graphemes retain Unicode segmentation.
+- Bound long style previews to a keyboard-scrollable area; keep the entire generated text and full copy/export behavior.
 
 ## Acceptance
 
