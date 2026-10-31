@@ -38,7 +38,7 @@ const InvisibleTextPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="google-anno-skip grid md:grid-cols-2 gap-8">
           
           {/* Main Card */}
           <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-xl text-center">

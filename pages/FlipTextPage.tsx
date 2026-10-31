@@ -55,7 +55,7 @@ const FlipTextPage: React.FC = () => {
            </button>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 items-stretch">
+        <div className="google-anno-skip grid md:grid-cols-2 gap-6 items-stretch">
            {/* Input */}
            <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col h-64 md:h-80 transition-colors duration-300">
               <div className="flex justify-between items-center mb-4">

@@ -431,7 +431,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         </div>
       </div>
 
-      <div className="pt-6 md:pt-12 pb-8 md:pb-20 px-4 text-center">
+      <div className="google-anno-skip pt-6 md:pt-12 pb-8 md:pb-20 px-4 text-center">
         <nav className="flex justify-center items-center gap-2 text-xs md:text-sm text-slate-600 dark:text-slate-300 mb-3 md:mb-6" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-primary-600 transition-colors flex items-center gap-1 font-medium">
             <Home size={12} /> Inicio
@@ -452,7 +452,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
       <div className="max-w-6xl mx-auto w-full px-4 -mt-4 md:-mt-10 relative z-20">
         
-        <div ref={inputContainerRef} className="bg-white dark:bg-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-6 md:mb-8">
+        <div ref={inputContainerRef} className="google-anno-skip bg-white dark:bg-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden mb-6 md:mb-8">
           <div className="p-5 md:p-8">
             <div className="flex flex-wrap justify-between items-center mb-4 md:mb-6 gap-3">
               <div className="hidden sm:flex gap-2 items-center text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest bg-slate-50 dark:bg-slate-900/50 px-3 py-1.5 rounded-full">
@@ -595,7 +595,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         </details>
         <HistoryBar history={history} onClear={() => setHistory([])} />
 
-        <div className="min-h-[600px]">
+        <div className="google-anno-skip min-h-[600px]">
           {/* ACCESSIBILITY FIX: Hidden H2 to fix heading hierarchy structure (H1 -> H2 -> H3) */}
           <h2 className="sr-only">Resultados de estilos</h2>
           

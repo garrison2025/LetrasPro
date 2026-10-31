@@ -49,7 +49,7 @@ const GlitchPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-12 gap-8">
+        <div className="google-anno-skip grid md:grid-cols-12 gap-8">
           
           {/* Controls */}
           <div className="md:col-span-5 space-y-8 bg-slate-900/50 p-6 rounded-3xl border border-slate-800">

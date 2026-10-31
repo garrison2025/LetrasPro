@@ -548,6 +548,13 @@ test('repeater flags stale results and requires regeneration before copying', as
     await act(async () => button(renderer, ' Generar Texto').props.onClick());
     assert.equal(copy().props.disabled, false);
     assert.ok(renderer.root.findByProps({ 'aria-label': 'Resultado del texto repetido' }).props.value.startsWith('Adiós'));
+    await act(async () => input().props.onChange({ target: { value: 'Hola' } }));
+    await act(async () => renderer.root.findByProps({ id: 'repeat-count' }).props.onChange({ target: { value: '3' } }));
+    await act(async () => button(renderer, 'Coma').props.onClick());
+    assert.equal(copy().props.disabled, true, 'Changing the separator requires regeneration');
+    await act(async () => button(renderer, ' Generar Texto').props.onClick());
+    assert.equal(renderer.root.findByProps({ 'aria-label': 'Resultado del texto repetido' }).props.value, 'Hola, Hola, Hola');
+    assert.equal(button(renderer, 'Coma').props['aria-pressed'], true);
   } finally { await act(async () => renderer.unmount()); }
 });
 

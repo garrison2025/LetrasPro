@@ -39,7 +39,7 @@ const BigTextPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="google-anno-skip space-y-6">
           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
              <label htmlFor="big-text-input" className="block text-sm font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Tu Texto</label>
              <div className="flex gap-2">
