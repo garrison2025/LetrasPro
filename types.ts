@@ -68,6 +68,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
+  summary: string;
   content: string; 
   date: string;
   author: string;

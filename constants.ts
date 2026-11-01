@@ -287,7 +287,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     path: '/letras-amino',
     title: 'Conversor de Letras Amino - Fuentes Aesthetic para Wikis',
     heading: 'Conversor de Letras Amino',
-    description: 'Decora tus blogs y wikis con letras aesthetic. Estilos verificados para la app Amino y perfiles soft.',
+    description: 'Decora tus blogs y wikis con letras aesthetic. Compara estilos para la app Amino y perfiles soft; revisa su apariencia al pegarlos.',
     filter: (f) => f.pages.includes('amino'),
     content: 'La comunidad de Amino ama la estética. Nuestro conversor de letras Amino está diseñado específicamente para crear blogs, wikis y biografías hermosas y ordenadas. Hemos filtrado las fuentes para facilitar la elección; prueba el resultado porque la compatibilidad puede variar. Crea títulos "aesthetic", separadores y decoraciones soft. Desde estilos "small caps" (letras pequeñas) hasta decoraciones vaporwave, aquí tienes todo para que tu perfil se vea profesional y curado.',
     whyFeatures: [
@@ -343,7 +343,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     path: '/letras-tattoo',
     title: 'Conversor de Letras Tattoo - Tipografías para Piel',
     heading: 'Conversor de Letras Tattoo',
-    description: 'Inspiración para tu próximo tatuaje. Lettering profesional, chicano y estilos de tinta para probar.',
+    description: 'Inspiración para tu próximo tatuaje. Compara lettering chicano y estilos de tinta como referencia visual para tu artista.',
     filter: (f) => f.pages.includes('tattoo'),
     content: 'El arte del lettering en la piel requiere precisión. Este conversor de letras tattoo es tu herramienta de bocetado gratuita. Ofrecemos estilos Unicode para comparar iniciales y fechas como inspiración; el artista debe adaptar el dibujo a la piel. Desde caligrafía clásica hasta estilos tribales y chicanos, cubrimos todas las tendencias. Úsalo para visualizar nombres de seres queridos o fechas importantes antes de ir al estudio. Tu piel merece el mejor diseño posible.',
     whyFeatures: [

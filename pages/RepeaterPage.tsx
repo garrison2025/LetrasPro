@@ -201,6 +201,7 @@ const RepeaterPage: React.FC = () => {
           <p>Escribe Hola, elige 3 repeticiones, selecciona la coma y pulsa Generar Texto. Obtendrás:</p>
           <pre data-tool-example>{repeatText('Hola', 3, ', ')}</pre>
           <p>Con salto de línea, cada repetición ocupa una fila. Con un separador personalizado puedes usar, por ejemplo, « · ». El separador se coloca entre las copias, sin añadir uno al final.</p>
+          <p>Para decorar una muestra breve, prueba <a href="/letras-para-whatsapp">letras para WhatsApp</a>. Si buscas cambiar la orientación en lugar de repetir, utiliza <a href="/texto-al-reves">texto al revés</a>.</p>
           <h3>Qué hacer si el resultado no se genera</h3>
           <p>Introduce texto y un número entero entre 1 y 1000. El resultado tiene un límite de 100 000 unidades de texto; un emoji puede ocupar varias. Si aparece el aviso de tamaño, reduce la frase o la cantidad. Después de cambiar la entrada, vuelve a generar antes de copiar.</p>
           <p>La herramienta solo prepara texto: no envía mensajes automáticamente. Antes de pegar en WhatsApp o Instagram, revisa el tamaño y las reglas del espacio donde vas a publicarlo. Evita mensajes repetitivos no solicitados.</p>

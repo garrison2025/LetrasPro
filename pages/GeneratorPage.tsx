@@ -528,7 +528,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-600 dark:placeholder:text-slate-400 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
             />
             {usageGuide && <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              Escribe, compara y copia una muestra corta. <a href="#ejemplo-conversion" className="text-primary-700 dark:text-primary-300 underline underline-offset-4">Ver ejemplo y límites de uso</a>.
+              {answer?.summary || 'Escribe, compara y copia una muestra corta.'} <a href="#ejemplo-conversion" className="text-primary-700 dark:text-primary-300 underline underline-offset-4">Ver ejemplo y límites de uso</a>.
             </p>}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
@@ -681,6 +681,18 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{answer.question}</h3>
               <p className="text-slate-700 dark:text-slate-200 mb-4">{answer.answer}</p>
             </>}
+            <div className="overflow-x-auto mb-4">
+              <table className="w-full text-left text-sm text-slate-700 dark:text-slate-200">
+                <caption className="text-left font-bold mb-2">Texto decorativo, formato y fuentes: diferencias</caption>
+                <thead><tr><th scope="col" className="p-2">Método</th><th scope="col" className="p-2">Qué obtienes</th><th scope="col" className="p-2">Qué comprobar</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row" className="p-2">Conversor Unicode</th><td className="p-2">Caracteres decorativos que puedes copiar.</td><td className="p-2">Lectura y aceptación en el campo de destino.</td></tr>
+                  <tr><th scope="row" className="p-2">Formato de la aplicación</th><td className="p-2">Formato aplicado por el propio editor, si lo ofrece.</td><td className="p-2">Opciones disponibles en esa aplicación.</td></tr>
+                  <tr><th scope="row" className="p-2">Archivo de fuente</th><td className="p-2">Una tipografía para un editor compatible; este conversor no entrega TTF u OTF.</td><td className="p-2">Compatibilidad del editor y licencia de la fuente.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            {config.path === '/letras-para-whatsapp' && <p className="text-slate-700 dark:text-slate-200 mb-4">Para negrita nativa, WhatsApp documenta el uso de asteriscos: <code>*Hola*</code>. Ese método mantiene las letras originales y es distinto de copiar caracteres decorativos. Consulta <a className="underline text-primary-700 dark:text-primary-300" href="https://faq.whatsapp.com/539178204879377/?locale=es_ES">cómo dar formato a los mensajes en la ayuda oficial de WhatsApp</a>; esta referencia explica el formato nativo, no certifica los estilos del conversor.</p>}
             <p className="text-slate-700 dark:text-slate-200 mb-3">Ejemplo para probar: <span className="font-bold">{usageGuide.example}</span></p>
             {exampleFont && <dl className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 mb-4">
               <dt className="text-sm font-semibold text-slate-600 dark:text-slate-300">Resultado con {exampleFont.name}</dt>

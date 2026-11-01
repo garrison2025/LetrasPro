@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { getPostBySlug } from '../data/blogPosts';
 import { EDITORIAL_ID, ORGANIZATION_ID, WEBSITE_ID } from '../data/siteIdentity';
 import NotFoundPage from './NotFoundPage';
+import contentDates from '../data/contentDates.json';
 import Toast from '../components/Toast';
 import { useClipboard } from '../hooks/useClipboard';
 import { Calendar, User, ChevronLeft, Tag, Share2, Home } from 'lucide-react';
@@ -18,6 +19,8 @@ if (!post) {
     return <NotFoundPage />;
   }
 
+  const updatedAt = contentDates.blogPageUpdated[post.slug as keyof typeof contentDates.blogPageUpdated] || contentDates.blogUpdated;
+  const visibleUpdatedAt = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(updatedAt + 'T00:00:00Z'));
   const canonicalUrl = `https://conversordeletrasbonitas.org/blog/${post.slug}`;
 
   // Structured Data Array: Article Schema + Breadcrumb Schema
@@ -36,8 +39,8 @@ if (!post) {
         "name": post.author
       },
       "datePublished": post.date,
-      // Matches the editorial review date already displayed below the header.
-      "dateModified": "2026-10-11",
+      // Shares the per-article content update date with the visible page and sitemap.
+      "dateModified": updatedAt,
       "inLanguage": "es",
       "publisher": { "@id": ORGANIZATION_ID },
       "mainEntityOfPage": {
@@ -166,8 +169,14 @@ if (!post) {
           </div>
         </header>
 
+        <section aria-labelledby="article-short-answer" className="mb-8 prose prose-slate dark:prose-invert max-w-none">
+          <h2 id="article-short-answer">Respuesta breve</h2>
+          <p data-article-summary>{post.summary}</p>
+          {post.slug.includes('canva') && <p className="text-sm">Consulta la ayuda de Canva sobre <a href="https://www.canva.com/help/upload-fonts/">subir y usar archivos de fuente</a> y <a href="https://www.canva.com/help/text-display/">problemas al mostrar texto</a>. Son instrucciones de Canva; las muestras de esta guía se generan en LetrasPro y no certifican compatibilidad con el editor.</p>}
+        </section>
+
         <aside className="mb-8 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300">
-          <p>Revisión editorial: 11 de octubre de 2026. Se conservan las fechas de publicación; se han revisado las afirmaciones y añadido ejemplos reproducibles. Las aplicaciones pueden cambiar sus límites y el aspecto de los caracteres.</p>
+          <p>Actualización de contenido: {visibleUpdatedAt}. Se conservan las fechas de publicación; las introducciones y los ejemplos distinguen los resultados del conversor de las recomendaciones de uso. Las aplicaciones pueden cambiar sus límites y el aspecto de los caracteres.</p>
           <p className="mt-2">Las ideas de diseño no garantizan aumentos de seguidores, alcance o conversiones. Usa texto normal para la información esencial y prueba los estilos antes de publicarlos.</p>
         </aside>
         {/* Cover Image with srcset and explicit dimensions to prevent CLS */}
