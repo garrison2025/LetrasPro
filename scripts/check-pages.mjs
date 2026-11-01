@@ -113,6 +113,7 @@ for (const url of urls) {
   }
   const article = entities.find(entity => entity['@type'] === 'BlogPosting');
   if (article) {
+    assert.match(html, /data-article-summary[^>]*>[^<]+<\/p>/, `Crawlable article summary: ${route}`);
     assert.equal(article.author['@id'], `${siteUrl}/sobre-nosotros#equipo-editorial`);
     assert.equal(article.publisher['@id'], organization['@id']);
     assert.equal(webpage.mainEntity['@id'], article['@id']);

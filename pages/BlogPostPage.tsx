@@ -169,6 +169,12 @@ if (!post) {
           </div>
         </header>
 
+        <section aria-labelledby="article-short-answer" className="mb-8 prose prose-slate dark:prose-invert max-w-none">
+          <h2 id="article-short-answer">Respuesta breve</h2>
+          <p data-article-summary>{post.summary}</p>
+          {post.slug.includes('canva') && <p className="text-sm">Consulta la ayuda de Canva sobre <a href="https://www.canva.com/help/upload-fonts/">subir y usar archivos de fuente</a> y <a href="https://www.canva.com/help/text-display/">problemas al mostrar texto</a>. Son instrucciones de Canva; las muestras de esta guía se generan en LetrasPro y no certifican compatibilidad con el editor.</p>}
+        </section>
+
         <aside className="mb-8 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300">
           <p>Actualización de contenido: {visibleUpdatedAt}. Se conservan las fechas de publicación; las introducciones y los ejemplos distinguen los resultados del conversor de las recomendaciones de uso. Las aplicaciones pueden cambiar sus límites y el aspecto de los caracteres.</p>
           <p className="mt-2">Las ideas de diseño no garantizan aumentos de seguidores, alcance o conversiones. Usa texto normal para la información esencial y prueba los estilos antes de publicarlos.</p>
