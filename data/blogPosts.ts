@@ -13,7 +13,7 @@ export const BLOG_POSTS: BlogPost[] = [
     // IMAGE OPTIMIZATION: force WebP and q=80 for performance (LCP)
     imageUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
-      <p class="lead">En el saturado mundo de las redes sociales, destacar es cada vez más difícil. Ya no basta con tener buenas fotos; la estética de tu texto juega un papel fundamental. Aquí es donde entra en juego una herramienta poderosa y a menudo subestimada: el <strong>conversor de letras bonitas</strong>.</p>
+      <p class="lead">Usa un <strong>conversor de letras bonitas</strong> para comparar una frase corta en Instagram y Facebook. Esta guía muestra resultados de LetrasPro, cómo copiarlos y qué revisar si se pierden tildes o aparecen cuadros. La apariencia depende del campo y del dispositivo; conserva el texto original.</p>
 
       <h2>Ejercicio: un nombre destacado y datos fáciles de leer</h2>
    <p>Partimos de María | Café, una muestra que incluye una tilde y un separador. Estas versiones salen de la conversión de LetrasPro; no son capturas de Instagram ni pruebas de compatibilidad con Facebook.</p>
@@ -107,7 +107,7 @@ export const BLOG_POSTS: BlogPost[] = [
     // IMAGE OPTIMIZATION: force WebP and q=80 for performance (LCP)
     imageUrl: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
-      <p class="lead">Un tatuaje es para siempre (o casi). Por eso, elegir la tipografía correcta para una frase, un nombre o una fecha es una decisión crítica. A diferencia del papel, la piel envejece, se estira y cambia con el tiempo. Un buen <strong>conversor de letras para tatuajes</strong> no solo te ayuda a visualizar el diseño, sino que puede ser la herramienta que evite un desastre estético en el futuro.</p>
+      <p class="lead">Compara <strong>letras para tatuajes</strong> antes de llevar una idea al estudio. Las muestras de este conversor son referencias de texto Unicode: no sustituyen un boceto a escala ni una plantilla preparada por el artista. Revisa primero la frase, sus tildes y su lectura.</p>
 
       <h2>Ejercicio: comparar la misma frase antes de llevarla al estudio</h2>
    <p>Usamos Siempre aquí para comparar una referencia gótica con otra cursiva. Ambas se generan con la misma herramienta de esta web; no muestran tinta sobre piel ni una plantilla lista para tatuar.</p>
@@ -188,7 +188,7 @@ export const BLOG_POSTS: BlogPost[] = [
     // IMAGE OPTIMIZATION: force WebP and q=80 for performance (LCP)
     imageUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
-      <p class="lead">En el lobby de cualquier Battle Royale, tu nombre es lo primero que ven tus enemigos (y lo último que ven en la killcam cuando los eliminas). Un nick genérico como "Juan123" no transmite nada. Pero un nick estilizado como "𝕵𝖚𝖆𝖓☠" o "Jᴜᴀɴ⚡" impone respeto inmediato. Para lograr esto, necesitas dominar el uso del <strong>conversor de letras graffiti</strong> y otras herramientas de símbolos.</p>
+      <p class="lead">Prueba un <strong>conversor de letras graffiti</strong> y símbolos para preparar un nick de Free Fire. Los ejemplos permiten comparar letras y números; la aceptación, disponibilidad y posible coste del cambio se comprueban dentro del juego.</p>
 
       <h2>Ejercicio: un nick visible antes de añadir símbolos</h2>
    <p>Comenzamos con Luna7, sin adornos, para revisar el nombre y el número por separado. Estas son salidas del generador, no nombres reservados ni aceptados por Free Fire.</p>
@@ -262,7 +262,7 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ['Instagram', 'Canva', 'Diseño', 'Marketing', 'Tipografía'],
     imageUrl: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
-      <p class="lead">En la saturada jungla digital que representa Instagram en la actualidad, capturar y retener la atención del usuario se ha convertido en la moneda de cambio más valiosa. Ya no basta simplemente con publicar fotos estéticas o vídeos dinámicos; la composición visual de cada elemento, incluida la tipografía, juega un papel crucial en la decisión de un usuario de pulsar el botón de "Seguir". Aquí es donde ocurre la magia: al combinar la versatilidad de diseño de <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> con la expresividad tipográfica de nuestro <a href="/">conversor de letras bonitas</a>, obtienes una ventaja competitiva brutal para diferenciar tu marca personal o negocio.</p>
+      <p class="lead">Combina <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> con el <a href="/">conversor de letras bonitas</a> para comparar títulos breves de Instagram. Aquí encontrarás una muestra con tildes y una forma de revisar la legibilidad. Pegar caracteres decorativos no instala una fuente en Canva ni garantiza más seguidores.</p>
 
       <h2>Ejercicio: separar texto decorativo y texto informativo</h2>
    <p>La muestra Café de Luna permite preparar un título corto para una publicación. La tabla muestra caracteres generados aquí; no reproduce la interfaz de Canva ni acredita resultados de una cuenta de Instagram.</p>
@@ -270,7 +270,7 @@ export const BLOG_POSTS: BlogPost[] = [
    <ol><li>Convierte el título en <a href="/letras-para-instagram">Letras para Instagram</a> y conserva el original.</li><li>En tu diseño de Canva, compara una caja con texto normal y otra con la muestra pegada, manteniendo el mismo espacio disponible.</li><li>Escribe «Tres pasos para preparar café» y los pasos del proceso en texto normal con una fuente del editor.</li><li>Revisa el diseño exportado en móvil; si hay cuadros, tildes extrañas o cortes, sustituye la muestra por texto normal.</li></ol>
    <p><strong>Qué evaluar:</strong> si se distingue el título, si las tildes se mantienen y si las instrucciones se leen sin ampliar. Las opciones de Canva dependen del editor y de la cuenta; pegar Unicode no añade un archivo de fuente ni desbloquea funciones de pago. Guarda una versión sin decoración para poder comparar. Este ejercicio no garantiza clics, alcance ni seguidores.</p>
 
-      <p>En esta guía, analizaremos paso a paso y de manera puramente estratégica cómo puedes dominar estas dos herramientas gratuitas para renovar por completo tu presencia visual, aumentar tu alcance de forma orgánica, mejorar tus métricas de interacción (engagement) y evaluar si los cambios ayudan a convertir visitantes en seguidores, sin garantizar resultados.</p>
+      <p>En esta guía compararás una muestra decorativa con texto normal, revisarás el archivo exportado y elegirás la opción que conserve mejor la lectura.</p>
 
       <h2>1. El Paradigma de la Primera Impresión: La Economía de la Atención en Instagram</h2>
       <p>Prepara el perfil para que una persona pueda reconocer tu nombre y actividad sin descifrar letras complejas. No contamos con una medición que establezca cuánto tiempo dedicará cada visitante a la primera impresión.</p>
@@ -288,7 +288,8 @@ export const BLOG_POSTS: BlogPost[] = [
       </ul>
       <p>Elegir el estilo adecuado no es una cuestión de gusto personal; se trata de consistencia. Un primer paso para mejorar la coherencia visual es elegir un estilo de fuente primario y uno secundario, y utilizarlos de manera uniforme en todos tus canales visuales.</p>
 
-      <h2>3. Canva: Tu estudio de diseño profesional democratizado</h2>
+      <h2>3. Canva: fuentes del editor y caracteres pegados</h2>
+      <p><strong>Si el texto pegado falla:</strong> vuelve al original y elige una fuente disponible en Canva. Pegar Unicode cambia los caracteres, no añade un archivo TTF u OTF. No necesitas subir una fuente para reproducir esta comparación. Si una función aparece bloqueada, usa una opción disponible en tu cuenta; el conversor no desbloquea funciones de Canva.</p>
       <p>Durante años, el diseño gráfico profesional estuvo limitado a aquellos que dominaban softwares sumamente complejos y costosos. Sin embargo, <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> cambió por completo las reglas del juego al democratizar el diseño digital. Gracias a su intuitivo sistema de "arrastrar y soltar", miles de creadores de todo el mundo pueden diseñar piezas de contenido espectaculares en cuestión de minutos.</p>
       <p>Puedes partir de una plantilla de Canva y adaptarla al contenido. Elegir una plantilla no asegura por sí solo contraste, proporciones o legibilidad: revisa el diseño al tamaño final, especialmente cuando cambies la longitud del título.</p>
       <p>Sin embargo, dado que millones de personas utilizan Canva diariamente, existe el riesgo latente de que tus diseños luzcan exactamente iguales a los de tus competidores que usan las mismas plantillas predeterminadas. Para solucionar esto y dotar a tus diseños de una originalidad irrepetible, la integración de textos convertidos con fuentes bonitas personalizadas desde nuestro generador es la clave absoluta de la diferenciación.</p>
@@ -407,7 +408,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h2>10. Conclusión: El camino hacia la excelencia visual</h2>
       <p>Conserva una versión legible de cada diseño y registra qué cambias en tus publicaciones de Instagram. Evalúa los resultados de tu cuenta sin atribuirlos automáticamente a una fuente; este proceso no promete duplicar seguidores.</p>
-      <p>La combinación estratégica de <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> y las infinitas posibilidades que te ofrece nuestro <a href="/">conversor de letras bonitas</a> en LetrasPro te dota de todo lo que necesitas para competir al más alto nivel con grandes marcas y presupuestos publicitarios, de forma completamente gratuita.</p>
+      <p>La combinación estratégica de <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> y las infinitas posibilidades que te ofrece nuestro <a href="/">conversor de letras bonitas</a> en LetrasPro te permite comparar estilos antes de publicar. Revisa las opciones de tu cuenta y conserva una versión normal del texto.</p>
       <p>Te invitamos a no quedarte solo con la teoría. Abre tu cuenta de Canva, entra en nuestro generador de fuentes, define hoy mismo tu nueva identidad visual tipográfica y comienza a construir el perfil de Instagram con el que siempre has soñado. ¡La creatividad es tu único límite!</p>
     `
   },
@@ -421,7 +422,7 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ['Canva', 'Branding', 'Diseño de Marca', 'Identidad Visual', 'Tipografía'],
     imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
-      <p class="lead">Construir una marca memorable en la era del bombardeo digital constante requiere mucho más que un logotipo bonito o un producto excelente. La clave del éxito empresarial radica en la coherencia y el reconocimiento instantáneo. Cuando un cliente potencial navega por internet, debe ser capaz de identificar tu negocio de inmediato a través de tus colores, tu estructura de diseño y, por supuesto, tu tipografía característica. En esta completísima guía, te enseñaremos paso a paso cómo crear un <strong>Kit de Marca (Brand Kit)</strong> sumamente profesional utilizando <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> y cómo inyectar personalidad única en tus diseños integrando letras estéticas de nuestro <a href="/">conversor de letras bonitas</a>.</p>
+      <p class="lead">Prepara un <strong>Kit de Marca en Canva</strong> distinguiendo las fuentes del editor de los caracteres del <a href="/">conversor de letras bonitas</a>. Compara un nombre corto, conserva una versión normal y usa tipografía legible para los datos. Las funciones disponibles dependen de tu cuenta de Canva.</p>
 
       <h2>Ejercicio: una ficha de marca que puedas reutilizar</h2>
    <p>Para la marca ficticia Luna Café, conserva una forma normal del nombre y una muestra decorativa. Es un ejemplo de organización del contenido, no un Kit de Marca ya configurado en Canva.</p>
@@ -557,7 +558,7 @@ export const BLOG_POSTS: BlogPost[] = [
     tags: ['Canva', 'Tipografía', 'Diseño Gráfico', 'Combinación de Fuentes', 'Arte Editorial'],
     imageUrl: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=1280&auto=format&fit=crop&fm=webp',
     content: `
-      <p class="lead">La tipografía es el lenguaje silencioso del diseño. Antes de que un usuario comience a leer la primera palabra de un texto, su subconsciente ya ha descodificado el mensaje de marca, el tono de voz y la atmósfera emocional de tu publicación a través del estilo de la letra. En el diseño gráfico profesional, dominar la combinación tipográfica es el equivalente a saber mezclar colores de forma armónica. Sin embargo, para muchos creadores independientes y emprendedores que utilizan <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a>, emparejar tipos de letra puede resultar una tarea abrumadora y llena de dudas. ¿Cómo saber qué fuentes combinan y cuáles chocan visualmente de forma desastrosa?</p>
+      <p class="lead">Para combinar <strong>fuentes bonitas en Canva</strong>, empieza por un título, un subtítulo y los datos esenciales. Esta guía compara muestras del <a href="/">conversor de letras bonitas</a> y propone comprobaciones de tamaño, contraste y tildes. El resultado debe seguir siendo legible en el archivo exportado.</p>
 
       <h2>Ejercicio: comparar jerarquías sin decorar todo el párrafo</h2>
    <p>Usamos Taller de cerámica como título. Primero compara estas dos salidas del conversor; luego elige una y conserva el resto de la información en texto normal.</p>

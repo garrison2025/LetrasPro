@@ -88,7 +88,7 @@ const generateFiles = () => {
     sitemap += `
   <url>
     <loc>${BASE_URL}/blog/${slug}</loc>
-    <lastmod>${dates.blogUpdated}</lastmod>
+    <lastmod>${dates.blogPageUpdated?.[slug] || dates.blogUpdated}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`;
