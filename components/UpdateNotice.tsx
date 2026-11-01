@@ -11,7 +11,8 @@ const UpdateNotice: React.FC = () => {
   useEffect(() => {
     let active = true;
     const updateSW = registerSW({
-      immediate: true,
+      // Avoid downloading the offline cache while the initial page is loading.
+      immediate: false,
       async onNeedRefresh() {
         try {
           const response = await fetch('/app-version.json', { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(5000) });

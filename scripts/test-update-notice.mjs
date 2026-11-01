@@ -63,7 +63,7 @@ test('an available update waits for a user choice and can be dismissed', async (
   await act(async () => { renderer = TestRenderer.create(React.createElement(UpdateNotice)); });
   try {
     assert.equal(renderer.toJSON(), null);
-    assert.equal(registration.callbacks.immediate, true);
+    assert.equal(registration.callbacks.immediate, false, 'Wait for page load before installing the offline cache');
     await act(async () => { registration.callbacks.onNeedRefresh(); });
     assert.equal(registration.updates.length, 0);
     assert.equal(renderer.root.findByType('aside').props['aria-label'], 'Actualización de la aplicación');

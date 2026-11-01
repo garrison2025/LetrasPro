@@ -50,7 +50,7 @@ export default function CurvedTextPage() {
       <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">Generador de Texto Curvo</h1>
       <p className="max-w-3xl text-lg text-slate-700 dark:text-slate-300">Escribe un título y convierte tu texto en un arco hacia arriba o hacia abajo. Cambia la curvatura, el color y el tamaño para diseños de insignias, invitaciones y encabezados.</p>
     </div>
-    <div className="grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
+    <div className="google-anno-skip grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
       <section aria-label="Editar texto curvo" className="p-5 sm:p-6 bg-white dark:bg-slate-800 rounded-2xl border dark:border-slate-700 shadow-sm space-y-5">
         <div><label htmlFor="curve-text" className="block font-bold text-sm mb-2">Texto para curvar</label><input id="curve-text" className={field} maxLength={42} value={text} onChange={e => setText(e.target.value)} placeholder="Mi título" /></div>
         <fieldset><legend className="font-bold text-sm mb-2">Dirección de la curva</legend><div className="grid grid-cols-2 gap-2">

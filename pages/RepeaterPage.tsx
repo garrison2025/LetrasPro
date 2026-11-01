@@ -67,7 +67,7 @@ const RepeaterPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="google-anno-skip grid md:grid-cols-2 gap-8">
           {/* Controls */}
           <div className="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm h-fit">
             <div className="space-y-6">
@@ -108,6 +108,12 @@ const RepeaterPage: React.FC = () => {
                     className={`px-3 py-2 rounded-lg text-sm font-medium border ${separator === 'space' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-800'}`}
                   >
                     Espacio
+                  </button>
+                  <button
+                    onClick={() => setSeparator('comma')} aria-pressed={separator === 'comma'}
+                    className={`px-3 py-2 rounded-lg text-sm font-medium border ${separator === 'comma' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-white dark:bg-slate-800'}`}
+                  >
+                    Coma
                   </button>
                   <button 
                     onClick={() => setSeparator('period')} aria-pressed={separator === 'period'}

@@ -60,7 +60,7 @@ export default function SignaturePage() {
       <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">Generador de Firmas Bonitas</h1>
       <p className="max-w-3xl text-lg text-slate-700 dark:text-slate-300">Escribe tu nombre, prueba distintas firmas tipográficas y descarga un diseño para tus proyectos creativos, invitaciones o marcas de agua.</p>
     </div>
-    <div className="grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
+    <div className="google-anno-skip grid lg:grid-cols-[350px_minmax(0,1fr)] gap-6 items-start">
       <section aria-label="Editor de firma bonita" className="p-5 sm:p-6 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl shadow-sm space-y-5">
         <div><label htmlFor="firma-name" className="block text-sm font-bold mb-2">Tu nombre</label><input id="firma-name" className={field} maxLength={48} value={name} onChange={e => setName(e.target.value)} /></div>
         <fieldset><legend className="text-sm font-bold mb-2">Estilo de la firma</legend>

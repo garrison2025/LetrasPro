@@ -37,6 +37,76 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const { default: GeneratorPage } = await import(loadSource(path.join(root, 'pages/GeneratorPage.tsx')));
 const { PAGE_CONFIGS } = await import(loadSource(path.join(root, 'constants.ts')));
 
+test('typing batches storage writes and flushes the latest draft on backgrounding or navigation', async () => {
+  const previousWindow = globalThis.window;
+  const previousStorage = globalThis.localStorage;
+  const windowListeners = new Map();
+  const documentListeners = new Map();
+  const document = {
+    visibilityState: 'visible',
+    addEventListener: (name, listener) => documentListeners.set(name, listener),
+    removeEventListener: name => documentListeners.delete(name),
+  };
+  const writes = [];
+  let storageAvailable = true;
+  globalThis.fontCardRenders = 0;
+  globalThis.window = {
+    document,
+    addEventListener: (name, listener) => windowListeners.set(name, listener),
+    removeEventListener: name => windowListeners.delete(name),
+  };
+  globalThis.localStorage = {
+    getItem: key => key === 'let_pro_input' ? 'Guardado ñ' : null,
+    setItem: (key, value) => {
+      if (!storageAvailable) throw new Error('Storage blocked');
+      if (key === 'let_pro_input') writes.push(value);
+    },
+  };
+  let renderer;
+  try {
+    await act(async () => {
+      renderer = TestRenderer.create(React.createElement(MemoryRouter, null,
+        React.createElement(GeneratorPage, { config: PAGE_CONFIGS.home })));
+    });
+    const input = () => renderer.root.findByProps({ 'aria-label': 'Texto para convertir' });
+    assert.equal(input().props.value, 'Guardado ñ');
+    assert.deepEqual(writes, [], 'Do not overwrite the restored draft with the initial empty debounce value');
+    for (let index = 0; index < 20; index++) {
+      await act(async () => input().props.onChange({ target: { value: `Café ${index}` } }));
+    }
+    assert.deepEqual(writes, [], 'No synchronous storage write per keystroke');
+    await act(async () => { await new Promise(resolve => setTimeout(resolve, 350)); });
+    assert.deepEqual(writes, ['Café 19'], 'Save only the final draft after the burst');
+    await act(async () => input().props.onChange({ target: { value: 'Último 👨‍👩‍👧‍👦' } }));
+    await act(async () => windowListeners.get('pagehide')());
+    assert.equal(writes.at(-1), 'Último 👨‍👩‍👧‍👦');
+    await act(async () => input().props.onChange({ target: { value: 'Al cambiar de aplicación 🇪🇸' } }));
+    document.visibilityState = 'hidden';
+    await act(async () => documentListeners.get('visibilitychange')());
+    assert.equal(writes.at(-1), 'Al cambiar de aplicación 🇪🇸');
+    storageAvailable = false;
+    await act(async () => input().props.onChange({ target: { value: 'Sin perder el borrador' } }));
+    await act(async () => windowListeners.get('pagehide')());
+    assert.equal(input().props.value, 'Sin perder el borrador');
+    assert.ok(JSON.stringify(renderer.toJSON()).includes('No se pudieron guardar algunos cambios'));
+    storageAvailable = true;
+    await act(async () => windowListeners.get('pagehide')());
+    assert.equal(writes.at(-1), 'Sin perder el borrador');
+    assert.ok(!JSON.stringify(renderer.toJSON()).includes('No se pudieron guardar algunos cambios'));
+    await act(async () => input().props.onChange({ target: { value: 'Antes de navegar áÑ' } }));
+    await act(async () => renderer.unmount());
+    renderer = null;
+    assert.equal(writes.at(-1), 'Antes de navegar áÑ');
+    assert.equal(windowListeners.has('pagehide'), false);
+    assert.equal(documentListeners.has('visibilitychange'), false);
+  } finally {
+    if (renderer) await act(async () => renderer.unmount());
+    globalThis.window = previousWindow;
+    globalThis.localStorage = previousStorage;
+    delete globalThis.fontCardRenders;
+  }
+});
+
 test('sticky input observes viewport crossings and rebuilds at desktop/mobile resize without a scroll listener', async () => {
   const previousWindow = globalThis.window;
   const previousStorage = globalThis.localStorage;
@@ -112,6 +182,27 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
     const beforeTyping = globalThis.fontCardRenders;
     assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 24);
     assert.ok(beforeTyping >= 24);
+    const previewRegion = renderer.root.findByProps({ 'aria-label': 'Vista previa de Sans Bold' });
+    assert.equal(previewRegion.props.role, 'region');
+    assert.equal(previewRegion.props.tabIndex, 0, 'Long previews remain keyboard-scrollable');
+    assert.match(previewRegion.props.className, /max-h-72.*overflow-auto/);
+    const region = { scrollTop: 0, scrollHeight: 1200, clientHeight: 288 };
+    let prevented = 0;
+    const key = (value, extra = {}) => previewRegion.props.onKeyDown({ key: value, target: region, currentTarget: region, preventDefault: () => prevented++, ...extra });
+    key('ArrowDown'); assert.equal(region.scrollTop, 80);
+    key('ArrowUp'); assert.equal(region.scrollTop, 0);
+    key('PageDown'); assert.equal(region.scrollTop, 288);
+    key('PageUp'); assert.equal(region.scrollTop, 0);
+    key('End'); assert.equal(region.scrollTop, 1200);
+    key('Home'); assert.equal(region.scrollTop, 0);
+    const handled = prevented;
+    key('End', { ctrlKey: true });
+    key('End', { target: {} });
+    key('Tab');
+    assert.equal(prevented, handled, 'Keep browser shortcuts, child controls and Tab behavior');
+    region.scrollHeight = region.clientHeight;
+    key('PageDown');
+    assert.equal(prevented, handled, 'Short previews keep normal page scrolling');
     const input = renderer.root.findByProps({ 'aria-label': 'Texto para convertir' });
     const latest = 'Último ñ 👨‍👩‍👧‍👦🇪🇸';
     for (const value of ['U', 'Último', latest]) {
