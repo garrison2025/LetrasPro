@@ -16,7 +16,7 @@ import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertC
 import { useDebounce } from '../hooks/useDebounce';
 import { useDynamicDate } from '../hooks/useDynamicDate';
 import { MAX_INPUT_LENGTH, splitCharacters, truncateText } from '../services/text';
-import { TONES, matchesTone } from '../services/fontFilters';
+import { TONES, matchesTone, filterFontsBySearch } from '../services/fontFilters';
 import { readStorage, readStoredArray, writeStorage } from '../services/storage';
 
 interface GeneratorPageProps {
@@ -49,6 +49,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const [searchQuery, setSearchQuery] = useState('');
   
   const [activeTone, setActiveTone] = useState('Todos');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [showBioTemplates, setShowBioTemplates] = useState(false);
   const [showAllSymbols, setShowAllSymbols] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -100,8 +101,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const exampleFont = useMemo(() => FONTS.find(font => config.filter(font)
     && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
-  // Format generator titles using the recorded content update date.
+  // Keep the homepage evergreen; preserve other generators' recorded-date titles.
   const dynamicTitle = useMemo(() => {
+    if (config.path === '/') return config.title;
     let t = config.title;
     if (t.includes('2025')) {
       t = t.replace('2025', `${month} ${year}`);
@@ -109,7 +111,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       t = `${t} (${month} ${year})`;
     }
     return t;
-  }, [config.title, month, year]);
+  }, [config.path, config.title, month, year]);
 
   const dynamicDescription = config.description.replace('2025', year);
 
@@ -188,6 +190,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   useEffect(() => {
     setVisibleCount(ITEMS_PER_PAGE);
     setActiveTone('Todos');
+    setShowFavoritesOnly(false);
     setRatingSaved(true);
     const storedRating = Number(readStorage(`rating_${config.path}`));
     if (Number.isInteger(storedRating) && storedRating >= 1 && storedRating <= 5) {
@@ -331,10 +334,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const filteredFonts = useMemo(() => {
     let result = FONTS.filter(config.filter);
     
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(f => f.name.toLowerCase().includes(q) || f.category.includes(q) || f.tags?.some(t => t.toLowerCase().includes(q)));
-    }
+    result = filterFontsBySearch(result, searchQuery);
+    if (config.path === '/' && showFavoritesOnly) result = result.filter(font => favorites.includes(font.id));
     
     if (activeTone !== 'Todos') {
       result = result.filter(f => matchesTone(f, activeTone));
@@ -347,7 +348,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       if (!aFav && bFav) return 1;
       return 0;
     });
-  }, [config.filter, favorites, searchQuery, activeTone]);
+  }, [config.filter, config.path, favorites, searchQuery, activeTone, showFavoritesOnly]);
 
   const availableTones = useMemo(() => TONES.filter(tone => FONTS.some(font => config.filter(font) && matchesTone(font, tone))), [config.filter]);
 
@@ -595,6 +596,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 ))}
              </div>
 
+             {config.path === '/' && <p className="sm:hidden text-xs text-slate-600 dark:text-slate-300">Desliza las categorías para ver más →</p>}
+
              <div className="flex items-center gap-2 justify-end">
                 <div className="flex bg-white dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
                    <button onClick={() => setViewMode('list')} aria-pressed={viewMode === 'list'} aria-label="Vista de Lista" className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-600' : 'text-slate-400 hover:text-slate-600'}`}><LayoutList size={18}/></button>
@@ -603,6 +606,23 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 </div>
              </div>
           </div>
+          {config.path === '/' && <div className="border-t border-slate-100 dark:border-slate-700 px-4 py-3 md:px-5 flex flex-wrap items-center gap-2">
+            <div role="group" aria-label="Estilos rápidos" className="flex flex-wrap gap-2">
+              {['Cursivas', 'Góticas', 'Negritas'].map(style => {
+                const selected = searchQuery.trim().toLowerCase() === style.toLowerCase();
+                return <button key={style} type="button" aria-pressed={selected}
+                  onClick={() => { updateSearchQuery(selected ? '' : style); setActiveTone('Todos'); }}
+                  className={`min-h-[44px] px-3 py-2 rounded-xl text-xs font-bold transition-colors ${selected ? 'bg-primary-600 text-white' : 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/50'}`}>
+                  {style}
+                </button>;
+              })}
+            </div>
+            <button type="button" aria-label="Solo favoritos" aria-pressed={showFavoritesOnly}
+              onClick={() => { setShowFavoritesOnly(value => !value); setVisibleCount(ITEMS_PER_PAGE); }}
+              className={`min-h-[44px] px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors ${showFavoritesOnly ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'}`}>
+              <Star size={14} aria-hidden="true" /> Solo favoritos
+            </button>
+          </div>}
         </div>
 
         {Object.values(storageFailures).some(Boolean) && <p role="status" className="mb-4 text-sm text-amber-700 dark:text-amber-300">No se pudieron guardar algunos cambios. Están disponibles solo durante esta sesión.</p>}
@@ -621,8 +641,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
           
           <p role="status" className="text-sm text-slate-500 dark:text-slate-400 mb-4">{filteredFonts.length} estilos encontrados</p>
           {filteredFonts.length === 0 && <div className="text-center py-12 rounded-3xl bg-white dark:bg-slate-800">
-            <p className="text-slate-700 dark:text-slate-200 mb-4">No hay estilos que coincidan con esta búsqueda y filtro.</p>
-            <button type="button" onClick={() => { updateSearchQuery(''); setActiveTone('Todos'); }} className="px-5 py-3 rounded-xl bg-primary-600 text-white font-bold">Restablecer filtros</button>
+            <p className="text-slate-700 dark:text-slate-200 mb-4">{showFavoritesOnly && favorites.length === 0 ? 'Aún no tienes favoritos. Pulsa la estrella de un estilo para guardarlo en este navegador.' : 'No hay estilos que coincidan con esta búsqueda y filtro.'}</p>
+            <button type="button" onClick={() => { updateSearchQuery(''); setActiveTone('Todos'); setShowFavoritesOnly(false); }} className="px-5 py-3 rounded-xl bg-primary-600 text-white font-bold">Restablecer filtros</button>
           </div>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {visibleFonts.map(font => {

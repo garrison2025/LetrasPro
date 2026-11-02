@@ -337,6 +337,63 @@ test('URL queries follow navigation, back and forward; editing preserves unrelat
   } finally { await act(async () => renderer.unmount()); }
 });
 
+test('homepage style shortcuts preserve attribution, reset conflicting tones and toggle off', async () => {
+  const renderer = await mount(React.createElement(MemoryRouter, { initialEntries: ['/?utm_source=test'] }, React.createElement(GeneratorRoute)));
+  const search = () => renderer.root.findByProps({ 'aria-label': 'Buscar estilo' });
+  const count = () => renderer.root.findByProps({ role: 'status' }).children.join('');
+  try {
+    await act(async () => button(renderer, 'Profesional').props.onClick());
+    for (const [label, expected] of [['Cursivas', 64], ['Góticas', 72], ['Negritas', 13]]) {
+      await act(async () => button(renderer, label).props.onClick());
+      assert.equal(search().props.value, label);
+      assert.equal(button(renderer, label).props['aria-pressed'], true);
+      assert.equal(button(renderer, 'Todos').props['aria-pressed'], true);
+      assert.equal(new URLSearchParams(currentLocation.search).get('utm_source'), 'test');
+      assert.equal(new URLSearchParams(currentLocation.search).get('q'), label);
+      assert.equal(count(), `${expected} estilos encontrados`);
+    }
+    await act(async () => button(renderer, 'Negritas').props.onClick());
+    assert.equal(search().props.value, '');
+    assert.equal(count(), '259 estilos encontrados');
+    await act(async () => navigate('/letras-cursivas'));
+    assert.equal(button(renderer, 'Cursivas'), undefined, 'Do not add homepage controls to other pages');
+    assert.equal(renderer.root.findAllByProps({ 'aria-label': 'Solo favoritos' }).length, 0);
+  } finally { await act(async () => renderer.unmount()); }
+});
+
+test('favorites-only combines with search, handles removing the last favorite and resets safely', async () => {
+  const renderer = await mount(React.createElement(MemoryRouter, null, React.createElement(GeneratorRoute)));
+  const favorites = () => renderer.root.findByProps({ 'aria-label': 'Solo favoritos' });
+  const count = () => renderer.root.findByProps({ role: 'status' }).children.join('');
+  const click = async label => act(async () => renderer.root.findByProps({ 'aria-label': label }).props.onClick({ stopPropagation() {} }));
+  try {
+    await act(async () => favorites().props.onClick());
+    assert.equal(count(), '0 estilos encontrados');
+    assert.ok(JSON.stringify(renderer.toJSON()).includes('Aún no tienes favoritos.'));
+    await act(async () => button(renderer, 'Restablecer filtros').props.onClick());
+    assert.equal(favorites().props['aria-pressed'], false);
+    await click('Añadir Sans Bold a favoritos');
+    await click('Añadir Gothic Normal a favoritos');
+    await act(async () => favorites().props.onClick());
+    assert.equal(count(), '2 estilos encontrados');
+    await act(async () => button(renderer, 'Negritas').props.onClick());
+    assert.equal(count(), '1 estilos encontrados');
+    await click('Quitar Sans Bold de favoritos');
+    assert.equal(count(), '0 estilos encontrados');
+    await act(async () => button(renderer, 'Negritas').props.onClick());
+    assert.equal(count(), '1 estilos encontrados');
+    await click('Quitar Gothic Normal de favoritos');
+    assert.equal(count(), '0 estilos encontrados');
+    assert.ok(JSON.stringify(renderer.toJSON()).includes('Aún no tienes favoritos.'));
+    await act(async () => button(renderer, 'Restablecer filtros').props.onClick());
+    assert.equal(count(), '259 estilos encontrados');
+    await act(async () => favorites().props.onClick());
+    await act(async () => navigate('/letras-cursivas'));
+    await act(async () => navigate('/'));
+    assert.equal(favorites().props['aria-pressed'], false, 'Route changes reset the temporary filter');
+  } finally { await act(async () => renderer.unmount()); }
+});
+
 test('empty searches explain the result and reset without losing campaign attribution', async () => {
   const renderer = await mount(React.createElement(MemoryRouter, { initialEntries: ['/?q=__no_matching_style__&utm_source=test'] }, React.createElement(GeneratorRoute)));
   try {
