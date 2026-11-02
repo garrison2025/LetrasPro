@@ -25,6 +25,13 @@ Spanish browser-local text tools for people preparing names and messages; retain
 - Optimize only independently verified single-code-point alphabet ranges; accents, flags, joined emoji and other complex graphemes retain Unicode segmentation.
 - Bound long style previews to a keyboard-scrollable area; keep the entire generated text and full copy/export behavior.
 
+## Scope of the 2026-11-03 homepage controls
+
+- Operate surface: reuse the existing input panel and violet/slate button styles; preserve the page heading, metadata, content, conversion maps and advertising.
+- Homepage only: add three wrap-safe style search shortcuts and a reversible favorites-only filter, with native buttons, pressed states and 44px minimum height.
+- Keep the existing tone scroller and add a mobile text hint; no animation, new dependencies or persistent filter preference.
+- Verify combined search/tone/favorites, empty favorites and recovery, removing the final favorite, query-parameter preservation, route changes, Unicode copy and responsive widths.
+
 ## Acceptance
 
 Test the real three-copy comma example and stale-result behavior; check 360/390/768/1024/1440px layouts, keyboard interaction, complete copy, production build, update/offline regressions and all 32 SEO baselines. Record exact measured performance separately from expected resource-scheduling benefits. Public rankings, revenue and field CWV are not proven by preview tests.

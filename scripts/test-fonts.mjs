@@ -13,11 +13,46 @@ let { outputText } = ts.transpileModule(source, {
 });
 outputText = outputText.replace(/from ['"]\.\/text['"]/g, `from '${textURL}'`);
 const { FONTS, convertText, getDisplaySegments } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
+const filtersModule = ts.transpileModule(fs.readFileSync(new URL('../services/fontFilters.ts', import.meta.url), 'utf8'), {
+  compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext }
+});
+const { filterFontsBySearch } = await import(`data:text/javascript;base64,${Buffer.from(filtersModule.outputText).toString('base64')}`);
 const font = name => {
   const result = FONTS.find(item => item.name === name);
   assert.ok(result, `Missing font: ${name}`);
   return result;
 };
+
+test('style search handles Spanish accents, whitespace and singular/plural family names', () => {
+  const ids = query => filterFontsBySearch(FONTS, query).map(item => item.id);
+  assert.deepEqual(ids('  GÓTICAS  '), ids('gothic'));
+  assert.deepEqual(ids('go\u0301ticas'), ids('gothic'));
+  assert.deepEqual(ids('gotica'), ids('goticos'));
+  assert.deepEqual(ids('cursivas'), ids('cursiva'));
+  assert.ok(ids('cursivas').includes(font('Cursive Bold').id));
+  assert.ok(ids('cursiva').includes(font('Sans Italic').id));
+  assert.deepEqual(ids(' negrita '), ids('negritas'));
+  assert.ok(ids('negritas').includes(font('Serif Bold').id));
+  assert.deepEqual(ids('basico'), ids('Básico'));
+  assert.deepEqual(ids('Sans   Bold'), ids('Sans Bold'));
+});
+
+test('style search retains existing matches, order and page/tone scope', () => {
+  for (const query of ['gothic', 'Sans Bold', 'free fire', 'cursive', 'negrita', 'cursiva', '✨']) {
+    const oldMatches = FONTS.filter(item => item.name.toLowerCase().includes(query.toLowerCase()) || item.category.includes(query.toLowerCase()) || item.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase())));
+    const matches = filterFontsBySearch(FONTS, query);
+    assert.ok(oldMatches.every(item => matches.includes(item)), query);
+    assert.deepEqual(matches, FONTS.filter(item => matches.includes(item)), 'Preserve catalogue order');
+  }
+  const scoped = FONTS.filter(item => item.category === 'sans');
+  assert.ok(filterFontsBySearch(scoped, 'cursivas').length > 0);
+  assert.ok(filterFontsBySearch(scoped, 'cursivas').every(item => scoped.includes(item)));
+  assert.deepEqual(filterFontsBySearch(FONTS, 'no-such-style-123'), []);
+  assert.deepEqual(filterFontsBySearch(FONTS, 'constructor'), []);
+  assert.deepEqual(filterFontsBySearch(FONTS, '__proto__'), []);
+  assert.equal(filterFontsBySearch(FONTS, ' \t\n '), FONTS);
+  assert.deepEqual(filterFontsBySearch([], 'góticas'), []);
+});
 
 test('display segments preserve emoji, mark accents and keep long styled text in a single segment', () => {
   const map = font('Cursive Bold').map;
