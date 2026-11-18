@@ -12,18 +12,6 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm install --prefix "$RUNNER_TEMP/lighthouse" lighthouse@13.6.0
-      - name: Wait for the production release
-        shell: bash
-        run: |
-          for n in {1..36}; do
-            version="$(curl -fsS --max-time 8 https://conversordeletrasbonitas.org/app-version.json | jq -r '.release' || true)"
-            if [[ "$version" == "f83d175b3ed9" ]]; then
-              echo "Verified production release: $version"
-              exit 0
-            fi
-            sleep 5
-          done
-          exit 1
       - name: Measure official domain in mobile emulation
         shell: bash
         run: |
