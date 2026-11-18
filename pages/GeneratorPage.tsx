@@ -25,6 +25,8 @@ interface GeneratorPageProps {
 
 const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
+const EVERGREEN_TITLE_PATHS = new Set(['/', '/letras-cursivas', '/letras-para-instagram', '/nicks-para-free-fire']);
+const TATTOO_SEPARATORS = [' · ', ' / ', ' — '];
 
 const QUICK_SYMBOLS = ['★', '✨', '⚡', '꧁', '꧂', '❤', '☠', '⚔', '✿', '❣', 'ღ', '♕', '➳', '➤', '•', '░', '【', '】'];
 
@@ -96,14 +98,16 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const baseUrl = 'https://conversordeletrasbonitas.org';
   const canonicalUrl = config.path === '/' ? `${baseUrl}/` : `${baseUrl}${config.path}`;
   const ogImage = `${baseUrl}/og-image.png`;
+  const isTattooPhrase = config.path === '/letras-tatuajes';
+  const isTattooInitials = config.path === '/letras-tattoo';
   const usageGuide = USAGE_GUIDES[config.path];
   const answer = GENERATOR_ANSWERS[config.path];
   const exampleFont = useMemo(() => FONTS.find(font => config.filter(font)
     && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
-  // Keep the homepage evergreen; preserve other generators' recorded-date titles.
+  // Keep the title trial limited to the selected landing pages.
   const dynamicTitle = useMemo(() => {
-    if (config.path === '/') return config.title;
+    if (EVERGREEN_TITLE_PATHS.has(config.path)) return config.title;
     let t = config.title;
     if (t.includes('2025')) {
       t = t.replace('2025', `${month} ${year}`);
@@ -306,6 +310,18 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
       textareaRef.current?.focus();
       textareaRef.current?.setSelectionRange(start + symbol.length, start + symbol.length);
     }, 0);
+  };
+
+  const phraseBreak = isTattooPhrase && !inputText.includes('\n')
+    ? [...inputText.matchAll(/(?<=\S)[^\S\n]+(?=\S)/gu)].reduce<RegExpMatchArray | undefined>((nearest, space) =>
+      !nearest || Math.abs((space.index ?? 0) - inputText.length / 2) < Math.abs((nearest.index ?? 0) - inputText.length / 2)
+        ? space : nearest, undefined)
+    : undefined;
+
+  const splitTattooPhrase = () => {
+    if (phraseBreak?.index === undefined) return;
+    const { index } = phraseBreak;
+    setInputText(inputText.slice(0, index) + '\n' + inputText.slice(index + phraseBreak[0].length));
   };
 
   const applyBioTemplate = (layout: string) => {
@@ -528,6 +544,21 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               // Keep the placeholder readable in both themes.
               className="w-full text-3xl sm:text-5xl font-black bg-transparent border-none focus:ring-0 placeholder:text-slate-600 dark:placeholder:text-slate-400 dark:text-white min-h-[100px] md:min-h-[140px] resize-none leading-tight py-2"
             />
+            {isTattooPhrase && <div className="mt-3 flex flex-wrap items-center gap-2">
+              <button type="button" onClick={splitTattooPhrase} disabled={!phraseBreak}
+                className="rounded-lg bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-700 disabled:opacity-60 dark:bg-slate-900 dark:text-primary-300">
+                Dividir frase en dos líneas
+              </button>
+              <span className="text-sm text-slate-600 dark:text-slate-300">También puedes insertar tus propios saltos de línea.</span>
+            </div>}
+            {isTattooInitials && <div role="group" aria-label="Separadores para iniciales y fechas" className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="text-sm text-slate-600 dark:text-slate-300">Separar iniciales y fechas</span>
+              {TATTOO_SEPARATORS.map(separator => <button key={separator} type="button"
+                aria-label={`Insertar separador ${separator.trim()}`} onClick={() => insertSymbol(separator)}
+                className="min-w-10 rounded-lg bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-700 dark:bg-slate-900 dark:text-primary-300">
+                {separator.trim()}
+              </button>)}
+            </div>}
             {usageGuide && <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
               {answer?.summary || 'Escribe, compara y copia una muestra corta.'} <a href="#ejemplo-conversion" className="text-primary-700 dark:text-primary-300 underline underline-offset-4">Ver ejemplo y límites de uso</a>.
             </p>}

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
 import { copyText } from '../services/clipboard';
+import { splitCharacters } from '../services/text';
 
 export type ViewMode = 'list' | 'instagram' | 'whatsapp';
 
@@ -32,7 +33,7 @@ const FontCard: React.FC<FontCardProps> = ({
   const [copyError, setCopyError] = useState(false);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
   const imageGenerationRef = useRef(false);
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState('');
 
   const handleCopy = async () => {
 
@@ -58,7 +59,7 @@ const FontCard: React.FC<FontCardProps> = ({
     if (imageGenerationRef.current) return;
     imageGenerationRef.current = true;
     setIsGeneratingImg(true);
-    setImageError(false);
+    setImageError('');
     let imageUrl: string | undefined;
     
     try {
@@ -72,15 +73,35 @@ const FontCard: React.FC<FontCardProps> = ({
       const ctx = canvas.getContext('2d');
       if (!ctx) throw new Error('Canvas unavailable');
 
-      const lines = text.split('\n');
+      const maxDimension = 4096;
+      const horizontalPadding = 160;
+      const maxLineWidth = maxDimension - horizontalPadding;
+      const measure = (line: string) => ctx.measureText(line).width;
+      const lines: string[] = [];
       ctx.font = canvasFont;
-      
-      const maxLineWidth = Math.max(...lines.map(l => ctx.measureText(l).width));
-      
-      const width = Math.max(480, Math.ceil(maxLineWidth + 160));
-      const height = Math.ceil((lines.length * (fontSize * 1.6)) + 120);
-      if (width > 4096 || height > 4096 || width * height > 8000000) {
-        throw new Error('Image too large');
+
+      for (const paragraph of text.split('\n')) {
+        if (measure(paragraph) <= maxLineWidth) {
+          lines.push(paragraph);
+          continue;
+        }
+
+        let line = '';
+        for (const character of splitCharacters(paragraph)) {
+          if (line && measure(line + character) > maxLineWidth) {
+            lines.push(line);
+            line = '';
+          }
+          line += character;
+        }
+        lines.push(line);
+      }
+
+      const width = Math.max(480, Math.ceil(Math.max(...lines.map(measure)) + horizontalPadding));
+      const height = Math.ceil(lines.length * fontSize * 1.6 + 120);
+      if (width > maxDimension || height > maxDimension || width * height > 8000000) {
+        setImageError('El texto supera el tamaño máximo de la imagen PNG. Descarga el texto en varios fragmentos.');
+        return;
       }
       canvas.width = width;
       canvas.height = height;
@@ -114,9 +135,9 @@ const FontCard: React.FC<FontCardProps> = ({
       imageUrl = URL.createObjectURL(blob);
       link.href = imageUrl;
       link.click();
-    } catch (err) {
+    } catch {
       console.warn('LetrasPro: image export unavailable');
-      setImageError(true);
+      setImageError('No se pudo crear la imagen. Vuelve a intentar la descarga.');
     } finally {
       if (imageUrl) {
         const completedUrl = imageUrl;
@@ -264,7 +285,7 @@ const FontCard: React.FC<FontCardProps> = ({
            </div>
         </div>
 
-        {imageError && <p role="alert" className="text-sm text-red-600 dark:text-red-400">No se pudo crear la imagen. Prueba con un texto más corto.</p>}
+        {imageError && <p role="alert" className="text-sm text-red-600 dark:text-red-400">{imageError}</p>}
         <div className="min-h-[4rem] flex items-center">
            <div role="region" aria-label={`Vista previa de ${font.name}`} tabIndex={0}
              onKeyDown={event => {
