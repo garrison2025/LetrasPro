@@ -128,7 +128,7 @@ test('sticky input observes viewport crossings and rebuilds at desktop/mobile re
   try {
     await act(async () => {
       renderer = TestRenderer.create(React.createElement(MemoryRouter, null, React.createElement(GeneratorPage, { config: PAGE_CONFIGS.home })), {
-        createNodeMock: () => ({ value: '', getBoundingClientRect: () => ({ bottom: 200 }) }),
+        createNodeMock: () => ({ value: '' }),
       });
     });
     const stickyHidden = () => renderer.root.findAllByType('div').find(node => node.props.className?.includes('fixed top-[64px]')).props.hidden;
@@ -139,6 +139,9 @@ test('sticky input observes viewport crossings and rebuilds at desktop/mobile re
     assert.equal(stickyHidden(), false, 'Show sticky input above the mobile header');
     await act(async () => observers[0].callback([{ boundingClientRect: { bottom: 900 } }]));
     assert.equal(stickyHidden(), true, 'Do not show sticky input when the editor is below the viewport');
+    window.innerWidth = 414;
+    await act(async () => listeners.get('resize')());
+    assert.equal(observers.length, 1, 'Resizing within a breakpoint keeps the existing observer');
     window.innerWidth = 1280;
     await act(async () => listeners.get('resize')());
     assert.equal(observers[0].disconnected, true);
