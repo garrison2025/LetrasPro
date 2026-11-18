@@ -1,64 +1,41 @@
-name: Mobile performance comparison
+name: Production mobile Lighthouse retest
 on:
   push:
     branches: [codex/mobile-performance-measurement]
 jobs:
   measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-      - run: git checkout --detach f240e042df4a8d8583961cafd833fa6ee07a2a0f
-      - run: npm ci
       - run: npm install --prefix "$RUNNER_TEMP/lighthouse" lighthouse@13.6.0
-      - name: Build both versions
+      - name: Wait for the production release
         shell: bash
         run: |
-          mkdir -p "$RUNNER_TEMP/baseline" "$RUNNER_TEMP/candidate" "$RUNNER_TEMP/lh-results"
-          npm run build
-          mv dist "$RUNNER_TEMP/baseline/dist"
-          git restore --source=a4ded9d6e5e89f91055232d50e70eb2026b762c3 -- scripts/prerender.mjs scripts/check-pages.mjs
-          npm run typecheck
-          npm test
-          npm run build
-          npm run check:pages
-          npm run check:seo
-          npm run check:offline
-          npm run check:http
-          mv dist "$RUNNER_TEMP/candidate/dist"
-          for variant in baseline candidate; do
-            f="$RUNNER_TEMP/$variant/dist/index.html"
-            printf "%s HTML bytes %s, gzip bytes %s\n" "$variant" "$(wc -c < "$f")" "$(gzip -c "$f" | wc -c)"
+          for n in {1..36}; do
+            version="$(curl -fsS --max-time 8 https://conversordeletrasbonitas.org/app-version.json | jq -r '.release' || true)"
+            if [[ "$version" == "f83d175b3ed9" ]]; then
+              echo "Verified production release: $version"
+              exit 0
+            fi
+            sleep 5
           done
-      - name: Compare cold mobile loads under the same conditions
+          exit 1
+      - name: Measure official domain in mobile emulation
         shell: bash
         run: |
+          mkdir -p "$RUNNER_TEMP/lh-results"
           export CHROME_PATH="$(command -v google-chrome)"
-          for run in 1 2 3 4; do
-            order=(baseline candidate)
-            if (( run % 2 == 0 )); then order=(candidate baseline); fi
-            for variant in "${order[@]}"; do
-              route="$RUNNER_TEMP/$variant"
-              (cd "$route"; exec node "$GITHUB_WORKSPACE/scripts/preview-pages.mjs" --port 4173) &
-              server=$!
-              for attempt in {1..20}; do
-                curl -fsS http://127.0.0.1:4173/ -o /dev/null && break
-                sleep 0.25
-              done
-              f="$RUNNER_TEMP/lh-results/$variant-$run.json"
-              "$RUNNER_TEMP/lighthouse/node_modules/.bin/lighthouse" http://127.0.0.1:4173/ --only-categories=performance --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --max-wait-for-load=25000 --output=json --output-path="$f" --quiet
-              jq -c --arg variant "$variant" --arg run "$run" '{variant:$variant,run:$run,error:.runtimeError,score:.categories.performance.score,fcp:.audits["first-contentful-paint"].numericValue,lcp:.audits["largest-contentful-paint"].numericValue,tbt:.audits["total-blocking-time"].numericValue,cls:.audits["cumulative-layout-shift"].numericValue}' "$f"
-              kill "$server"
-              wait "$server" || true
-            done
+          for run in 1 2 3; do
+            f="$RUNNER_TEMP/lh-results/production-$run.json"
+            "$RUNNER_TEMP/lighthouse/node_modules/.bin/lighthouse" https://conversordeletrasbonitas.org/ --only-categories=performance --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --max-wait-for-load=35000 --output=json --output-path="$f" --quiet
+            jq -c --arg run "$run" '{run:$run,url:.finalDisplayedUrl,error:.runtimeError,score:.categories.performance.score,fcp:.audits["first-contentful-paint"].numericValue,lcp:.audits["largest-contentful-paint"].numericValue,tbt:.audits["total-blocking-time"].numericValue,cls:.audits["cumulative-layout-shift"].numericValue}' "$f"
           done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mobile-comparison
+          name: production-mobile-retest
           path: ${{ runner.temp }}/lh-results
