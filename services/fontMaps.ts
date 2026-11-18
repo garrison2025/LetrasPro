@@ -573,19 +573,13 @@ const initFonts = () => {
 initFonts();
 
 export const FONTS: FontStyle[] = generatedFonts;
-const catalogFontIds = new WeakMap<Record<string, string>, string>();
-for (const { map, id } of FONTS) {
-  if (!catalogFontIds.has(map)) catalogFontIds.set(map, id);
-}
-const catalogDisplayValues = new WeakMap<Record<string, string>, Set<string>>();
-let vaporwaveSegmenter: Intl.Segmenter | undefined;
-let vaporwaveConstructor: typeof Intl.Segmenter | undefined;
 
 export const convertText = (text: string, map: Record<string, string>, isVaporwave: boolean = false): string => {
   const normalized = text.normalize('NFC');
   
   // Find font definition to apply decorators
-  const fontId = catalogFontIds.get(map) || '';
+  const fontDef = generatedFonts.find(f => f.map === map);
+  const fontId = fontDef?.id || '';
 
   // Efficient Lookup using Registry
   let prefix = '';
@@ -611,25 +605,15 @@ export const convertText = (text: string, map: Record<string, string>, isVaporwa
   }).join('');
 
   // Older browsers keep the mapped text intact rather than splitting emoji or accents.
-  let final = mapped;
-  if (isVaporwave && typeof Intl.Segmenter === 'function') {
-    if (vaporwaveConstructor !== Intl.Segmenter || !vaporwaveSegmenter) {
-      vaporwaveConstructor = Intl.Segmenter;
-      vaporwaveSegmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
-    }
-    final = Array.from(vaporwaveSegmenter.segment(mapped), part => part.segment).join(' ');
-  }
+  const final = isVaporwave && typeof Intl.Segmenter === 'function'
+    ? [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(mapped)].map(part => part.segment).join(' ')
+    : mapped;
   
   return `${prefix}${final}${suffix}`;
 };
 
 export const getDisplaySegments = (text: string, map: Record<string, string>): TextSegment[] => {
-  let mapped = catalogDisplayValues.get(map);
-  if (!mapped) {
-    mapped = new Set(Object.values(map));
-    // Catalog maps are stable; caller-provided maps still reflect any edits.
-    if (catalogFontIds.has(map)) catalogDisplayValues.set(map, mapped);
-  }
+  const mapped = new Set(Object.values(map));
   const segments: TextSegment[] = [];
   for (const content of splitCharacters(text)) {
     const isCombined = /\p{Mark}/u.test(content);

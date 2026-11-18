@@ -24,7 +24,6 @@ interface GeneratorPageProps {
 }
 
 const INITIAL_STYLE_COUNT = 12;
-const reviewDateFormatter = new Intl.DateTimeFormat('es', { dateStyle: 'long', timeZone: 'UTC' });
 const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
 const RELATED_ARTICLES: Record<string, { slug: string; label: string }> = {
@@ -113,7 +112,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
   const availableStyles = useMemo(() => FONTS.filter(config.filter), [config.filter]);
-  const visibleReviewDate = useMemo(() => reviewDateFormatter.format(new Date(`${lastModified}T00:00:00Z`)), [lastModified]);
+  const visibleReviewDate = new Intl.DateTimeFormat('es', { dateStyle: 'long', timeZone: 'UTC' })
+    .format(new Date(`${lastModified}T00:00:00Z`));
   const pageTitle = config.title;
   const description = config.description;
 
@@ -257,22 +257,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'function' && inputContainerRef.current) {
-      const input = inputContainerRef.current;
-      let observer: IntersectionObserver | undefined;
-      let previousThreshold: number | undefined;
+      let observer: IntersectionObserver;
       const observeInput = () => {
-        const threshold = window.innerWidth < 1024 ? 64 : 80;
-        if (threshold === previousThreshold) return;
-        previousThreshold = threshold;
         observer?.disconnect();
+        const threshold = window.innerWidth < 1024 ? 64 : 80;
         observer = new IntersectionObserver(([entry]) => {
           if (entry) setIsStickyVisible(entry.boundingClientRect.bottom <= threshold);
         }, { rootMargin: `-${threshold}px 0px 0px 0px` });
-        observer.observe(input);
+        observer.observe(inputContainerRef.current!);
+        setIsStickyVisible(inputContainerRef.current!.getBoundingClientRect().bottom <= threshold);
       };
       observeInput();
       window.addEventListener('resize', observeInput);
-      return () => { observer?.disconnect(); window.removeEventListener('resize', observeInput); };
+      return () => { observer.disconnect(); window.removeEventListener('resize', observeInput); };
     }
     const handleScroll = () => {
       if (inputContainerRef.current) {
