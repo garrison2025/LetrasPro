@@ -56,6 +56,11 @@ for (const url of urls) {
   assert.ok(html.includes('data-prerendered="true"'), `Initial content: ${route}`);
   assert.ok(!html.includes('fonts.googleapis.com'), `No render-blocking font stylesheet: ${route}`);
   assert.ok(!/<link[^>]+rel="stylesheet"/.test(html.replace(/<noscript>[^]*?<\/noscript>/g, '')), `No blocking stylesheet before first paint: ${route}`);
+  const styleStart = html.indexOf('<style data-critical-styles>');
+  const entryStart = html.search(/<script\b[^>]*type="module"[^>]*src="\/assets\//);
+  const adsStart = html.indexOf('<script async src="https://pagead2.googlesyndication.com/');
+  assert.ok(styleStart >= 0 && styleStart < entryStart && entryStart < adsStart, `Critical styles and app before ads: ${route}`);
+  assert.ok(html.indexOf('rel="modulepreload"') < adsStart, `Route modules discoverable before ads: ${route}`);
   const inlineCSS = html.match(/<style data-critical-styles>([^]*?)<\/style>/)?.[1];
   assert.match(inlineCSS, /\.site-ambient-background/, `Decorative background styles are available at first paint: ${route}`);
   assert.doesNotMatch(html, /class="[^"]*\banimate-blob\b/, `No animated background layers at first paint: ${route}`);
