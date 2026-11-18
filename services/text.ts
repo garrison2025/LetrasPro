@@ -1,12 +1,20 @@
+let graphemeSegmenter: Intl.Segmenter | undefined;
+
+function getGraphemeSegmenter(): Intl.Segmenter | undefined {
+  if (typeof Intl.Segmenter !== 'function') return undefined;
+  return graphemeSegmenter ??= new Intl.Segmenter('es', { granularity: 'grapheme' });
+}
+
 export function splitCharacters(text: string): string[] {
   const normalized = text.normalize('NFC');
   // Latin, letterlike, enclosed, block, fullwidth and mathematical characters
   // cannot join without marks/ZWJ. Regional indicators deliberately stay out.
   // Styled alphabets otherwise repeat expensive segmentation for every card.
   if (/^[\u0020-\u007e\u00a0-\u00ff\u2100-\u214f\u2460-\u24ff\u2580-\u259f\uff01-\uff60\u{1d400}-\u{1d7ff}\t\n]*$/u.test(normalized)) return [...normalized];
-  if (typeof Intl.Segmenter === 'function') {
+  const segmenter = getGraphemeSegmenter();
+  if (segmenter) {
     const result: string[] = [];
-    for (const part of new Intl.Segmenter('es', { granularity: 'grapheme' }).segment(normalized)) result.push(part.segment);
+    for (const part of segmenter.segment(normalized)) result.push(part.segment);
     return result;
   }
   // Keep combining marks, emoji modifiers, flags and joined emoji together on older browsers.
@@ -34,9 +42,10 @@ export function truncateText(text: string, limit = MAX_INPUT_LENGTH): string {
   const normalized = text.replace(/[\uD800-\uDFFF]/gu, '\uFFFD').normalize('NFC');
   if (normalized.length <= limit) return normalized;
   let result = '';
-  if (typeof Intl.Segmenter === 'function') {
+  const segmenter = getGraphemeSegmenter();
+  if (segmenter) {
     // Stop at the budget instead of materializing every grapheme in a large paste.
-    for (const { segment } of new Intl.Segmenter('es', { granularity: 'grapheme' }).segment(normalized)) {
+    for (const { segment } of segmenter.segment(normalized)) {
       if (result.length + segment.length > limit) break;
       result += segment;
     }
