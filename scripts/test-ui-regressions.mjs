@@ -230,8 +230,9 @@ test('PNG export uses current text and rejects oversized images without triggeri
   const previousDocument = globalThis.document;
   const previousWarn = console.warn;
   let downloads = 0; const rendered = []; let tooWide = false;
+  let currentText = 'María 👨‍👩‍👧‍👦';
   const context = {
-    measureText: () => ({ width: tooWide ? 5000 : 120 }),
+    measureText: text => ({ width: tooWide ? 5000 : text.length * 35 }),
     createLinearGradient: () => ({ addColorStop() {} }),
     fillRect() {}, fillText(text) { rendered.push(text); },
   };
@@ -242,15 +243,20 @@ test('PNG export uses current text and rejects oversized images without triggeri
   const font = FONTS[0];
   const renderer = await mount(React.createElement(FontCard, {
     font, rawText: 'Old', originalText: 'Old', displaySegments: [], isFavorite: false,
-    viewMode: 'list', onToggleFavorite() {}, onCopy() {}, getCurrentText: () => 'María 👨‍👩‍👧‍👦',
+    viewMode: 'list', onToggleFavorite() {}, onCopy() {}, getCurrentText: () => currentText,
   }));
   try {
     const download = () => renderer.root.findAllByType('button').find(node => node.props['aria-label']?.startsWith('Descargar'));
     await act(async () => download().props.onClick({ stopPropagation() {} }));
     assert.equal(downloads, 1); assert.ok(rendered.includes('María 👨‍👩‍👧‍👦'));
+    currentText = 'A'.repeat(108) + '👩‍💻' + 'B'.repeat(30);
+    rendered.length = 0;
+    await act(async () => download().props.onClick({ stopPropagation() {} }));
+    assert.equal(downloads, 2);
+    assert.deepEqual(rendered.slice(0, 2), ['A'.repeat(108), '👩‍💻' + 'B'.repeat(30)]);
     tooWide = true;
     await act(async () => download().props.onClick({ stopPropagation() {} }));
-    assert.equal(downloads, 1);
+    assert.equal(downloads, 2);
     assert.ok(JSON.stringify(renderer.toJSON()).includes('imagen'));
     assert.equal(download().props.disabled, false);
   } finally {
