@@ -180,8 +180,8 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
       });
     });
     const beforeTyping = globalThis.fontCardRenders;
-    assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 24);
-    assert.ok(beforeTyping >= 24);
+    assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 12);
+    assert.ok(beforeTyping >= 12);
     const previewRegion = renderer.root.findByProps({ 'aria-label': 'Vista previa de Sans Bold' });
     assert.equal(previewRegion.props.role, 'region');
     assert.equal(previewRegion.props.tabIndex, 0, 'Long previews remain keyboard-scrollable');
@@ -229,7 +229,7 @@ test('typing skips unchanged cards while immediate copy, case changes and previe
     assert.equal(globalThis.previewConversions, 0, 'Favoriting keeps every existing conversion');
     await act(async () => { renderer.root.findAllByType('button').find(node => node.children.includes('Cargar más estilos')).props.onClick(); });
     assert.equal(globalThis.previewConversions, 24, 'Loading more converts only the 24 new cards');
-    assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 48);
+    assert.equal(renderer.root.findAll(node => node.type === 'button' && node.props['aria-label']?.startsWith('Copiar estilo de letra ')).length, 36);
   } finally {
     if (renderer) await act(async () => { renderer.unmount(); });
     if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;

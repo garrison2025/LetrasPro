@@ -23,6 +23,7 @@ interface GeneratorPageProps {
   config: PageConfig;
 }
 
+const INITIAL_STYLE_COUNT = 12;
 const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
 const RELATED_ARTICLES: Record<string, { slug: string; label: string }> = {
@@ -86,7 +87,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
 
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const activeDecorator = 'none';
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_STYLE_COUNT);
   const [showToast, setShowToast] = useState(false);
   
   // UX: Sticky Input State
@@ -188,7 +189,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   };
   
   useEffect(() => {
-    setVisibleCount(ITEMS_PER_PAGE);
+    setVisibleCount(INITIAL_STYLE_COUNT);
     setActiveTone('Todos');
     setShowFavoritesOnly(false);
     setRatingSaved(true);
@@ -205,13 +206,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   // The URL is the source of search state, including back/forward navigation.
   useEffect(() => {
     setSearchQuery(truncateText(searchParams.get('q') || '', 100));
-    setVisibleCount(ITEMS_PER_PAGE);
+    setVisibleCount(INITIAL_STYLE_COUNT);
   }, [searchParams]);
 
   const updateSearchQuery = (value: string) => {
     const query = truncateText(value, 100);
     setSearchQuery(query);
-    setVisibleCount(ITEMS_PER_PAGE);
+    setVisibleCount(INITIAL_STYLE_COUNT);
     const next = new URLSearchParams(searchParams);
     if (query) next.set('q', query); else next.delete('q');
     setSearchParams(next, { replace: true });
@@ -614,7 +615,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                 {TONES.map(t => (
                   <button
                     key={t}
-                    onClick={() => { setActiveTone(t); setVisibleCount(ITEMS_PER_PAGE); }}
+                    onClick={() => { setActiveTone(t); setVisibleCount(INITIAL_STYLE_COUNT); }}
                     aria-pressed={activeTone === t}
                     disabled={!availableTones.includes(t)}
                     className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-tighter transition-all whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed ${activeTone === t ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary-200 active:scale-95'}`}
@@ -646,7 +647,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               })}
             </div>
             <button type="button" aria-label="Solo favoritos" aria-pressed={showFavoritesOnly}
-              onClick={() => { setShowFavoritesOnly(value => !value); setVisibleCount(ITEMS_PER_PAGE); }}
+              onClick={() => { setShowFavoritesOnly(value => !value); setVisibleCount(INITIAL_STYLE_COUNT); }}
               className={`min-h-[44px] px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors ${showFavoritesOnly ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'}`}>
               <Star size={14} aria-hidden="true" /> Solo favoritos
             </button>

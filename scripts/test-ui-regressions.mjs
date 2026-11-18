@@ -379,6 +379,7 @@ test('favorites-only combines with search, handles removing the last favorite an
     await act(async () => button(renderer, 'Restablecer filtros').props.onClick());
     assert.equal(favorites().props['aria-pressed'], false);
     await click('Añadir Sans Bold a favoritos');
+    await act(async () => button(renderer, 'Cargar más estilos').props.onClick());
     await click('Añadir Gothic Normal a favoritos');
     await act(async () => favorites().props.onClick());
     assert.equal(count(), '2 estilos encontrados');
@@ -407,7 +408,7 @@ test('empty searches explain the result and reset without losing campaign attrib
     await act(async () => button(renderer, 'Restablecer filtros').props.onClick());
     assert.equal(new URLSearchParams(currentLocation.search).get('q'), null);
     assert.equal(new URLSearchParams(currentLocation.search).get('utm_source'), 'test');
-    assert.equal(renderer.root.findAllByType('article').filter(node => node.props.className?.includes('content-visibility-auto')).length, 24);
+    assert.equal(renderer.root.findAllByType('article').filter(node => node.props.className?.includes('content-visibility-auto')).length, 12);
   } finally { await act(async () => renderer.unmount()); }
 });
 
@@ -417,7 +418,7 @@ test('hidden sticky inputs are hidden from focus and cards contain independent n
     const sticky = renderer.root.findByProps({ 'aria-label': 'Texto para convertir (barra fija)' });
     assert.equal(sticky.parent.parent.props.hidden, true);
     const cards = renderer.root.findAllByType('article').filter(node => node.props.className?.includes('content-visibility-auto'));
-    assert.equal(cards.length, 24);
+    assert.equal(cards.length, 12);
     for (const card of cards) {
       assert.equal(card.props.role, undefined);
       assert.equal(card.findAllByType('button').length, 3);
