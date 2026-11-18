@@ -2,6 +2,7 @@ import React from 'react';
 import { PageMetadata as Helmet } from '../components/PageMetadata';
 import { Users, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PROJECT_REPOSITORY, SITE_NAME } from '../data/siteIdentity';
 
 const AboutPage: React.FC = () => {
 const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
@@ -27,7 +28,7 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
         {/* Main Content */}
         <div className="prose prose-slate prose-lg max-w-none bg-white p-8 sm:p-12 rounded-3xl border border-slate-100 shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:prose-invert">
           <p>
-            Bienvenido a <strong>ConversorDeLetrasBonitas.org</strong>. Fundada con la misión de democratizar el diseño de texto en redes sociales, nuestra plataforma se ha convertido en la herramienta de referencia para influencers, gamers y creadores de contenido de habla hispana.
+            <strong>{SITE_NAME}</strong> es el proyecto detrás de ConversorDeLetrasBonitas.org. Mantenemos herramientas de texto y guías en español para redes sociales, juegos y proyectos de diseño.
           </p>
           
           <h3>Nuestra Misión</h3>
@@ -60,6 +61,7 @@ const canonicalUrl = "https://conversordeletrasbonitas.org/sobre-nosotros";
           <p>
             Nos comprometemos a mantener esta herramienta <strong>100% gratuita</strong> y accesible para todos, sin registros molestos ni descargas de software sospechoso.
           </p>
+          <p>El <a href={PROJECT_REPOSITORY}>repositorio oficial de LetrasPro en GitHub</a> contiene el código del conversor y el historial de cambios del sitio.</p>
           <section id="equipo-editorial" className="scroll-mt-24">
             <h2>Equipo LetrasPro: cómo preparamos las guías</h2>
             <p>LetrasPro es el nombre de este proyecto, publicado en ConversorDeLetrasBonitas.org. Las guías del blog se firman como Equipo LetrasPro. Puedes consultar este criterio editorial y enviarnos correcciones desde la <Link to="/contacto">página de contacto</Link>.</p>

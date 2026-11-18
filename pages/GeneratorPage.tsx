@@ -7,7 +7,7 @@ import { applyDecoration } from '../services/decorators';
 import { BIO_TEMPLATES } from '../data/bioTemplates';
 import { USAGE_GUIDES } from '../data/usageGuides';
 import { GENERATOR_ANSWERS } from '../data/generatorAnswers';
-import { ORGANIZATION_ID, WEBSITE_ID } from '../data/siteIdentity';
+import { EDITORIAL_ID, EDITORIAL_NAME, ORGANIZATION_ID, UNICODE_FONT_FAQ, WEBSITE_ID } from '../data/siteIdentity';
 import FontCard, { ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import CommentsSection from '../components/CommentsSection';
@@ -110,6 +110,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const exampleFont = useMemo(() => FONTS.find(font => config.filter(font)
     && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
+  const availableStyles = useMemo(() => FONTS.filter(config.filter), [config.filter]);
+  const visibleReviewDate = new Intl.DateTimeFormat('es', { dateStyle: 'long', timeZone: 'UTC' })
+    .format(new Date(`${lastModified}T00:00:00Z`));
   const pageTitle = config.title;
   const description = config.description;
 
@@ -341,23 +344,22 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   ), [textCase, activeDecorator]);
 
   const filteredFonts = useMemo(() => {
-    let result = FONTS.filter(config.filter);
+    let result = filterFontsBySearch(availableStyles, searchQuery);
     
-    result = filterFontsBySearch(result, searchQuery);
     if (config.path === '/' && showFavoritesOnly) result = result.filter(font => favorites.includes(font.id));
     
     if (activeTone !== 'Todos') {
       result = result.filter(f => matchesTone(f, activeTone));
     }
 
-    return result.sort((a, b) => {
+    return [...result].sort((a, b) => {
       const aFav = favorites.includes(a.id);
       const bFav = favorites.includes(b.id);
       if (aFav && !bFav) return -1;
       if (!aFav && bFav) return 1;
       return 0;
     });
-  }, [config.filter, config.path, favorites, searchQuery, activeTone, showFavoritesOnly]);
+  }, [availableStyles, config.path, favorites, searchQuery, activeTone, showFavoritesOnly]);
 
   const availableTones = useMemo(() => TONES.filter(tone => FONTS.some(font => config.filter(font) && matchesTone(font, tone))), [config.filter]);
 
@@ -411,7 +413,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={config.path === '/' ? pageTitle : config.title} />
         <meta property="og:locale" content="es_ES" />
-        <meta property="og:site_name" content="Conversor de Letras Bonitas" />
+        <meta name="author" content={EDITORIAL_NAME} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={canonicalUrl} />
         <meta name="twitter:title" content={pageTitle} />
@@ -426,6 +428,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               '@id': `${canonicalUrl}#webpage`, url: canonicalUrl,
               name: pageTitle, description: description, inLanguage: 'es',
               isPartOf: { '@id': WEBSITE_ID }, publisher: { '@id': ORGANIZATION_ID },
+              author: { '@id': EDITORIAL_ID }, dateModified: lastModified,
+              citation: UNICODE_FONT_FAQ,
               mainEntity: { '@id': `${canonicalUrl}#application` },
             },
             webAppSchema, 
@@ -475,8 +479,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <h1 className="text-3xl sm:text-7xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter leading-tight">
           {config.heading}
         </h1>
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-700 dark:text-slate-400 font-medium leading-snug">
-          {config.description}
+        <p id="respuesta-rapida" className="max-w-2xl mx-auto text-base sm:text-lg text-slate-700 dark:text-slate-400 font-medium leading-snug">
+          {answer?.answer || config.description}
         </p>
       </div>
 
@@ -553,7 +557,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               </button>)}
             </div>}
             {usageGuide && <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              {answer?.summary || 'Escribe, compara y copia una muestra corta.'} <a href="#ejemplo-conversion" className="text-primary-700 dark:text-primary-300 underline underline-offset-4">Ver ejemplo y límites de uso</a>.
+              <a href="#ejemplo-conversion" className="text-primary-700 dark:text-primary-300 underline underline-offset-4">Ver ejemplo y límites de uso</a>
             </p>}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 sm:gap-6 mt-4 md:mt-8 pt-4 md:pt-8 border-t border-slate-50 dark:border-slate-700/50">
                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
@@ -723,8 +727,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Ejemplos y límites de uso</h2>
             {answer && <>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{answer.question}</h3>
-              <p className="text-slate-700 dark:text-slate-200 mb-4">{answer.answer}</p>
+              <p className="text-slate-700 dark:text-slate-200 mb-4">{answer.summary}</p>
             </>}
+            <p className="text-slate-700 dark:text-slate-200 mb-4">
+              Esta página ofrece <strong>{availableStyles.length} estilos</strong> antes de aplicar filtros y admite hasta <strong>{MAX_INPUT_LENGTH.toLocaleString('es-ES')} unidades de texto</strong> por entrada. La cifra de entrada se mide en UTF-16; un emoji puede ocupar varias unidades.
+            </p>
             <div className="overflow-x-auto mb-4">
               <table className="w-full text-left text-sm text-slate-700 dark:text-slate-200">
                 <caption className="text-left font-bold mb-2">Texto decorativo, formato y fuentes: diferencias</caption>
@@ -752,7 +759,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               <h4 className="font-bold mt-4 mb-2">Qué revisar antes de usar el resultado</h4>
               <ul className="list-disc pl-5 space-y-2">{usageGuide.workflow.checks.map(check => <li key={check}>{check}</li>)}</ul>
             </div>}
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">Base técnica: Unicode identifica caracteres; las fuentes determinan su representación visual. Consulta la <a href="https://www.unicode.org/faq/font_keyboard.html" className="underline text-primary-700 dark:text-primary-300">explicación del Consorcio Unicode sobre caracteres y fuentes</a>. El ejemplo anterior se calcula con este conversor; la recomendación de uso es de <Link to="/sobre-nosotros#equipo-editorial" className="underline text-primary-700 dark:text-primary-300">Equipo LetrasPro</Link>.</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-4">
+              <strong>Fuente técnica:</strong> el Consorcio Unicode explica la diferencia entre un carácter y su representación en una fuente en{' '}
+              <cite><a href={UNICODE_FONT_FAQ} className="underline text-primary-700 dark:text-primary-300">Fonts and Keyboards</a></cite>.
+              LetrasPro genera el ejemplo anterior con el mismo conversor que usa el campo de texto.
+            </p>
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-3">
+              Preparado por <Link to="/sobre-nosotros#equipo-editorial" rel="author" className="underline text-primary-700 dark:text-primary-300">{EDITORIAL_NAME}</Link>.
+              {' '}Actualizado el <time dateTime={lastModified}>{visibleReviewDate}</time>.
+            </p>
           </section>}
 
           {/* Local notes and practical usage tips */}
