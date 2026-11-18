@@ -3,7 +3,10 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 
 const baseline = JSON.parse(fs.readFileSync(new URL('./fixtures/seo-baseline.json', import.meta.url), 'utf8'));
-const routes = [...fs.readFileSync('dist/sitemap.xml', 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1]).pathname);
+const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
+const entries = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)];
+const routes = entries.map(([, url]) => new URL(url).pathname);
+const datesByUrl = new Map(entries.map(([, url, date]) => [url, date]));
 assert.deepEqual(routes, baseline.map(page => page.route), 'All approved public URLs must remain unchanged');
 assert.equal(new Set(routes).size, routes.length, 'All URLs must be unique');
 for (const page of baseline) {
@@ -12,6 +15,7 @@ for (const page of baseline) {
   assert.equal(html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/)?.[1], page.description, `Description changed: ${page.route}`);
   assert.equal(html.match(/<h1[^>]*>([^]*?)<\/h1>/)?.[1], page.h1, `H1 changed: ${page.route}`);
   assert.equal(html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/)?.[1], page.canonical, `Canonical changed: ${page.route}`);
+  assert.ok(datesByUrl.has(page.canonical), `Sitemap URL differs from canonical: ${page.route}`);
   assert.ok(!/name="robots"[^>]*content="[^"]*noindex/.test(html), `Indexing changed: ${page.route}`);
 }
 console.log(`Preserved URLs, titles, descriptions, H1, canonical and indexability for all ${baseline.length} pages.`);

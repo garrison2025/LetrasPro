@@ -14,7 +14,7 @@ import CommentsSection from '../components/CommentsSection';
 import Toast from '../components/Toast';
 import { Trash2, Search, LayoutList, Instagram, Wand2, Star, ShieldCheck, AlertCircle, Info, Hash, Type, MessageCircle, Zap, Palette, Smartphone, Check, ChevronDown, Eye, PenTool, Moon, Gamepad2, List, TrendingUp, Bold, Layers, Home, ChevronRight, ArrowUp, Skull, Crosshair, CheckCircle, MessageSquare, User, DownloadCloud, Users, Sparkles, ExternalLink, ArrowRight } from 'lucide-react';
 import { useDebounce } from '../hooks/useDebounce';
-import { useDynamicDate } from '../hooks/useDynamicDate';
+import contentDates from '../data/contentDates.json';
 import { MAX_INPUT_LENGTH, splitCharacters, truncateText } from '../services/text';
 import { TONES, matchesTone, filterFontsBySearch } from '../services/fontFilters';
 import { readStorage, readStoredArray, writeStorage } from '../services/storage';
@@ -25,7 +25,11 @@ interface GeneratorPageProps {
 
 const ITEMS_PER_PAGE = 24;
 const INSTAGRAM_BIO_LIMIT = 150;
-const EVERGREEN_TITLE_PATHS = new Set(['/', '/letras-cursivas', '/letras-para-instagram', '/nicks-para-free-fire']);
+const RELATED_ARTICLES: Record<string, { slug: string; label: string }> = {
+  '/letras-para-instagram': { slug: 'guia-definitiva-conversor-letras-bonitas-instagram-facebook', label: 'cómo preparar letras para una biografía de Instagram' },
+  '/letras-tatuajes': { slug: 'letras-para-tatuajes-guia-estilos-goticos-cursivos', label: 'cómo elegir letras góticas, cursivas o chicanas para un tatuaje' },
+  '/nicks-para-free-fire': { slug: 'mejores-nicks-free-fire-pubg-graffiti', label: 'cómo preparar un nick de Free Fire con símbolos y letras graffiti' },
+};
 const TATTOO_SEPARATORS = [' · ', ' / ', ' — '];
 
 const QUICK_SYMBOLS = ['★', '✨', '⚡', '꧁', '꧂', '❤', '☠', '⚔', '✿', '❣', 'ღ', '♕', '➳', '➤', '•', '░', '【', '】'];
@@ -42,7 +46,8 @@ const FontPreview = React.memo(({ font, originalText, ...props }: Omit<React.Com
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { month, year, fullDate } = useDynamicDate(); // Dynamic Date Hook
+  const lastModified = contentDates.pageUpdated[config.path as keyof typeof contentDates.pageUpdated] || contentDates.generatorUpdated;
+  const relatedArticle = RELATED_ARTICLES[config.path];
   
   const [inputText, setInputText] = useState('');
   const [textCase, setTextCase] = useState<TextCase>('original');
@@ -105,20 +110,8 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   const exampleFont = useMemo(() => FONTS.find(font => config.filter(font)
     && font.map.A && font.map.A !== 'A' && /\p{L}/u.test(font.map.A)) || FONTS.find(config.filter), [config.filter]);
 
-  // Keep the title trial limited to the selected landing pages.
-  const dynamicTitle = useMemo(() => {
-    if (EVERGREEN_TITLE_PATHS.has(config.path)) return config.title;
-    let t = config.title;
-    if (t.includes('2025')) {
-      t = t.replace('2025', `${month} ${year}`);
-    } else {
-      t = `${t} (${month} ${year})`;
-    }
-    return t;
-  }, [config.path, config.title, month, year]);
-
-  const dynamicDescription = config.description.replace('2025', year);
-
+  const pageTitle = config.title;
+  const description = config.description;
 
   // WebApplication Structured Data (JSON-LD)
   const webAppSchema = {
@@ -127,13 +120,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
     "@id": `${canonicalUrl}#application`,
     "name": config.heading,
     "url": canonicalUrl,
-    "description": dynamicDescription,
+    "description": description,
     "inLanguage": "es",
     "publisher": { "@id": ORGANIZATION_ID },
     "mainEntityOfPage": { "@id": `${canonicalUrl}#webpage` },
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Any",
-    "dateModified": fullDate,
+    "dateModified": lastModified,
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -406,23 +399,23 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
   return (
     <div className="flex flex-col pb-20 dark:bg-slate-900 transition-colors duration-300">
       <Helmet>
-        <title>{dynamicTitle}</title>
-        <meta name="description" content={dynamicDescription} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:title" content={dynamicTitle} />
-        <meta property="og:description" content={dynamicDescription} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={config.path === '/' ? dynamicTitle : config.title} />
+        <meta property="og:image:alt" content={config.path === '/' ? pageTitle : config.title} />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="Conversor de Letras Bonitas" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={canonicalUrl} />
-        <meta name="twitter:title" content={dynamicTitle} />
-        <meta name="twitter:description" content={dynamicDescription} />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
         
         {/* JSON-LD Schemas */}
@@ -431,7 +424,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
             {
               '@context': 'https://schema.org', '@type': 'WebPage',
               '@id': `${canonicalUrl}#webpage`, url: canonicalUrl,
-              name: dynamicTitle, description: dynamicDescription, inLanguage: 'es',
+              name: pageTitle, description: description, inLanguage: 'es',
               isPartOf: { '@id': WEBSITE_ID }, publisher: { '@id': ORGANIZATION_ID },
               mainEntity: { '@id': `${canonicalUrl}#application` },
             },
@@ -750,6 +743,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
               <dd data-conversion-example className="text-lg text-slate-900 dark:text-white break-words mt-2">{convertText(usageGuide.example, exampleFont.map, exampleFont.category === 'vaporwave')}</dd>
             </dl>}
             <p className="text-slate-600 dark:text-slate-300">{usageGuide.guidance}</p>
+            {relatedArticle && <p className="mt-3 text-slate-700 dark:text-slate-200">
+              En nuestra guía explicamos <Link to={`/blog/${relatedArticle.slug}`} className="font-semibold underline underline-offset-4">{relatedArticle.label}</Link>.
+            </p>}
             {usageGuide.workflow && <div className="mt-6 text-slate-700 dark:text-slate-200">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{usageGuide.workflow.title}</h3>
               <ol className="list-decimal pl-5 space-y-2">{usageGuide.workflow.steps.map(step => <li key={step}>{step}</li>)}</ol>
