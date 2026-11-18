@@ -292,6 +292,8 @@ export const BLOG_POSTS: BlogPost[] = [
       </ul>
       <p>Elegir el estilo adecuado no es una cuestión de gusto personal; se trata de consistencia. Un primer paso para mejorar la coherencia visual es elegir un estilo de fuente primario y uno secundario, y utilizarlos de manera uniforme en todos tus canales visuales.</p>
 
+      <p>Si quieres repetir la misma combinación en varias publicaciones, anota fuentes, colores y ejemplos en tu <a href="/blog/como-crear-kit-marca-canva-letras-esteticas">kit de marca en Canva</a>.</p>
+      
       <h2>3. Canva: fuentes del editor y caracteres pegados</h2>
       <p><strong>Si el texto pegado falla:</strong> vuelve al original y elige una fuente disponible en Canva. Pegar Unicode cambia los caracteres, no añade un archivo TTF u OTF. No necesitas subir una fuente para reproducir esta comparación. Si una función aparece bloqueada, usa una opción disponible en tu cuenta; el conversor no desbloquea funciones de Canva.</p>
       <p>Durante años, el diseño gráfico profesional estuvo limitado a aquellos que dominaban softwares sumamente complejos y costosos. Sin embargo, <a href="https://www.canva.com" target="_blank" rel="noopener noreferrer">Canva</a> cambió por completo las reglas del juego al democratizar el diseño digital. Gracias a su intuitivo sistema de "arrastrar y soltar", miles de creadores de todo el mundo pueden diseñar piezas de contenido espectaculares en cuestión de minutos.</p>
@@ -527,6 +529,8 @@ export const BLOG_POSTS: BlogPost[] = [
         </tbody>
       </table>
 
+      <p>Antes de llevar las fuentes del kit a una plantilla, usa esta <a href="/blog/guia-combinacion-tipografica-canva-emparejar-fuentes">guía para combinar tipografías y definir la jerarquía visual</a>.</p>
+      
       <h2>6. Diseñando tu Ecosistema de Plantillas Maestras en Canva</h2>
       <p>Una vez que has definido tus colores, fuentes y logotipos, el siguiente paso práctico para automatizar tu marketing visual es diseñar tus <strong>Plantillas Maestras</strong> en Canva. Debes crear un lote inicial de al menos 5 plantillas que resuelvan las necesidades recurrentes de tu negocio:</p>
       
@@ -668,6 +672,8 @@ export const BLOG_POSTS: BlogPost[] = [
       <h3>Paso C: Estructura tu Jerarquía en Canva</h3>
       <p>Pega tu título estético en Canva y colócalo en el tercio superior del lienzo. Añade un segundo bloque de texto en Canva con una tipografía Sans-Serif limpia como "Montserrat" para los detalles informativos (ej: fecha, hora y lugar del evento). Diseña un botón de llamada a la acción en la parte inferior para que el usuario sepa exactamente qué hacer (ej: "Compra tus entradas aquí").</p>
 
+      <p>Para aplicar estas parejas a un formato móvil, prueba el flujo de <a href="/blog/como-usar-fuentes-bonitas-canva-seguidores-instagram">diseño de carruseles para Instagram con Canva</a>.</p>
+      
       <h2>7. Ajustes Tipográficos Avanzados en Canva para un Acabado de Agencia</h2>
       <p>Para dar el salto definitivo de un diseño aficionado a un trabajo de agencia publicitaria profesional, debes afinar los detalles. Canva te permite realizar ajustes tipográficos precisos mediante su barra de herramientas de texto superior:</p>
       <ul>

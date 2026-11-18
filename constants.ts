@@ -6,7 +6,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     path: '/',
     title: 'Conversor de Letras Bonitas y Chidas - Copiar y Pegar',
     heading: 'Conversor de Letras Bonitas',
-    description: 'El mejor conversor de letras bonitas y chidas para Instagram, TikTok, Free Fire y WhatsApp. Transforma tu texto en fuentes perronas y estéticas.',
+    description: 'Convierte tu texto en letras bonitas y chidas para copiar y pegar. Compara cursivas, góticas y negritas para Instagram, TikTok, WhatsApp y Free Fire.',
     content: 'Si buscas destacar en redes sociales, nuestro conversor de letras bonitas (y chidas) es la herramienta definitiva. A diferencia de otros sitios, este generador de fuentes utiliza Unicode para transformar tu nick o biografía en más de 140 estilos únicos. Ya sea que busques letras para Instagram, nicks para Free Fire o estados de WhatsApp, aquí encontrarás tipografías legibles y estéticas. Deja de usar fuentes aburridas; usa nuestro conversor para crear letras perronas y comparar estilos antes de publicar.',
     filter: (f) => f.pages.includes('home'),
     whyFeatures: [
@@ -201,18 +201,19 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   tatuajes: {
     path: '/letras-tatuajes',
-    title: 'Conversor de Letras para Tatuajes - Diseños Chicanos y Góticos',
+    title: 'Letras para Tatuajes: Frases y Nombres en Dos Líneas',
     heading: 'Letras para Tatuajes',
-    description: 'Diseña tu piel con el conversor de letras para tatuajes. Simula estilos Chicano, Gótico y Minimalista (Fine Line) gratis.',
+    description: 'Prueba letras para tatuajes en frases y nombres. Divide el texto en dos líneas, compara estilos góticos, cursivos y chicanos y descarga una referencia.',
     filter: (f) => f.pages.includes('tatuajes'),
-    content: 'Antes de marcar tu piel, visualiza tu idea. Este conversor de letras para tatuajes sirve como referencia inicial para comparar estilos. Puedes experimentar con estilos Chicanos (cholos), Old English (Góticas), y Fine Line (Minimalistas) sin dolor. Es ideal para probar cómo se vería un nombre, una fecha en números romanos o una frase inspiradora. No te tatúes sin probar primero tus opciones en el mejor simulador de fuentes para tattoo.',
+    content: 'Escribe un nombre o una frase completa y compara su composición en estilos góticos, cursivos y chicanos. Prueba el texto en una línea y luego en dos para revisar dónde queda el corte. La imagen sirve como referencia para que el tatuador ajuste la escala y la separación de las letras.',
     whyFeatures: [
       { title: 'Previsualización de Tatuajes', description: 'Compara referencias antes de pedir un boceto al artista; la vista previa no reproduce la piel ni la escala final.', icon: 'shield' },
       { title: 'Estilos Exclusivos', description: 'Incluimos fuentes Chicanas, Gángster y de Caligrafía Fina.', icon: 'star' },
-      { title: 'Inspiración Infinita', description: 'Encuentra la fuente perfecta para nombres de hijos o fechas especiales.', icon: 'heart' }
+      { title: 'Frases en dos líneas', description: 'Prueba dónde cortar una frase sin cambiar el orden ni perder palabras.', icon: 'heart' }
     ],
     howToSteps: [
-      'Escribe la fecha, nombre o frase a tatuar.',
+      'Escribe el nombre o la frase completa y revisa las tildes.',
+      'Prueba Dividir frase en dos líneas o ajusta el salto manualmente.',
       'Filtra por estilos góticos, chicanos o manuscritos.',
       'Haz una captura de tu opción favorita o descarga la imagen.',
       'Muestra el diseño a tu tatuador como referencia.'
@@ -224,7 +225,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     recommendations: [
       { title: 'Letras Góticas', path: '/letras-goticas', description: 'Estilo Blackwork y Old English.', color: 'from-slate-800 to-black' },
       { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Estilo Fine Line y Script.', color: 'from-pink-400 to-rose-500' },
-      { title: 'Letras Tattoo', path: '/letras-tattoo', description: 'Más estilos de tinta.', color: 'from-zinc-500 to-zinc-700' },
+      { title: 'Letras Tattoo', path: '/letras-tattoo', description: 'Compara iniciales y fechas con separadores.', color: 'from-zinc-500 to-zinc-700' },
     ]
   },
   goticas: {
@@ -341,19 +342,19 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
   },
   tattoo: {
     path: '/letras-tattoo',
-    title: 'Conversor de Letras Tattoo - Tipografías para Piel',
+    title: 'Letras Tattoo para Iniciales y Fechas | LetrasPro',
     heading: 'Conversor de Letras Tattoo',
-    description: 'Inspiración para tu próximo tatuaje. Compara lettering chicano y estilos de tinta como referencia visual para tu artista.',
+    description: 'Combina iniciales y fechas para tu tattoo. Prueba separadores y estilos Unicode, compara cómo se leen las letras y números y guarda una referencia visual.',
     filter: (f) => f.pages.includes('tattoo'),
-    content: 'El arte del lettering en la piel requiere precisión. Este conversor de letras tattoo es tu herramienta de bocetado gratuita. Ofrecemos estilos Unicode para comparar iniciales y fechas como inspiración; el artista debe adaptar el dibujo a la piel. Desde caligrafía clásica hasta estilos tribales y chicanos, cubrimos todas las tendencias. Úsalo para visualizar nombres de seres queridos o fechas importantes antes de ir al estudio. Tu piel merece el mejor diseño posible.',
+    content: 'Compara iniciales y fechas antes de preparar un boceto. Prueba M · J · 2026 y cambia los separadores para elegir cuánto espacio dejar entre cada elemento. Revisa que cada cifra se distinga bien y guarda el resultado como referencia para tu tatuador.',
     whyFeatures: [
       { title: 'Diseño Profesional', description: 'Referencias de lettering para preparar una conversación con el artista.', icon: 'pen-tool' },
-      { title: 'Visualización Previa', description: 'Imagina cómo quedará la frase antes de marcarte.', icon: 'eye' },
+      { title: 'Separadores para iniciales y fechas', description: 'Compara el punto medio, la barra y la raya en la misma composición.', icon: 'eye' },
       { title: 'Estilos Variados', description: 'Encuentra desde minimalismo hasta barroco y gótico.', icon: 'layers' }
     ],
     howToSteps: [
-      'Ingresa tu frase significativa o fecha.',
-      'Navega por las opciones de lettering.',
+      'Escribe las iniciales o la fecha en el orden que quieres conservar.',
+      'Inserta un separador y compara cómo se leen los números y las letras en varios estilos.',
       'Guarda tus favoritas o descarga la imagen.',
       'Consulta con tu tatuador mostrando el resultado.'
     ],
@@ -362,7 +363,7 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
       { question: '¿Qué estilos incluye?', answer: 'Chicano, Blackwork, Minimalista, Tradicional y Manuscrito.' }
     ],
     recommendations: [
-      { title: 'Letras Tatuajes', path: '/letras-tatuajes', description: 'Más estilos.', color: 'from-slate-700 to-black' },
+      { title: 'Letras Tatuajes', path: '/letras-tatuajes', description: 'Divide nombres y frases completas en dos líneas.', color: 'from-slate-700 to-black' },
       { title: 'Letras Góticas', path: '/letras-goticas', description: 'Estilo Blackletter clásico.', color: 'from-stone-700 to-stone-900' },
       { title: 'Letras Cursivas', path: '/letras-cursivas', description: 'Nombres y fechas.', color: 'from-pink-400 to-purple-500' },
     ]
