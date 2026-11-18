@@ -78,6 +78,10 @@ for (const url of urls) {
   const pageName = applicationPageName(route);
   if (pageName === 'GeneratorPage') {
     assert.equal((html.match(/aria-label="Copiar estilo de letra /g) || []).length, 12, `Only the first 12 style cards are prerendered: ${route}`);
+    for (const icon of ['copy', 'star', 'download']) {
+      assert.equal(html.split(`id="font-card-${icon}"`).length - 1, 1, `Single sprite symbol for ${icon}: ${route}`);
+      assert.equal(html.split(`href="#font-card-${icon}"`).length - 1, 12, `Each prerendered card uses the ${icon} symbol: ${route}`);
+    }
   }
   assert.equal(routeChunks[0], `/${manifest[`pages/${pageName}.tsx`].file}`, `Correct page module: ${route}`);
   assert.ok(!html.includes('aggregateRating'), `No simulated rating: ${route}`);
