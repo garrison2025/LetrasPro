@@ -13,6 +13,21 @@
   --unicode-fallbacks: "Noto Sans", "Arial Unicode MS", "Segoe UI Symbol", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
 }
 
+/* A single decorative paint under the layout, without animated blur layers. */
+.site-ambient-background {
+  background:
+    radial-gradient(ellipse at 28% 12%, rgb(221 214 254 / 45%), transparent 46%),
+    radial-gradient(ellipse at 78% 16%, rgb(251 207 232 / 32%), transparent 44%),
+    #f8fafc;
+}
+
+.dark .site-ambient-background {
+  background:
+    radial-gradient(ellipse at 28% 12%, rgb(76 29 149 / 20%), transparent 46%),
+    radial-gradient(ellipse at 78% 16%, rgb(131 24 67 / 14%), transparent 44%),
+    #020617;
+}
+
 .graphic-preview > svg {
   display: block;
   width: 100%;

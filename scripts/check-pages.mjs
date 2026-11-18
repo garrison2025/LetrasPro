@@ -57,6 +57,8 @@ for (const url of urls) {
   assert.ok(!html.includes('fonts.googleapis.com'), `No render-blocking font stylesheet: ${route}`);
   assert.ok(!/<link[^>]+rel="stylesheet"/.test(html.replace(/<noscript>[^]*?<\/noscript>/g, '')), `No blocking stylesheet before first paint: ${route}`);
   const inlineCSS = html.match(/<style data-critical-styles>([^]*?)<\/style>/)?.[1];
+  assert.match(inlineCSS, /\.site-ambient-background/, `Decorative background styles are available at first paint: ${route}`);
+  assert.doesNotMatch(html, /class="[^"]*\banimate-blob\b/, `No animated background layers at first paint: ${route}`);
   if (['/moldes-de-letras-para-imprimir', '/generador-de-firmas-bonitas', '/generador-de-texto-curvo'].includes(route)) {
     assert.match(inlineCSS, /\.graphic-preview\s*>\s*svg/, `Responsive preview styles available before hydration: ${route}`);
   }
@@ -64,7 +66,7 @@ for (const url of urls) {
   const initialContent = html.slice(html.indexOf('<div id="root"'), html.lastIndexOf('</div>') + 6);
   assert.equal(inlineCSS, criticalCSS(builtCSS, initialContent), `Initial styles match compiled rules: ${route}`);
   for (const file of manifest['index.html'].css) {
-    assert.ok(html.includes(`rel="preload" as="style" href="/${file}" onload="this.onload=null;this.rel='stylesheet'"`), `Complete stylesheet loads asynchronously: ${route}`);
+    assert.ok(html.includes(`rel="preload" as="style" href="/${file}" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'"`), `Complete stylesheet loads asynchronously: ${route}`);
     assert.ok(html.includes(`<noscript><link rel="stylesheet" href="/${file}"></noscript>`), `Styles without JavaScript: ${route}`);
   }
   const fontPreloads = [...html.matchAll(/<link[^>]+rel="preload"[^>]+as="font"[^>]+href="([^"]+)"[^>]+crossorigin/g)].map(match => match[1]);

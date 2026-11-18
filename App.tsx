@@ -38,12 +38,7 @@ function App({ isStatic = false, helmetContext }: { isStatic?: boolean; helmetCo
           <SiteIdentity />
           <ErrorBoundary>
             <div className="flex flex-col min-h-screen font-sans relative dark:bg-slate-900 transition-colors duration-300">
-              {/* Animated Background Elements */}
-              <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none bg-slate-50 dark:bg-slate-950">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200/40 dark:bg-primary-900/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob"></div>
-                <div className="absolute top-0 right-1/4 w-96 h-96 bg-secondary-200/40 dark:bg-secondary-900/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-                <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-200/40 dark:bg-pink-900/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
-              </div>
+              <div aria-hidden="true" className="site-ambient-background fixed inset-0 -z-10 pointer-events-none" />
 
               <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:text-slate-900 focus:p-3 focus:rounded-xl">Saltar al contenido</a>
               <RouteNavigation />
