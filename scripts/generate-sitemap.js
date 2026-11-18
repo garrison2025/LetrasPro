@@ -77,10 +77,8 @@ const generateFiles = () => {
   STATIC_PATHS.forEach(route => {
     sitemap += `
   <url>
-    <loc>${BASE_URL}${route === '/' ? '' : route}</loc>
+    <loc>${BASE_URL}${route}</loc>
     <lastmod>${updatedAt(route)}</lastmod>
-    <changefreq>${route === '/' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${route === '/' ? '1.0' : '0.8'}</priority>
   </url>`;
   });
 
@@ -89,8 +87,6 @@ const generateFiles = () => {
   <url>
     <loc>${BASE_URL}/blog/${slug}</loc>
     <lastmod>${dates.blogPageUpdated?.[slug] || dates.blogUpdated}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>`;
   });
 

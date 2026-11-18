@@ -104,6 +104,7 @@ for (const url of urls) {
   for (const reference of references) assert.ok(entities.some(entity => entity['@id'] === reference), `Resolved schema reference ${reference}: ${route}`);
   const application = entities.find(entity => entity['@type'] === 'WebApplication');
   if (application) {
+    if (application.dateModified) assert.equal(application.dateModified, sitemapDates.get(route), `WebApplication date matches sitemap: ${route}`);
     assert.equal(application.publisher['@id'], organization['@id']);
     assert.equal(webpage.mainEntity['@id'], application['@id']);
     assert.match(html, /id="ejemplo-conversion"/, `Visible usage explanation: ${route}`);
@@ -117,9 +118,10 @@ for (const url of urls) {
     assert.equal(article.author['@id'], `${siteUrl}/sobre-nosotros#equipo-editorial`);
     assert.equal(article.publisher['@id'], organization['@id']);
     assert.equal(webpage.mainEntity['@id'], article['@id']);
-    assert.equal(article.dateModified, '2026-11-01');
     assert.equal(sitemapDates.get(route), article.dateModified, `Sitemap matches the article review date: ${route}`);
-    assert.ok(html.replace(/<!--[^]*?-->/g, '').includes('Actualización de contenido: 1 de noviembre de 2026'), `Visible review date: ${route}`);
+    const reviewDate = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+      .format(new Date(`${article.dateModified}T00:00:00Z`));
+    assert.ok(html.replace(/<!--[^]*?-->/g, '').includes(`Actualización de contenido: ${reviewDate}`), `Visible review date: ${route}`);
     assert.ok([...html.matchAll(/<a\s[^>]*>/g)].some(([anchor]) => anchor.includes('href="/sobre-nosotros#equipo-editorial"') && anchor.includes('rel="author"')), `Visible author link: ${route}`);
   }
   for (const link of html.matchAll(/href="(\/[^"?#]*)/g)) {

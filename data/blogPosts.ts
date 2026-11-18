@@ -5,7 +5,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: '1',
     slug: 'guia-definitiva-conversor-letras-bonitas-instagram-facebook',
-    title: 'Guía Definitiva 2025: Cómo usar un Conversor de Letras Bonitas para Instagram y Facebook',
+    title: 'Cómo usar Letras Bonitas en Instagram y Facebook',
     excerpt: 'Domina el arte de la tipografía digital. Aprende a cambiar la fuente de tu biografía, posts y comentarios utilizando un conversor de letras bonitas. Trucos, consejos de diseño y estrategias para ganar seguidores.',
     summary: 'Escribe una frase corta en el conversor de letras bonitas, elige un estilo y copia el resultado. Pruébalo en el campo de Instagram o Facebook antes de guardar. Obtienes caracteres Unicode, no una fuente instalada; conserva nombres y datos esenciales en texto normal.',
     date: '2026-03-12',
@@ -92,7 +92,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h2>Conclusión</h2>
       
-      <p>Personalizar tu presencia digital es más fácil que nunca en 2025. Ya sea que necesites un <strong>conversor de letras cursivas</strong> para una invitación de boda digital, letras agresivas para tu clan de videojuegos, o simplemente quieras destacar en los comentarios de tus amigos, en <a href="https://conversordeletrasbonitas.org">ConversorDeLetrasBonitas.org</a> tenemos una colección de estilos gratuitos esperándote.</p>
+      <p>Empieza por convertir un fragmento corto y comprueba cómo se lee después de pegarlo en el campo donde quieres usarlo. Ya sea que necesites un <strong>conversor de letras cursivas</strong> para una invitación de boda digital, letras agresivas para tu clan de videojuegos, o simplemente quieras destacar en los comentarios de tus amigos, en <a href="https://conversordeletrasbonitas.org">ConversorDeLetrasBonitas.org</a> tenemos una colección de estilos gratuitos esperándote.</p>
       
       <p>Empieza hoy mismo a experimentar con tu tipografía y observa cómo aumenta la interacción en tus perfiles. ¡La creatividad no tiene límites cuando tienes las herramientas adecuadas!</p>
     `
@@ -100,7 +100,7 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: '2',
     slug: 'letras-para-tatuajes-guia-estilos-goticos-cursivos',
-    title: 'Letras para Tatuajes: Guía de Estilos Góticos, Cursivos y Chicanos (Edición 2025)',
+    title: 'Letras para Tatuajes: Guía de Estilos Góticos, Cursivos y Chicanos',
     excerpt: '¿Pensando en tu próximo tatuaje? Descubre cómo elegir la tipografía perfecta. Análisis profundo de estilos góticos, chicanos y cursivos para marcar tu piel para siempre.',
     summary: 'Para comparar letras para tatuajes, conserva la frase original, genera dos estilos y revisa cada tilde. Lleva las muestras al artista como referencia: el conversor no prepara una plantilla a escala ni determina el tamaño o el espaciado adecuados para la piel.',
     date: '2026-04-18',
@@ -163,7 +163,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Llévalas a tu artista. Él usará esa referencia para crear el "stencil" (la plantilla) adaptándola a la curvatura anatómica de tu cuerpo.</li>
       </ul>
 
-      <h2>Inspiración: Frases populares para tatuarse en 2025</h2>
+      <h2>Ejemplos de frases cortas para comparar estilos</h2>
       
       <p>Si ya tienes el estilo definido pero te falta el mensaje exacto, aquí tienes algunas ideas que funcionan visualmente bien con nuestro <strong>conversor de letras tatuajes</strong>:</p>
       <ul>
