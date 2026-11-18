@@ -24,6 +24,7 @@ const app = (
   </>
 );
 if (rootElement.dataset.prerendered) {
+  const container = rootElement;
   const earlyEvents = ['pointerdown', 'keydown', 'focusin', 'click'] as const;
   let firstFrame = 0;
   let secondFrame = 0;
@@ -37,7 +38,7 @@ if (rootElement.dataset.prerendered) {
     window.cancelAnimationFrame(secondFrame);
     window.clearTimeout(deadline);
     for (const event of earlyEvents) document.removeEventListener(event, hydrate, true);
-    ReactDOM.hydrateRoot(rootElement, app, { onRecoverableError(error) {
+    ReactDOM.hydrateRoot(container, app, { onRecoverableError(error) {
       reportDiagnostic('hydration');
       // Keep only React's numeric production code locally, never its message or input.
       const code = error instanceof Error ? error.message.match(/^Minified React error #(\d{1,3});/)?.[1] : undefined;
