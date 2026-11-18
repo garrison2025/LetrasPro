@@ -21,7 +21,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/baseline" "$RUNNER_TEMP/candidate" "$RUNNER_TEMP/lh-results"
           npm run build
           mv dist "$RUNNER_TEMP/baseline/dist"
-          git show 868b813f9831a0fad94df3ddc8d18131d058ea0e:index.tsx > index.tsx
+          git restore --source=ad58e4817d208f28193250794d9404484290e0e4 -- components/FontCard.tsx pages/GeneratorPage.tsx scripts/check-pages.mjs
           npm run typecheck
           npm test
           npm run build
@@ -30,6 +30,10 @@ jobs:
           npm run check:offline
           npm run check:http
           mv dist "$RUNNER_TEMP/candidate/dist"
+          for variant in baseline candidate; do
+            f="$RUNNER_TEMP/$variant/dist/index.html"
+            printf "%s HTML bytes %s, gzip bytes %s\n" "$variant" "$(wc -c < "$f")" "$(gzip -c "$f" | wc -c)"
+          done
       - name: Compare cold mobile loads under the same conditions
         shell: bash
         run: |
