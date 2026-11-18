@@ -33,7 +33,7 @@ for (const route of [...routes, '/404']) {
   page = page.replace(/<link\b[^>]*rel="stylesheet"[^>]*href="(\/assets\/[^\"]+\.css)"[^>]*>/g, (_, href) => {
     const css = criticalCSS(fs.readFileSync(path.join(dist, href), 'utf8'), html);
     if (/<\/style/i.test(css)) throw new Error('Unsafe inline stylesheet');
-    return `<style data-critical-styles>${css}</style><link rel="preload" as="style" href="${href}" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="${href}"></noscript>`;
+    return `<style data-critical-styles>${css}</style><link rel="preload" as="style" href="${href}" fetchpriority="low" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="${href}"></noscript>`;
   });
   page = page.replace('</head>', `${head}\n</head>`).replace('<div id="root"></div>', `<div id="root" data-prerendered="true">${html}</div>`);
   const getMeta = key => page.match(new RegExp(`<meta[^>]+name="${key}"[^>]+content="([^"]*)"`))?.[1];
