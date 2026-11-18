@@ -74,8 +74,9 @@ export default function CurvedTextPage() {
       </section>
     </div>
     <section className="prose prose-slate dark:prose-invert max-w-3xl mt-12">
-      <h2>Cómo escribir texto arqueado</h2>
-      <p>Introduce una palabra o frase, elige arco superior o inferior y mueve el control de curvatura. El texto se coloca sobre un trazado vectorial real; no es un truco con caracteres Unicode ni una captura de pantalla.</p>
+      <h2 id="ejemplo-exportacion">Cómo escribir texto arqueado</h2>
+      <p>Escribe un título, elige la dirección del arco y ajusta la curvatura. Descarga <strong>PNG transparente</strong> para colocarlo encima de un diseño o <strong>SVG</strong> si necesitas seguir editando el trazado.</p>
+      <p><strong>Ejemplo:</strong> la vista previa inicial coloca <strong>MI TEXTO CURVO</strong> sobre un arco hacia arriba. Cambia la dirección para comparar el mismo texto con el arco hacia abajo. Activa la línea guía para revisar el trazado y desactívala antes de descargar si quieres exportar solo las letras.</p>
       <h2>Texto curvo para logotipos y carteles</h2>
       <p>Los arcos son útiles en invitaciones, etiquetas y proyectos personales. Prueba títulos cortos para mejorar la legibilidad; con frases largas, el generador reduce automáticamente el tamaño de letra para evitar que se salga del diseño.</p>
       <h2>Preguntas frecuentes</h2>

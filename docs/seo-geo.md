@@ -4,7 +4,7 @@ Adapted for an existing site from [Website-Starter-Standard](https://github.com/
 
 ## Protected search architecture
 
-This is a Spanish-language text utility for a global Spanish-speaking audience. The primary task is to generate, compare and copy decorative text. Preserve existing owner-approved keywords and all 29 public routes. `scripts/fixtures/seo-baseline.json` is the accepted exact baseline for titles, descriptions, H1, canonicals and route order. Never refresh that fixture merely to make a failed check pass.
+This is a Spanish-language text utility for a global Spanish-speaking audience. The primary task is to generate, compare and copy decorative text. Preserve existing owner-approved keywords and all 32 public routes. `scripts/fixtures/seo-baseline.json` is the accepted exact baseline for titles, descriptions, H1, canonicals and route order. Never refresh that fixture merely to make a failed check pass.
 
 The homepage owns the existing general conversion terms, including `conversor de letras bonitas`, `conversor de letras`, `letras bonitas` and `copiar y pegar`. Platform pages own specialized usage; do not automatically move queries away from the homepage because they mention a platform. Private Search Console measurements remain outside the public repository.
 
@@ -28,6 +28,9 @@ The homepage owns the existing general conversion terms, including `conversor de
 | `/texto-invisible` | Copy invisible characters / utility | Navigation, footer |
 | `/texto-al-reves` | Reverse/flip text / utility | Navigation |
 | `/letras-grandes` | Large text / utility | Navigation |
+| `/moldes-de-letras-para-imprimir` | Printable A4 letter molds / visual tool | Navigation, related tools |
+| `/generador-de-firmas-bonitas` | Decorative signature graphics / visual tool | Navigation, related tools |
+| `/generador-de-texto-curvo` | Curved text graphics / visual tool | Navigation, related tools |
 | `/blog` | Editorial guide hub | Navigation |
 | `/blog/guia-definitiva-conversor-letras-bonitas-instagram-facebook` | General conversion workflow / article | Blog hub |
 | `/blog/letras-para-tatuajes-guia-estilos-goticos-cursivos` | Tattoo style selection / article | Blog hub |
@@ -59,6 +62,8 @@ The 13 generator pages each retain their working tool before explanatory content
 | Publisher identity and logo | Visible footer, About page, owned icon | Every affected release | Do not invent legal registration, address, social profiles or credentials |
 | Article author/publisher relationships | [Google Article documentation](https://developers.google.com/search/docs/appearance/structured-data/article), visible author/review date | 2026-10-10 | Preserve publication dates; modified dates must match a substantive review |
 
+The three visual tools explain their initial SVG previews and how to reproduce them, when to use each export format, and which settings affect the output. The conversion FAQs ship their answer text in the initial HTML and remain collapsible. The build checks both the initial SVG sample and the HTML answer text.
+
 ## Entity and structured-data model
 
 `data/siteIdentity.ts` defines shared public identities: LetrasPro (`/#organization`), the site Conversor de Letras Bonitas (`/#website`) and Equipo LetrasPro (`/sobre-nosotros#equipo-editorial`). The visible About section identifies the brand/team and describes its editorial process; article bylines link there. There are no fabricated individual authors or testimonials.
@@ -73,9 +78,9 @@ Keep existing `robots.txt` search-crawler policy unchanged. Training/product per
 
 ## Release gates and monitoring
 
-Run `npm run typecheck`, `npm test`, `npm run build`, `npm run check:pages`, `npm run check:seo`, `npm run check:offline` and `npm run check:http`. The existing CI runs these gates. `check:pages` additionally validates the entity graph, initial-HTML examples/citations, author destinations and crawlable reachability of all 29 routes.
+Run `npm run typecheck`, `npm test`, `npm run build`, `npm run check:pages`, `npm run check:seo`, `npm run check:offline` and `npm run check:http`. The existing CI runs these gates. `check:pages` additionally validates the entity graph, initial-HTML examples/citations, author destinations and crawlable reachability of all 32 routes.
 
-Before merging, visually review desktop/mobile explanation sections, author links and client navigation, and run `npm run check:deployment -- <preview-origin>`. After deployment verify the production release identifier, all 29 routes plus three missing-route cases, raw HTML/schema and referenced assets. Store the dated release evidence and private GSC export outside the public repository.
+Before merging, visually review desktop/mobile explanation sections, author links and client navigation, and run `npm run check:deployment -- <preview-origin>`. After deployment verify the production release identifier, all 32 routes plus three missing-route cases, raw HTML/schema and referenced assets. Store the dated release evidence and private GSC export outside the public repository.
 
 For subsequent audits compare settled GSC Web query/page periods with the saved private baseline; do not attribute same-day fluctuations to this release. Google AI features are included in overall Web reporting, so those totals alone do not isolate an AI citation effect. Use existing Cloudflare dashboard statistics for errors/performance. No new alerts or recurring automation are enabled here.
 

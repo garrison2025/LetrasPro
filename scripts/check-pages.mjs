@@ -7,6 +7,7 @@ import { criticalCSS } from './critical-css.mjs';
 const sitemap = fs.readFileSync('dist/sitemap.xml', 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 const sitemapDates = new Map([...sitemap.matchAll(/<url>([^]*?)<\/url>/g)].map(match => [new URL(match[1].match(/<loc>([^<]+)<\/loc>/)[1]).pathname, match[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1]]));
+const visualExamples = new Map([["/moldes-de-letras-para-imprimir","A"],["/generador-de-firmas-bonitas","Sofía Morales"],["/generador-de-texto-curvo","MI TEXTO CURVO"]]);
 const titles = new Set();
 const crawlLinks = new Map();
 const manifest = JSON.parse(fs.readFileSync('dist/.vite/manifest.json', 'utf8'));
@@ -102,12 +103,25 @@ for (const url of urls) {
   assert.equal(webpage.inLanguage, 'es');
   assert.equal(webpage.isPartOf['@id'], website[0]['@id']);
   for (const reference of references) assert.ok(entities.some(entity => entity['@id'] === reference), `Resolved schema reference ${reference}: ${route}`);
+  const visualExample = visualExamples.get(route);
+  if (visualExample) {
+    const exampleSection = html.match(/id="ejemplo-exportacion"[\s\S]*?<\/section>/)?.[0];
+    const preview = html.match(/class="graphic-preview[^"]*"[^>]*>\s*<svg[\s\S]*?<\/svg>/)?.[0];
+    assert.ok(exampleSection?.includes(`<strong>${visualExample}</strong>`), `Initial-HTML export example: ${route}`);
+    assert.ok(preview?.includes(`>${visualExample}</`), `Export example matches the initial SVG preview: ${route}`);
+  }
   const application = entities.find(entity => entity['@type'] === 'WebApplication');
   if (application) {
     if (application.dateModified) assert.equal(application.dateModified, sitemapDates.get(route), `WebApplication date matches sitemap: ${route}`);
     assert.equal(application.publisher['@id'], organization['@id']);
     assert.equal(webpage.mainEntity['@id'], application['@id']);
     assert.match(html, /id="ejemplo-conversion"/, `Visible usage explanation: ${route}`);
+    const faq = entities.find(entity => entity['@type'] === 'FAQPage');
+    if (faq) {
+      for (const [index] of faq.mainEntity.entries()) {
+        assert.match(html, new RegExp(`id="faq-answer-${index}"[^>]*>\\s*<p[^>]*>[^<]+`), `Initial-HTML FAQ answer ${index + 1}: ${route}`);
+      }
+    }
     assert.match(html, /data-conversion-example[^>]*>[^<]+<\/dd>/, `Real initial-HTML conversion: ${route}`);
     assert.ok(html.includes('href="https://www.unicode.org/faq/font_keyboard.html"'), `Primary technical source: ${route}`);
     assert.ok(html.includes('href="/sobre-nosotros#equipo-editorial"'), `Editorial attribution: ${route}`);

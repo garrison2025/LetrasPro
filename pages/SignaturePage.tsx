@@ -86,8 +86,9 @@ export default function SignaturePage() {
       </section>
     </div>
     <section className="prose prose-slate dark:prose-invert max-w-3xl mt-12">
-      <h2>Cómo hacer una firma bonita con tu nombre</h2>
-      <p>Escribe el nombre que quieras decorar y elige una firma caligráfica, clásica, moderna o marcada. Ajusta el color y el tamaño, comprueba la vista previa y descarga PNG para presentaciones o SVG para trabajar en programas de diseño.</p>
+      <h2 id="ejemplo-exportacion">Cómo hacer una firma bonita con tu nombre</h2>
+      <p>Escribe tu nombre, elige un estilo y descarga <strong>PNG</strong> si quieres colocar la firma sobre una foto o diapositiva. El PNG tiene fondo transparente. Usa <strong>SVG</strong> si quieres escalar o editar el diseño en un editor compatible.</p>
+      <p><strong>Ejemplo:</strong> la vista previa inicial muestra <strong>Sofía Morales</strong> en estilo caligráfico con un trazo debajo. Quita la marca de <strong>Añadir trazo debajo</strong> para comparar ambas composiciones. Si necesitas el mismo aspecto en otro dispositivo, exporta el PNG en el equipo donde revisaste el diseño: el SVG usa las fuentes disponibles al abrirlo.</p>
       <h2>Firmas artísticas y firmas legales</h2>
       <p>Este generador crea un diseño tipográfico decorativo. No verifica identidades, no crea una firma electrónica certificada y no sustituye los requisitos de un servicio de firma legal.</p>
       <h2>Preguntas frecuentes</h2>

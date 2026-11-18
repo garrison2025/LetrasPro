@@ -84,8 +84,9 @@ export default function PrintableLettersPage() {
       </section>
     </div>
     <section className="prose prose-slate dark:prose-invert max-w-3xl mt-12">
-      <h2>Cómo crear moldes de letras grandes</h2>
-      <p>Selecciona una letra del abecedario, incluyendo Ñ, o escribe un nombre corto. El modo hueco produce letras de contorno para recortar en cartulina, usar en goma EVA o colorear. Puedes descargar SVG para editarlo en un programa de diseño, PNG para insertar en documentos o imprimir directamente.</p>
+      <h2 id="ejemplo-exportacion">Cómo imprimir un molde de letras en A4</h2>
+      <p>Para recortar o colorear un molde, selecciona una letra o escribe un nombre, activa <strong>Letras huecas para colorear</strong> y pulsa <strong>Imprimir A4 / PDF</strong>. En el diálogo del navegador puedes imprimir la hoja o guardarla como PDF.</p>
+      <p><strong>Ejemplo:</strong> la vista previa inicial muestra la letra <strong>A</strong> hueca en una hoja A4. Elige <strong>Ñ</strong> en el selector para generar el mismo tipo de molde con esa letra. Usa SVG si necesitas ajustar el diseño en un editor y PNG si solo quieres insertar el molde como imagen.</p>
       <h2>Consejos para imprimir sin perder calidad</h2>
       <p>Usa una escala del 100 % para conservar las proporciones de la hoja. Si necesitas un tamaño exacto en centímetros, comprueba las opciones de escala de tu impresora antes de cortar el molde. Los nombres largos reducen su tamaño automáticamente para caber en la página.</p>
       <h2>Preguntas frecuentes</h2>

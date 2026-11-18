@@ -830,11 +830,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
                       <span className="text-base font-black text-slate-800 dark:text-white pr-4">{faq.question}</span>
                       <ChevronDown className={`text-primary-600 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
                     </button>
-                    {openFaq === i && (
-                      <div id={`faq-answer-${i}`} className="px-6 pb-6 animate-fade-in">
-                        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed text-sm">{faq.answer}</p>
-                      </div>
-                    )}
+                    <div id={`faq-answer-${i}`} hidden={openFaq !== i} className="px-6 pb-6 animate-fade-in">
+                      <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed text-sm">{faq.answer}</p>
+                    </div>
                  </div>
                ))}
             </div>
