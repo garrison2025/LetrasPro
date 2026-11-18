@@ -124,7 +124,7 @@ for (const url of urls) {
     assert.equal(webpage.dateModified, sitemapDates.get(route), `Review date matches sitemap: ${route}`);
     assert.equal(webpage.citation, 'https://www.unicode.org/faq/font_keyboard.html');
     assert.match(html, /<h1[\s\S]*?<\/h1>\s*<p\b[^>]*\bid="respuesta-rapida"/, `Direct answer after H1: ${route}`);
-    assert.ok(html.includes(`datetime="${webpage.dateModified}"`), `Visible review date: ${route}`);
+    assert.ok(html.toLowerCase().includes(`datetime="${webpage.dateModified}"`), `Visible review date: ${route}`);
     assert.equal(webpage.mainEntity['@id'], application['@id']);
     assert.match(html, /id="ejemplo-conversion"/, `Visible usage explanation: ${route}`);
     const faq = entities.find(entity => entity['@type'] === 'FAQPage');
