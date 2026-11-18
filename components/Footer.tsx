@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Type, Heart } from 'lucide-react';
+import { SITE_NAME } from '../data/siteIdentity';
 
 const Footer: React.FC = () => {
   return (
@@ -13,7 +14,7 @@ const Footer: React.FC = () => {
                <div className="bg-primary-600 text-white p-1.5 rounded-lg">
                   <Type size={20} strokeWidth={2.5} />
                </div>
-               <span className="font-display font-bold text-xl text-slate-900 dark:text-white">LetrasPro</span>
+               <span className="font-display font-bold text-xl text-slate-900 dark:text-white">{SITE_NAME}</span>
             </div>
             {/* Improved Contrast: slate-700 for text */}
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm">
@@ -48,18 +49,18 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="md:col-span-2">
-             <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Legal</h3>
+             <h3 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">Información del sitio</h3>
              <ul className="space-y-3 text-sm font-medium text-slate-600 dark:text-slate-400 mb-6">
                 <li><Link to="/sobre-nosotros" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sobre Nosotros</Link></li>
                 <li><Link to="/contacto" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contacto</Link></li>
-                <li><Link to="/politica-de-privacidad" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Privacidad</Link></li>
-                <li><Link to="/terminos-y-condiciones" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Términos</Link></li>
+                <li><Link to="/politica-de-privacidad" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Política de privacidad</Link></li>
+                <li><Link to="/terminos-y-condiciones" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Términos y condiciones</Link></li>
              </ul>
           </div>
         </div>
 
         <div className="border-t border-slate-100 dark:border-slate-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-           <p className="text-xs text-slate-500 dark:text-slate-500">© {new Date().getFullYear()} ConversorDeLetrasBonitas.org. Todos los derechos reservados.</p>
+           <p className="text-xs text-slate-500 dark:text-slate-500">© {new Date().getFullYear()} {SITE_NAME}. Todos los derechos reservados.</p>
            <p className="text-xs text-slate-500 dark:text-slate-500 flex items-center gap-1">
               Diseñado con <Heart size={12} className="fill-red-400 text-red-400" /> para creadores
            </p>

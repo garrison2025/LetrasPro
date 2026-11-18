@@ -97,6 +97,12 @@ for (const url of urls) {
   assert.equal(website[0].publisher['@id'], `${siteUrl}/#organization`);
   const organization = entities.find(entity => entity['@id'] === `${siteUrl}/#organization`);
   assert.equal(organization?.name, 'LetrasPro', `Publisher: ${route}`);
+  assert.equal(website[0].name, organization.name, `Consistent brand identity: ${route}`);
+  assert.match(html, /property="og:site_name"[^>]*content="LetrasPro"/, `Social brand identity: ${route}`);
+  assert.deepEqual(organization.sameAs, ['https://github.com/garrison2025/LetrasPro']);
+  for (const trustRoute of ['/sobre-nosotros', '/contacto', '/politica-de-privacidad', '/terminos-y-condiciones']) {
+    assert.ok(html.includes(`href="${trustRoute}"`), `Public information link ${trustRoute}: ${route}`);
+  }
   assert.ok(fs.existsSync(path.join('dist', new URL(organization.logo.url).pathname)), `Publisher logo: ${route}`);
   const webpage = entities.find(entity => entity['@id'] === `${canonical[1]}#webpage`);
   assert.equal(webpage?.url, canonical[1], `Page identity matches canonical: ${route}`);
@@ -114,6 +120,11 @@ for (const url of urls) {
   if (application) {
     if (application.dateModified) assert.equal(application.dateModified, sitemapDates.get(route), `WebApplication date matches sitemap: ${route}`);
     assert.equal(application.publisher['@id'], organization['@id']);
+    assert.equal(webpage.author?.['@id'], `${siteUrl}/sobre-nosotros#equipo-editorial`);
+    assert.equal(webpage.dateModified, sitemapDates.get(route), `Review date matches sitemap: ${route}`);
+    assert.equal(webpage.citation, 'https://www.unicode.org/faq/font_keyboard.html');
+    assert.match(html, /<h1[\s\S]*?<\/h1>\s*<p id="respuesta-rapida"/, `Direct answer after H1: ${route}`);
+    assert.ok(html.includes(`datetime="${webpage.dateModified}"`), `Visible review date: ${route}`);
     assert.equal(webpage.mainEntity['@id'], application['@id']);
     assert.match(html, /id="ejemplo-conversion"/, `Visible usage explanation: ${route}`);
     const faq = entities.find(entity => entity['@type'] === 'FAQPage');
