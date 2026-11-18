@@ -21,7 +21,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/baseline" "$RUNNER_TEMP/candidate" "$RUNNER_TEMP/lh-results"
           npm run build
           mv dist "$RUNNER_TEMP/baseline/dist"
-          git show a9958a0b32008debe6b18b57b71e747dcbb98abd:index.tsx > index.tsx
+          git show 868b813f9831a0fad94df3ddc8d18131d058ea0e:index.tsx > index.tsx
           npm run typecheck
           npm test
           npm run build
