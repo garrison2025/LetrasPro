@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - run: git checkout --detach f240e042df4a8d8583961cafd833fa6ee07a2a0f
       - run: npm ci
       - run: npm install --prefix "$RUNNER_TEMP/lighthouse" lighthouse@13.6.0
       - name: Build both versions
@@ -21,7 +22,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/baseline" "$RUNNER_TEMP/candidate" "$RUNNER_TEMP/lh-results"
           npm run build
           mv dist "$RUNNER_TEMP/baseline/dist"
-          git restore --source=ad58e4817d208f28193250794d9404484290e0e4 -- components/FontCard.tsx pages/GeneratorPage.tsx scripts/check-pages.mjs
+          git restore --source=a4ded9d6e5e89f91055232d50e70eb2026b762c3 -- scripts/prerender.mjs scripts/check-pages.mjs
           npm run typecheck
           npm test
           npm run build
@@ -38,8 +39,10 @@ jobs:
         shell: bash
         run: |
           export CHROME_PATH="$(command -v google-chrome)"
-          for run in 1 2 3; do
-            for variant in baseline candidate; do
+          for run in 1 2 3 4; do
+            order=(baseline candidate)
+            if (( run % 2 == 0 )); then order=(candidate baseline); fi
+            for variant in "${order[@]}"; do
               route="$RUNNER_TEMP/$variant"
               (cd "$route"; exec node "$GITHUB_WORKSPACE/scripts/preview-pages.mjs" --port 4173) &
               server=$!
