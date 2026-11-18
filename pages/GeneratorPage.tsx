@@ -8,7 +8,7 @@ import { BIO_TEMPLATES } from '../data/bioTemplates';
 import { USAGE_GUIDES } from '../data/usageGuides';
 import { GENERATOR_ANSWERS } from '../data/generatorAnswers';
 import { EDITORIAL_ID, EDITORIAL_NAME, ORGANIZATION_ID, UNICODE_FONT_FAQ, WEBSITE_ID } from '../data/siteIdentity';
-import FontCard, { ViewMode } from '../components/FontCard';
+import FontCard, { FontCardIcons, ViewMode } from '../components/FontCard';
 import HistoryBar from '../components/HistoryBar';
 import CommentsSection from '../components/CommentsSection';
 import Toast from '../components/Toast';
@@ -665,6 +665,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ config }) => {
         <HistoryBar history={history} onClear={() => setHistory([])} />
 
         <div className="google-anno-skip min-h-[600px]">
+          <FontCardIcons />
           {/* ACCESSIBILITY FIX: Hidden H2 to fix heading hierarchy structure (H1 -> H2 -> H3) */}
           <h2 className="sr-only">Resultados de estilos</h2>
           

@@ -1,8 +1,38 @@
 import React, { useRef, useState } from 'react';
-import { Copy, Check, Star, Download, ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, AlertCircle, AlertTriangle } from 'lucide-react';
 import { FontStyle, TextSegment } from '../types';
 import { copyText } from '../services/clipboard';
 import { splitCharacters } from '../services/text';
+
+type CardActionIconName = 'copy' | 'check' | 'star' | 'download';
+
+export function FontCardIcons() {
+  return <svg aria-hidden="true" width="0" height="0" className="absolute pointer-events-none">
+    <defs>
+      <symbol id="font-card-copy" viewBox="0 0 24 24">
+        <rect x="8" y="8" width="14" height="14" rx="2" />
+        <path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2" />
+      </symbol>
+      <symbol id="font-card-check" viewBox="0 0 24 24">
+        <path d="m20 6-11 11-5-5" />
+      </symbol>
+      <symbol id="font-card-star" viewBox="0 0 24 24">
+        <path d="m12 3 2.8 5.7 6.3.9-4.5 4.5 1 6.3-5.6-3-5.6 3 1-6.3L2.9 9.6l6.3-.9L12 3Z" />
+      </symbol>
+      <symbol id="font-card-download" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+      </symbol>
+    </defs>
+  </svg>;
+}
+
+function CardActionIcon({ name, active, className }: { name: CardActionIconName; active?: boolean; className?: string }) {
+  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" width="18" height="18"
+    fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={name === 'check' ? 4 : 2}
+    strokeLinecap="round" strokeLinejoin="round">
+    <use href={`#font-card-${name}`} />
+  </svg>;
+}
 
 export type ViewMode = 'list' | 'instagram' | 'whatsapp';
 
@@ -264,7 +294,7 @@ const FontCard: React.FC<FontCardProps> = ({
                 title="Descargar PNG Pro"
                 aria-label={`Descargar imagen de estilo ${font.name}`}
              >
-                <Download size={18} className={isGeneratingImg ? 'animate-pulse' : undefined} />
+                <CardActionIcon name="download" className={isGeneratingImg ? 'animate-pulse' : undefined} />
              </button>
              <button
                 className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all active:scale-90 shadow-sm ${
@@ -274,13 +304,13 @@ const FontCard: React.FC<FontCardProps> = ({
                 aria-pressed={isFavorite}
                 aria-label={isFavorite ? `Quitar ${font.name} de favoritos` : `Añadir ${font.name} a favoritos`}
              >
-                <Star size={18} fill={isFavorite ? "currentColor" : "none"} />
+                <CardActionIcon name="star" active={isFavorite} />
              </button>
              <button type="button" onClick={event => { event.stopPropagation(); void handleCopy(); }}
                aria-label={`Copiar estilo de letra ${font.name}`}
                className={`p-2 md:p-3 rounded-xl md:rounded-2xl transition-all ${justCopied ? 'text-green-700 bg-green-50 dark:text-green-400 dark:bg-green-900/30 scale-125 shadow-xl' : 'text-slate-600 dark:text-slate-300'}`}
              >
-               {justCopied ? <Check size={18} strokeWidth={4} /> : <Copy size={18} />}
+               <CardActionIcon name={justCopied ? 'check' : 'copy'} />
              </button>
            </div>
         </div>
