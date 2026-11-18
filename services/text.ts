@@ -1,8 +1,13 @@
 let graphemeSegmenter: Intl.Segmenter | undefined;
+let segmenterConstructor: typeof Intl.Segmenter | undefined;
 
 function getGraphemeSegmenter(): Intl.Segmenter | undefined {
   if (typeof Intl.Segmenter !== 'function') return undefined;
-  return graphemeSegmenter ??= new Intl.Segmenter('es', { granularity: 'grapheme' });
+  if (segmenterConstructor !== Intl.Segmenter) {
+    segmenterConstructor = Intl.Segmenter;
+    graphemeSegmenter = new Intl.Segmenter('es', { granularity: 'grapheme' });
+  }
+  return graphemeSegmenter;
 }
 
 export function splitCharacters(text: string): string[] {

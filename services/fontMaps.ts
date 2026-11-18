@@ -579,6 +579,7 @@ for (const { map, id } of FONTS) {
 }
 const catalogDisplayValues = new WeakMap<Record<string, string>, Set<string>>();
 let vaporwaveSegmenter: Intl.Segmenter | undefined;
+let vaporwaveConstructor: typeof Intl.Segmenter | undefined;
 
 export const convertText = (text: string, map: Record<string, string>, isVaporwave: boolean = false): string => {
   const normalized = text.normalize('NFC');
@@ -610,9 +611,14 @@ export const convertText = (text: string, map: Record<string, string>, isVaporwa
   }).join('');
 
   // Older browsers keep the mapped text intact rather than splitting emoji or accents.
-  const final = isVaporwave && typeof Intl.Segmenter === 'function'
-    ? Array.from((vaporwaveSegmenter ??= new Intl.Segmenter(undefined, { granularity: 'grapheme' })).segment(mapped), part => part.segment).join(' ')
-    : mapped;
+  let final = mapped;
+  if (isVaporwave && typeof Intl.Segmenter === 'function') {
+    if (vaporwaveConstructor !== Intl.Segmenter || !vaporwaveSegmenter) {
+      vaporwaveConstructor = Intl.Segmenter;
+      vaporwaveSegmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+    }
+    final = Array.from(vaporwaveSegmenter.segment(mapped), part => part.segment).join(' ');
+  }
   
   return `${prefix}${final}${suffix}`;
 };
