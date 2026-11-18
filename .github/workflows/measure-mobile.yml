@@ -5,26 +5,53 @@ on:
 jobs:
   measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - run: npm ci
       - run: npm install --prefix "$RUNNER_TEMP/lighthouse" lighthouse@13.6.0
-      - name: Measure production three times
+      - name: Build both versions
         shell: bash
         run: |
-          mkdir -p "$RUNNER_TEMP/lh-results"
+          mkdir -p "$RUNNER_TEMP/baseline" "$RUNNER_TEMP/candidate" "$RUNNER_TEMP/lh-results"
+          npm run build
+          mv dist "$RUNNER_TEMP/baseline/dist"
+          git show a9958a0b32008debe6b18b57b71e747dcbb98abd:index.tsx > index.tsx
+          npm run typecheck
+          npm test
+          npm run build
+          npm run check:pages
+          npm run check:seo
+          npm run check:offline
+          npm run check:http
+          mv dist "$RUNNER_TEMP/candidate/dist"
+      - name: Compare cold mobile loads under the same conditions
+        shell: bash
+        run: |
           export CHROME_PATH="$(command -v google-chrome)"
           for run in 1 2 3; do
-            "$RUNNER_TEMP/lighthouse/node_modules/.bin/lighthouse" https://conversordeletrasbonitas.org/ --only-categories=performance --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --max-wait-for-load=35000 --output=json --output-path="$RUNNER_TEMP/lh-results/production-$run.json" --quiet || true
-          done
-          for f in "$RUNNER_TEMP"/lh-results/*.json; do
-            jq -c '{url:.finalDisplayedUrl,error:.runtimeError,score:.categories.performance.score,fcp:.audits["first-contentful-paint"].numericValue,lcp:.audits["largest-contentful-paint"].numericValue,tbt:.audits["total-blocking-time"].numericValue,cls:.audits["cumulative-layout-shift"].numericValue,lcpBreakdown:.audits["lcp-breakdown-insight"].details.items}' "$f"
+            for variant in baseline candidate; do
+              route="$RUNNER_TEMP/$variant"
+              (cd "$route"; exec node "$GITHUB_WORKSPACE/scripts/preview-pages.mjs" --port 4173) &
+              server=$!
+              for attempt in {1..20}; do
+                curl -fsS http://127.0.0.1:4173/ -o /dev/null && break
+                sleep 0.25
+              done
+              f="$RUNNER_TEMP/lh-results/$variant-$run.json"
+              "$RUNNER_TEMP/lighthouse/node_modules/.bin/lighthouse" http://127.0.0.1:4173/ --only-categories=performance --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --max-wait-for-load=25000 --output=json --output-path="$f" --quiet
+              jq -c --arg variant "$variant" --arg run "$run" '{variant:$variant,run:$run,error:.runtimeError,score:.categories.performance.score,fcp:.audits["first-contentful-paint"].numericValue,lcp:.audits["largest-contentful-paint"].numericValue,tbt:.audits["total-blocking-time"].numericValue,cls:.audits["cumulative-layout-shift"].numericValue}' "$f"
+              kill "$server"
+              wait "$server" || true
+            done
           done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mobile-lighthouse
+          name: mobile-comparison
           path: ${{ runner.temp }}/lh-results
