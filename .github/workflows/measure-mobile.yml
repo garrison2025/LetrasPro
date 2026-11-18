@@ -1,0 +1,30 @@
+name: Mobile performance comparison
+on:
+  push:
+    branches: [codex/mobile-performance-measurement]
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm install --prefix "$RUNNER_TEMP/lighthouse" lighthouse@13.6.0
+      - name: Measure production three times
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/lh-results"
+          export CHROME_PATH="$(command -v google-chrome)"
+          for run in 1 2 3; do
+            "$RUNNER_TEMP/lighthouse/node_modules/.bin/lighthouse" https://conversordeletrasbonitas.org/ --only-categories=performance --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --max-wait-for-load=35000 --output=json --output-path="$RUNNER_TEMP/lh-results/production-$run.json" --quiet || true
+          done
+          for f in "$RUNNER_TEMP"/lh-results/*.json; do
+            jq -c '{url:.finalDisplayedUrl,error:.runtimeError,score:.categories.performance.score,fcp:.audits["first-contentful-paint"].numericValue,lcp:.audits["largest-contentful-paint"].numericValue,tbt:.audits["total-blocking-time"].numericValue,cls:.audits["cumulative-layout-shift"].numericValue,lcpBreakdown:.audits["lcp-breakdown-insight"].details.items}' "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-lighthouse
+          path: ${{ runner.temp }}/lh-results
